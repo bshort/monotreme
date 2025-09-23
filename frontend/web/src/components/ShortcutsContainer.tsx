@@ -4,6 +4,7 @@ import { useViewStore } from "@/stores";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import ShortcutCard from "./ShortcutCard";
 import ShortcutView from "./ShortcutView";
+import ShortcutListView from "./ShortcutListView";
 
 interface Props {
   shortcutList: Shortcut[];
@@ -14,19 +15,29 @@ const ShortcutsContainer: React.FC<Props> = (props: Props) => {
   const navigateTo = useNavigateTo();
   const viewStore = useViewStore();
   const displayStyle = viewStore.displayStyle || "full";
-  const ShortcutItemView = viewStore.displayStyle === "compact" ? ShortcutView : ShortcutCard;
+
+  let ShortcutItemView = ShortcutCard;
+  if (displayStyle === "compact") {
+    ShortcutItemView = ShortcutView;
+  } else if (displayStyle === "list") {
+    ShortcutItemView = ShortcutListView;
+  }
 
   const handleShortcutClick = (shortcut: Shortcut) => {
     navigateTo(`/shortcut/${shortcut.id}`);
   };
 
+  let gridClasses = "w-full grid grid-cols-1 gap-3 sm:gap-4";
+  if (displayStyle === "full") {
+    gridClasses += " sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+  } else if (displayStyle === "compact") {
+    gridClasses += " grid-cols-2 sm:grid-cols-4";
+  } else if (displayStyle === "list") {
+    gridClasses += " grid-cols-1";
+  }
+
   return (
-    <div
-      className={classNames(
-        "w-full grid grid-cols-1 gap-3 sm:gap-4",
-        displayStyle === "full" ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-2 sm:grid-cols-4",
-      )}
-    >
+    <div className={gridClasses}>
       {shortcutList.map((shortcut) => {
         return <ShortcutItemView key={shortcut.id} shortcut={shortcut} showActions={true} onClick={() => handleShortcutClick(shortcut)} />;
       })}

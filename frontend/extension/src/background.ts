@@ -1,4 +1,5 @@
 import { Storage } from "@plasmohq/storage";
+import { apiService } from "./services/api";
 
 const storage = new Storage();
 const urlRegex = /https?:\/\/s\/(.+)/;
@@ -52,3 +53,29 @@ const getShortcutNameFromSearchUrl = (urlString: string) => {
   }
   return "";
 };
+
+// Handle messages from popup or other parts of the extension
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "sendCurrentUrl") {
+    (async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+        if (!tab.url) {
+          throw new Error("Could not get current tab URL");
+        }
+
+        const result = await apiService.sendCurrentUrl(tab.url, tab.title);
+        sendResponse({ success: true, data: result });
+      } catch (error) {
+        sendResponse({
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error"
+        });
+      }
+    })();
+
+    // Return true to indicate we'll respond asynchronously
+    return true;
+  }
+});

@@ -1,13 +1,16 @@
 import { Button, CssVarsProvider } from "@mui/joy";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
+import { useState } from "react";
 import Icon from "@/components/Icon";
 import Logo from "@/components/Logo";
 import { StorageContextProvider, useStorageContext } from "./context";
+import { apiService } from "./services/api";
 import "./style.css";
 
 const IndexPopup = () => {
   const context = useStorageContext();
   const isInitialized = context.instanceUrl;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSettingButtonClick = () => {
     chrome.runtime.openOptionsPage();
@@ -16,6 +19,33 @@ const IndexPopup = () => {
   const handleRefreshButtonClick = () => {
     chrome.runtime.reload();
     chrome.browserAction.setPopup({ popup: "" });
+  };
+
+  const handleSendUrlButtonClick = async () => {
+    if (!isInitialized) {
+      toast.error("Please set your instance URL first");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Get the current active tab
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+      if (!tab.url) {
+        throw new Error("Could not get current tab URL");
+      }
+
+      // Send the URL to the backend
+      const result = await apiService.sendCurrentUrl(tab.url, tab.title);
+
+      toast.success(`Shortcut created: ${result.name}`);
+    } catch (error) {
+      console.error("Failed to send URL:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to send URL");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,6 +71,22 @@ const IndexPopup = () => {
                 <Icon.ExternalLink className="w-4 h-auto" />
               </a>
             </p>
+            <div className="w-full mb-3">
+              <Button
+                size="md"
+                color="primary"
+                disabled={isLoading}
+                onClick={handleSendUrlButtonClick}
+                sx={{ width: '100%' }}
+              >
+                {isLoading ? (
+                  <Icon.Loader2 className="w-4 h-auto mr-2 animate-spin" />
+                ) : (
+                  <Icon.Share className="w-4 h-auto mr-2" />
+                )}
+                {isLoading ? 'Sending...' : 'Send Current URL'}
+              </Button>
+            </div>
             <div className="w-full flex flex-row justify-between items-center mb-2">
               <div className="flex flex-row justify-start items-center gap-2">
                 <Button size="sm" variant="outlined" color="neutral" onClick={handleSettingButtonClick}>
@@ -52,7 +98,7 @@ const IndexPopup = () => {
                   variant="outlined"
                   color="neutral"
                   component="a"
-                  href="https://github.com/yourselfhosted/slash"
+                  href="https://github.com/bshort/monotreme"
                   target="_blank"
                 >
                   <Icon.Github className="w-5 h-auto text-gray-500 dark:text-gray-400 mr-1" />

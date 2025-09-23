@@ -345,31 +345,31 @@ var File_api_v1_user_setting_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_user_setting_service_proto_rawDesc = "" +
 	"\n" +
-	"!api/v1/user_setting_service.proto\x12\fmonotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a google/protobuf/field_mask.proto\"\xd5\x03\n" +
+	"!api/v1/user_setting_service.proto\x12\x10monotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a google/protobuf/field_mask.proto\"\xe1\x03\n" +
 	"\vUserSetting\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x05R\x06userId\x12B\n" +
-	"\ageneral\x18\x02 \x01(\v2(.monotreme.api.v1.UserSetting.GeneralSettingR\ageneral\x12R\n" +
-	"\raccess_tokens\x18\x03 \x01(\v2-.monotreme.api.v1.UserSetting.AccessTokensSettingR\faccessTokens\x1aI\n" +
+	"\auser_id\x18\x01 \x01(\x05R\x06userId\x12F\n" +
+	"\ageneral\x18\x02 \x01(\v2,.monotreme.api.v1.UserSetting.GeneralSettingR\ageneral\x12V\n" +
+	"\raccess_tokens\x18\x03 \x01(\v21.monotreme.api.v1.UserSetting.AccessTokensSettingR\faccessTokens\x1aI\n" +
 	"\x0eGeneralSetting\x12\x16\n" +
 	"\x06locale\x18\x01 \x01(\tR\x06locale\x12\x1f\n" +
 	"\vcolor_theme\x18\x02 \x01(\tR\n" +
-	"colorTheme\x1a\xc9\x01\n" +
-	"\x13AccessTokensSetting\x12^\n" +
-	"\raccess_tokens\x18\x01 \x03(\v29.monotreme.api.v1.UserSetting.AccessTokensSetting.AccessTokenR\faccessTokens\x1aR\n" +
+	"colorTheme\x1a\xcd\x01\n" +
+	"\x13AccessTokensSetting\x12b\n" +
+	"\raccess_tokens\x18\x01 \x03(\v2=.monotreme.api.v1.UserSetting.AccessTokensSetting.AccessTokenR\faccessTokens\x1aR\n" +
 	"\vAccessToken\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"'\n" +
 	"\x15GetUserSettingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\"\xa5\x01\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\"\xa9\x01\n" +
 	"\x18UpdateUserSettingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\x12<\n" +
-	"\fuser_setting\x18\x02 \x01(\v2\x19.monotreme.api.v1.UserSettingR\vuserSetting\x12;\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\x12@\n" +
+	"\fuser_setting\x18\x02 \x01(\v2\x1d.monotreme.api.v1.UserSettingR\vuserSetting\x12;\n" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
-	"updateMask2\xb7\x02\n" +
-	"\x12UserSettingService\x12z\n" +
-	"\x0eGetUserSetting\x12#.monotreme.api.v1.GetUserSettingRequest\x1a\x19.monotreme.api.v1.UserSetting\"(\xdaA\x02id\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/users/{id}/settings\x12\xa4\x01\n" +
-	"\x11UpdateUserSetting\x12&.monotreme.api.v1.UpdateUserSettingRequest\x1a\x19.monotreme.api.v1.UserSetting\"L\xdaA\x18user_setting,update_mask\x82\xd3\xe4\x93\x02+:\fuser_setting2\x1b/api/v1/users/{id}/settingsB\xad\x01\n" +
-	"\x10com.monotreme.api.v1B\x17UserSettingServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"updateMask2\xc8\x02\n" +
+	"\x12UserSettingService\x12\x82\x01\n" +
+	"\x0eGetUserSetting\x12'.monotreme.api.v1.GetUserSettingRequest\x1a\x1d.monotreme.api.v1.UserSetting\"(\xdaA\x02id\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/users/{id}/settings\x12\xac\x01\n" +
+	"\x11UpdateUserSetting\x12*.monotreme.api.v1.UpdateUserSettingRequest\x1a\x1d.monotreme.api.v1.UserSetting\"L\xdaA\x18user_setting,update_mask\x82\xd3\xe4\x93\x02+:\fuser_setting2\x1b/api/v1/users/{id}/settingsB\xc5\x01\n" +
+	"\x14com.monotreme.api.v1B\x17UserSettingServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_user_setting_service_proto_rawDescOnce sync.Once

@@ -123,7 +123,7 @@ var File_api_v1_common_proto protoreflect.FileDescriptor
 
 const file_api_v1_common_proto_rawDesc = "" +
 	"\n" +
-	"\x13api/v1/common.proto\x12\fmonotreme.api.v1*8\n" +
+	"\x13api/v1/common.proto\x12\x10monotreme.api.v1*8\n" +
 	"\x05State\x12\x15\n" +
 	"\x11STATE_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
@@ -134,8 +134,8 @@ const file_api_v1_common_proto_rawDesc = "" +
 	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tWORKSPACE\x10\x01\x12\n" +
 	"\n" +
-	"\x06PUBLIC\x10\x02B\xa1\x01\n" +
-	"\x10com.monotreme.api.v1B\vCommonProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"\x06PUBLIC\x10\x02B\xb9\x01\n" +
+	"\x14com.monotreme.api.v1B\vCommonProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_common_proto_rawDescOnce sync.Once

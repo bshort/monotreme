@@ -3,6 +3,7 @@ import App from "@/App";
 import Root from "@/layouts/Root";
 import AdminSignIn from "@/pages/AdminSignIn";
 import AuthCallback from "@/pages/AuthCallback";
+import BookmarkImport from "@/pages/BookmarkImport";
 import CollectionDashboard from "@/pages/CollectionDashboard";
 import CollectionSpace from "@/pages/CollectionSpace";
 import Home from "@/pages/Home";
@@ -13,6 +14,7 @@ import ShortcutSpace from "@/pages/ShortcutSpace";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 //import SubscriptionSetting from "@/pages/SubscriptionSetting";
+import TagsDashboard from "@/pages/TagsDashboard";
 import UserSetting from "@/pages/UserSetting";
 import WorkspaceSetting from "@/pages/WorkspaceSetting";
 
@@ -59,6 +61,10 @@ const router = createBrowserRouter([
             element: <CollectionDashboard />,
           },
           {
+            path: "/tags",
+            element: <TagsDashboard />,
+          },
+          {
             path: "/shortcut/:shortcutId",
             element: <ShortcutDetail />,
           },
@@ -69,6 +75,10 @@ const router = createBrowserRouter([
           {
             path: "/setting/workspace",
             element: <WorkspaceSetting />,
+          },
+          {
+            path: "/admin/import",
+            element: <BookmarkImport />,
           },
         ],
       },

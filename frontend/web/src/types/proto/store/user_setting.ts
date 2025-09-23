@@ -7,7 +7,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "slash.store";
+export const protobufPackage = "monotreme.store";
 
 export enum UserSettingKey {
   USER_SETTING_KEY_UNSPECIFIED = "USER_SETTING_KEY_UNSPECIFIED",

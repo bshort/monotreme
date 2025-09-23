@@ -72,7 +72,7 @@ type IdentityProvider struct {
 	// The unique identifier of the identity provider.
 	Id            string                  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                  `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Type          IdentityProvider_Type   `protobuf:"varint,3,opt,name=type,proto3,enum=slash.store.IdentityProvider_Type" json:"type,omitempty"`
+	Type          IdentityProvider_Type   `protobuf:"varint,3,opt,name=type,proto3,enum=monotreme.store.IdentityProvider_Type" json:"type,omitempty"`
 	Config        *IdentityProviderConfig `protobuf:"bytes,4,opt,name=config,proto3" json:"config,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -350,33 +350,33 @@ var File_store_idp_proto protoreflect.FileDescriptor
 
 const file_store_idp_proto_rawDesc = "" +
 	"\n" +
-	"\x0fstore/idp.proto\x12\vslash.store\"\xd7\x01\n" +
+	"\x0fstore/idp.proto\x12\x0fmonotreme.store\"\xdf\x01\n" +
 	"\x10IdentityProvider\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
-	"\x05title\x18\x02 \x01(\tR\x05title\x126\n" +
-	"\x04type\x18\x03 \x01(\x0e2\".slash.store.IdentityProvider.TypeR\x04type\x12;\n" +
-	"\x06config\x18\x04 \x01(\v2#.slash.store.IdentityProviderConfigR\x06config\"(\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12:\n" +
+	"\x04type\x18\x03 \x01(\x0e2&.monotreme.store.IdentityProvider.TypeR\x04type\x12?\n" +
+	"\x06config\x18\x04 \x01(\v2'.monotreme.store.IdentityProviderConfigR\x06config\"(\n" +
 	"\x04Type\x12\x14\n" +
 	"\x10TYPE_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
-	"\x06OAUTH2\x10\x01\"\xdf\x03\n" +
-	"\x16IdentityProviderConfig\x12J\n" +
-	"\x06oauth2\x18\x01 \x01(\v20.slash.store.IdentityProviderConfig.OAuth2ConfigH\x00R\x06oauth2\x1aQ\n" +
+	"\x06OAUTH2\x10\x01\"\xe7\x03\n" +
+	"\x16IdentityProviderConfig\x12N\n" +
+	"\x06oauth2\x18\x01 \x01(\v24.monotreme.store.IdentityProviderConfig.OAuth2ConfigH\x00R\x06oauth2\x1aQ\n" +
 	"\fFieldMapping\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
 	"identifier\x12!\n" +
-	"\fdisplay_name\x18\x02 \x01(\tR\vdisplayName\x1a\x9b\x02\n" +
+	"\fdisplay_name\x18\x02 \x01(\tR\vdisplayName\x1a\x9f\x02\n" +
 	"\fOAuth2Config\x12\x1b\n" +
 	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12#\n" +
 	"\rclient_secret\x18\x02 \x01(\tR\fclientSecret\x12\x19\n" +
 	"\bauth_url\x18\x03 \x01(\tR\aauthUrl\x12\x1b\n" +
 	"\ttoken_url\x18\x04 \x01(\tR\btokenUrl\x12\"\n" +
 	"\ruser_info_url\x18\x05 \x01(\tR\vuserInfoUrl\x12\x16\n" +
-	"\x06scopes\x18\x06 \x03(\tR\x06scopes\x12U\n" +
-	"\rfield_mapping\x18\a \x01(\v20.slash.store.IdentityProviderConfig.FieldMappingR\ffieldMappingB\b\n" +
-	"\x06configB\x91\x01\n" +
-	"\x0fcom.monotreme.storeB\bIdpProtoP\x01Z'github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03SSX\xaa\x02\vSlash.Store\xca\x02\vSlash\\Store\xe2\x02\x17Slash\\Store\\GPBMetadata\xea\x02\fMonotreme::Storeb\x06proto3"
+	"\x06scopes\x18\x06 \x03(\tR\x06scopes\x12Y\n" +
+	"\rfield_mapping\x18\a \x01(\v24.monotreme.store.IdentityProviderConfig.FieldMappingR\ffieldMappingB\b\n" +
+	"\x06configB\xa9\x01\n" +
+	"\x13com.monotreme.storeB\bIdpProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (
 	file_store_idp_proto_rawDescOnce sync.Once
@@ -393,17 +393,17 @@ func file_store_idp_proto_rawDescGZIP() []byte {
 var file_store_idp_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_store_idp_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_store_idp_proto_goTypes = []any{
-	(IdentityProvider_Type)(0),                  // 0: slash.store.IdentityProvider.Type
-	(*IdentityProvider)(nil),                    // 1: slash.store.IdentityProvider
-	(*IdentityProviderConfig)(nil),              // 2: slash.store.IdentityProviderConfig
-	(*IdentityProviderConfig_FieldMapping)(nil), // 3: slash.store.IdentityProviderConfig.FieldMapping
-	(*IdentityProviderConfig_OAuth2Config)(nil), // 4: slash.store.IdentityProviderConfig.OAuth2Config
+	(IdentityProvider_Type)(0),                  // 0: monotreme.store.IdentityProvider.Type
+	(*IdentityProvider)(nil),                    // 1: monotreme.store.IdentityProvider
+	(*IdentityProviderConfig)(nil),              // 2: monotreme.store.IdentityProviderConfig
+	(*IdentityProviderConfig_FieldMapping)(nil), // 3: monotreme.store.IdentityProviderConfig.FieldMapping
+	(*IdentityProviderConfig_OAuth2Config)(nil), // 4: monotreme.store.IdentityProviderConfig.OAuth2Config
 }
 var file_store_idp_proto_depIdxs = []int32{
-	0, // 0: slash.store.IdentityProvider.type:type_name -> slash.store.IdentityProvider.Type
-	2, // 1: slash.store.IdentityProvider.config:type_name -> slash.store.IdentityProviderConfig
-	4, // 2: slash.store.IdentityProviderConfig.oauth2:type_name -> slash.store.IdentityProviderConfig.OAuth2Config
-	3, // 3: slash.store.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> slash.store.IdentityProviderConfig.FieldMapping
+	0, // 0: monotreme.store.IdentityProvider.type:type_name -> monotreme.store.IdentityProvider.Type
+	2, // 1: monotreme.store.IdentityProvider.config:type_name -> monotreme.store.IdentityProviderConfig
+	4, // 2: monotreme.store.IdentityProviderConfig.oauth2:type_name -> monotreme.store.IdentityProviderConfig.OAuth2Config
+	3, // 3: monotreme.store.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.store.IdentityProviderConfig.FieldMapping
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name

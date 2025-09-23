@@ -441,11 +441,147 @@ func (x *DeleteCollectionRequest) GetId() int32 {
 	return 0
 }
 
+type ImportBookmarksRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	HtmlContent   string                 `protobuf:"bytes,1,opt,name=html_content,json=htmlContent,proto3" json:"html_content,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImportBookmarksRequest) Reset() {
+	*x = ImportBookmarksRequest{}
+	mi := &file_api_v1_collection_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportBookmarksRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportBookmarksRequest) ProtoMessage() {}
+
+func (x *ImportBookmarksRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_collection_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportBookmarksRequest.ProtoReflect.Descriptor instead.
+func (*ImportBookmarksRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_collection_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ImportBookmarksRequest) GetHtmlContent() string {
+	if x != nil {
+		return x.HtmlContent
+	}
+	return ""
+}
+
+type ImportBookmarksResponse struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Collections        []*Collection          `protobuf:"bytes,1,rep,name=collections,proto3" json:"collections,omitempty"`
+	TotalShortcuts     int32                  `protobuf:"varint,2,opt,name=total_shortcuts,json=totalShortcuts,proto3" json:"total_shortcuts,omitempty"`
+	TotalCollections   int32                  `protobuf:"varint,3,opt,name=total_collections,json=totalCollections,proto3" json:"total_collections,omitempty"`
+	ShortcutsCreated   int32                  `protobuf:"varint,4,opt,name=shortcuts_created,json=shortcutsCreated,proto3" json:"shortcuts_created,omitempty"`
+	ShortcutsUpdated   int32                  `protobuf:"varint,5,opt,name=shortcuts_updated,json=shortcutsUpdated,proto3" json:"shortcuts_updated,omitempty"`
+	CollectionsCreated int32                  `protobuf:"varint,6,opt,name=collections_created,json=collectionsCreated,proto3" json:"collections_created,omitempty"`
+	CollectionsUpdated int32                  `protobuf:"varint,7,opt,name=collections_updated,json=collectionsUpdated,proto3" json:"collections_updated,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *ImportBookmarksResponse) Reset() {
+	*x = ImportBookmarksResponse{}
+	mi := &file_api_v1_collection_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportBookmarksResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportBookmarksResponse) ProtoMessage() {}
+
+func (x *ImportBookmarksResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_collection_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportBookmarksResponse.ProtoReflect.Descriptor instead.
+func (*ImportBookmarksResponse) Descriptor() ([]byte, []int) {
+	return file_api_v1_collection_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ImportBookmarksResponse) GetCollections() []*Collection {
+	if x != nil {
+		return x.Collections
+	}
+	return nil
+}
+
+func (x *ImportBookmarksResponse) GetTotalShortcuts() int32 {
+	if x != nil {
+		return x.TotalShortcuts
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetTotalCollections() int32 {
+	if x != nil {
+		return x.TotalCollections
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetShortcutsCreated() int32 {
+	if x != nil {
+		return x.ShortcutsCreated
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetShortcutsUpdated() int32 {
+	if x != nil {
+		return x.ShortcutsUpdated
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetCollectionsCreated() int32 {
+	if x != nil {
+		return x.CollectionsCreated
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetCollectionsUpdated() int32 {
+	if x != nil {
+		return x.CollectionsUpdated
+	}
+	return 0
+}
+
 var File_api_v1_collection_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_collection_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1fapi/v1/collection_service.proto\x12\fmonotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe2\x02\n" +
+	"\x1fapi/v1/collection_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe6\x02\n" +
 	"\n" +
 	"Collection\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x1d\n" +
@@ -456,40 +592,51 @@ const file_api_v1_collection_service_proto_rawDesc = "" +
 	"\x04name\x18\x06 \x01(\tR\x04name\x12\x14\n" +
 	"\x05title\x18\a \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\b \x01(\tR\vdescription\x12!\n" +
-	"\fshortcut_ids\x18\t \x03(\x05R\vshortcutIds\x128\n" +
+	"\fshortcut_ids\x18\t \x03(\x05R\vshortcutIds\x12<\n" +
 	"\n" +
 	"visibility\x18\n" +
-	" \x01(\x0e2\x18.monotreme.api.v1.VisibilityR\n" +
+	" \x01(\x0e2\x1c.monotreme.api.v1.VisibilityR\n" +
 	"visibility\"\x18\n" +
-	"\x16ListCollectionsRequest\"U\n" +
-	"\x17ListCollectionsResponse\x12:\n" +
-	"\vcollections\x18\x01 \x03(\v2\x18.monotreme.api.v1.CollectionR\vcollections\"&\n" +
+	"\x16ListCollectionsRequest\"Y\n" +
+	"\x17ListCollectionsResponse\x12>\n" +
+	"\vcollections\x18\x01 \x03(\v2\x1c.monotreme.api.v1.CollectionR\vcollections\"&\n" +
 	"\x14GetCollectionRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"0\n" +
 	"\x1aGetCollectionByNameRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"S\n" +
-	"\x17CreateCollectionRequest\x128\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"W\n" +
+	"\x17CreateCollectionRequest\x12<\n" +
 	"\n" +
-	"collection\x18\x01 \x01(\v2\x18.monotreme.api.v1.CollectionR\n" +
-	"collection\"\x90\x01\n" +
-	"\x17UpdateCollectionRequest\x128\n" +
+	"collection\x18\x01 \x01(\v2\x1c.monotreme.api.v1.CollectionR\n" +
+	"collection\"\x94\x01\n" +
+	"\x17UpdateCollectionRequest\x12<\n" +
 	"\n" +
-	"collection\x18\x01 \x01(\v2\x18.monotreme.api.v1.CollectionR\n" +
+	"collection\x18\x01 \x01(\v2\x1c.monotreme.api.v1.CollectionR\n" +
 	"collection\x12;\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
 	"updateMask\")\n" +
 	"\x17DeleteCollectionRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id2\x83\x06\n" +
-	"\x11CollectionService\x12{\n" +
-	"\x0fListCollections\x12$.monotreme.api.v1.ListCollectionsRequest\x1a%.monotreme.api.v1.ListCollectionsResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/collections\x12t\n" +
-	"\rGetCollection\x12\".monotreme.api.v1.GetCollectionRequest\x1a\x18.monotreme.api.v1.Collection\"%\xdaA\x02id\x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/collections/{id}\x12[\n" +
-	"\x13GetCollectionByName\x12(.monotreme.api.v1.GetCollectionByNameRequest\x1a\x18.monotreme.api.v1.Collection\"\x00\x12|\n" +
-	"\x10CreateCollection\x12%.monotreme.api.v1.CreateCollectionRequest\x1a\x18.monotreme.api.v1.Collection\"'\x82\xd3\xe4\x93\x02!:\n" +
-	"collection\"\x13/api/v1/collections\x12\xa5\x01\n" +
-	"\x10UpdateCollection\x12%.monotreme.api.v1.UpdateCollectionRequest\x1a\x18.monotreme.api.v1.Collection\"P\xdaA\x16collection,update_mask\x82\xd3\xe4\x93\x021:\n" +
-	"collection\x1a#/api/v1/collections/{collection.id}\x12x\n" +
-	"\x10DeleteCollection\x12%.monotreme.api.v1.DeleteCollectionRequest\x1a\x16.google.protobuf.Empty\"%\xdaA\x02id\x82\xd3\xe4\x93\x02\x1a*\x18/api/v1/collections/{id}B\xac\x01\n" +
-	"\x10com.monotreme.api.v1B\x16CollectionServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"\x02id\x18\x01 \x01(\x05R\x02id\";\n" +
+	"\x16ImportBookmarksRequest\x12!\n" +
+	"\fhtml_content\x18\x01 \x01(\tR\vhtmlContent\"\xeb\x02\n" +
+	"\x17ImportBookmarksResponse\x12>\n" +
+	"\vcollections\x18\x01 \x03(\v2\x1c.monotreme.api.v1.CollectionR\vcollections\x12'\n" +
+	"\x0ftotal_shortcuts\x18\x02 \x01(\x05R\x0etotalShortcuts\x12+\n" +
+	"\x11total_collections\x18\x03 \x01(\x05R\x10totalCollections\x12+\n" +
+	"\x11shortcuts_created\x18\x04 \x01(\x05R\x10shortcutsCreated\x12+\n" +
+	"\x11shortcuts_updated\x18\x05 \x01(\x05R\x10shortcutsUpdated\x12/\n" +
+	"\x13collections_created\x18\x06 \x01(\x05R\x12collectionsCreated\x12/\n" +
+	"\x13collections_updated\x18\a \x01(\x05R\x12collectionsUpdated2\xc1\a\n" +
+	"\x11CollectionService\x12\x83\x01\n" +
+	"\x0fListCollections\x12(.monotreme.api.v1.ListCollectionsRequest\x1a).monotreme.api.v1.ListCollectionsResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/collections\x12|\n" +
+	"\rGetCollection\x12&.monotreme.api.v1.GetCollectionRequest\x1a\x1c.monotreme.api.v1.Collection\"%\xdaA\x02id\x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/collections/{id}\x12c\n" +
+	"\x13GetCollectionByName\x12,.monotreme.api.v1.GetCollectionByNameRequest\x1a\x1c.monotreme.api.v1.Collection\"\x00\x12\x84\x01\n" +
+	"\x10CreateCollection\x12).monotreme.api.v1.CreateCollectionRequest\x1a\x1c.monotreme.api.v1.Collection\"'\x82\xd3\xe4\x93\x02!:\n" +
+	"collection\"\x13/api/v1/collections\x12\xad\x01\n" +
+	"\x10UpdateCollection\x12).monotreme.api.v1.UpdateCollectionRequest\x1a\x1c.monotreme.api.v1.Collection\"P\xdaA\x16collection,update_mask\x82\xd3\xe4\x93\x021:\n" +
+	"collection\x1a#/api/v1/collections/{collection.id}\x12|\n" +
+	"\x10DeleteCollection\x12).monotreme.api.v1.DeleteCollectionRequest\x1a\x16.google.protobuf.Empty\"%\xdaA\x02id\x82\xd3\xe4\x93\x02\x1a*\x18/api/v1/collections/{id}\x12\x8d\x01\n" +
+	"\x0fImportBookmarks\x12(.monotreme.api.v1.ImportBookmarksRequest\x1a).monotreme.api.v1.ImportBookmarksResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/api/v1/collections/importB\xc4\x01\n" +
+	"\x14com.monotreme.api.v1B\x16CollectionServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_collection_service_proto_rawDescOnce sync.Once
@@ -503,7 +650,7 @@ func file_api_v1_collection_service_proto_rawDescGZIP() []byte {
 	return file_api_v1_collection_service_proto_rawDescData
 }
 
-var file_api_v1_collection_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_api_v1_collection_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_api_v1_collection_service_proto_goTypes = []any{
 	(*Collection)(nil),                 // 0: monotreme.api.v1.Collection
 	(*ListCollectionsRequest)(nil),     // 1: monotreme.api.v1.ListCollectionsRequest
@@ -513,36 +660,41 @@ var file_api_v1_collection_service_proto_goTypes = []any{
 	(*CreateCollectionRequest)(nil),    // 5: monotreme.api.v1.CreateCollectionRequest
 	(*UpdateCollectionRequest)(nil),    // 6: monotreme.api.v1.UpdateCollectionRequest
 	(*DeleteCollectionRequest)(nil),    // 7: monotreme.api.v1.DeleteCollectionRequest
-	(*timestamppb.Timestamp)(nil),      // 8: google.protobuf.Timestamp
-	(Visibility)(0),                    // 9: monotreme.api.v1.Visibility
-	(*fieldmaskpb.FieldMask)(nil),      // 10: google.protobuf.FieldMask
-	(*emptypb.Empty)(nil),              // 11: google.protobuf.Empty
+	(*ImportBookmarksRequest)(nil),     // 8: monotreme.api.v1.ImportBookmarksRequest
+	(*ImportBookmarksResponse)(nil),    // 9: monotreme.api.v1.ImportBookmarksResponse
+	(*timestamppb.Timestamp)(nil),      // 10: google.protobuf.Timestamp
+	(Visibility)(0),                    // 11: monotreme.api.v1.Visibility
+	(*fieldmaskpb.FieldMask)(nil),      // 12: google.protobuf.FieldMask
+	(*emptypb.Empty)(nil),              // 13: google.protobuf.Empty
 }
 var file_api_v1_collection_service_proto_depIdxs = []int32{
-	8,  // 0: monotreme.api.v1.Collection.created_time:type_name -> google.protobuf.Timestamp
-	8,  // 1: monotreme.api.v1.Collection.updated_time:type_name -> google.protobuf.Timestamp
-	9,  // 2: monotreme.api.v1.Collection.visibility:type_name -> monotreme.api.v1.Visibility
+	10, // 0: monotreme.api.v1.Collection.created_time:type_name -> google.protobuf.Timestamp
+	10, // 1: monotreme.api.v1.Collection.updated_time:type_name -> google.protobuf.Timestamp
+	11, // 2: monotreme.api.v1.Collection.visibility:type_name -> monotreme.api.v1.Visibility
 	0,  // 3: monotreme.api.v1.ListCollectionsResponse.collections:type_name -> monotreme.api.v1.Collection
 	0,  // 4: monotreme.api.v1.CreateCollectionRequest.collection:type_name -> monotreme.api.v1.Collection
 	0,  // 5: monotreme.api.v1.UpdateCollectionRequest.collection:type_name -> monotreme.api.v1.Collection
-	10, // 6: monotreme.api.v1.UpdateCollectionRequest.update_mask:type_name -> google.protobuf.FieldMask
-	1,  // 7: monotreme.api.v1.CollectionService.ListCollections:input_type -> monotreme.api.v1.ListCollectionsRequest
-	3,  // 8: monotreme.api.v1.CollectionService.GetCollection:input_type -> monotreme.api.v1.GetCollectionRequest
-	4,  // 9: monotreme.api.v1.CollectionService.GetCollectionByName:input_type -> monotreme.api.v1.GetCollectionByNameRequest
-	5,  // 10: monotreme.api.v1.CollectionService.CreateCollection:input_type -> monotreme.api.v1.CreateCollectionRequest
-	6,  // 11: monotreme.api.v1.CollectionService.UpdateCollection:input_type -> monotreme.api.v1.UpdateCollectionRequest
-	7,  // 12: monotreme.api.v1.CollectionService.DeleteCollection:input_type -> monotreme.api.v1.DeleteCollectionRequest
-	2,  // 13: monotreme.api.v1.CollectionService.ListCollections:output_type -> monotreme.api.v1.ListCollectionsResponse
-	0,  // 14: monotreme.api.v1.CollectionService.GetCollection:output_type -> monotreme.api.v1.Collection
-	0,  // 15: monotreme.api.v1.CollectionService.GetCollectionByName:output_type -> monotreme.api.v1.Collection
-	0,  // 16: monotreme.api.v1.CollectionService.CreateCollection:output_type -> monotreme.api.v1.Collection
-	0,  // 17: monotreme.api.v1.CollectionService.UpdateCollection:output_type -> monotreme.api.v1.Collection
-	11, // 18: monotreme.api.v1.CollectionService.DeleteCollection:output_type -> google.protobuf.Empty
-	13, // [13:19] is the sub-list for method output_type
-	7,  // [7:13] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	12, // 6: monotreme.api.v1.UpdateCollectionRequest.update_mask:type_name -> google.protobuf.FieldMask
+	0,  // 7: monotreme.api.v1.ImportBookmarksResponse.collections:type_name -> monotreme.api.v1.Collection
+	1,  // 8: monotreme.api.v1.CollectionService.ListCollections:input_type -> monotreme.api.v1.ListCollectionsRequest
+	3,  // 9: monotreme.api.v1.CollectionService.GetCollection:input_type -> monotreme.api.v1.GetCollectionRequest
+	4,  // 10: monotreme.api.v1.CollectionService.GetCollectionByName:input_type -> monotreme.api.v1.GetCollectionByNameRequest
+	5,  // 11: monotreme.api.v1.CollectionService.CreateCollection:input_type -> monotreme.api.v1.CreateCollectionRequest
+	6,  // 12: monotreme.api.v1.CollectionService.UpdateCollection:input_type -> monotreme.api.v1.UpdateCollectionRequest
+	7,  // 13: monotreme.api.v1.CollectionService.DeleteCollection:input_type -> monotreme.api.v1.DeleteCollectionRequest
+	8,  // 14: monotreme.api.v1.CollectionService.ImportBookmarks:input_type -> monotreme.api.v1.ImportBookmarksRequest
+	2,  // 15: monotreme.api.v1.CollectionService.ListCollections:output_type -> monotreme.api.v1.ListCollectionsResponse
+	0,  // 16: monotreme.api.v1.CollectionService.GetCollection:output_type -> monotreme.api.v1.Collection
+	0,  // 17: monotreme.api.v1.CollectionService.GetCollectionByName:output_type -> monotreme.api.v1.Collection
+	0,  // 18: monotreme.api.v1.CollectionService.CreateCollection:output_type -> monotreme.api.v1.Collection
+	0,  // 19: monotreme.api.v1.CollectionService.UpdateCollection:output_type -> monotreme.api.v1.Collection
+	13, // 20: monotreme.api.v1.CollectionService.DeleteCollection:output_type -> google.protobuf.Empty
+	9,  // 21: monotreme.api.v1.CollectionService.ImportBookmarks:output_type -> monotreme.api.v1.ImportBookmarksResponse
+	15, // [15:22] is the sub-list for method output_type
+	8,  // [8:15] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_api_v1_collection_service_proto_init() }
@@ -557,7 +709,7 @@ func file_api_v1_collection_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_collection_service_proto_rawDesc), len(file_api_v1_collection_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

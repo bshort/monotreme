@@ -53,6 +53,20 @@ export interface DeleteCollectionRequest {
   id: number;
 }
 
+export interface ImportBookmarksRequest {
+  htmlContent: string;
+}
+
+export interface ImportBookmarksResponse {
+  collections: Collection[];
+  totalShortcuts: number;
+  totalCollections: number;
+  shortcutsCreated: number;
+  shortcutsUpdated: number;
+  collectionsCreated: number;
+  collectionsUpdated: number;
+}
+
 function createBaseCollection(): Collection {
   return {
     id: 0,
@@ -543,6 +557,178 @@ export const DeleteCollectionRequest: MessageFns<DeleteCollectionRequest> = {
   },
 };
 
+function createBaseImportBookmarksRequest(): ImportBookmarksRequest {
+  return { htmlContent: "" };
+}
+
+export const ImportBookmarksRequest: MessageFns<ImportBookmarksRequest> = {
+  encode(message: ImportBookmarksRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.htmlContent !== "") {
+      writer.uint32(10).string(message.htmlContent);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ImportBookmarksRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseImportBookmarksRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.htmlContent = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ImportBookmarksRequest>): ImportBookmarksRequest {
+    return ImportBookmarksRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ImportBookmarksRequest>): ImportBookmarksRequest {
+    const message = createBaseImportBookmarksRequest();
+    message.htmlContent = object.htmlContent ?? "";
+    return message;
+  },
+};
+
+function createBaseImportBookmarksResponse(): ImportBookmarksResponse {
+  return {
+    collections: [],
+    totalShortcuts: 0,
+    totalCollections: 0,
+    shortcutsCreated: 0,
+    shortcutsUpdated: 0,
+    collectionsCreated: 0,
+    collectionsUpdated: 0,
+  };
+}
+
+export const ImportBookmarksResponse: MessageFns<ImportBookmarksResponse> = {
+  encode(message: ImportBookmarksResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.collections) {
+      Collection.encode(v!, writer.uint32(10).fork()).join();
+    }
+    if (message.totalShortcuts !== 0) {
+      writer.uint32(16).int32(message.totalShortcuts);
+    }
+    if (message.totalCollections !== 0) {
+      writer.uint32(24).int32(message.totalCollections);
+    }
+    if (message.shortcutsCreated !== 0) {
+      writer.uint32(32).int32(message.shortcutsCreated);
+    }
+    if (message.shortcutsUpdated !== 0) {
+      writer.uint32(40).int32(message.shortcutsUpdated);
+    }
+    if (message.collectionsCreated !== 0) {
+      writer.uint32(48).int32(message.collectionsCreated);
+    }
+    if (message.collectionsUpdated !== 0) {
+      writer.uint32(56).int32(message.collectionsUpdated);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ImportBookmarksResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseImportBookmarksResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.collections.push(Collection.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.totalShortcuts = reader.int32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.totalCollections = reader.int32();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.shortcutsCreated = reader.int32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.shortcutsUpdated = reader.int32();
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.collectionsCreated = reader.int32();
+          continue;
+        }
+        case 7: {
+          if (tag !== 56) {
+            break;
+          }
+
+          message.collectionsUpdated = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ImportBookmarksResponse>): ImportBookmarksResponse {
+    return ImportBookmarksResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ImportBookmarksResponse>): ImportBookmarksResponse {
+    const message = createBaseImportBookmarksResponse();
+    message.collections = object.collections?.map((e) => Collection.fromPartial(e)) || [];
+    message.totalShortcuts = object.totalShortcuts ?? 0;
+    message.totalCollections = object.totalCollections ?? 0;
+    message.shortcutsCreated = object.shortcutsCreated ?? 0;
+    message.shortcutsUpdated = object.shortcutsUpdated ?? 0;
+    message.collectionsCreated = object.collectionsCreated ?? 0;
+    message.collectionsUpdated = object.collectionsUpdated ?? 0;
+    return message;
+  },
+};
+
 export type CollectionServiceDefinition = typeof CollectionServiceDefinition;
 export const CollectionServiceDefinition = {
   name: "CollectionService",
@@ -821,6 +1007,54 @@ export const CollectionServiceDefinition = {
               105,
               100,
               125,
+            ]),
+          ],
+        },
+      },
+    },
+    /** ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts. */
+    importBookmarks: {
+      name: "ImportBookmarks",
+      requestType: ImportBookmarksRequest,
+      requestStream: false,
+      responseType: ImportBookmarksResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              31,
+              58,
+              1,
+              42,
+              34,
+              26,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              99,
+              111,
+              108,
+              108,
+              101,
+              99,
+              116,
+              105,
+              111,
+              110,
+              115,
+              47,
+              105,
+              109,
+              112,
+              111,
+              114,
+              116,
             ]),
           ],
         },

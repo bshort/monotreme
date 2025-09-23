@@ -18,7 +18,7 @@ import (
 )
 
 //go:embed slash.public.pem
-var slashPublicRSAKey string
+var monotremePublicRSAKey string
 
 type LicenseService struct {
 	Profile *profile.Profile
@@ -189,7 +189,7 @@ func parseLicenseKey(licenseKey string) (*Claims, error) {
 			return nil, errors.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		key, err := jwt.ParseRSAPublicKeyFromPEM([]byte(slashPublicRSAKey))
+		key, err := jwt.ParseRSAPublicKeyFromPEM([]byte(monotremePublicRSAKey))
 		if err != nil {
 			return nil, err
 		}

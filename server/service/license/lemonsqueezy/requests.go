@@ -13,11 +13,11 @@ import (
 const (
 	// The base API URL for the Lemon Squeezy API.
 	baseAPIURL = "https://api.lemonsqueezy.com"
-	// The store ID for the yourselfhosted store.
-	// Link: https://yourselfhosted.lemonsqueezy.com
+	// The store ID for the monotrememarks store.
+	// Link: https://monotrememarks.lemonsqueezy.com
 	storeID = 15634
 	// The product ID for the subscription pro product.
-	// Link: https://yourselfhosted.lemonsqueezy.com/checkout/buy/d03a2696-8a8b-49c9-9e19-d425e3884fd7
+	// Link: https://monotrememarks.lemonsqueezy.com/checkout/buy/d03a2696-8a8b-49c9-9e19-d425e3884fd7
 	subscriptionProProductID = 98995
 )
 

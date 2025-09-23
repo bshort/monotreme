@@ -164,6 +164,27 @@ paths:
             $ref: '#/definitions/apiv1Collection'
       tags:
         - CollectionService
+  /api/v1/collections/import:
+    post:
+      summary: ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts.
+      operationId: CollectionService_ImportBookmarks
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ImportBookmarksResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ImportBookmarksRequest'
+      tags:
+        - CollectionService
   /api/v1/collections/{collection.id}:
     put:
       summary: UpdateCollection updates a collection.
@@ -1000,6 +1021,37 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/GetShortcutAnalyticsResponseAnalyticsItem'
+  v1ImportBookmarksRequest:
+    type: object
+    properties:
+      htmlContent:
+        type: string
+  v1ImportBookmarksResponse:
+    type: object
+    properties:
+      collections:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1Collection'
+      totalShortcuts:
+        type: integer
+        format: int32
+      totalCollections:
+        type: integer
+        format: int32
+      shortcutsCreated:
+        type: integer
+        format: int32
+      shortcutsUpdated:
+        type: integer
+        format: int32
+      collectionsCreated:
+        type: integer
+        format: int32
+      collectionsUpdated:
+        type: integer
+        format: int32
   v1ListCollectionsResponse:
     type: object
     properties:

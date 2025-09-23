@@ -14,7 +14,7 @@ To deploy Monotreme using docker run, just one command is needed:
 docker run -d --name monotreme --publish 5231:5231 --volume ~/.monotreme/:/var/opt/monotreme bshort/monotreme:latest
 ```
 
-This will start Monotreme in the background and expose it on port `5231`. Data is stored in `~/.slash/`. You can customize the port and data directory.
+This will start Monotreme in the background and expose it on port `5231`. Data is stored in `~/.monotreme/`. You can customize the port and data directory.
 
 ### Upgrade
 
@@ -27,7 +27,7 @@ docker stop monotreme && docker rm monotreme
 It's recommended but optional to backup database:
 
 ```bash
-cp -r ~/.slash/slash_prod.db ~/.slash/slash_prod.db.bak
+cp -r ~/.monotreme/monotreme_prod.db ~/.monotreme/monotreme_prod.db.bak
 ```
 
 Then pull the latest image:
@@ -74,8 +74,8 @@ docker run -d --name monotreme --publish 5231:5231 --volume ~/.monotreme/:/var/o
 Additionally, you can set these configurations via environment variables:
 
 ```shell
-SLASH_DRIVER=postgres
-SLASH_DSN=postgresql://root:password@localhost:5432/monotreme
+MONOTREME_DRIVER=postgres
+MONOTREME_DSN=postgresql://root:password@localhost:5432/monotreme
 ```
 
 Note that if the PostgreSQL server is not configured to support SSL connections you will need to add `?sslmode=disable` to the DSN.

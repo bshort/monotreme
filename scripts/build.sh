@@ -11,15 +11,15 @@ OS=$(uname -s)
 
 # Set output file name based on the OS
 if [[ "$OS" == *"CYGWIN"* || "$OS" == *"MINGW"* || "$OS" == *"MSYS"* ]]; then
-  OUTPUT="./build/slash.exe"
+  OUTPUT="./build/monotreme.exe"
 else
-  OUTPUT="./build/slash"
+  OUTPUT="./build/monotreme"
 fi
 
 echo "Building for $OS..."
 
 # Build the executable
-go build -o "$OUTPUT" ./bin/slash/main.go
+go build -o "$OUTPUT" ./bin/monotreme/main.go
 
 # Output the success message
 echo "Build successful!"

@@ -1,5 +1,5 @@
 version: v2
-name: buf.build/yourselfhosted/slash
+name: buf.build/bshort/monotreme
 deps:
   - buf.build/googleapis/googleapis
   - buf.build/grpc-ecosystem/grpc-gateway

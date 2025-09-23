@@ -10,23 +10,23 @@ const (
 	// Enterprise features.
 
 	// FeatureTypeSSO allows the user to use SSO.
-	FeatureTypeSSO FeatureType = "ysh.slash.sso"
+	FeatureTypeSSO FeatureType = "ysh.monotreme.sso"
 	// FeatureTypeAdvancedAnalytics allows the user to use advanced analytics.
-	FeatureTypeAdvancedAnalytics FeatureType = "ysh.slash.advanced-analytics"
+	FeatureTypeAdvancedAnalytics FeatureType = "ysh.monotreme.advanced-analytics"
 
 	// Usages.
 
 	// FeatureTypeUnlimitedAccounts allows the user to create unlimited accounts.
-	FeatureTypeUnlimitedAccounts FeatureType = "ysh.slash.unlimited-accounts"
+	FeatureTypeUnlimitedAccounts FeatureType = "ysh.monotreme.unlimited-accounts"
 	// FeatureTypeUnlimitedShortcuts allows the user to create unlimited shortcuts.
-	FeatureTypeUnlimitedShortcuts FeatureType = "ysh.slash.unlimited-shortcuts"
+	FeatureTypeUnlimitedShortcuts FeatureType = "ysh.monotreme.unlimited-shortcuts"
 	// FeatureTypeUnlimitedAccounts allows the user to create unlimited collections.
-	FeatureTypeUnlimitedCollections FeatureType = "ysh.slash.unlimited-collections"
+	FeatureTypeUnlimitedCollections FeatureType = "ysh.monotreme.unlimited-collections"
 
 	// Customization.
 
 	// FeatureTypeCustomeBranding allows the user to customize the branding.
-	FeatureTypeCustomeBranding FeatureType = "ysh.slash.custom-branding"
+	FeatureTypeCustomeBranding FeatureType = "ysh.monotreme.custom-branding"
 )
 
 func (f FeatureType) String() string {
@@ -55,17 +55,17 @@ func getDefaultFeatures(plan v1pb.PlanType) []FeatureType {
 
 func validateFeatureString(feature string) (FeatureType, bool) {
 	switch feature {
-	case "ysh.slash.unlimited-accounts":
+	case "ysh.monotreme.unlimited-accounts":
 		return FeatureTypeUnlimitedAccounts, true
-	case "ysh.slash.unlimited-shortcuts":
+	case "ysh.monotreme.unlimited-shortcuts":
 		return FeatureTypeUnlimitedShortcuts, true
-	case "ysh.slash.unlimited-collections":
+	case "ysh.monotreme.unlimited-collections":
 		return FeatureTypeUnlimitedCollections, true
-	case "ysh.slash.custom-branding":
+	case "ysh.monotreme.custom-branding":
 		return FeatureTypeCustomeBranding, true
-	case "ysh.slash.sso":
+	case "ysh.monotreme.sso":
 		return FeatureTypeSSO, true
-	case "ysh.slash.advanced-analytics":
+	case "ysh.monotreme.advanced-analytics":
 		return FeatureTypeAdvancedAnalytics, true
 	default:
 		return "", false

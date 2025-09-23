@@ -1,6 +1,5 @@
-import { Alert, Button, Divider } from "@mui/joy";
+import { Alert, Divider } from "@mui/joy";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import Icon from "@/components/Icon";
 import WorkspaceGeneralSettingSection from "@/components/setting/WorkspaceGeneralSettingSection";
 import WorkspaceMembersSection from "@/components/setting/WorkspaceMembersSection";

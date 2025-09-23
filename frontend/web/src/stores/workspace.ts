@@ -4,12 +4,12 @@ import { Subscription } from "@/types/proto/api/v1/subscription_service";
 import { WorkspaceProfile, WorkspaceSetting } from "@/types/proto/api/v1/workspace_service";
 
 export enum FeatureType {
-  SSO = "ysh.slash.sso",
-  AdvancedAnalytics = "ysh.slash.advanced-analytics",
-  UnlimitedAccounts = "ysh.slash.unlimited-accounts",
-  UnlimitedShortcuts = "ysh.slash.unlimited-shortcuts",
-  UnlimitedCollections = "ysh.slash.unlimited-collections",
-  CustomeBranding = "ysh.slash.custom-branding",
+  SSO = "ysh.monotreme.sso",
+  AdvancedAnalytics = "ysh.monotreme.advanced-analytics",
+  UnlimitedAccounts = "ysh.monotreme.unlimited-accounts",
+  UnlimitedShortcuts = "ysh.monotreme.unlimited-shortcuts",
+  UnlimitedCollections = "ysh.monotreme.unlimited-collections",
+  CustomeBranding = "ysh.monotreme.custom-branding",
 }
 
 interface WorkspaceState {

@@ -123,7 +123,7 @@ var File_store_common_proto protoreflect.FileDescriptor
 
 const file_store_common_proto_rawDesc = "" +
 	"\n" +
-	"\x12store/common.proto\x12\vslash.store*A\n" +
+	"\x12store/common.proto\x12\x0fmonotreme.store*A\n" +
 	"\tRowStatus\x12\x1a\n" +
 	"\x16ROW_STATUS_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
@@ -134,8 +134,8 @@ const file_store_common_proto_rawDesc = "" +
 	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tWORKSPACE\x10\x01\x12\n" +
 	"\n" +
-	"\x06PUBLIC\x10\x02B\x94\x01\n" +
-	"\x0fcom.monotreme.storeB\vCommonProtoP\x01Z'github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03SSX\xaa\x02\vSlash.Store\xca\x02\vSlash\\Store\xe2\x02\x17Slash\\Store\\GPBMetadata\xea\x02\fMonotreme::Storeb\x06proto3"
+	"\x06PUBLIC\x10\x02B\xac\x01\n" +
+	"\x13com.monotreme.storeB\vCommonProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (
 	file_store_common_proto_rawDescOnce sync.Once
@@ -151,8 +151,8 @@ func file_store_common_proto_rawDescGZIP() []byte {
 
 var file_store_common_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_store_common_proto_goTypes = []any{
-	(RowStatus)(0),  // 0: slash.store.RowStatus
-	(Visibility)(0), // 1: slash.store.Visibility
+	(RowStatus)(0),  // 0: monotreme.store.RowStatus
+	(Visibility)(0), // 1: monotreme.store.Visibility
 }
 var file_store_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
