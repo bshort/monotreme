@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SubscriptionService_GetSubscription_FullMethodName    = "/slash.api.v1.SubscriptionService/GetSubscription"
-	SubscriptionService_UpdateSubscription_FullMethodName = "/slash.api.v1.SubscriptionService/UpdateSubscription"
-	SubscriptionService_DeleteSubscription_FullMethodName = "/slash.api.v1.SubscriptionService/DeleteSubscription"
+	SubscriptionService_GetSubscription_FullMethodName    = "/monotreme.api.v1.SubscriptionService/GetSubscription"
+	SubscriptionService_UpdateSubscription_FullMethodName = "/monotreme.api.v1.SubscriptionService/UpdateSubscription"
+	SubscriptionService_DeleteSubscription_FullMethodName = "/monotreme.api.v1.SubscriptionService/DeleteSubscription"
 )
 
 // SubscriptionServiceClient is the client API for SubscriptionService service.
@@ -182,7 +182,7 @@ func _SubscriptionService_DeleteSubscription_Handler(srv interface{}, ctx contex
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SubscriptionService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.SubscriptionService",
+	ServiceName: "monotreme.api.v1.SubscriptionService",
 	HandlerType: (*SubscriptionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

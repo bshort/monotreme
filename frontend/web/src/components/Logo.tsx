@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useWorkspaceStore } from "@/stores";
 import { FeatureType } from "@/stores/workspace";
-import Icon from "./Icon";
+import monotremeLogo from "@/images/monotreme.png";
 
 interface Props {
   className?: string;
@@ -16,7 +16,7 @@ const Logo = ({ className }: Props) => {
       {branding ? (
         <img src={branding} alt="branding" className="max-w-full max-h-full" />
       ) : (
-        <Icon.CircleSlash className="w-full h-auto" strokeWidth={1.5} />
+        <img src={monotremeLogo} alt="Monotreme Logo" className="max-w-full max-h-full" />
       )}
     </div>
   );

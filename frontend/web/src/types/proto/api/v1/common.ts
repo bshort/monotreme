@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export enum State {
   STATE_UNSPECIFIED = "STATE_UNSPECIFIED",

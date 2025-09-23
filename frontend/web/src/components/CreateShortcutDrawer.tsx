@@ -320,7 +320,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
                   <Input
                     className="w-full"
                     type="text"
-                    placeholder="Slash - An open source, self-hosted platform for sharing and managing your most frequently used links"
+                    placeholder="Monotreme - An open source, self-hosted platform for sharing and managing your most frequently used links"
                     size="sm"
                     value={state.shortcutCreate.ogMetadata?.title}
                     onChange={handleOpenGraphMetadataTitleChange}

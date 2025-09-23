@@ -393,7 +393,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/users"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/users"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -413,7 +413,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -433,7 +433,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/CreateUser", runtime.WithHTTPPathPattern("/api/v1/users"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/CreateUser", runtime.WithHTTPPathPattern("/api/v1/users"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -453,7 +453,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/users/{user.id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/users/{user.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -473,7 +473,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/DeleteUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/DeleteUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -493,7 +493,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/ListUserAccessTokens", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/ListUserAccessTokens", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -513,7 +513,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/CreateUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/CreateUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -533,7 +533,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserService/DeleteUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens/{access_token}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserService/DeleteUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens/{access_token}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -591,7 +591,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/users"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/ListUsers", runtime.WithHTTPPathPattern("/api/v1/users"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -608,7 +608,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/GetUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -625,7 +625,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/CreateUser", runtime.WithHTTPPathPattern("/api/v1/users"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/CreateUser", runtime.WithHTTPPathPattern("/api/v1/users"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -642,7 +642,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/users/{user.id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/UpdateUser", runtime.WithHTTPPathPattern("/api/v1/users/{user.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -659,7 +659,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/DeleteUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/DeleteUser", runtime.WithHTTPPathPattern("/api/v1/users/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -676,7 +676,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/ListUserAccessTokens", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/ListUserAccessTokens", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -693,7 +693,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/CreateUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/CreateUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -710,7 +710,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserService/DeleteUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens/{access_token}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserService/DeleteUserAccessToken", runtime.WithHTTPPathPattern("/api/v1/users/{id}/access_tokens/{access_token}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

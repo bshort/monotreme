@@ -20,12 +20,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CollectionService_ListCollections_FullMethodName     = "/slash.api.v1.CollectionService/ListCollections"
-	CollectionService_GetCollection_FullMethodName       = "/slash.api.v1.CollectionService/GetCollection"
-	CollectionService_GetCollectionByName_FullMethodName = "/slash.api.v1.CollectionService/GetCollectionByName"
-	CollectionService_CreateCollection_FullMethodName    = "/slash.api.v1.CollectionService/CreateCollection"
-	CollectionService_UpdateCollection_FullMethodName    = "/slash.api.v1.CollectionService/UpdateCollection"
-	CollectionService_DeleteCollection_FullMethodName    = "/slash.api.v1.CollectionService/DeleteCollection"
+	CollectionService_ListCollections_FullMethodName     = "/monotreme.api.v1.CollectionService/ListCollections"
+	CollectionService_GetCollection_FullMethodName       = "/monotreme.api.v1.CollectionService/GetCollection"
+	CollectionService_GetCollectionByName_FullMethodName = "/monotreme.api.v1.CollectionService/GetCollectionByName"
+	CollectionService_CreateCollection_FullMethodName    = "/monotreme.api.v1.CollectionService/CreateCollection"
+	CollectionService_UpdateCollection_FullMethodName    = "/monotreme.api.v1.CollectionService/UpdateCollection"
+	CollectionService_DeleteCollection_FullMethodName    = "/monotreme.api.v1.CollectionService/DeleteCollection"
 )
 
 // CollectionServiceClient is the client API for CollectionService service.
@@ -291,7 +291,7 @@ func _CollectionService_DeleteCollection_Handler(srv interface{}, ctx context.Co
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CollectionService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.CollectionService",
+	ServiceName: "monotreme.api.v1.CollectionService",
 	HandlerType: (*CollectionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

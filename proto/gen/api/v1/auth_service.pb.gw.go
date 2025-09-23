@@ -194,7 +194,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.AuthService/GetAuthStatus", runtime.WithHTTPPathPattern("/api/v1/auth/status"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.AuthService/GetAuthStatus", runtime.WithHTTPPathPattern("/api/v1/auth/status"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -214,7 +214,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.AuthService/SignIn", runtime.WithHTTPPathPattern("/api/v1/auth/signin"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignIn", runtime.WithHTTPPathPattern("/api/v1/auth/signin"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -234,7 +234,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.AuthService/SignInWithSSO", runtime.WithHTTPPathPattern("/api/v1/auth/signin/sso"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignInWithSSO", runtime.WithHTTPPathPattern("/api/v1/auth/signin/sso"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -254,7 +254,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.AuthService/SignUp", runtime.WithHTTPPathPattern("/api/v1/auth/signup"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignUp", runtime.WithHTTPPathPattern("/api/v1/auth/signup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -274,7 +274,7 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.AuthService/SignOut", runtime.WithHTTPPathPattern("/api/v1/auth/signout"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignOut", runtime.WithHTTPPathPattern("/api/v1/auth/signout"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -332,7 +332,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.AuthService/GetAuthStatus", runtime.WithHTTPPathPattern("/api/v1/auth/status"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.AuthService/GetAuthStatus", runtime.WithHTTPPathPattern("/api/v1/auth/status"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -349,7 +349,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.AuthService/SignIn", runtime.WithHTTPPathPattern("/api/v1/auth/signin"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignIn", runtime.WithHTTPPathPattern("/api/v1/auth/signin"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -366,7 +366,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.AuthService/SignInWithSSO", runtime.WithHTTPPathPattern("/api/v1/auth/signin/sso"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignInWithSSO", runtime.WithHTTPPathPattern("/api/v1/auth/signin/sso"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -383,7 +383,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.AuthService/SignUp", runtime.WithHTTPPathPattern("/api/v1/auth/signup"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignUp", runtime.WithHTTPPathPattern("/api/v1/auth/signup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -400,7 +400,7 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.AuthService/SignOut", runtime.WithHTTPPathPattern("/api/v1/auth/signout"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.AuthService/SignOut", runtime.WithHTTPPathPattern("/api/v1/auth/signout"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

@@ -22,7 +22,7 @@ const ShortcutsNavigator = () => {
         )}
         onClick={() => viewStore.setFilter({ tab: "tab:all" })}
       >
-        <Icon.CircleSlash className="w-4 h-auto mr-1" />
+        <Icon.Earth className="w-4 h-auto mr-1" />
         <span className="font-normal">{t("filter.all")}</span>
       </button>
       <button

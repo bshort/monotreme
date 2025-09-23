@@ -76,7 +76,7 @@ const SignUp: React.FC = () => {
         <div className="w-full py-4 grow flex flex-col justify-center items-center">
           <div className="flex flex-row justify-start items-center w-auto mx-auto gap-y-2 mb-4">
             <Logo className="mr-2" />
-            <span className="text-3xl opacity-80 dark:text-gray-500">Slash</span>
+            <span className="text-3xl opacity-80 dark:text-gray-500">Monotreme</span>
           </div>
           <p className="w-full text-2xl mt-6 dark:text-gray-500">{t("auth.create-your-account")}</p>
           <form className="w-full mt-4" onSubmit={handleSignupBtnClick}>

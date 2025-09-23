@@ -20,11 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_GetAuthStatus_FullMethodName = "/slash.api.v1.AuthService/GetAuthStatus"
-	AuthService_SignIn_FullMethodName        = "/slash.api.v1.AuthService/SignIn"
-	AuthService_SignInWithSSO_FullMethodName = "/slash.api.v1.AuthService/SignInWithSSO"
-	AuthService_SignUp_FullMethodName        = "/slash.api.v1.AuthService/SignUp"
-	AuthService_SignOut_FullMethodName       = "/slash.api.v1.AuthService/SignOut"
+	AuthService_GetAuthStatus_FullMethodName = "/monotreme.api.v1.AuthService/GetAuthStatus"
+	AuthService_SignIn_FullMethodName        = "/monotreme.api.v1.AuthService/SignIn"
+	AuthService_SignInWithSSO_FullMethodName = "/monotreme.api.v1.AuthService/SignInWithSSO"
+	AuthService_SignUp_FullMethodName        = "/monotreme.api.v1.AuthService/SignUp"
+	AuthService_SignOut_FullMethodName       = "/monotreme.api.v1.AuthService/SignOut"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -255,7 +255,7 @@ func _AuthService_SignOut_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.AuthService",
+	ServiceName: "monotreme.api.v1.AuthService",
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

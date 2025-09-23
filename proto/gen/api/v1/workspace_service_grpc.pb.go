@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WorkspaceService_GetWorkspaceProfile_FullMethodName    = "/slash.api.v1.WorkspaceService/GetWorkspaceProfile"
-	WorkspaceService_GetWorkspaceSetting_FullMethodName    = "/slash.api.v1.WorkspaceService/GetWorkspaceSetting"
-	WorkspaceService_UpdateWorkspaceSetting_FullMethodName = "/slash.api.v1.WorkspaceService/UpdateWorkspaceSetting"
+	WorkspaceService_GetWorkspaceProfile_FullMethodName    = "/monotreme.api.v1.WorkspaceService/GetWorkspaceProfile"
+	WorkspaceService_GetWorkspaceSetting_FullMethodName    = "/monotreme.api.v1.WorkspaceService/GetWorkspaceSetting"
+	WorkspaceService_UpdateWorkspaceSetting_FullMethodName = "/monotreme.api.v1.WorkspaceService/UpdateWorkspaceSetting"
 )
 
 // WorkspaceServiceClient is the client API for WorkspaceService service.
@@ -176,7 +176,7 @@ func _WorkspaceService_UpdateWorkspaceSetting_Handler(srv interface{}, ctx conte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var WorkspaceService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.WorkspaceService",
+	ServiceName: "monotreme.api.v1.WorkspaceService",
 	HandlerType: (*WorkspaceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

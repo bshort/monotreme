@@ -232,7 +232,7 @@ func RegisterCollectionServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.CollectionService/ListCollections", runtime.WithHTTPPathPattern("/api/v1/collections"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/ListCollections", runtime.WithHTTPPathPattern("/api/v1/collections"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -252,7 +252,7 @@ func RegisterCollectionServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.CollectionService/GetCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/GetCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -272,7 +272,7 @@ func RegisterCollectionServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.CollectionService/CreateCollection", runtime.WithHTTPPathPattern("/api/v1/collections"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/CreateCollection", runtime.WithHTTPPathPattern("/api/v1/collections"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -292,7 +292,7 @@ func RegisterCollectionServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.CollectionService/UpdateCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{collection.id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/UpdateCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{collection.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -312,7 +312,7 @@ func RegisterCollectionServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.CollectionService/DeleteCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/DeleteCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -370,7 +370,7 @@ func RegisterCollectionServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.CollectionService/ListCollections", runtime.WithHTTPPathPattern("/api/v1/collections"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/ListCollections", runtime.WithHTTPPathPattern("/api/v1/collections"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -387,7 +387,7 @@ func RegisterCollectionServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.CollectionService/GetCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/GetCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -404,7 +404,7 @@ func RegisterCollectionServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.CollectionService/CreateCollection", runtime.WithHTTPPathPattern("/api/v1/collections"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/CreateCollection", runtime.WithHTTPPathPattern("/api/v1/collections"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -421,7 +421,7 @@ func RegisterCollectionServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.CollectionService/UpdateCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{collection.id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/UpdateCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{collection.id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -438,7 +438,7 @@ func RegisterCollectionServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.CollectionService/DeleteCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.CollectionService/DeleteCollection", runtime.WithHTTPPathPattern("/api/v1/collections/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

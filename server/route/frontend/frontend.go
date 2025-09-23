@@ -47,7 +47,7 @@ func (s *FrontendService) Serve(_ context.Context, e *echo.Echo) {
 		HTML5:      true,
 		Filesystem: getFileSystem("dist"),
 		Skipper: func(c echo.Context) bool {
-			return util.HasPrefixes(c.Path(), "/api", "/slash.api.v1", "/s/:shortcutName", "/c/:collectionName")
+			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1", "/s/:shortcutName", "/c/:collectionName")
 		},
 	}))
 
@@ -56,7 +56,7 @@ func (s *FrontendService) Serve(_ context.Context, e *echo.Echo) {
 	// Reference: https://echo.labstack.com/docs/middleware/gzip
 	assetsGroup.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Skipper: func(c echo.Context) bool {
-			return util.HasPrefixes(c.Path(), "/api", "/slash.api.v1", "/s/:shortcutName", "/c/:collectionName")
+			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1", "/s/:shortcutName", "/c/:collectionName")
 		},
 		Level: 5,
 	}))
@@ -70,7 +70,7 @@ func (s *FrontendService) Serve(_ context.Context, e *echo.Echo) {
 		HTML5:      true,
 		Filesystem: getFileSystem("dist/assets"),
 		Skipper: func(c echo.Context) bool {
-			return util.HasPrefixes(c.Path(), "/api", "/slash.api.v1", "/s/:shortcutName", "/c/:collectionName")
+			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1", "/s/:shortcutName", "/c/:collectionName")
 		},
 	}))
 

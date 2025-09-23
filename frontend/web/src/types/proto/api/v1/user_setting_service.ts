@@ -8,7 +8,7 @@
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { FieldMask } from "../../google/protobuf/field_mask";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export interface UserSetting {
   userId: number;
@@ -412,7 +412,7 @@ export const UpdateUserSettingRequest: MessageFns<UpdateUserSettingRequest> = {
 export type UserSettingServiceDefinition = typeof UserSettingServiceDefinition;
 export const UserSettingServiceDefinition = {
   name: "UserSettingService",
-  fullName: "slash.api.v1.UserSettingService",
+  fullName: "monotreme.api.v1.UserSettingService",
   methods: {
     /** GetUserSetting returns the user setting. */
     getUserSetting: {

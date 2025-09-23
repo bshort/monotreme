@@ -1,5 +1,5 @@
 -- This file demonstrates the UUID migration that will be applied automatically
--- when the Slash application starts and detects the new migration files.
+-- when the Monotreme application starts and detects the new migration files.
 
 -- The migration system will apply the following SQL commands:
 
@@ -18,5 +18,5 @@ INSERT INTO migration_history (version) VALUES ('1.1.1');
 -- - Update the migration history
 -- - Generate UUIDs for new shortcuts created after this migration
 
--- To apply this migration, simply start the Slash application:
+-- To apply this migration, simply start the Monotreme application:
 -- ./slash --mode dev --data /path/to/data/directory

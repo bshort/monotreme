@@ -51,7 +51,7 @@ const IndexOptions = () => {
       <div className="w-full max-w-lg mx-auto flex flex-col justify-start items-start py-12">
         <h2 className="flex flex-row justify-start items-center mb-6 text-2xl dark:text-gray-400">
           <Logo className="w-10 h-auto mr-2" />
-          <span>Slash</span>
+          <span>Monotreme</span>
           <span className="mx-2 text-gray-400">/</span>
           <span>Setting</span>
         </h2>
@@ -66,7 +66,7 @@ const IndexOptions = () => {
                   href={context.instanceUrl}
                   target="_blank"
                 >
-                  <span className="mr-1">Go to my Slash</span>
+                  <span className="mr-1">Go to my Monotreme</span>
                   <Icon.ExternalLink className="w-4 h-auto" />
                 </a>
               )}
