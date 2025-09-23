@@ -108,4 +108,8 @@ message ImportBookmarksResponse {
   repeated Collection collections = 1;
   int32 total_shortcuts = 2;
   int32 total_collections = 3;
+  int32 shortcuts_created = 4;
+  int32 shortcuts_updated = 5;
+  int32 collections_created = 6;
+  int32 collections_updated = 7;
 }

@@ -1,13 +1,14 @@
 import { Button, Input } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 import CreateShortcutDrawer from "@/components/CreateShortcutDrawer";
 import FilterView from "@/components/FilterView";
 import Icon from "@/components/Icon";
 import ShortcutsContainer from "@/components/ShortcutsContainer";
 import ShortcutsNavigator from "@/components/ShortcutsNavigator";
-import ViewSetting from "@/components/ViewSetting";
+import StandaloneViewControls from "@/components/StandaloneViewControls";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useUserStore, useViewStore } from "@/stores";
 import { getFilteredShortcutList, getOrderedShortcutList } from "@/stores/view";
@@ -18,6 +19,7 @@ interface State {
 
 const ShortcutDashboard: React.FC = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
   const [, setLastVisited] = useLocalStorage<string>("lastVisited", "/shortcuts");
   const loadingState = useLoading();
   const currentUser = useUserStore().getCurrentUser();
@@ -27,7 +29,17 @@ const ShortcutDashboard: React.FC = () => {
   const [state, setState] = useState<State>({
     showCreateShortcutDrawer: false,
   });
-  const filter = viewStore.filter;
+
+  // Get tags from URL querystring
+  const urlTagsParam = searchParams.get('tags');
+  const urlTags = urlTagsParam ? urlTagsParam.split(',').map(tag => tag.trim()) : [];
+
+  // Merge URL tags with current filter
+  const filter = {
+    ...viewStore.filter,
+    urlTags: urlTags.length > 0 ? urlTags : undefined
+  };
+
   const filteredShortcutList = getFilteredShortcutList(shortcutList, filter, currentUser);
   const orderedShortcutList = getOrderedShortcutList(filteredShortcutList, viewStore.order);
 
@@ -57,7 +69,6 @@ const ShortcutDashboard: React.FC = () => {
               size="sm"
               placeholder={t("common.search")}
               startDecorator={<Icon.Search className="w-4 h-auto" />}
-              endDecorator={<ViewSetting />}
               value={filter.search}
               onChange={(e) => viewStore.setFilter({ search: e.target.value })}
             />
@@ -69,6 +80,12 @@ const ShortcutDashboard: React.FC = () => {
             </Button>
           </div>
         </div>
+
+        {/* Standalone View Controls */}
+        <div className="w-full mb-4 flex flex-row justify-start items-center overflow-x-auto">
+          <StandaloneViewControls />
+        </div>
+
         <FilterView />
         {loadingState.isLoading ? (
           <div className="py-12 w-full flex flex-row justify-center items-center opacity-80 dark:text-gray-500">

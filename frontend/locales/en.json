@@ -49,7 +49,12 @@
   "filter": {
     "all": "All",
     "personal": "Personal",
-    "compact-mode": "Compact mode",
+    "display-mode": "Display Mode",
+    "full-mode": "Full",
+    "compact-mode": "Compact",
+    "list-mode": "List",
+    "tag": "Tag",
+    "all-tags": "All Tags",
     "order-by": "Order by",
     "direction": "Direction"
   },

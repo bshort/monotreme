@@ -486,12 +486,16 @@ func (x *ImportBookmarksRequest) GetHtmlContent() string {
 }
 
 type ImportBookmarksResponse struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	Collections      []*Collection          `protobuf:"bytes,1,rep,name=collections,proto3" json:"collections,omitempty"`
-	TotalShortcuts   int32                  `protobuf:"varint,2,opt,name=total_shortcuts,json=totalShortcuts,proto3" json:"total_shortcuts,omitempty"`
-	TotalCollections int32                  `protobuf:"varint,3,opt,name=total_collections,json=totalCollections,proto3" json:"total_collections,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Collections        []*Collection          `protobuf:"bytes,1,rep,name=collections,proto3" json:"collections,omitempty"`
+	TotalShortcuts     int32                  `protobuf:"varint,2,opt,name=total_shortcuts,json=totalShortcuts,proto3" json:"total_shortcuts,omitempty"`
+	TotalCollections   int32                  `protobuf:"varint,3,opt,name=total_collections,json=totalCollections,proto3" json:"total_collections,omitempty"`
+	ShortcutsCreated   int32                  `protobuf:"varint,4,opt,name=shortcuts_created,json=shortcutsCreated,proto3" json:"shortcuts_created,omitempty"`
+	ShortcutsUpdated   int32                  `protobuf:"varint,5,opt,name=shortcuts_updated,json=shortcutsUpdated,proto3" json:"shortcuts_updated,omitempty"`
+	CollectionsCreated int32                  `protobuf:"varint,6,opt,name=collections_created,json=collectionsCreated,proto3" json:"collections_created,omitempty"`
+	CollectionsUpdated int32                  `protobuf:"varint,7,opt,name=collections_updated,json=collectionsUpdated,proto3" json:"collections_updated,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *ImportBookmarksResponse) Reset() {
@@ -545,6 +549,34 @@ func (x *ImportBookmarksResponse) GetTotalCollections() int32 {
 	return 0
 }
 
+func (x *ImportBookmarksResponse) GetShortcutsCreated() int32 {
+	if x != nil {
+		return x.ShortcutsCreated
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetShortcutsUpdated() int32 {
+	if x != nil {
+		return x.ShortcutsUpdated
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetCollectionsCreated() int32 {
+	if x != nil {
+		return x.CollectionsCreated
+	}
+	return 0
+}
+
+func (x *ImportBookmarksResponse) GetCollectionsUpdated() int32 {
+	if x != nil {
+		return x.CollectionsUpdated
+	}
+	return 0
+}
+
 var File_api_v1_collection_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_collection_service_proto_rawDesc = "" +
@@ -585,11 +617,15 @@ const file_api_v1_collection_service_proto_rawDesc = "" +
 	"\x17DeleteCollectionRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\";\n" +
 	"\x16ImportBookmarksRequest\x12!\n" +
-	"\fhtml_content\x18\x01 \x01(\tR\vhtmlContent\"\xaf\x01\n" +
+	"\fhtml_content\x18\x01 \x01(\tR\vhtmlContent\"\xeb\x02\n" +
 	"\x17ImportBookmarksResponse\x12>\n" +
 	"\vcollections\x18\x01 \x03(\v2\x1c.monotreme.api.v1.CollectionR\vcollections\x12'\n" +
 	"\x0ftotal_shortcuts\x18\x02 \x01(\x05R\x0etotalShortcuts\x12+\n" +
-	"\x11total_collections\x18\x03 \x01(\x05R\x10totalCollections2\xc1\a\n" +
+	"\x11total_collections\x18\x03 \x01(\x05R\x10totalCollections\x12+\n" +
+	"\x11shortcuts_created\x18\x04 \x01(\x05R\x10shortcutsCreated\x12+\n" +
+	"\x11shortcuts_updated\x18\x05 \x01(\x05R\x10shortcutsUpdated\x12/\n" +
+	"\x13collections_created\x18\x06 \x01(\x05R\x12collectionsCreated\x12/\n" +
+	"\x13collections_updated\x18\a \x01(\x05R\x12collectionsUpdated2\xc1\a\n" +
 	"\x11CollectionService\x12\x83\x01\n" +
 	"\x0fListCollections\x12(.monotreme.api.v1.ListCollectionsRequest\x1a).monotreme.api.v1.ListCollectionsResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/collections\x12|\n" +
 	"\rGetCollection\x12&.monotreme.api.v1.GetCollectionRequest\x1a\x1c.monotreme.api.v1.Collection\"%\xdaA\x02id\x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/collections/{id}\x12c\n" +

@@ -596,6 +596,10 @@
 | collections | [Collection](#monotreme-api-v1-Collection) | repeated |  |
 | total_shortcuts | [int32](#int32) |  |  |
 | total_collections | [int32](#int32) |  |  |
+| shortcuts_created | [int32](#int32) |  |  |
+| shortcuts_updated | [int32](#int32) |  |  |
+| collections_created | [int32](#int32) |  |  |
+| collections_updated | [int32](#int32) |  |  |
 
 
 

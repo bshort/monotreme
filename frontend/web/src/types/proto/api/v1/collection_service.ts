@@ -61,6 +61,10 @@ export interface ImportBookmarksResponse {
   collections: Collection[];
   totalShortcuts: number;
   totalCollections: number;
+  shortcutsCreated: number;
+  shortcutsUpdated: number;
+  collectionsCreated: number;
+  collectionsUpdated: number;
 }
 
 function createBaseCollection(): Collection {
@@ -600,7 +604,15 @@ export const ImportBookmarksRequest: MessageFns<ImportBookmarksRequest> = {
 };
 
 function createBaseImportBookmarksResponse(): ImportBookmarksResponse {
-  return { collections: [], totalShortcuts: 0, totalCollections: 0 };
+  return {
+    collections: [],
+    totalShortcuts: 0,
+    totalCollections: 0,
+    shortcutsCreated: 0,
+    shortcutsUpdated: 0,
+    collectionsCreated: 0,
+    collectionsUpdated: 0,
+  };
 }
 
 export const ImportBookmarksResponse: MessageFns<ImportBookmarksResponse> = {
@@ -613,6 +625,18 @@ export const ImportBookmarksResponse: MessageFns<ImportBookmarksResponse> = {
     }
     if (message.totalCollections !== 0) {
       writer.uint32(24).int32(message.totalCollections);
+    }
+    if (message.shortcutsCreated !== 0) {
+      writer.uint32(32).int32(message.shortcutsCreated);
+    }
+    if (message.shortcutsUpdated !== 0) {
+      writer.uint32(40).int32(message.shortcutsUpdated);
+    }
+    if (message.collectionsCreated !== 0) {
+      writer.uint32(48).int32(message.collectionsCreated);
+    }
+    if (message.collectionsUpdated !== 0) {
+      writer.uint32(56).int32(message.collectionsUpdated);
     }
     return writer;
   },
@@ -648,6 +672,38 @@ export const ImportBookmarksResponse: MessageFns<ImportBookmarksResponse> = {
           message.totalCollections = reader.int32();
           continue;
         }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.shortcutsCreated = reader.int32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.shortcutsUpdated = reader.int32();
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.collectionsCreated = reader.int32();
+          continue;
+        }
+        case 7: {
+          if (tag !== 56) {
+            break;
+          }
+
+          message.collectionsUpdated = reader.int32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -665,6 +721,10 @@ export const ImportBookmarksResponse: MessageFns<ImportBookmarksResponse> = {
     message.collections = object.collections?.map((e) => Collection.fromPartial(e)) || [];
     message.totalShortcuts = object.totalShortcuts ?? 0;
     message.totalCollections = object.totalCollections ?? 0;
+    message.shortcutsCreated = object.shortcutsCreated ?? 0;
+    message.shortcutsUpdated = object.shortcutsUpdated ?? 0;
+    message.collectionsCreated = object.collectionsCreated ?? 0;
+    message.collectionsUpdated = object.collectionsUpdated ?? 0;
     return message;
   },
 };

@@ -93,7 +93,7 @@ const BookmarkImport = () => {
             Import Bookmarks
           </Typography>
           <Typography level="body-md" className="text-gray-600 dark:text-gray-400 mb-6">
-            Upload an HTML bookmark file exported from your browser. The system will create collections for each bookmark folder and shortcuts for each bookmark.
+            Upload an HTML bookmark file exported from your browser (Chrome, Firefox, Safari, Edge). The system will automatically detect the format and create collections for each bookmark folder and shortcuts for each bookmark.
           </Typography>
         </div>
 
@@ -106,7 +106,7 @@ const BookmarkImport = () => {
               <input
                 id="file-input"
                 type="file"
-                accept=".html,.htm"
+                accept=".html,.htm,text/html"
                 onChange={handleFileChange}
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
@@ -209,22 +209,45 @@ const BookmarkImport = () => {
         )}
 
         <Card className="w-full p-6 bg-blue-50 dark:bg-blue-900/20">
-          <Typography level="title-md" className="mb-2 flex items-center gap-2">
-            <Icon.Info /> How it works
+          <Typography level="title-md" className="mb-3 flex items-center gap-2">
+            <Icon.Info /> Supported Formats & How it Works
           </Typography>
-          <div className="space-y-2">
-            <Typography level="body-sm">
-              • The system parses HTML bookmark files exported from browsers like Chrome, Firefox, Safari, etc.
-            </Typography>
-            <Typography level="body-sm">
-              • Each bookmark folder (H3 tag) becomes a collection
-            </Typography>
-            <Typography level="body-sm">
-              • Each bookmark link becomes a shortcut within the corresponding collection
-            </Typography>
-            <Typography level="body-sm">
-              • Collections and shortcuts are created with workspace visibility by default
-            </Typography>
+          <div className="space-y-3">
+            <div>
+              <Typography level="body-sm" className="font-medium mb-1">
+                Supported Browser Formats:
+              </Typography>
+              <Typography level="body-sm" className="ml-4">
+                • <strong>Chrome/Chromium:</strong> Standard HTML bookmarks export<br/>
+                • <strong>Firefox:</strong> HTML bookmarks with Firefox-specific attributes<br/>
+                • <strong>Safari/Edge:</strong> Standard HTML format (Chrome-compatible)
+              </Typography>
+            </div>
+
+            <div>
+              <Typography level="body-sm" className="font-medium mb-1">
+                Import Process:
+              </Typography>
+              <Typography level="body-sm" className="ml-4">
+                • System automatically detects your browser format<br/>
+                • Bookmark folders (H3 headings) become collections<br/>
+                • Individual bookmarks become shortcuts within collections<br/>
+                • System folders and invalid links are automatically filtered out<br/>
+                • All imported items use workspace visibility by default
+              </Typography>
+            </div>
+
+            <div>
+              <Typography level="body-sm" className="font-medium mb-1">
+                How to Export Bookmarks:
+              </Typography>
+              <Typography level="body-sm" className="ml-4">
+                • <strong>Chrome:</strong> Settings → Bookmarks → Bookmark Manager → Export bookmarks<br/>
+                • <strong>Firefox:</strong> Library → Bookmarks → Show All Bookmarks → Import/Export → Export<br/>
+                • <strong>Safari:</strong> File → Export Bookmarks<br/>
+                • <strong>Edge:</strong> Settings → Profiles → Import/Export → Export to file
+              </Typography>
+            </div>
           </div>
         </Card>
       </div>

@@ -9,6 +9,7 @@ export interface Filter {
   tag?: string;
   visibility?: Visibility;
   search?: string;
+  urlTags?: string[];
 }
 
 export interface Order {
@@ -16,7 +17,7 @@ export interface Order {
   direction: "asc" | "desc";
 }
 
-export type DisplayStyle = "full" | "compact";
+export type DisplayStyle = "full" | "compact" | "list";
 
 interface ViewState {
   filter: Filter;
@@ -60,10 +61,16 @@ const useViewStore = create<ViewState>()(
 );
 
 export const getFilteredShortcutList = (shortcutList: Shortcut[], filter: Filter, currentUser: User) => {
-  const { tab, tag, visibility, search } = filter;
+  const { tab, tag, visibility, search, urlTags } = filter;
   const filteredShortcutList = shortcutList.filter((shortcut) => {
     if (tag) {
       if (!shortcut.tags.includes(tag)) {
+        return false;
+      }
+    }
+    if (urlTags && urlTags.length > 0) {
+      // For URL tags, all tags must be present in the shortcut (AND logic)
+      if (!urlTags.every(urlTag => shortcut.tags.includes(urlTag))) {
         return false;
       }
     }
@@ -122,6 +129,19 @@ export const getOrderedShortcutList = (shortcutList: Shortcut[], order: Order) =
 
 const getDateTimestamp = (date: Date = new Date()) => {
   return new Date(date).getTime();
+};
+
+export const getAllUniqueTags = (shortcutList: Shortcut[]): string[] => {
+  const tagSet = new Set<string>();
+  shortcutList.forEach((shortcut) => {
+    shortcut.tags.forEach((tag) => {
+      const cleanTag = tag.trim().replace(/,$/, ''); // Remove trailing comma
+      if (cleanTag) {
+        tagSet.add(cleanTag);
+      }
+    });
+  });
+  return Array.from(tagSet).sort();
 };
 
 export default useViewStore;

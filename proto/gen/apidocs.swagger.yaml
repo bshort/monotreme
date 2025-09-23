@@ -1040,6 +1040,18 @@ definitions:
       totalCollections:
         type: integer
         format: int32
+      shortcutsCreated:
+        type: integer
+        format: int32
+      shortcutsUpdated:
+        type: integer
+        format: int32
+      collectionsCreated:
+        type: integer
+        format: int32
+      collectionsUpdated:
+        type: integer
+        format: int32
   v1ListCollectionsResponse:
     type: object
     properties:
