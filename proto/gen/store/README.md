@@ -4,46 +4,46 @@
 ## Table of Contents
 
 - [store/activity.proto](#store_activity-proto)
-    - [ActivityShorcutCreatePayload](#slash-store-ActivityShorcutCreatePayload)
-    - [ActivityShorcutViewPayload](#slash-store-ActivityShorcutViewPayload)
-    - [ActivityShorcutViewPayload.ParamsEntry](#slash-store-ActivityShorcutViewPayload-ParamsEntry)
-    - [ActivityShorcutViewPayload.ValueList](#slash-store-ActivityShorcutViewPayload-ValueList)
+    - [ActivityShorcutCreatePayload](#monotreme-store-ActivityShorcutCreatePayload)
+    - [ActivityShorcutViewPayload](#monotreme-store-ActivityShorcutViewPayload)
+    - [ActivityShorcutViewPayload.ParamsEntry](#monotreme-store-ActivityShorcutViewPayload-ParamsEntry)
+    - [ActivityShorcutViewPayload.ValueList](#monotreme-store-ActivityShorcutViewPayload-ValueList)
   
 - [store/common.proto](#store_common-proto)
-    - [RowStatus](#slash-store-RowStatus)
-    - [Visibility](#slash-store-Visibility)
+    - [RowStatus](#monotreme-store-RowStatus)
+    - [Visibility](#monotreme-store-Visibility)
   
 - [store/collection.proto](#store_collection-proto)
-    - [Collection](#slash-store-Collection)
+    - [Collection](#monotreme-store-Collection)
   
 - [store/idp.proto](#store_idp-proto)
-    - [IdentityProvider](#slash-store-IdentityProvider)
-    - [IdentityProviderConfig](#slash-store-IdentityProviderConfig)
-    - [IdentityProviderConfig.FieldMapping](#slash-store-IdentityProviderConfig-FieldMapping)
-    - [IdentityProviderConfig.OAuth2Config](#slash-store-IdentityProviderConfig-OAuth2Config)
+    - [IdentityProvider](#monotreme-store-IdentityProvider)
+    - [IdentityProviderConfig](#monotreme-store-IdentityProviderConfig)
+    - [IdentityProviderConfig.FieldMapping](#monotreme-store-IdentityProviderConfig-FieldMapping)
+    - [IdentityProviderConfig.OAuth2Config](#monotreme-store-IdentityProviderConfig-OAuth2Config)
   
-    - [IdentityProvider.Type](#slash-store-IdentityProvider-Type)
+    - [IdentityProvider.Type](#monotreme-store-IdentityProvider-Type)
   
 - [store/shortcut.proto](#store_shortcut-proto)
-    - [OpenGraphMetadata](#slash-store-OpenGraphMetadata)
-    - [Shortcut](#slash-store-Shortcut)
+    - [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata)
+    - [Shortcut](#monotreme-store-Shortcut)
   
 - [store/user_setting.proto](#store_user_setting-proto)
-    - [UserSetting](#slash-store-UserSetting)
-    - [UserSetting.AccessTokensSetting](#slash-store-UserSetting-AccessTokensSetting)
-    - [UserSetting.AccessTokensSetting.AccessToken](#slash-store-UserSetting-AccessTokensSetting-AccessToken)
-    - [UserSetting.GeneralSetting](#slash-store-UserSetting-GeneralSetting)
+    - [UserSetting](#monotreme-store-UserSetting)
+    - [UserSetting.AccessTokensSetting](#monotreme-store-UserSetting-AccessTokensSetting)
+    - [UserSetting.AccessTokensSetting.AccessToken](#monotreme-store-UserSetting-AccessTokensSetting-AccessToken)
+    - [UserSetting.GeneralSetting](#monotreme-store-UserSetting-GeneralSetting)
   
-    - [UserSettingKey](#slash-store-UserSettingKey)
+    - [UserSettingKey](#monotreme-store-UserSettingKey)
   
 - [store/workspace_setting.proto](#store_workspace_setting-proto)
-    - [WorkspaceSetting](#slash-store-WorkspaceSetting)
-    - [WorkspaceSetting.GeneralSetting](#slash-store-WorkspaceSetting-GeneralSetting)
-    - [WorkspaceSetting.IdentityProviderSetting](#slash-store-WorkspaceSetting-IdentityProviderSetting)
-    - [WorkspaceSetting.SecuritySetting](#slash-store-WorkspaceSetting-SecuritySetting)
-    - [WorkspaceSetting.ShortcutRelatedSetting](#slash-store-WorkspaceSetting-ShortcutRelatedSetting)
+    - [WorkspaceSetting](#monotreme-store-WorkspaceSetting)
+    - [WorkspaceSetting.GeneralSetting](#monotreme-store-WorkspaceSetting-GeneralSetting)
+    - [WorkspaceSetting.IdentityProviderSetting](#monotreme-store-WorkspaceSetting-IdentityProviderSetting)
+    - [WorkspaceSetting.SecuritySetting](#monotreme-store-WorkspaceSetting-SecuritySetting)
+    - [WorkspaceSetting.ShortcutRelatedSetting](#monotreme-store-WorkspaceSetting-ShortcutRelatedSetting)
   
-    - [WorkspaceSettingKey](#slash-store-WorkspaceSettingKey)
+    - [WorkspaceSettingKey](#monotreme-store-WorkspaceSettingKey)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -56,7 +56,7 @@
 
 
 
-<a name="slash-store-ActivityShorcutCreatePayload"></a>
+<a name="monotreme-store-ActivityShorcutCreatePayload"></a>
 
 ### ActivityShorcutCreatePayload
 
@@ -71,7 +71,7 @@
 
 
 
-<a name="slash-store-ActivityShorcutViewPayload"></a>
+<a name="monotreme-store-ActivityShorcutViewPayload"></a>
 
 ### ActivityShorcutViewPayload
 
@@ -83,14 +83,14 @@
 | ip | [string](#string) |  |  |
 | referer | [string](#string) |  |  |
 | user_agent | [string](#string) |  |  |
-| params | [ActivityShorcutViewPayload.ParamsEntry](#slash-store-ActivityShorcutViewPayload-ParamsEntry) | repeated |  |
+| params | [ActivityShorcutViewPayload.ParamsEntry](#monotreme-store-ActivityShorcutViewPayload-ParamsEntry) | repeated |  |
 
 
 
 
 
 
-<a name="slash-store-ActivityShorcutViewPayload-ParamsEntry"></a>
+<a name="monotreme-store-ActivityShorcutViewPayload-ParamsEntry"></a>
 
 ### ActivityShorcutViewPayload.ParamsEntry
 
@@ -99,14 +99,14 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) |  |  |
-| value | [ActivityShorcutViewPayload.ValueList](#slash-store-ActivityShorcutViewPayload-ValueList) |  |  |
+| value | [ActivityShorcutViewPayload.ValueList](#monotreme-store-ActivityShorcutViewPayload-ValueList) |  |  |
 
 
 
 
 
 
-<a name="slash-store-ActivityShorcutViewPayload-ValueList"></a>
+<a name="monotreme-store-ActivityShorcutViewPayload-ValueList"></a>
 
 ### ActivityShorcutViewPayload.ValueList
 
@@ -139,7 +139,7 @@
  
 
 
-<a name="slash-store-RowStatus"></a>
+<a name="monotreme-store-RowStatus"></a>
 
 ### RowStatus
 
@@ -152,7 +152,7 @@
 
 
 
-<a name="slash-store-Visibility"></a>
+<a name="monotreme-store-Visibility"></a>
 
 ### Visibility
 
@@ -179,7 +179,7 @@
 
 
 
-<a name="slash-store-Collection"></a>
+<a name="monotreme-store-Collection"></a>
 
 ### Collection
 
@@ -195,7 +195,7 @@
 | title | [string](#string) |  |  |
 | description | [string](#string) |  |  |
 | shortcut_ids | [int32](#int32) | repeated |  |
-| visibility | [Visibility](#slash-store-Visibility) |  |  |
+| visibility | [Visibility](#monotreme-store-Visibility) |  |  |
 
 
 
@@ -218,7 +218,7 @@
 
 
 
-<a name="slash-store-IdentityProvider"></a>
+<a name="monotreme-store-IdentityProvider"></a>
 
 ### IdentityProvider
 
@@ -228,15 +228,15 @@
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | The unique identifier of the identity provider. |
 | title | [string](#string) |  |  |
-| type | [IdentityProvider.Type](#slash-store-IdentityProvider-Type) |  |  |
-| config | [IdentityProviderConfig](#slash-store-IdentityProviderConfig) |  |  |
+| type | [IdentityProvider.Type](#monotreme-store-IdentityProvider-Type) |  |  |
+| config | [IdentityProviderConfig](#monotreme-store-IdentityProviderConfig) |  |  |
 
 
 
 
 
 
-<a name="slash-store-IdentityProviderConfig"></a>
+<a name="monotreme-store-IdentityProviderConfig"></a>
 
 ### IdentityProviderConfig
 
@@ -244,14 +244,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth2 | [IdentityProviderConfig.OAuth2Config](#slash-store-IdentityProviderConfig-OAuth2Config) |  |  |
+| oauth2 | [IdentityProviderConfig.OAuth2Config](#monotreme-store-IdentityProviderConfig-OAuth2Config) |  |  |
 
 
 
 
 
 
-<a name="slash-store-IdentityProviderConfig-FieldMapping"></a>
+<a name="monotreme-store-IdentityProviderConfig-FieldMapping"></a>
 
 ### IdentityProviderConfig.FieldMapping
 
@@ -267,7 +267,7 @@
 
 
 
-<a name="slash-store-IdentityProviderConfig-OAuth2Config"></a>
+<a name="monotreme-store-IdentityProviderConfig-OAuth2Config"></a>
 
 ### IdentityProviderConfig.OAuth2Config
 
@@ -281,7 +281,7 @@
 | token_url | [string](#string) |  |  |
 | user_info_url | [string](#string) |  |  |
 | scopes | [string](#string) | repeated |  |
-| field_mapping | [IdentityProviderConfig.FieldMapping](#slash-store-IdentityProviderConfig-FieldMapping) |  |  |
+| field_mapping | [IdentityProviderConfig.FieldMapping](#monotreme-store-IdentityProviderConfig-FieldMapping) |  |  |
 
 
 
@@ -290,7 +290,7 @@
  
 
 
-<a name="slash-store-IdentityProvider-Type"></a>
+<a name="monotreme-store-IdentityProvider-Type"></a>
 
 ### IdentityProvider.Type
 
@@ -316,7 +316,7 @@
 
 
 
-<a name="slash-store-OpenGraphMetadata"></a>
+<a name="monotreme-store-OpenGraphMetadata"></a>
 
 ### OpenGraphMetadata
 
@@ -333,7 +333,7 @@
 
 
 
-<a name="slash-store-Shortcut"></a>
+<a name="monotreme-store-Shortcut"></a>
 
 ### Shortcut
 
@@ -351,8 +351,8 @@
 | title | [string](#string) |  |  |
 | tags | [string](#string) | repeated |  |
 | description | [string](#string) |  |  |
-| visibility | [Visibility](#slash-store-Visibility) |  |  |
-| og_metadata | [OpenGraphMetadata](#slash-store-OpenGraphMetadata) |  |  |
+| visibility | [Visibility](#monotreme-store-Visibility) |  |  |
+| og_metadata | [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata) |  |  |
 
 
 
@@ -375,7 +375,7 @@
 
 
 
-<a name="slash-store-UserSetting"></a>
+<a name="monotreme-store-UserSetting"></a>
 
 ### UserSetting
 
@@ -384,16 +384,16 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | user_id | [int32](#int32) |  |  |
-| key | [UserSettingKey](#slash-store-UserSettingKey) |  |  |
-| general | [UserSetting.GeneralSetting](#slash-store-UserSetting-GeneralSetting) |  |  |
-| access_tokens | [UserSetting.AccessTokensSetting](#slash-store-UserSetting-AccessTokensSetting) |  |  |
+| key | [UserSettingKey](#monotreme-store-UserSettingKey) |  |  |
+| general | [UserSetting.GeneralSetting](#monotreme-store-UserSetting-GeneralSetting) |  |  |
+| access_tokens | [UserSetting.AccessTokensSetting](#monotreme-store-UserSetting-AccessTokensSetting) |  |  |
 
 
 
 
 
 
-<a name="slash-store-UserSetting-AccessTokensSetting"></a>
+<a name="monotreme-store-UserSetting-AccessTokensSetting"></a>
 
 ### UserSetting.AccessTokensSetting
 
@@ -401,14 +401,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| access_tokens | [UserSetting.AccessTokensSetting.AccessToken](#slash-store-UserSetting-AccessTokensSetting-AccessToken) | repeated | Nested repeated field |
+| access_tokens | [UserSetting.AccessTokensSetting.AccessToken](#monotreme-store-UserSetting-AccessTokensSetting-AccessToken) | repeated | Nested repeated field |
 
 
 
 
 
 
-<a name="slash-store-UserSetting-AccessTokensSetting-AccessToken"></a>
+<a name="monotreme-store-UserSetting-AccessTokensSetting-AccessToken"></a>
 
 ### UserSetting.AccessTokensSetting.AccessToken
 
@@ -424,7 +424,7 @@
 
 
 
-<a name="slash-store-UserSetting-GeneralSetting"></a>
+<a name="monotreme-store-UserSetting-GeneralSetting"></a>
 
 ### UserSetting.GeneralSetting
 
@@ -442,7 +442,7 @@
  
 
 
-<a name="slash-store-UserSettingKey"></a>
+<a name="monotreme-store-UserSettingKey"></a>
 
 ### UserSettingKey
 
@@ -469,7 +469,7 @@
 
 
 
-<a name="slash-store-WorkspaceSetting"></a>
+<a name="monotreme-store-WorkspaceSetting"></a>
 
 ### WorkspaceSetting
 
@@ -477,19 +477,19 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| key | [WorkspaceSettingKey](#slash-store-WorkspaceSettingKey) |  |  |
+| key | [WorkspaceSettingKey](#monotreme-store-WorkspaceSettingKey) |  |  |
 | raw | [string](#string) |  |  |
-| general | [WorkspaceSetting.GeneralSetting](#slash-store-WorkspaceSetting-GeneralSetting) |  |  |
-| security | [WorkspaceSetting.SecuritySetting](#slash-store-WorkspaceSetting-SecuritySetting) |  |  |
-| shortcut_related | [WorkspaceSetting.ShortcutRelatedSetting](#slash-store-WorkspaceSetting-ShortcutRelatedSetting) |  |  |
-| identity_provider | [WorkspaceSetting.IdentityProviderSetting](#slash-store-WorkspaceSetting-IdentityProviderSetting) |  |  |
+| general | [WorkspaceSetting.GeneralSetting](#monotreme-store-WorkspaceSetting-GeneralSetting) |  |  |
+| security | [WorkspaceSetting.SecuritySetting](#monotreme-store-WorkspaceSetting-SecuritySetting) |  |  |
+| shortcut_related | [WorkspaceSetting.ShortcutRelatedSetting](#monotreme-store-WorkspaceSetting-ShortcutRelatedSetting) |  |  |
+| identity_provider | [WorkspaceSetting.IdentityProviderSetting](#monotreme-store-WorkspaceSetting-IdentityProviderSetting) |  |  |
 
 
 
 
 
 
-<a name="slash-store-WorkspaceSetting-GeneralSetting"></a>
+<a name="monotreme-store-WorkspaceSetting-GeneralSetting"></a>
 
 ### WorkspaceSetting.GeneralSetting
 
@@ -508,7 +508,7 @@
 
 
 
-<a name="slash-store-WorkspaceSetting-IdentityProviderSetting"></a>
+<a name="monotreme-store-WorkspaceSetting-IdentityProviderSetting"></a>
 
 ### WorkspaceSetting.IdentityProviderSetting
 
@@ -516,14 +516,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| identity_providers | [IdentityProvider](#slash-store-IdentityProvider) | repeated |  |
+| identity_providers | [IdentityProvider](#monotreme-store-IdentityProvider) | repeated |  |
 
 
 
 
 
 
-<a name="slash-store-WorkspaceSetting-SecuritySetting"></a>
+<a name="monotreme-store-WorkspaceSetting-SecuritySetting"></a>
 
 ### WorkspaceSetting.SecuritySetting
 
@@ -539,7 +539,7 @@
 
 
 
-<a name="slash-store-WorkspaceSetting-ShortcutRelatedSetting"></a>
+<a name="monotreme-store-WorkspaceSetting-ShortcutRelatedSetting"></a>
 
 ### WorkspaceSetting.ShortcutRelatedSetting
 
@@ -547,7 +547,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| default_visibility | [Visibility](#slash-store-Visibility) |  |  |
+| default_visibility | [Visibility](#monotreme-store-Visibility) |  |  |
 
 
 
@@ -556,7 +556,7 @@
  
 
 
-<a name="slash-store-WorkspaceSettingKey"></a>
+<a name="monotreme-store-WorkspaceSettingKey"></a>
 
 ### WorkspaceSettingKey
 

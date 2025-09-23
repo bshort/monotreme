@@ -19,4 +19,4 @@ INSERT INTO migration_history (version) VALUES ('1.1.1');
 -- - Generate UUIDs for new shortcuts created after this migration
 
 -- To apply this migration, simply start the Monotreme application:
--- ./slash --mode dev --data /path/to/data/directory
+-- ./monotreme --mode dev --data /path/to/data/directory

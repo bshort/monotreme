@@ -64,7 +64,7 @@ const SSOSection = () => {
             <FeatureBadge className="w-5 h-auto ml-1 text-blue-600" feature={FeatureType.SSO} />
             <a
               className="text-blue-600 text-sm hover:underline flex flex-row justify-center items-center ml-2"
-              href="https://github.com/yourselfhosted/slash/blob/main/docs/getting-started/sso.md"
+              href="https://github.com/bshort/monotreme/blob/main/docs/getting-started/sso.md"
               target="_blank"
             >
               <span>Learn more</span>

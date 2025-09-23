@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 
-export const protobufPackage = "slash.store";
+export const protobufPackage = "monotreme.store";
 
 export enum RowStatus {
   ROW_STATUS_UNSPECIFIED = "ROW_STATUS_UNSPECIFIED",

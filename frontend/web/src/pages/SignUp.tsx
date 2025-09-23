@@ -87,13 +87,13 @@ const SignUp: React.FC = () => {
                   className="w-full py-3"
                   type="email"
                   value={email}
-                  placeholder="slash@yourselfhosted.com"
+                  placeholder="monotrememarks@gmail.com"
                   onChange={handleEmailInputChanged}
                 />
               </div>
               <div className="w-full flex flex-col mb-2">
                 <span className="leading-8 text-gray-600">Nickname</span>
-                <Input className="w-full py-3" type="text" value={nickname} placeholder="slash" onChange={handleNicknameInputChanged} />
+                <Input className="w-full py-3" type="text" value={nickname} placeholder="platypus" onChange={handleNicknameInputChanged} />
               </div>
               <div className="w-full flex flex-col mb-2">
                 <span className="leading-8 text-gray-600">{t("common.password")}</span>

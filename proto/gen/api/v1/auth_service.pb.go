@@ -274,7 +274,7 @@ var File_api_v1_auth_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_auth_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19api/v1/auth_service.proto\x12\fmonotreme.api.v1\x1a\x19api/v1/user_service.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x16\n" +
+	"\x19api/v1/auth_service.proto\x12\x10monotreme.api.v1\x1a\x19api/v1/user_service.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x16\n" +
 	"\x14GetAuthStatusRequest\"A\n" +
 	"\rSignInRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
@@ -287,14 +287,14 @@ const file_api_v1_auth_service_proto_rawDesc = "" +
 	"\x06idp_id\x18\x01 \x01(\tR\x05idpId\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12!\n" +
 	"\fredirect_uri\x18\x03 \x01(\tR\vredirectUri\"\x10\n" +
-	"\x0eSignOutRequest2\xec\x03\n" +
-	"\vAuthService\x12d\n" +
-	"\rGetAuthStatus\x12\".monotreme.api.v1.GetAuthStatusRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/status\x12V\n" +
-	"\x06SignIn\x12\x1b.monotreme.api.v1.SignInRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signin\x12h\n" +
-	"\rSignInWithSSO\x12\".monotreme.api.v1.SignInWithSSORequest\x1a\x12.monotreme.api.v1.User\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x17/api/v1/auth/signin/sso\x12V\n" +
-	"\x06SignUp\x12\x1b.monotreme.api.v1.SignUpRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signup\x12]\n" +
-	"\aSignOut\x12\x1c.monotreme.api.v1.SignOutRequest\x1a\x16.google.protobuf.Empty\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x14/api/v1/auth/signoutB\xa6\x01\n" +
-	"\x10com.monotreme.api.v1B\x10AuthServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"\x0eSignOutRequest2\x90\x04\n" +
+	"\vAuthService\x12l\n" +
+	"\rGetAuthStatus\x12&.monotreme.api.v1.GetAuthStatusRequest\x1a\x16.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/status\x12^\n" +
+	"\x06SignIn\x12\x1f.monotreme.api.v1.SignInRequest\x1a\x16.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signin\x12p\n" +
+	"\rSignInWithSSO\x12&.monotreme.api.v1.SignInWithSSORequest\x1a\x16.monotreme.api.v1.User\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x17/api/v1/auth/signin/sso\x12^\n" +
+	"\x06SignUp\x12\x1f.monotreme.api.v1.SignUpRequest\x1a\x16.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signup\x12a\n" +
+	"\aSignOut\x12 .monotreme.api.v1.SignOutRequest\x1a\x16.google.protobuf.Empty\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x14/api/v1/auth/signoutB\xbe\x01\n" +
+	"\x14com.monotreme.api.v1B\x10AuthServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_auth_service_proto_rawDescOnce sync.Once

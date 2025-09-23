@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { collectionServiceClient } from "@/grpcweb";
-import { Collection } from "@/types/proto/api/v1/collection_service";
+import { Collection, ImportBookmarksResponse } from "@/types/proto/api/v1/collection_service";
 
 interface CollectionState {
   collectionMapById: Record<number, Collection>;
@@ -12,6 +12,7 @@ interface CollectionState {
   createCollection: (collection: Collection) => Promise<Collection>;
   updateCollection: (collection: Partial<Collection>, updateMask: string[]) => Promise<Collection>;
   deleteCollection: (id: number) => Promise<void>;
+  importBookmarks: (htmlContent: string) => Promise<ImportBookmarksResponse>;
 }
 
 const useCollectionStore = create<CollectionState>()((set, get) => ({
@@ -80,6 +81,20 @@ const useCollectionStore = create<CollectionState>()((set, get) => ({
     const collectionMap = get().collectionMapById;
     delete collectionMap[id];
     set(collectionMap);
+  },
+  importBookmarks: async (htmlContent: string) => {
+    const response = await collectionServiceClient.importBookmarks({
+      htmlContent,
+    });
+
+    // Update the collection map with newly created collections
+    const collectionMap = get().collectionMapById;
+    response.collections.forEach((collection) => {
+      collectionMap[collection.id] = collection;
+    });
+    set(collectionMap);
+
+    return response;
   },
 }));
 

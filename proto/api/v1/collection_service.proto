@@ -43,6 +43,13 @@ service CollectionService {
     option (google.api.http) = {delete: "/api/v1/collections/{id}"};
     option (google.api.method_signature) = "id";
   }
+  // ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts.
+  rpc ImportBookmarks(ImportBookmarksRequest) returns (ImportBookmarksResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/collections/import"
+      body: "*"
+    };
+  }
 }
 
 message Collection {
@@ -91,4 +98,14 @@ message UpdateCollectionRequest {
 
 message DeleteCollectionRequest {
   int32 id = 1;
+}
+
+message ImportBookmarksRequest {
+  string html_content = 1;
+}
+
+message ImportBookmarksResponse {
+  repeated Collection collections = 1;
+  int32 total_shortcuts = 2;
+  int32 total_collections = 3;
 }

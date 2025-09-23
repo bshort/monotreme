@@ -81,7 +81,7 @@ const ShortcutDashboard: React.FC = () => {
             <p className="mt-2">No shortcuts found.</p>
             <a
               className="text-blue-600 border-t dark:border-t-zinc-600 text-sm hover:underline flex flex-row justify-center items-center mt-4 pt-2"
-              href="https://github.com/yourselfhosted/slash/blob/main/docs/getting-started/shortcuts.md"
+              href="https://github.com/bshort/monotreme/blob/main/docs/getting-started/shortcuts.md"
               target="_blank"
             >
               <span>Learn more about shortcuts.</span>

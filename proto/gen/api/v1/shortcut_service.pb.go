@@ -693,7 +693,7 @@ var File_api_v1_shortcut_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_shortcut_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1dapi/v1/shortcut_service.proto\x12\fmonotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc6\x04\n" +
+	"\x1dapi/v1/shortcut_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xce\x04\n" +
 	"\bShortcut\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04uuid\x18\x05 \x01(\tR\x04uuid\x12\x1d\n" +
@@ -706,53 +706,53 @@ const file_api_v1_shortcut_service_proto_rawDesc = "" +
 	"\x05title\x18\b \x01(\tR\x05title\x12\x12\n" +
 	"\x04tags\x18\t \x03(\tR\x04tags\x12 \n" +
 	"\vdescription\x18\n" +
-	" \x01(\tR\vdescription\x128\n" +
+	" \x01(\tR\vdescription\x12<\n" +
 	"\n" +
-	"visibility\x18\v \x01(\x0e2\x18.monotreme.api.v1.VisibilityR\n" +
+	"visibility\x18\v \x01(\x0e2\x1c.monotreme.api.v1.VisibilityR\n" +
 	"visibility\x12\x1d\n" +
 	"\n" +
-	"view_count\x18\f \x01(\x05R\tviewCount\x12I\n" +
-	"\vog_metadata\x18\r \x01(\v2(.monotreme.api.v1.Shortcut.OpenGraphMetadataR\n" +
+	"view_count\x18\f \x01(\x05R\tviewCount\x12M\n" +
+	"\vog_metadata\x18\r \x01(\v2,.monotreme.api.v1.Shortcut.OpenGraphMetadataR\n" +
 	"ogMetadata\x1aa\n" +
 	"\x11OpenGraphMetadata\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +
 	"\x05image\x18\x03 \x01(\tR\x05image\"\x16\n" +
-	"\x14ListShortcutsRequest\"M\n" +
-	"\x15ListShortcutsResponse\x124\n" +
-	"\tshortcuts\x18\x01 \x03(\v2\x16.monotreme.api.v1.ShortcutR\tshortcuts\"$\n" +
+	"\x14ListShortcutsRequest\"Q\n" +
+	"\x15ListShortcutsResponse\x128\n" +
+	"\tshortcuts\x18\x01 \x03(\v2\x1a.monotreme.api.v1.ShortcutR\tshortcuts\"$\n" +
 	"\x12GetShortcutRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\".\n" +
 	"\x18GetShortcutByNameRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"K\n" +
-	"\x15CreateShortcutRequest\x122\n" +
-	"\bshortcut\x18\x01 \x01(\v2\x16.monotreme.api.v1.ShortcutR\bshortcut\"\x88\x01\n" +
-	"\x15UpdateShortcutRequest\x122\n" +
-	"\bshortcut\x18\x01 \x01(\v2\x16.monotreme.api.v1.ShortcutR\bshortcut\x12;\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"O\n" +
+	"\x15CreateShortcutRequest\x126\n" +
+	"\bshortcut\x18\x01 \x01(\v2\x1a.monotreme.api.v1.ShortcutR\bshortcut\"\x8c\x01\n" +
+	"\x15UpdateShortcutRequest\x126\n" +
+	"\bshortcut\x18\x01 \x01(\v2\x1a.monotreme.api.v1.ShortcutR\bshortcut\x12;\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
 	"updateMask\"'\n" +
 	"\x15DeleteShortcutRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"-\n" +
 	"\x1bGetShortcutAnalyticsRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\"\xdd\x02\n" +
-	"\x1cGetShortcutAnalyticsResponse\x12X\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\"\xe9\x02\n" +
+	"\x1cGetShortcutAnalyticsResponse\x12\\\n" +
 	"\n" +
-	"references\x18\x01 \x03(\v28.monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItemR\n" +
-	"references\x12R\n" +
-	"\adevices\x18\x02 \x03(\v28.monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItemR\adevices\x12T\n" +
-	"\bbrowsers\x18\x03 \x03(\v28.monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItemR\bbrowsers\x1a9\n" +
+	"references\x18\x01 \x03(\v2<.monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItemR\n" +
+	"references\x12V\n" +
+	"\adevices\x18\x02 \x03(\v2<.monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItemR\adevices\x12X\n" +
+	"\bbrowsers\x18\x03 \x03(\v2<.monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItemR\bbrowsers\x1a9\n" +
 	"\rAnalyticsItem\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05count\x18\x02 \x01(\x05R\x05count2\xec\x06\n" +
-	"\x0fShortcutService\x12s\n" +
-	"\rListShortcuts\x12\".monotreme.api.v1.ListShortcutsRequest\x1a#.monotreme.api.v1.ListShortcutsResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/shortcuts\x12l\n" +
-	"\vGetShortcut\x12 .monotreme.api.v1.GetShortcutRequest\x1a\x16.monotreme.api.v1.Shortcut\"#\xdaA\x02id\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/shortcuts/{id}\x12U\n" +
-	"\x11GetShortcutByName\x12&.monotreme.api.v1.GetShortcutByNameRequest\x1a\x16.monotreme.api.v1.Shortcut\"\x00\x12r\n" +
-	"\x0eCreateShortcut\x12#.monotreme.api.v1.CreateShortcutRequest\x1a\x16.monotreme.api.v1.Shortcut\"#\x82\xd3\xe4\x93\x02\x1d:\bshortcut\"\x11/api/v1/shortcuts\x12\x97\x01\n" +
-	"\x0eUpdateShortcut\x12#.monotreme.api.v1.UpdateShortcutRequest\x1a\x16.monotreme.api.v1.Shortcut\"H\xdaA\x14shortcut,update_mask\x82\xd3\xe4\x93\x02+:\bshortcut\x1a\x1f/api/v1/shortcuts/{shortcut.id}\x12r\n" +
-	"\x0eDeleteShortcut\x12#.monotreme.api.v1.DeleteShortcutRequest\x1a\x16.google.protobuf.Empty\"#\xdaA\x02id\x82\xd3\xe4\x93\x02\x18*\x16/api/v1/shortcuts/{id}\x12\x9c\x01\n" +
-	"\x14GetShortcutAnalytics\x12).monotreme.api.v1.GetShortcutAnalyticsRequest\x1a*.monotreme.api.v1.GetShortcutAnalyticsResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/shortcuts/{id}/analyticsB\xaa\x01\n" +
-	"\x10com.monotreme.api.v1B\x14ShortcutServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"\x05count\x18\x02 \x01(\x05R\x05count2\xa0\a\n" +
+	"\x0fShortcutService\x12{\n" +
+	"\rListShortcuts\x12&.monotreme.api.v1.ListShortcutsRequest\x1a'.monotreme.api.v1.ListShortcutsResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/shortcuts\x12t\n" +
+	"\vGetShortcut\x12$.monotreme.api.v1.GetShortcutRequest\x1a\x1a.monotreme.api.v1.Shortcut\"#\xdaA\x02id\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/shortcuts/{id}\x12]\n" +
+	"\x11GetShortcutByName\x12*.monotreme.api.v1.GetShortcutByNameRequest\x1a\x1a.monotreme.api.v1.Shortcut\"\x00\x12z\n" +
+	"\x0eCreateShortcut\x12'.monotreme.api.v1.CreateShortcutRequest\x1a\x1a.monotreme.api.v1.Shortcut\"#\x82\xd3\xe4\x93\x02\x1d:\bshortcut\"\x11/api/v1/shortcuts\x12\x9f\x01\n" +
+	"\x0eUpdateShortcut\x12'.monotreme.api.v1.UpdateShortcutRequest\x1a\x1a.monotreme.api.v1.Shortcut\"H\xdaA\x14shortcut,update_mask\x82\xd3\xe4\x93\x02+:\bshortcut\x1a\x1f/api/v1/shortcuts/{shortcut.id}\x12v\n" +
+	"\x0eDeleteShortcut\x12'.monotreme.api.v1.DeleteShortcutRequest\x1a\x16.google.protobuf.Empty\"#\xdaA\x02id\x82\xd3\xe4\x93\x02\x18*\x16/api/v1/shortcuts/{id}\x12\xa4\x01\n" +
+	"\x14GetShortcutAnalytics\x12-.monotreme.api.v1.GetShortcutAnalyticsRequest\x1a..monotreme.api.v1.GetShortcutAnalyticsResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/shortcuts/{id}/analyticsB\xc2\x01\n" +
+	"\x14com.monotreme.api.v1B\x14ShortcutServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_shortcut_service_proto_rawDescOnce sync.Once
@@ -784,7 +784,7 @@ var file_api_v1_shortcut_service_proto_goTypes = []any{
 	(Visibility)(0),                                    // 13: monotreme.api.v1.Visibility
 	(*fieldmaskpb.FieldMask)(nil),                      // 14: google.protobuf.FieldMask
 	(*emptypb.Empty)(nil),                              // 15: google.protobuf.Empty
-} 
+}
 var file_api_v1_shortcut_service_proto_depIdxs = []int32{
 	12, // 0: monotreme.api.v1.Shortcut.created_time:type_name -> google.protobuf.Timestamp
 	12, // 1: monotreme.api.v1.Shortcut.updated_time:type_name -> google.protobuf.Timestamp

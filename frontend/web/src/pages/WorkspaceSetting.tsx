@@ -1,4 +1,4 @@
-import { Alert, Button, Divider } from "@mui/joy";
+import { Alert, Button, Divider, Card, Typography } from "@mui/joy";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/Icon";
@@ -34,6 +34,25 @@ const WorkspaceSetting = () => {
       <WorkspaceGeneralSettingSection />
       <Divider />
       <WorkspaceSecuritySection />
+      <Divider />
+
+      <Card className="w-full p-6">
+        <Typography level="title-md" className="mb-3">
+          Data Management
+        </Typography>
+        <Typography level="body-sm" className="mb-4 text-gray-600 dark:text-gray-400">
+          Import and manage your data
+        </Typography>
+        <Link to="/admin/import">
+          <Button
+            variant="outlined"
+            color="primary"
+            startDecorator={<Icon.Upload />}
+          >
+            Import Bookmarks
+          </Button>
+        </Link>
+      </Card>
     </div>
   );
 };

@@ -8,7 +8,7 @@
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Visibility, visibilityFromJSON, visibilityToNumber } from "./common";
 
-export const protobufPackage = "slash.store";
+export const protobufPackage = "monotreme.store";
 
 export interface Shortcut {
   id: number;

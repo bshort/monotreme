@@ -33,7 +33,7 @@ type Shortcut struct {
 	Title         string                 `protobuf:"bytes,8,opt,name=title,proto3" json:"title,omitempty"`
 	Tags          []string               `protobuf:"bytes,9,rep,name=tags,proto3" json:"tags,omitempty"`
 	Description   string                 `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
-	Visibility    Visibility             `protobuf:"varint,11,opt,name=visibility,proto3,enum=slash.store.Visibility" json:"visibility,omitempty"`
+	Visibility    Visibility             `protobuf:"varint,11,opt,name=visibility,proto3,enum=monotreme.store.Visibility" json:"visibility,omitempty"`
 	OgMetadata    *OpenGraphMetadata     `protobuf:"bytes,12,opt,name=og_metadata,json=ogMetadata,proto3" json:"og_metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -217,7 +217,7 @@ var File_store_shortcut_proto protoreflect.FileDescriptor
 
 const file_store_shortcut_proto_rawDesc = "" +
 	"\n" +
-	"\x14store/shortcut.proto\x12\vslash.store\x1a\x12store/common.proto\"\xf9\x02\n" +
+	"\x14store/shortcut.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\x81\x03\n" +
 	"\bShortcut\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04uuid\x18\x05 \x01(\tR\x04uuid\x12\x1d\n" +
@@ -232,17 +232,17 @@ const file_store_shortcut_proto_rawDesc = "" +
 	"\x05title\x18\b \x01(\tR\x05title\x12\x12\n" +
 	"\x04tags\x18\t \x03(\tR\x04tags\x12 \n" +
 	"\vdescription\x18\n" +
-	" \x01(\tR\vdescription\x127\n" +
+	" \x01(\tR\vdescription\x12;\n" +
 	"\n" +
-	"visibility\x18\v \x01(\x0e2\x17.slash.store.VisibilityR\n" +
-	"visibility\x12?\n" +
-	"\vog_metadata\x18\f \x01(\v2\x1e.slash.store.OpenGraphMetadataR\n" +
+	"visibility\x18\v \x01(\x0e2\x1b.monotreme.store.VisibilityR\n" +
+	"visibility\x12C\n" +
+	"\vog_metadata\x18\f \x01(\v2\".monotreme.store.OpenGraphMetadataR\n" +
 	"ogMetadata\"a\n" +
 	"\x11OpenGraphMetadata\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +
-	"\x05image\x18\x03 \x01(\tR\x05imageB\x96\x01\n" +
-	"\x0fcom.monotreme.storeB\rShortcutProtoP\x01Z'github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03SSX\xaa\x02\vSlash.Store\xca\x02\vSlash\\Store\xe2\x02\x17Slash\\Store\\GPBMetadata\xea\x02\fMonotreme::Storeb\x06proto3"
+	"\x05image\x18\x03 \x01(\tR\x05imageB\xae\x01\n" +
+	"\x13com.monotreme.storeB\rShortcutProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (
 	file_store_shortcut_proto_rawDescOnce sync.Once
@@ -258,13 +258,13 @@ func file_store_shortcut_proto_rawDescGZIP() []byte {
 
 var file_store_shortcut_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_store_shortcut_proto_goTypes = []any{
-	(*Shortcut)(nil),          // 0: slash.store.Shortcut
-	(*OpenGraphMetadata)(nil), // 1: slash.store.OpenGraphMetadata
-	(Visibility)(0),           // 2: slash.store.Visibility
+	(*Shortcut)(nil),          // 0: monotreme.store.Shortcut
+	(*OpenGraphMetadata)(nil), // 1: monotreme.store.OpenGraphMetadata
+	(Visibility)(0),           // 2: monotreme.store.Visibility
 }
 var file_store_shortcut_proto_depIdxs = []int32{
-	2, // 0: slash.store.Shortcut.visibility:type_name -> slash.store.Visibility
-	1, // 1: slash.store.Shortcut.og_metadata:type_name -> slash.store.OpenGraphMetadata
+	2, // 0: monotreme.store.Shortcut.visibility:type_name -> monotreme.store.Visibility
+	1, // 1: monotreme.store.Shortcut.og_metadata:type_name -> monotreme.store.OpenGraphMetadata
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

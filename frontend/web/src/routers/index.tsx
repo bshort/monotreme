@@ -3,6 +3,7 @@ import App from "@/App";
 import Root from "@/layouts/Root";
 import AdminSignIn from "@/pages/AdminSignIn";
 import AuthCallback from "@/pages/AuthCallback";
+import BookmarkImport from "@/pages/BookmarkImport";
 import CollectionDashboard from "@/pages/CollectionDashboard";
 import CollectionSpace from "@/pages/CollectionSpace";
 import Home from "@/pages/Home";
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
           {
             path: "/setting/workspace",
             element: <WorkspaceSetting />,
+          },
+          {
+            path: "/admin/import",
+            element: <BookmarkImport />,
           },
         ],
       },

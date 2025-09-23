@@ -717,33 +717,33 @@ var File_api_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_user_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19api/v1/user_service.proto\x12\fmonotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb5\x02\n" +
+	"\x19api/v1/user_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbd\x02\n" +
 	"\x04User\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\x12)\n" +
-	"\x05state\x18\x02 \x01(\x0e2\x13.monotreme.api.v1.StateR\x05state\x12=\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\x12-\n" +
+	"\x05state\x18\x02 \x01(\x0e2\x17.monotreme.api.v1.StateR\x05state\x12=\n" +
 	"\fcreated_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\vcreatedTime\x12=\n" +
-	"\fupdated_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\vupdatedTime\x12&\n" +
-	"\x04role\x18\x06 \x01(\x0e2\x12.monotreme.api.v1.RoleR\x04role\x12\x14\n" +
+	"\fupdated_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\vupdatedTime\x12*\n" +
+	"\x04role\x18\x06 \x01(\x0e2\x16.monotreme.api.v1.RoleR\x04role\x12\x14\n" +
 	"\x05email\x18\a \x01(\tR\x05email\x12\x1a\n" +
 	"\bnickname\x18\b \x01(\tR\bnickname\x12\x1a\n" +
 	"\bpassword\x18\t \x01(\tR\bpassword\"\x12\n" +
-	"\x10ListUsersRequest\"=\n" +
-	"\x11ListUsersResponse\x12(\n" +
-	"\x05users\x18\x01 \x03(\v2\x12.monotreme.api.v1.UserR\x05users\" \n" +
+	"\x10ListUsersRequest\"A\n" +
+	"\x11ListUsersResponse\x12,\n" +
+	"\x05users\x18\x01 \x03(\v2\x16.monotreme.api.v1.UserR\x05users\" \n" +
 	"\x0eGetUserRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\";\n" +
-	"\x11CreateUserRequest\x12&\n" +
-	"\x04user\x18\x01 \x01(\v2\x12.monotreme.api.v1.UserR\x04user\"x\n" +
-	"\x11UpdateUserRequest\x12&\n" +
-	"\x04user\x18\x01 \x01(\v2\x12.monotreme.api.v1.UserR\x04user\x12;\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\"?\n" +
+	"\x11CreateUserRequest\x12*\n" +
+	"\x04user\x18\x01 \x01(\v2\x16.monotreme.api.v1.UserR\x04user\"|\n" +
+	"\x11UpdateUserRequest\x12*\n" +
+	"\x04user\x18\x01 \x01(\v2\x16.monotreme.api.v1.UserR\x04user\x12;\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
 	"updateMask\"#\n" +
 	"\x11DeleteUserRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"-\n" +
 	"\x1bListUserAccessTokensRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\"b\n" +
-	"\x1cListUserAccessTokensResponse\x12B\n" +
-	"\raccess_tokens\x18\x01 \x03(\v2\x1d.monotreme.api.v1.UserAccessTokenR\faccessTokens\"\x9f\x01\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\"f\n" +
+	"\x1cListUserAccessTokensResponse\x12F\n" +
+	"\raccess_tokens\x18\x01 \x03(\v2!.monotreme.api.v1.UserAccessTokenR\faccessTokens\"\x9f\x01\n" +
 	"\x1cCreateUserAccessTokenRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12>\n" +
@@ -762,20 +762,20 @@ const file_api_v1_user_service_proto_rawDesc = "" +
 	"\x04Role\x12\x14\n" +
 	"\x10ROLE_UNSPECIFIED\x10\x00\x12\t\n" +
 	"\x05ADMIN\x10\x01\x12\b\n" +
-	"\x04USER\x10\x022\xf4\a\n" +
-	"\vUserService\x12c\n" +
-	"\tListUsers\x12\x1e.monotreme.api.v1.ListUsersRequest\x1a\x1f.monotreme.api.v1.ListUsersResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/api/v1/users\x12\\\n" +
-	"\aGetUser\x12\x1c.monotreme.api.v1.GetUserRequest\x1a\x12.monotreme.api.v1.User\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/users/{id}\x12^\n" +
+	"\x04USER\x10\x022\xad\b\n" +
+	"\vUserService\x12k\n" +
+	"\tListUsers\x12\".monotreme.api.v1.ListUsersRequest\x1a#.monotreme.api.v1.ListUsersResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/api/v1/users\x12d\n" +
+	"\aGetUser\x12 .monotreme.api.v1.GetUserRequest\x1a\x16.monotreme.api.v1.User\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/users/{id}\x12f\n" +
 	"\n" +
-	"CreateUser\x12\x1f.monotreme.api.v1.CreateUserRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15:\x04user\"\r/api/v1/users\x12{\n" +
+	"CreateUser\x12#.monotreme.api.v1.CreateUserRequest\x1a\x16.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15:\x04user\"\r/api/v1/users\x12\x83\x01\n" +
 	"\n" +
-	"UpdateUser\x12\x1f.monotreme.api.v1.UpdateUserRequest\x1a\x12.monotreme.api.v1.User\"8\xdaA\x10user,update_mask\x82\xd3\xe4\x93\x02\x1f:\x04user2\x17/api/v1/users/{user.id}\x12f\n" +
+	"UpdateUser\x12#.monotreme.api.v1.UpdateUserRequest\x1a\x16.monotreme.api.v1.User\"8\xdaA\x10user,update_mask\x82\xd3\xe4\x93\x02\x1f:\x04user2\x17/api/v1/users/{user.id}\x12j\n" +
 	"\n" +
-	"DeleteUser\x12\x1f.monotreme.api.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14*\x12/api/v1/users/{id}\x12\x9c\x01\n" +
-	"\x14ListUserAccessTokens\x12).monotreme.api.v1.ListUserAccessTokensRequest\x1a*.monotreme.api.v1.ListUserAccessTokensResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/users/{id}/access_tokens\x12\x94\x01\n" +
-	"\x15CreateUserAccessToken\x12*.monotreme.api.v1.CreateUserAccessTokenRequest\x1a\x1d.monotreme.api.v1.UserAccessToken\"0\xdaA\x02id\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/users/{id}/access_tokens\x12\xa6\x01\n" +
-	"\x15DeleteUserAccessToken\x12*.monotreme.api.v1.DeleteUserAccessTokenRequest\x1a\x16.google.protobuf.Empty\"I\xdaA\x0fid,access_token\x82\xd3\xe4\x93\x021*//api/v1/users/{id}/access_tokens/{access_token}B\xa6\x01\n" +
-	"\x10com.monotreme.api.v1B\x10UserServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"DeleteUser\x12#.monotreme.api.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14*\x12/api/v1/users/{id}\x12\xa4\x01\n" +
+	"\x14ListUserAccessTokens\x12-.monotreme.api.v1.ListUserAccessTokensRequest\x1a..monotreme.api.v1.ListUserAccessTokensResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/users/{id}/access_tokens\x12\x9c\x01\n" +
+	"\x15CreateUserAccessToken\x12..monotreme.api.v1.CreateUserAccessTokenRequest\x1a!.monotreme.api.v1.UserAccessToken\"0\xdaA\x02id\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/users/{id}/access_tokens\x12\xaa\x01\n" +
+	"\x15DeleteUserAccessToken\x12..monotreme.api.v1.DeleteUserAccessTokenRequest\x1a\x16.google.protobuf.Empty\"I\xdaA\x0fid,access_token\x82\xd3\xe4\x93\x021*//api/v1/users/{id}/access_tokens/{access_token}B\xbe\x01\n" +
+	"\x14com.monotreme.api.v1B\x10UserServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_user_service_proto_rawDescOnce sync.Once

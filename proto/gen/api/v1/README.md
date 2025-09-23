@@ -4,98 +4,100 @@
 ## Table of Contents
 
 - [api/v1/common.proto](#api_v1_common-proto)
-    - [State](#slash-api-v1-State)
-    - [Visibility](#slash-api-v1-Visibility)
+    - [State](#monotreme-api-v1-State)
+    - [Visibility](#monotreme-api-v1-Visibility)
   
 - [api/v1/user_service.proto](#api_v1_user_service-proto)
-    - [CreateUserAccessTokenRequest](#slash-api-v1-CreateUserAccessTokenRequest)
-    - [CreateUserRequest](#slash-api-v1-CreateUserRequest)
-    - [DeleteUserAccessTokenRequest](#slash-api-v1-DeleteUserAccessTokenRequest)
-    - [DeleteUserRequest](#slash-api-v1-DeleteUserRequest)
-    - [GetUserRequest](#slash-api-v1-GetUserRequest)
-    - [ListUserAccessTokensRequest](#slash-api-v1-ListUserAccessTokensRequest)
-    - [ListUserAccessTokensResponse](#slash-api-v1-ListUserAccessTokensResponse)
-    - [ListUsersRequest](#slash-api-v1-ListUsersRequest)
-    - [ListUsersResponse](#slash-api-v1-ListUsersResponse)
-    - [UpdateUserRequest](#slash-api-v1-UpdateUserRequest)
-    - [User](#slash-api-v1-User)
-    - [UserAccessToken](#slash-api-v1-UserAccessToken)
+    - [CreateUserAccessTokenRequest](#monotreme-api-v1-CreateUserAccessTokenRequest)
+    - [CreateUserRequest](#monotreme-api-v1-CreateUserRequest)
+    - [DeleteUserAccessTokenRequest](#monotreme-api-v1-DeleteUserAccessTokenRequest)
+    - [DeleteUserRequest](#monotreme-api-v1-DeleteUserRequest)
+    - [GetUserRequest](#monotreme-api-v1-GetUserRequest)
+    - [ListUserAccessTokensRequest](#monotreme-api-v1-ListUserAccessTokensRequest)
+    - [ListUserAccessTokensResponse](#monotreme-api-v1-ListUserAccessTokensResponse)
+    - [ListUsersRequest](#monotreme-api-v1-ListUsersRequest)
+    - [ListUsersResponse](#monotreme-api-v1-ListUsersResponse)
+    - [UpdateUserRequest](#monotreme-api-v1-UpdateUserRequest)
+    - [User](#monotreme-api-v1-User)
+    - [UserAccessToken](#monotreme-api-v1-UserAccessToken)
   
-    - [Role](#slash-api-v1-Role)
+    - [Role](#monotreme-api-v1-Role)
   
-    - [UserService](#slash-api-v1-UserService)
+    - [UserService](#monotreme-api-v1-UserService)
   
 - [api/v1/auth_service.proto](#api_v1_auth_service-proto)
-    - [GetAuthStatusRequest](#slash-api-v1-GetAuthStatusRequest)
-    - [SignInRequest](#slash-api-v1-SignInRequest)
-    - [SignInWithSSORequest](#slash-api-v1-SignInWithSSORequest)
-    - [SignOutRequest](#slash-api-v1-SignOutRequest)
-    - [SignUpRequest](#slash-api-v1-SignUpRequest)
+    - [GetAuthStatusRequest](#monotreme-api-v1-GetAuthStatusRequest)
+    - [SignInRequest](#monotreme-api-v1-SignInRequest)
+    - [SignInWithSSORequest](#monotreme-api-v1-SignInWithSSORequest)
+    - [SignOutRequest](#monotreme-api-v1-SignOutRequest)
+    - [SignUpRequest](#monotreme-api-v1-SignUpRequest)
   
-    - [AuthService](#slash-api-v1-AuthService)
+    - [AuthService](#monotreme-api-v1-AuthService)
   
 - [api/v1/collection_service.proto](#api_v1_collection_service-proto)
-    - [Collection](#slash-api-v1-Collection)
-    - [CreateCollectionRequest](#slash-api-v1-CreateCollectionRequest)
-    - [DeleteCollectionRequest](#slash-api-v1-DeleteCollectionRequest)
-    - [GetCollectionByNameRequest](#slash-api-v1-GetCollectionByNameRequest)
-    - [GetCollectionRequest](#slash-api-v1-GetCollectionRequest)
-    - [ListCollectionsRequest](#slash-api-v1-ListCollectionsRequest)
-    - [ListCollectionsResponse](#slash-api-v1-ListCollectionsResponse)
-    - [UpdateCollectionRequest](#slash-api-v1-UpdateCollectionRequest)
+    - [Collection](#monotreme-api-v1-Collection)
+    - [CreateCollectionRequest](#monotreme-api-v1-CreateCollectionRequest)
+    - [DeleteCollectionRequest](#monotreme-api-v1-DeleteCollectionRequest)
+    - [GetCollectionByNameRequest](#monotreme-api-v1-GetCollectionByNameRequest)
+    - [GetCollectionRequest](#monotreme-api-v1-GetCollectionRequest)
+    - [ImportBookmarksRequest](#monotreme-api-v1-ImportBookmarksRequest)
+    - [ImportBookmarksResponse](#monotreme-api-v1-ImportBookmarksResponse)
+    - [ListCollectionsRequest](#monotreme-api-v1-ListCollectionsRequest)
+    - [ListCollectionsResponse](#monotreme-api-v1-ListCollectionsResponse)
+    - [UpdateCollectionRequest](#monotreme-api-v1-UpdateCollectionRequest)
   
-    - [CollectionService](#slash-api-v1-CollectionService)
+    - [CollectionService](#monotreme-api-v1-CollectionService)
   
 - [api/v1/shortcut_service.proto](#api_v1_shortcut_service-proto)
-    - [CreateShortcutRequest](#slash-api-v1-CreateShortcutRequest)
-    - [DeleteShortcutRequest](#slash-api-v1-DeleteShortcutRequest)
-    - [GetShortcutAnalyticsRequest](#slash-api-v1-GetShortcutAnalyticsRequest)
-    - [GetShortcutAnalyticsResponse](#slash-api-v1-GetShortcutAnalyticsResponse)
-    - [GetShortcutAnalyticsResponse.AnalyticsItem](#slash-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem)
-    - [GetShortcutByNameRequest](#slash-api-v1-GetShortcutByNameRequest)
-    - [GetShortcutRequest](#slash-api-v1-GetShortcutRequest)
-    - [ListShortcutsRequest](#slash-api-v1-ListShortcutsRequest)
-    - [ListShortcutsResponse](#slash-api-v1-ListShortcutsResponse)
-    - [Shortcut](#slash-api-v1-Shortcut)
-    - [Shortcut.OpenGraphMetadata](#slash-api-v1-Shortcut-OpenGraphMetadata)
-    - [UpdateShortcutRequest](#slash-api-v1-UpdateShortcutRequest)
+    - [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest)
+    - [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest)
+    - [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest)
+    - [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse)
+    - [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem)
+    - [GetShortcutByNameRequest](#monotreme-api-v1-GetShortcutByNameRequest)
+    - [GetShortcutRequest](#monotreme-api-v1-GetShortcutRequest)
+    - [ListShortcutsRequest](#monotreme-api-v1-ListShortcutsRequest)
+    - [ListShortcutsResponse](#monotreme-api-v1-ListShortcutsResponse)
+    - [Shortcut](#monotreme-api-v1-Shortcut)
+    - [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata)
+    - [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest)
   
-    - [ShortcutService](#slash-api-v1-ShortcutService)
+    - [ShortcutService](#monotreme-api-v1-ShortcutService)
   
 - [api/v1/subscription_service.proto](#api_v1_subscription_service-proto)
-    - [DeleteSubscriptionRequest](#slash-api-v1-DeleteSubscriptionRequest)
-    - [GetSubscriptionRequest](#slash-api-v1-GetSubscriptionRequest)
-    - [Subscription](#slash-api-v1-Subscription)
-    - [UpdateSubscriptionRequest](#slash-api-v1-UpdateSubscriptionRequest)
+    - [DeleteSubscriptionRequest](#monotreme-api-v1-DeleteSubscriptionRequest)
+    - [GetSubscriptionRequest](#monotreme-api-v1-GetSubscriptionRequest)
+    - [Subscription](#monotreme-api-v1-Subscription)
+    - [UpdateSubscriptionRequest](#monotreme-api-v1-UpdateSubscriptionRequest)
   
-    - [PlanType](#slash-api-v1-PlanType)
+    - [PlanType](#monotreme-api-v1-PlanType)
   
-    - [SubscriptionService](#slash-api-v1-SubscriptionService)
+    - [SubscriptionService](#monotreme-api-v1-SubscriptionService)
   
 - [api/v1/user_setting_service.proto](#api_v1_user_setting_service-proto)
-    - [GetUserSettingRequest](#slash-api-v1-GetUserSettingRequest)
-    - [UpdateUserSettingRequest](#slash-api-v1-UpdateUserSettingRequest)
-    - [UserSetting](#slash-api-v1-UserSetting)
-    - [UserSetting.AccessTokensSetting](#slash-api-v1-UserSetting-AccessTokensSetting)
-    - [UserSetting.AccessTokensSetting.AccessToken](#slash-api-v1-UserSetting-AccessTokensSetting-AccessToken)
-    - [UserSetting.GeneralSetting](#slash-api-v1-UserSetting-GeneralSetting)
+    - [GetUserSettingRequest](#monotreme-api-v1-GetUserSettingRequest)
+    - [UpdateUserSettingRequest](#monotreme-api-v1-UpdateUserSettingRequest)
+    - [UserSetting](#monotreme-api-v1-UserSetting)
+    - [UserSetting.AccessTokensSetting](#monotreme-api-v1-UserSetting-AccessTokensSetting)
+    - [UserSetting.AccessTokensSetting.AccessToken](#monotreme-api-v1-UserSetting-AccessTokensSetting-AccessToken)
+    - [UserSetting.GeneralSetting](#monotreme-api-v1-UserSetting-GeneralSetting)
   
-    - [UserSettingService](#slash-api-v1-UserSettingService)
+    - [UserSettingService](#monotreme-api-v1-UserSettingService)
   
 - [api/v1/workspace_service.proto](#api_v1_workspace_service-proto)
-    - [GetWorkspaceProfileRequest](#slash-api-v1-GetWorkspaceProfileRequest)
-    - [GetWorkspaceSettingRequest](#slash-api-v1-GetWorkspaceSettingRequest)
-    - [IdentityProvider](#slash-api-v1-IdentityProvider)
-    - [IdentityProviderConfig](#slash-api-v1-IdentityProviderConfig)
-    - [IdentityProviderConfig.FieldMapping](#slash-api-v1-IdentityProviderConfig-FieldMapping)
-    - [IdentityProviderConfig.OAuth2Config](#slash-api-v1-IdentityProviderConfig-OAuth2Config)
-    - [UpdateWorkspaceSettingRequest](#slash-api-v1-UpdateWorkspaceSettingRequest)
-    - [WorkspaceProfile](#slash-api-v1-WorkspaceProfile)
-    - [WorkspaceSetting](#slash-api-v1-WorkspaceSetting)
+    - [GetWorkspaceProfileRequest](#monotreme-api-v1-GetWorkspaceProfileRequest)
+    - [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest)
+    - [IdentityProvider](#monotreme-api-v1-IdentityProvider)
+    - [IdentityProviderConfig](#monotreme-api-v1-IdentityProviderConfig)
+    - [IdentityProviderConfig.FieldMapping](#monotreme-api-v1-IdentityProviderConfig-FieldMapping)
+    - [IdentityProviderConfig.OAuth2Config](#monotreme-api-v1-IdentityProviderConfig-OAuth2Config)
+    - [UpdateWorkspaceSettingRequest](#monotreme-api-v1-UpdateWorkspaceSettingRequest)
+    - [WorkspaceProfile](#monotreme-api-v1-WorkspaceProfile)
+    - [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting)
   
-    - [IdentityProvider.Type](#slash-api-v1-IdentityProvider-Type)
+    - [IdentityProvider.Type](#monotreme-api-v1-IdentityProvider-Type)
   
-    - [WorkspaceService](#slash-api-v1-WorkspaceService)
+    - [WorkspaceService](#monotreme-api-v1-WorkspaceService)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -110,7 +112,7 @@
  
 
 
-<a name="slash-api-v1-State"></a>
+<a name="monotreme-api-v1-State"></a>
 
 ### State
 
@@ -123,7 +125,7 @@
 
 
 
-<a name="slash-api-v1-Visibility"></a>
+<a name="monotreme-api-v1-Visibility"></a>
 
 ### Visibility
 
@@ -150,7 +152,7 @@
 
 
 
-<a name="slash-api-v1-CreateUserAccessTokenRequest"></a>
+<a name="monotreme-api-v1-CreateUserAccessTokenRequest"></a>
 
 ### CreateUserAccessTokenRequest
 
@@ -167,7 +169,7 @@
 
 
 
-<a name="slash-api-v1-CreateUserRequest"></a>
+<a name="monotreme-api-v1-CreateUserRequest"></a>
 
 ### CreateUserRequest
 
@@ -175,14 +177,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| user | [User](#slash-api-v1-User) |  |  |
+| user | [User](#monotreme-api-v1-User) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-DeleteUserAccessTokenRequest"></a>
+<a name="monotreme-api-v1-DeleteUserAccessTokenRequest"></a>
 
 ### DeleteUserAccessTokenRequest
 
@@ -198,7 +200,7 @@
 
 
 
-<a name="slash-api-v1-DeleteUserRequest"></a>
+<a name="monotreme-api-v1-DeleteUserRequest"></a>
 
 ### DeleteUserRequest
 
@@ -213,7 +215,7 @@
 
 
 
-<a name="slash-api-v1-GetUserRequest"></a>
+<a name="monotreme-api-v1-GetUserRequest"></a>
 
 ### GetUserRequest
 
@@ -228,7 +230,7 @@
 
 
 
-<a name="slash-api-v1-ListUserAccessTokensRequest"></a>
+<a name="monotreme-api-v1-ListUserAccessTokensRequest"></a>
 
 ### ListUserAccessTokensRequest
 
@@ -243,7 +245,7 @@
 
 
 
-<a name="slash-api-v1-ListUserAccessTokensResponse"></a>
+<a name="monotreme-api-v1-ListUserAccessTokensResponse"></a>
 
 ### ListUserAccessTokensResponse
 
@@ -251,14 +253,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| access_tokens | [UserAccessToken](#slash-api-v1-UserAccessToken) | repeated |  |
+| access_tokens | [UserAccessToken](#monotreme-api-v1-UserAccessToken) | repeated |  |
 
 
 
 
 
 
-<a name="slash-api-v1-ListUsersRequest"></a>
+<a name="monotreme-api-v1-ListUsersRequest"></a>
 
 ### ListUsersRequest
 
@@ -268,7 +270,7 @@
 
 
 
-<a name="slash-api-v1-ListUsersResponse"></a>
+<a name="monotreme-api-v1-ListUsersResponse"></a>
 
 ### ListUsersResponse
 
@@ -276,14 +278,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| users | [User](#slash-api-v1-User) | repeated |  |
+| users | [User](#monotreme-api-v1-User) | repeated |  |
 
 
 
 
 
 
-<a name="slash-api-v1-UpdateUserRequest"></a>
+<a name="monotreme-api-v1-UpdateUserRequest"></a>
 
 ### UpdateUserRequest
 
@@ -291,7 +293,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| user | [User](#slash-api-v1-User) |  |  |
+| user | [User](#monotreme-api-v1-User) |  |  |
 | update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  |  |
 
 
@@ -299,7 +301,7 @@
 
 
 
-<a name="slash-api-v1-User"></a>
+<a name="monotreme-api-v1-User"></a>
 
 ### User
 
@@ -308,10 +310,10 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [int32](#int32) |  |  |
-| state | [State](#slash-api-v1-State) |  |  |
+| state | [State](#monotreme-api-v1-State) |  |  |
 | created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| role | [Role](#slash-api-v1-Role) |  |  |
+| role | [Role](#monotreme-api-v1-Role) |  |  |
 | email | [string](#string) |  |  |
 | nickname | [string](#string) |  |  |
 | password | [string](#string) |  |  |
@@ -321,7 +323,7 @@
 
 
 
-<a name="slash-api-v1-UserAccessToken"></a>
+<a name="monotreme-api-v1-UserAccessToken"></a>
 
 ### UserAccessToken
 
@@ -341,7 +343,7 @@
  
 
 
-<a name="slash-api-v1-Role"></a>
+<a name="monotreme-api-v1-Role"></a>
 
 ### Role
 
@@ -358,21 +360,21 @@
  
 
 
-<a name="slash-api-v1-UserService"></a>
+<a name="monotreme-api-v1-UserService"></a>
 
 ### UserService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| ListUsers | [ListUsersRequest](#slash-api-v1-ListUsersRequest) | [ListUsersResponse](#slash-api-v1-ListUsersResponse) | ListUsers returns a list of users. |
-| GetUser | [GetUserRequest](#slash-api-v1-GetUserRequest) | [User](#slash-api-v1-User) | GetUser returns a user by id. |
-| CreateUser | [CreateUserRequest](#slash-api-v1-CreateUserRequest) | [User](#slash-api-v1-User) | CreateUser creates a new user. |
-| UpdateUser | [UpdateUserRequest](#slash-api-v1-UpdateUserRequest) | [User](#slash-api-v1-User) |  |
-| DeleteUser | [DeleteUserRequest](#slash-api-v1-DeleteUserRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteUser deletes a user by id. |
-| ListUserAccessTokens | [ListUserAccessTokensRequest](#slash-api-v1-ListUserAccessTokensRequest) | [ListUserAccessTokensResponse](#slash-api-v1-ListUserAccessTokensResponse) | ListUserAccessTokens returns a list of access tokens for a user. |
-| CreateUserAccessToken | [CreateUserAccessTokenRequest](#slash-api-v1-CreateUserAccessTokenRequest) | [UserAccessToken](#slash-api-v1-UserAccessToken) | CreateUserAccessToken creates a new access token for a user. |
-| DeleteUserAccessToken | [DeleteUserAccessTokenRequest](#slash-api-v1-DeleteUserAccessTokenRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteUserAccessToken deletes an access token for a user. |
+| ListUsers | [ListUsersRequest](#monotreme-api-v1-ListUsersRequest) | [ListUsersResponse](#monotreme-api-v1-ListUsersResponse) | ListUsers returns a list of users. |
+| GetUser | [GetUserRequest](#monotreme-api-v1-GetUserRequest) | [User](#monotreme-api-v1-User) | GetUser returns a user by id. |
+| CreateUser | [CreateUserRequest](#monotreme-api-v1-CreateUserRequest) | [User](#monotreme-api-v1-User) | CreateUser creates a new user. |
+| UpdateUser | [UpdateUserRequest](#monotreme-api-v1-UpdateUserRequest) | [User](#monotreme-api-v1-User) |  |
+| DeleteUser | [DeleteUserRequest](#monotreme-api-v1-DeleteUserRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteUser deletes a user by id. |
+| ListUserAccessTokens | [ListUserAccessTokensRequest](#monotreme-api-v1-ListUserAccessTokensRequest) | [ListUserAccessTokensResponse](#monotreme-api-v1-ListUserAccessTokensResponse) | ListUserAccessTokens returns a list of access tokens for a user. |
+| CreateUserAccessToken | [CreateUserAccessTokenRequest](#monotreme-api-v1-CreateUserAccessTokenRequest) | [UserAccessToken](#monotreme-api-v1-UserAccessToken) | CreateUserAccessToken creates a new access token for a user. |
+| DeleteUserAccessToken | [DeleteUserAccessTokenRequest](#monotreme-api-v1-DeleteUserAccessTokenRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteUserAccessToken deletes an access token for a user. |
 
  
 
@@ -385,7 +387,7 @@
 
 
 
-<a name="slash-api-v1-GetAuthStatusRequest"></a>
+<a name="monotreme-api-v1-GetAuthStatusRequest"></a>
 
 ### GetAuthStatusRequest
 
@@ -395,7 +397,7 @@
 
 
 
-<a name="slash-api-v1-SignInRequest"></a>
+<a name="monotreme-api-v1-SignInRequest"></a>
 
 ### SignInRequest
 
@@ -411,7 +413,7 @@
 
 
 
-<a name="slash-api-v1-SignInWithSSORequest"></a>
+<a name="monotreme-api-v1-SignInWithSSORequest"></a>
 
 ### SignInWithSSORequest
 
@@ -428,7 +430,7 @@
 
 
 
-<a name="slash-api-v1-SignOutRequest"></a>
+<a name="monotreme-api-v1-SignOutRequest"></a>
 
 ### SignOutRequest
 
@@ -438,7 +440,7 @@
 
 
 
-<a name="slash-api-v1-SignUpRequest"></a>
+<a name="monotreme-api-v1-SignUpRequest"></a>
 
 ### SignUpRequest
 
@@ -461,18 +463,18 @@
  
 
 
-<a name="slash-api-v1-AuthService"></a>
+<a name="monotreme-api-v1-AuthService"></a>
 
 ### AuthService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetAuthStatus | [GetAuthStatusRequest](#slash-api-v1-GetAuthStatusRequest) | [User](#slash-api-v1-User) | GetAuthStatus returns the current auth status of the user. |
-| SignIn | [SignInRequest](#slash-api-v1-SignInRequest) | [User](#slash-api-v1-User) | SignIn signs in the user with the given username and password. |
-| SignInWithSSO | [SignInWithSSORequest](#slash-api-v1-SignInWithSSORequest) | [User](#slash-api-v1-User) | SignInWithSSO signs in the user with the given SSO code. |
-| SignUp | [SignUpRequest](#slash-api-v1-SignUpRequest) | [User](#slash-api-v1-User) | SignUp signs up the user with the given username and password. |
-| SignOut | [SignOutRequest](#slash-api-v1-SignOutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | SignOut signs out the user. |
+| GetAuthStatus | [GetAuthStatusRequest](#monotreme-api-v1-GetAuthStatusRequest) | [User](#monotreme-api-v1-User) | GetAuthStatus returns the current auth status of the user. |
+| SignIn | [SignInRequest](#monotreme-api-v1-SignInRequest) | [User](#monotreme-api-v1-User) | SignIn signs in the user with the given username and password. |
+| SignInWithSSO | [SignInWithSSORequest](#monotreme-api-v1-SignInWithSSORequest) | [User](#monotreme-api-v1-User) | SignInWithSSO signs in the user with the given SSO code. |
+| SignUp | [SignUpRequest](#monotreme-api-v1-SignUpRequest) | [User](#monotreme-api-v1-User) | SignUp signs up the user with the given username and password. |
+| SignOut | [SignOutRequest](#monotreme-api-v1-SignOutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | SignOut signs out the user. |
 
  
 
@@ -485,7 +487,7 @@
 
 
 
-<a name="slash-api-v1-Collection"></a>
+<a name="monotreme-api-v1-Collection"></a>
 
 ### Collection
 
@@ -501,14 +503,14 @@
 | title | [string](#string) |  |  |
 | description | [string](#string) |  |  |
 | shortcut_ids | [int32](#int32) | repeated |  |
-| visibility | [Visibility](#slash-api-v1-Visibility) |  |  |
+| visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-CreateCollectionRequest"></a>
+<a name="monotreme-api-v1-CreateCollectionRequest"></a>
 
 ### CreateCollectionRequest
 
@@ -516,14 +518,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| collection | [Collection](#slash-api-v1-Collection) |  |  |
+| collection | [Collection](#monotreme-api-v1-Collection) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-DeleteCollectionRequest"></a>
+<a name="monotreme-api-v1-DeleteCollectionRequest"></a>
 
 ### DeleteCollectionRequest
 
@@ -538,7 +540,7 @@
 
 
 
-<a name="slash-api-v1-GetCollectionByNameRequest"></a>
+<a name="monotreme-api-v1-GetCollectionByNameRequest"></a>
 
 ### GetCollectionByNameRequest
 
@@ -553,7 +555,7 @@
 
 
 
-<a name="slash-api-v1-GetCollectionRequest"></a>
+<a name="monotreme-api-v1-GetCollectionRequest"></a>
 
 ### GetCollectionRequest
 
@@ -568,7 +570,39 @@
 
 
 
-<a name="slash-api-v1-ListCollectionsRequest"></a>
+<a name="monotreme-api-v1-ImportBookmarksRequest"></a>
+
+### ImportBookmarksRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| html_content | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ImportBookmarksResponse"></a>
+
+### ImportBookmarksResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| collections | [Collection](#monotreme-api-v1-Collection) | repeated |  |
+| total_shortcuts | [int32](#int32) |  |  |
+| total_collections | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListCollectionsRequest"></a>
 
 ### ListCollectionsRequest
 
@@ -578,7 +612,7 @@
 
 
 
-<a name="slash-api-v1-ListCollectionsResponse"></a>
+<a name="monotreme-api-v1-ListCollectionsResponse"></a>
 
 ### ListCollectionsResponse
 
@@ -586,14 +620,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| collections | [Collection](#slash-api-v1-Collection) | repeated |  |
+| collections | [Collection](#monotreme-api-v1-Collection) | repeated |  |
 
 
 
 
 
 
-<a name="slash-api-v1-UpdateCollectionRequest"></a>
+<a name="monotreme-api-v1-UpdateCollectionRequest"></a>
 
 ### UpdateCollectionRequest
 
@@ -601,7 +635,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| collection | [Collection](#slash-api-v1-Collection) |  |  |
+| collection | [Collection](#monotreme-api-v1-Collection) |  |  |
 | update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  |  |
 
 
@@ -615,19 +649,20 @@
  
 
 
-<a name="slash-api-v1-CollectionService"></a>
+<a name="monotreme-api-v1-CollectionService"></a>
 
 ### CollectionService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| ListCollections | [ListCollectionsRequest](#slash-api-v1-ListCollectionsRequest) | [ListCollectionsResponse](#slash-api-v1-ListCollectionsResponse) | ListCollections returns a list of collections. |
-| GetCollection | [GetCollectionRequest](#slash-api-v1-GetCollectionRequest) | [Collection](#slash-api-v1-Collection) | GetCollection returns a collection by id. |
-| GetCollectionByName | [GetCollectionByNameRequest](#slash-api-v1-GetCollectionByNameRequest) | [Collection](#slash-api-v1-Collection) | GetCollectionByName returns a collection by name. |
-| CreateCollection | [CreateCollectionRequest](#slash-api-v1-CreateCollectionRequest) | [Collection](#slash-api-v1-Collection) | CreateCollection creates a collection. |
-| UpdateCollection | [UpdateCollectionRequest](#slash-api-v1-UpdateCollectionRequest) | [Collection](#slash-api-v1-Collection) | UpdateCollection updates a collection. |
-| DeleteCollection | [DeleteCollectionRequest](#slash-api-v1-DeleteCollectionRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteCollection deletes a collection by id. |
+| ListCollections | [ListCollectionsRequest](#monotreme-api-v1-ListCollectionsRequest) | [ListCollectionsResponse](#monotreme-api-v1-ListCollectionsResponse) | ListCollections returns a list of collections. |
+| GetCollection | [GetCollectionRequest](#monotreme-api-v1-GetCollectionRequest) | [Collection](#monotreme-api-v1-Collection) | GetCollection returns a collection by id. |
+| GetCollectionByName | [GetCollectionByNameRequest](#monotreme-api-v1-GetCollectionByNameRequest) | [Collection](#monotreme-api-v1-Collection) | GetCollectionByName returns a collection by name. |
+| CreateCollection | [CreateCollectionRequest](#monotreme-api-v1-CreateCollectionRequest) | [Collection](#monotreme-api-v1-Collection) | CreateCollection creates a collection. |
+| UpdateCollection | [UpdateCollectionRequest](#monotreme-api-v1-UpdateCollectionRequest) | [Collection](#monotreme-api-v1-Collection) | UpdateCollection updates a collection. |
+| DeleteCollection | [DeleteCollectionRequest](#monotreme-api-v1-DeleteCollectionRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteCollection deletes a collection by id. |
+| ImportBookmarks | [ImportBookmarksRequest](#monotreme-api-v1-ImportBookmarksRequest) | [ImportBookmarksResponse](#monotreme-api-v1-ImportBookmarksResponse) | ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts. |
 
  
 
@@ -640,7 +675,7 @@
 
 
 
-<a name="slash-api-v1-CreateShortcutRequest"></a>
+<a name="monotreme-api-v1-CreateShortcutRequest"></a>
 
 ### CreateShortcutRequest
 
@@ -648,14 +683,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| shortcut | [Shortcut](#slash-api-v1-Shortcut) |  |  |
+| shortcut | [Shortcut](#monotreme-api-v1-Shortcut) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-DeleteShortcutRequest"></a>
+<a name="monotreme-api-v1-DeleteShortcutRequest"></a>
 
 ### DeleteShortcutRequest
 
@@ -670,7 +705,7 @@
 
 
 
-<a name="slash-api-v1-GetShortcutAnalyticsRequest"></a>
+<a name="monotreme-api-v1-GetShortcutAnalyticsRequest"></a>
 
 ### GetShortcutAnalyticsRequest
 
@@ -685,7 +720,7 @@
 
 
 
-<a name="slash-api-v1-GetShortcutAnalyticsResponse"></a>
+<a name="monotreme-api-v1-GetShortcutAnalyticsResponse"></a>
 
 ### GetShortcutAnalyticsResponse
 
@@ -693,16 +728,16 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| references | [GetShortcutAnalyticsResponse.AnalyticsItem](#slash-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
-| devices | [GetShortcutAnalyticsResponse.AnalyticsItem](#slash-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
-| browsers | [GetShortcutAnalyticsResponse.AnalyticsItem](#slash-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
+| references | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
+| devices | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
+| browsers | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
 
 
 
 
 
 
-<a name="slash-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem"></a>
+<a name="monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem"></a>
 
 ### GetShortcutAnalyticsResponse.AnalyticsItem
 
@@ -718,7 +753,7 @@
 
 
 
-<a name="slash-api-v1-GetShortcutByNameRequest"></a>
+<a name="monotreme-api-v1-GetShortcutByNameRequest"></a>
 
 ### GetShortcutByNameRequest
 
@@ -733,7 +768,7 @@
 
 
 
-<a name="slash-api-v1-GetShortcutRequest"></a>
+<a name="monotreme-api-v1-GetShortcutRequest"></a>
 
 ### GetShortcutRequest
 
@@ -748,7 +783,7 @@
 
 
 
-<a name="slash-api-v1-ListShortcutsRequest"></a>
+<a name="monotreme-api-v1-ListShortcutsRequest"></a>
 
 ### ListShortcutsRequest
 
@@ -758,7 +793,7 @@
 
 
 
-<a name="slash-api-v1-ListShortcutsResponse"></a>
+<a name="monotreme-api-v1-ListShortcutsResponse"></a>
 
 ### ListShortcutsResponse
 
@@ -766,14 +801,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| shortcuts | [Shortcut](#slash-api-v1-Shortcut) | repeated |  |
+| shortcuts | [Shortcut](#monotreme-api-v1-Shortcut) | repeated |  |
 
 
 
 
 
 
-<a name="slash-api-v1-Shortcut"></a>
+<a name="monotreme-api-v1-Shortcut"></a>
 
 ### Shortcut
 
@@ -791,16 +826,16 @@
 | title | [string](#string) |  |  |
 | tags | [string](#string) | repeated |  |
 | description | [string](#string) |  |  |
-| visibility | [Visibility](#slash-api-v1-Visibility) |  |  |
+| visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
 | view_count | [int32](#int32) |  |  |
-| og_metadata | [Shortcut.OpenGraphMetadata](#slash-api-v1-Shortcut-OpenGraphMetadata) |  |  |
+| og_metadata | [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-Shortcut-OpenGraphMetadata"></a>
+<a name="monotreme-api-v1-Shortcut-OpenGraphMetadata"></a>
 
 ### Shortcut.OpenGraphMetadata
 
@@ -817,7 +852,7 @@
 
 
 
-<a name="slash-api-v1-UpdateShortcutRequest"></a>
+<a name="monotreme-api-v1-UpdateShortcutRequest"></a>
 
 ### UpdateShortcutRequest
 
@@ -825,7 +860,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| shortcut | [Shortcut](#slash-api-v1-Shortcut) |  |  |
+| shortcut | [Shortcut](#monotreme-api-v1-Shortcut) |  |  |
 | update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  |  |
 
 
@@ -839,20 +874,20 @@
  
 
 
-<a name="slash-api-v1-ShortcutService"></a>
+<a name="monotreme-api-v1-ShortcutService"></a>
 
 ### ShortcutService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| ListShortcuts | [ListShortcutsRequest](#slash-api-v1-ListShortcutsRequest) | [ListShortcutsResponse](#slash-api-v1-ListShortcutsResponse) | ListShortcuts returns a list of shortcuts. |
-| GetShortcut | [GetShortcutRequest](#slash-api-v1-GetShortcutRequest) | [Shortcut](#slash-api-v1-Shortcut) | GetShortcut returns a shortcut by id. |
-| GetShortcutByName | [GetShortcutByNameRequest](#slash-api-v1-GetShortcutByNameRequest) | [Shortcut](#slash-api-v1-Shortcut) | GetShortcutByName returns a shortcut by name. |
-| CreateShortcut | [CreateShortcutRequest](#slash-api-v1-CreateShortcutRequest) | [Shortcut](#slash-api-v1-Shortcut) | CreateShortcut creates a shortcut. |
-| UpdateShortcut | [UpdateShortcutRequest](#slash-api-v1-UpdateShortcutRequest) | [Shortcut](#slash-api-v1-Shortcut) | UpdateShortcut updates a shortcut. |
-| DeleteShortcut | [DeleteShortcutRequest](#slash-api-v1-DeleteShortcutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteShortcut deletes a shortcut by name. |
-| GetShortcutAnalytics | [GetShortcutAnalyticsRequest](#slash-api-v1-GetShortcutAnalyticsRequest) | [GetShortcutAnalyticsResponse](#slash-api-v1-GetShortcutAnalyticsResponse) | GetShortcutAnalytics returns the analytics for a shortcut. |
+| ListShortcuts | [ListShortcutsRequest](#monotreme-api-v1-ListShortcutsRequest) | [ListShortcutsResponse](#monotreme-api-v1-ListShortcutsResponse) | ListShortcuts returns a list of shortcuts. |
+| GetShortcut | [GetShortcutRequest](#monotreme-api-v1-GetShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | GetShortcut returns a shortcut by id. |
+| GetShortcutByName | [GetShortcutByNameRequest](#monotreme-api-v1-GetShortcutByNameRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | GetShortcutByName returns a shortcut by name. |
+| CreateShortcut | [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | CreateShortcut creates a shortcut. |
+| UpdateShortcut | [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | UpdateShortcut updates a shortcut. |
+| DeleteShortcut | [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteShortcut deletes a shortcut by name. |
+| GetShortcutAnalytics | [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest) | [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse) | GetShortcutAnalytics returns the analytics for a shortcut. |
 
  
 
@@ -865,7 +900,7 @@
 
 
 
-<a name="slash-api-v1-DeleteSubscriptionRequest"></a>
+<a name="monotreme-api-v1-DeleteSubscriptionRequest"></a>
 
 ### DeleteSubscriptionRequest
 
@@ -875,7 +910,7 @@
 
 
 
-<a name="slash-api-v1-GetSubscriptionRequest"></a>
+<a name="monotreme-api-v1-GetSubscriptionRequest"></a>
 
 ### GetSubscriptionRequest
 
@@ -885,7 +920,7 @@
 
 
 
-<a name="slash-api-v1-Subscription"></a>
+<a name="monotreme-api-v1-Subscription"></a>
 
 ### Subscription
 
@@ -893,7 +928,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| plan | [PlanType](#slash-api-v1-PlanType) |  |  |
+| plan | [PlanType](#monotreme-api-v1-PlanType) |  |  |
 | started_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | expires_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | features | [string](#string) | repeated |  |
@@ -906,7 +941,7 @@
 
 
 
-<a name="slash-api-v1-UpdateSubscriptionRequest"></a>
+<a name="monotreme-api-v1-UpdateSubscriptionRequest"></a>
 
 ### UpdateSubscriptionRequest
 
@@ -923,7 +958,7 @@
  
 
 
-<a name="slash-api-v1-PlanType"></a>
+<a name="monotreme-api-v1-PlanType"></a>
 
 ### PlanType
 
@@ -941,16 +976,16 @@
  
 
 
-<a name="slash-api-v1-SubscriptionService"></a>
+<a name="monotreme-api-v1-SubscriptionService"></a>
 
 ### SubscriptionService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetSubscription | [GetSubscriptionRequest](#slash-api-v1-GetSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | GetSubscription gets the current subscription of Monotreme instance. |
-| UpdateSubscription | [UpdateSubscriptionRequest](#slash-api-v1-UpdateSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | UpdateSubscription updates the subscription. |
-| DeleteSubscription | [DeleteSubscriptionRequest](#slash-api-v1-DeleteSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | DeleteSubscription deletes the subscription. |
+| GetSubscription | [GetSubscriptionRequest](#monotreme-api-v1-GetSubscriptionRequest) | [Subscription](#monotreme-api-v1-Subscription) | GetSubscription gets the current subscription of Monotreme instance. |
+| UpdateSubscription | [UpdateSubscriptionRequest](#monotreme-api-v1-UpdateSubscriptionRequest) | [Subscription](#monotreme-api-v1-Subscription) | UpdateSubscription updates the subscription. |
+| DeleteSubscription | [DeleteSubscriptionRequest](#monotreme-api-v1-DeleteSubscriptionRequest) | [Subscription](#monotreme-api-v1-Subscription) | DeleteSubscription deletes the subscription. |
 
  
 
@@ -963,7 +998,7 @@
 
 
 
-<a name="slash-api-v1-GetUserSettingRequest"></a>
+<a name="monotreme-api-v1-GetUserSettingRequest"></a>
 
 ### GetUserSettingRequest
 
@@ -978,7 +1013,7 @@
 
 
 
-<a name="slash-api-v1-UpdateUserSettingRequest"></a>
+<a name="monotreme-api-v1-UpdateUserSettingRequest"></a>
 
 ### UpdateUserSettingRequest
 
@@ -987,7 +1022,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [int32](#int32) |  | id is the user id. |
-| user_setting | [UserSetting](#slash-api-v1-UserSetting) |  | user_setting is the user setting to update. |
+| user_setting | [UserSetting](#monotreme-api-v1-UserSetting) |  | user_setting is the user setting to update. |
 | update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  | update_mask is the field mask to update. |
 
 
@@ -995,7 +1030,7 @@
 
 
 
-<a name="slash-api-v1-UserSetting"></a>
+<a name="monotreme-api-v1-UserSetting"></a>
 
 ### UserSetting
 
@@ -1004,15 +1039,15 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | user_id | [int32](#int32) |  |  |
-| general | [UserSetting.GeneralSetting](#slash-api-v1-UserSetting-GeneralSetting) |  |  |
-| access_tokens | [UserSetting.AccessTokensSetting](#slash-api-v1-UserSetting-AccessTokensSetting) |  |  |
+| general | [UserSetting.GeneralSetting](#monotreme-api-v1-UserSetting-GeneralSetting) |  |  |
+| access_tokens | [UserSetting.AccessTokensSetting](#monotreme-api-v1-UserSetting-AccessTokensSetting) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-UserSetting-AccessTokensSetting"></a>
+<a name="monotreme-api-v1-UserSetting-AccessTokensSetting"></a>
 
 ### UserSetting.AccessTokensSetting
 
@@ -1020,14 +1055,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| access_tokens | [UserSetting.AccessTokensSetting.AccessToken](#slash-api-v1-UserSetting-AccessTokensSetting-AccessToken) | repeated | Nested repeated field |
+| access_tokens | [UserSetting.AccessTokensSetting.AccessToken](#monotreme-api-v1-UserSetting-AccessTokensSetting-AccessToken) | repeated | Nested repeated field |
 
 
 
 
 
 
-<a name="slash-api-v1-UserSetting-AccessTokensSetting-AccessToken"></a>
+<a name="monotreme-api-v1-UserSetting-AccessTokensSetting-AccessToken"></a>
 
 ### UserSetting.AccessTokensSetting.AccessToken
 
@@ -1043,7 +1078,7 @@
 
 
 
-<a name="slash-api-v1-UserSetting-GeneralSetting"></a>
+<a name="monotreme-api-v1-UserSetting-GeneralSetting"></a>
 
 ### UserSetting.GeneralSetting
 
@@ -1065,15 +1100,15 @@
  
 
 
-<a name="slash-api-v1-UserSettingService"></a>
+<a name="monotreme-api-v1-UserSettingService"></a>
 
 ### UserSettingService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetUserSetting | [GetUserSettingRequest](#slash-api-v1-GetUserSettingRequest) | [UserSetting](#slash-api-v1-UserSetting) | GetUserSetting returns the user setting. |
-| UpdateUserSetting | [UpdateUserSettingRequest](#slash-api-v1-UpdateUserSettingRequest) | [UserSetting](#slash-api-v1-UserSetting) | UpdateUserSetting updates the user setting. |
+| GetUserSetting | [GetUserSettingRequest](#monotreme-api-v1-GetUserSettingRequest) | [UserSetting](#monotreme-api-v1-UserSetting) | GetUserSetting returns the user setting. |
+| UpdateUserSetting | [UpdateUserSettingRequest](#monotreme-api-v1-UpdateUserSettingRequest) | [UserSetting](#monotreme-api-v1-UserSetting) | UpdateUserSetting updates the user setting. |
 
  
 
@@ -1086,7 +1121,7 @@
 
 
 
-<a name="slash-api-v1-GetWorkspaceProfileRequest"></a>
+<a name="monotreme-api-v1-GetWorkspaceProfileRequest"></a>
 
 ### GetWorkspaceProfileRequest
 
@@ -1096,7 +1131,7 @@
 
 
 
-<a name="slash-api-v1-GetWorkspaceSettingRequest"></a>
+<a name="monotreme-api-v1-GetWorkspaceSettingRequest"></a>
 
 ### GetWorkspaceSettingRequest
 
@@ -1106,7 +1141,7 @@
 
 
 
-<a name="slash-api-v1-IdentityProvider"></a>
+<a name="monotreme-api-v1-IdentityProvider"></a>
 
 ### IdentityProvider
 
@@ -1116,15 +1151,15 @@
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | The unique identifier of the identity provider. |
 | title | [string](#string) |  |  |
-| type | [IdentityProvider.Type](#slash-api-v1-IdentityProvider-Type) |  |  |
-| config | [IdentityProviderConfig](#slash-api-v1-IdentityProviderConfig) |  |  |
+| type | [IdentityProvider.Type](#monotreme-api-v1-IdentityProvider-Type) |  |  |
+| config | [IdentityProviderConfig](#monotreme-api-v1-IdentityProviderConfig) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-IdentityProviderConfig"></a>
+<a name="monotreme-api-v1-IdentityProviderConfig"></a>
 
 ### IdentityProviderConfig
 
@@ -1132,14 +1167,14 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth2 | [IdentityProviderConfig.OAuth2Config](#slash-api-v1-IdentityProviderConfig-OAuth2Config) |  |  |
+| oauth2 | [IdentityProviderConfig.OAuth2Config](#monotreme-api-v1-IdentityProviderConfig-OAuth2Config) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-IdentityProviderConfig-FieldMapping"></a>
+<a name="monotreme-api-v1-IdentityProviderConfig-FieldMapping"></a>
 
 ### IdentityProviderConfig.FieldMapping
 
@@ -1155,7 +1190,7 @@
 
 
 
-<a name="slash-api-v1-IdentityProviderConfig-OAuth2Config"></a>
+<a name="monotreme-api-v1-IdentityProviderConfig-OAuth2Config"></a>
 
 ### IdentityProviderConfig.OAuth2Config
 
@@ -1169,14 +1204,14 @@
 | token_url | [string](#string) |  |  |
 | user_info_url | [string](#string) |  |  |
 | scopes | [string](#string) | repeated |  |
-| field_mapping | [IdentityProviderConfig.FieldMapping](#slash-api-v1-IdentityProviderConfig-FieldMapping) |  |  |
+| field_mapping | [IdentityProviderConfig.FieldMapping](#monotreme-api-v1-IdentityProviderConfig-FieldMapping) |  |  |
 
 
 
 
 
 
-<a name="slash-api-v1-UpdateWorkspaceSettingRequest"></a>
+<a name="monotreme-api-v1-UpdateWorkspaceSettingRequest"></a>
 
 ### UpdateWorkspaceSettingRequest
 
@@ -1184,7 +1219,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| setting | [WorkspaceSetting](#slash-api-v1-WorkspaceSetting) |  | The user setting. |
+| setting | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  | The user setting. |
 | update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  | The update mask. |
 
 
@@ -1192,7 +1227,7 @@
 
 
 
-<a name="slash-api-v1-WorkspaceProfile"></a>
+<a name="monotreme-api-v1-WorkspaceProfile"></a>
 
 ### WorkspaceProfile
 
@@ -1203,7 +1238,7 @@
 | mode | [string](#string) |  | Current workspace mode: dev, prod. |
 | version | [string](#string) |  | Current workspace version. |
 | owner | [string](#string) |  | The owner name. Format: &#34;users/{id}&#34; |
-| subscription | [Subscription](#slash-api-v1-Subscription) |  | The workspace subscription. |
+| subscription | [Subscription](#monotreme-api-v1-Subscription) |  | The workspace subscription. |
 | custom_style | [string](#string) |  | The custom style. |
 | branding | [bytes](#bytes) |  | The workspace branding. |
 
@@ -1212,7 +1247,7 @@
 
 
 
-<a name="slash-api-v1-WorkspaceSetting"></a>
+<a name="monotreme-api-v1-WorkspaceSetting"></a>
 
 ### WorkspaceSetting
 
@@ -1223,8 +1258,8 @@
 | instance_url | [string](#string) |  | The url of instance. |
 | branding | [bytes](#bytes) |  | The workspace custome branding. |
 | custom_style | [string](#string) |  | The custom style. |
-| default_visibility | [Visibility](#slash-api-v1-Visibility) |  | The default visibility of shortcuts and collections. |
-| identity_providers | [IdentityProvider](#slash-api-v1-IdentityProvider) | repeated | The identity providers. |
+| default_visibility | [Visibility](#monotreme-api-v1-Visibility) |  | The default visibility of shortcuts and collections. |
+| identity_providers | [IdentityProvider](#monotreme-api-v1-IdentityProvider) | repeated | The identity providers. |
 | disallow_user_registration | [bool](#bool) |  | Whether to disallow user registration by email&amp;password. |
 | disallow_password_auth | [bool](#bool) |  | Whether to disallow password authentication. |
 
@@ -1235,7 +1270,7 @@
  
 
 
-<a name="slash-api-v1-IdentityProvider-Type"></a>
+<a name="monotreme-api-v1-IdentityProvider-Type"></a>
 
 ### IdentityProvider.Type
 
@@ -1251,16 +1286,16 @@
  
 
 
-<a name="slash-api-v1-WorkspaceService"></a>
+<a name="monotreme-api-v1-WorkspaceService"></a>
 
 ### WorkspaceService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetWorkspaceProfile | [GetWorkspaceProfileRequest](#slash-api-v1-GetWorkspaceProfileRequest) | [WorkspaceProfile](#slash-api-v1-WorkspaceProfile) |  |
-| GetWorkspaceSetting | [GetWorkspaceSettingRequest](#slash-api-v1-GetWorkspaceSettingRequest) | [WorkspaceSetting](#slash-api-v1-WorkspaceSetting) |  |
-| UpdateWorkspaceSetting | [UpdateWorkspaceSettingRequest](#slash-api-v1-UpdateWorkspaceSettingRequest) | [WorkspaceSetting](#slash-api-v1-WorkspaceSetting) |  |
+| GetWorkspaceProfile | [GetWorkspaceProfileRequest](#monotreme-api-v1-GetWorkspaceProfileRequest) | [WorkspaceProfile](#monotreme-api-v1-WorkspaceProfile) |  |
+| GetWorkspaceSetting | [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest) | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  |
+| UpdateWorkspaceSetting | [UpdateWorkspaceSettingRequest](#monotreme-api-v1-UpdateWorkspaceSettingRequest) | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  |
 
  
 

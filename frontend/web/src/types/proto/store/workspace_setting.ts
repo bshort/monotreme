@@ -9,7 +9,7 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Visibility, visibilityFromJSON, visibilityToNumber } from "./common";
 import { IdentityProvider } from "./idp";
 
-export const protobufPackage = "slash.store";
+export const protobufPackage = "monotreme.store";
 
 export enum WorkspaceSettingKey {
   WORKSPACE_SETTING_KEY_UNSPECIFIED = "WORKSPACE_SETTING_KEY_UNSPECIFIED",

@@ -29,7 +29,7 @@ func NewEmailMsg() *Email {
 }
 
 // SetFrom sets the from address of the SMTP client.
-// Only accept the valid RFC 5322 address, e.g. "yourselfhosted <support@yourselfhosted.com>".
+// Only accept the valid RFC 5322 address, e.g. "monotrememarks <support@monotrememarks.com>".
 func (e *Email) SetFrom(from string) *Email {
 	if e.err != nil {
 		return e
@@ -49,7 +49,7 @@ func (e *Email) SetFrom(from string) *Email {
 }
 
 // AddTo adds the to address of the SMTP client.
-// Only accept the valid RFC 5322 address, e.g. "yourselfhosted <support@yourselfhosted.com>".
+// Only accept the valid RFC 5322 address, e.g. "monotrememarks <support@monotrememarks.com>".
 func (e *Email) AddTo(to ...string) *Email {
 	if e.err != nil {
 		return e

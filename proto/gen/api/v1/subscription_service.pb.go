@@ -287,9 +287,9 @@ var File_api_v1_subscription_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_subscription_service_proto_rawDesc = "" +
 	"\n" +
-	"!api/v1/subscription_service.proto\x12\fmonotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xea\x02\n" +
-	"\fSubscription\x120\n" +
-	"\x04plan\x18\x01 \x01(\x0e2\x16.monotreme.api.v1.PlanTypeB\x04\xe2A\x01\x03R\x04plan\x12C\n" +
+	"!api/v1/subscription_service.proto\x12\x10monotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xee\x02\n" +
+	"\fSubscription\x124\n" +
+	"\x04plan\x18\x01 \x01(\x0e2\x1a.monotreme.api.v1.PlanTypeB\x04\xe2A\x01\x03R\x04plan\x12C\n" +
 	"\fstarted_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampB\x04\xe2A\x01\x03R\vstartedTime\x12C\n" +
 	"\fexpires_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampB\x04\xe2A\x01\x03R\vexpiresTime\x12 \n" +
 	"\bfeatures\x18\x04 \x03(\tB\x04\xe2A\x01\x03R\bfeatures\x12\x1a\n" +
@@ -306,12 +306,12 @@ const file_api_v1_subscription_service_proto_rawDesc = "" +
 	"\x04FREE\x10\x01\x12\a\n" +
 	"\x03PRO\x10\x02\x12\x0e\n" +
 	"\n" +
-	"ENTERPRISE\x10\x032\xf1\x02\n" +
-	"\x13SubscriptionService\x12m\n" +
-	"\x0fGetSubscription\x12$.monotreme.api.v1.GetSubscriptionRequest\x1a\x1a.monotreme.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/subscription\x12v\n" +
-	"\x12UpdateSubscription\x12'.monotreme.api.v1.UpdateSubscriptionRequest\x1a\x1a.monotreme.api.v1.Subscription\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*2\x10/v1/subscription\x12s\n" +
-	"\x12DeleteSubscription\x12'.monotreme.api.v1.DeleteSubscriptionRequest\x1a\x1a.monotreme.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/subscriptionB\xae\x01\n" +
-	"\x10com.monotreme.api.v1B\x18SubscriptionServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
+	"ENTERPRISE\x10\x032\x89\x03\n" +
+	"\x13SubscriptionService\x12u\n" +
+	"\x0fGetSubscription\x12(.monotreme.api.v1.GetSubscriptionRequest\x1a\x1e.monotreme.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/subscription\x12~\n" +
+	"\x12UpdateSubscription\x12+.monotreme.api.v1.UpdateSubscriptionRequest\x1a\x1e.monotreme.api.v1.Subscription\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*2\x10/v1/subscription\x12{\n" +
+	"\x12DeleteSubscription\x12+.monotreme.api.v1.DeleteSubscriptionRequest\x1a\x1e.monotreme.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/subscriptionB\xc6\x01\n" +
+	"\x14com.monotreme.api.v1B\x18SubscriptionServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
 	file_api_v1_subscription_service_proto_rawDescOnce sync.Once

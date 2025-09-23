@@ -71,7 +71,7 @@ func getTestingProfile(t *testing.T) *profile.Profile {
 	driver := getDriverFromEnv()
 	dsn := os.Getenv("DSN")
 	if driver == "sqlite" {
-		dsn = fmt.Sprintf("%s/slash_%s.db", dir, mode)
+		dsn = fmt.Sprintf("%s/monotreme_%s.db", dir, mode)
 	}
 	return &profile.Profile{
 		Mode:    mode,

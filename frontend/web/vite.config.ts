@@ -15,7 +15,7 @@ export default defineConfig({
         target: devProxyServer,
         xfwd: true,
       },
-      "^/slash.api.v2": {
+      "^/monotreme.api.v2": {
         target: devProxyServer,
         xfwd: true,
       },

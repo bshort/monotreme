@@ -99,7 +99,7 @@ func (WorkspaceSettingKey) EnumDescriptor() ([]byte, []int) {
 
 type WorkspaceSetting struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	Key   WorkspaceSettingKey    `protobuf:"varint,1,opt,name=key,proto3,enum=slash.store.WorkspaceSettingKey" json:"key,omitempty"`
+	Key   WorkspaceSettingKey    `protobuf:"varint,1,opt,name=key,proto3,enum=monotreme.store.WorkspaceSettingKey" json:"key,omitempty"`
 	Raw   string                 `protobuf:"bytes,2,opt,name=raw,proto3" json:"raw,omitempty"`
 	// Types that are valid to be assigned to Value:
 	//
@@ -357,7 +357,7 @@ func (x *WorkspaceSetting_SecuritySetting) GetDisallowPasswordAuth() bool {
 
 type WorkspaceSetting_ShortcutRelatedSetting struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	DefaultVisibility Visibility             `protobuf:"varint,1,opt,name=default_visibility,json=defaultVisibility,proto3,enum=slash.store.Visibility" json:"default_visibility,omitempty"`
+	DefaultVisibility Visibility             `protobuf:"varint,1,opt,name=default_visibility,json=defaultVisibility,proto3,enum=monotreme.store.Visibility" json:"default_visibility,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -447,14 +447,14 @@ var File_store_workspace_setting_proto protoreflect.FileDescriptor
 
 const file_store_workspace_setting_proto_rawDesc = "" +
 	"\n" +
-	"\x1dstore/workspace_setting.proto\x12\vslash.store\x1a\x12store/common.proto\x1a\x0fstore/idp.proto\"\xd1\a\n" +
-	"\x10WorkspaceSetting\x122\n" +
-	"\x03key\x18\x01 \x01(\x0e2 .slash.store.WorkspaceSettingKeyR\x03key\x12\x10\n" +
-	"\x03raw\x18\x02 \x01(\tR\x03raw\x12H\n" +
-	"\ageneral\x18\x03 \x01(\v2,.slash.store.WorkspaceSetting.GeneralSettingH\x00R\ageneral\x12K\n" +
-	"\bsecurity\x18\x04 \x01(\v2-.slash.store.WorkspaceSetting.SecuritySettingH\x00R\bsecurity\x12a\n" +
-	"\x10shortcut_related\x18\x05 \x01(\v24.slash.store.WorkspaceSetting.ShortcutRelatedSettingH\x00R\x0fshortcutRelated\x12d\n" +
-	"\x11identity_provider\x18\x06 \x01(\v25.slash.store.WorkspaceSetting.IdentityProviderSettingH\x00R\x10identityProvider\x1a\xba\x01\n" +
+	"\x1dstore/workspace_setting.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\x1a\x0fstore/idp.proto\"\xed\a\n" +
+	"\x10WorkspaceSetting\x126\n" +
+	"\x03key\x18\x01 \x01(\x0e2$.monotreme.store.WorkspaceSettingKeyR\x03key\x12\x10\n" +
+	"\x03raw\x18\x02 \x01(\tR\x03raw\x12L\n" +
+	"\ageneral\x18\x03 \x01(\v20.monotreme.store.WorkspaceSetting.GeneralSettingH\x00R\ageneral\x12O\n" +
+	"\bsecurity\x18\x04 \x01(\v21.monotreme.store.WorkspaceSetting.SecuritySettingH\x00R\bsecurity\x12e\n" +
+	"\x10shortcut_related\x18\x05 \x01(\v28.monotreme.store.WorkspaceSetting.ShortcutRelatedSettingH\x00R\x0fshortcutRelated\x12h\n" +
+	"\x11identity_provider\x18\x06 \x01(\v29.monotreme.store.WorkspaceSetting.IdentityProviderSettingH\x00R\x10identityProvider\x1a\xba\x01\n" +
 	"\x0eGeneralSetting\x12%\n" +
 	"\x0esecret_session\x18\x01 \x01(\tR\rsecretSession\x12\x1f\n" +
 	"\vlicense_key\x18\x02 \x01(\tR\n" +
@@ -464,11 +464,11 @@ const file_store_workspace_setting_proto_rawDesc = "" +
 	"\fcustom_style\x18\x05 \x01(\tR\vcustomStyle\x1a\x85\x01\n" +
 	"\x0fSecuritySetting\x12<\n" +
 	"\x1adisallow_user_registration\x18\x01 \x01(\bR\x18disallowUserRegistration\x124\n" +
-	"\x16disallow_password_auth\x18\x02 \x01(\bR\x14disallowPasswordAuth\x1a`\n" +
-	"\x16ShortcutRelatedSetting\x12F\n" +
-	"\x12default_visibility\x18\x01 \x01(\x0e2\x17.slash.store.VisibilityR\x11defaultVisibility\x1ag\n" +
-	"\x17IdentityProviderSetting\x12L\n" +
-	"\x12identity_providers\x18\x01 \x03(\v2\x1d.slash.store.IdentityProviderR\x11identityProvidersB\a\n" +
+	"\x16disallow_password_auth\x18\x02 \x01(\bR\x14disallowPasswordAuth\x1ad\n" +
+	"\x16ShortcutRelatedSetting\x12J\n" +
+	"\x12default_visibility\x18\x01 \x01(\x0e2\x1b.monotreme.store.VisibilityR\x11defaultVisibility\x1ak\n" +
+	"\x17IdentityProviderSetting\x12P\n" +
+	"\x12identity_providers\x18\x01 \x03(\v2!.monotreme.store.IdentityProviderR\x11identityProvidersB\a\n" +
 	"\x05value*\xe3\x02\n" +
 	"\x13WorkspaceSettingKey\x12%\n" +
 	"!WORKSPACE_SETTING_KEY_UNSPECIFIED\x10\x00\x12\x1d\n" +
@@ -480,8 +480,8 @@ const file_store_workspace_setting_proto_rawDesc = "" +
 	"\x12$\n" +
 	" WORKSPACE_SETTING_SECRET_SESSION\x10\v\x12\"\n" +
 	"\x1eWORKSPACE_SETTING_CUSTOM_STYLE\x10\f\x12(\n" +
-	"$WORKSPACE_SETTING_DEFAULT_VISIBILITY\x10\rB\x9e\x01\n" +
-	"\x0fcom.monotreme.storeB\x15WorkspaceSettingProtoP\x01Z'github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03SSX\xaa\x02\vSlash.Store\xca\x02\vSlash\\Store\xe2\x02\x17Slash\\Store\\GPBMetadata\xea\x02\fMonotreme::Storeb\x06proto3"
+	"$WORKSPACE_SETTING_DEFAULT_VISIBILITY\x10\rB\xb6\x01\n" +
+	"\x13com.monotreme.storeB\x15WorkspaceSettingProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (
 	file_store_workspace_setting_proto_rawDescOnce sync.Once
@@ -498,23 +498,23 @@ func file_store_workspace_setting_proto_rawDescGZIP() []byte {
 var file_store_workspace_setting_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_store_workspace_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_store_workspace_setting_proto_goTypes = []any{
-	(WorkspaceSettingKey)(0),                         // 0: slash.store.WorkspaceSettingKey
-	(*WorkspaceSetting)(nil),                         // 1: slash.store.WorkspaceSetting
-	(*WorkspaceSetting_GeneralSetting)(nil),          // 2: slash.store.WorkspaceSetting.GeneralSetting
-	(*WorkspaceSetting_SecuritySetting)(nil),         // 3: slash.store.WorkspaceSetting.SecuritySetting
-	(*WorkspaceSetting_ShortcutRelatedSetting)(nil),  // 4: slash.store.WorkspaceSetting.ShortcutRelatedSetting
-	(*WorkspaceSetting_IdentityProviderSetting)(nil), // 5: slash.store.WorkspaceSetting.IdentityProviderSetting
-	(Visibility)(0),                                  // 6: slash.store.Visibility
-	(*IdentityProvider)(nil),                         // 7: slash.store.IdentityProvider
+	(WorkspaceSettingKey)(0),                         // 0: monotreme.store.WorkspaceSettingKey
+	(*WorkspaceSetting)(nil),                         // 1: monotreme.store.WorkspaceSetting
+	(*WorkspaceSetting_GeneralSetting)(nil),          // 2: monotreme.store.WorkspaceSetting.GeneralSetting
+	(*WorkspaceSetting_SecuritySetting)(nil),         // 3: monotreme.store.WorkspaceSetting.SecuritySetting
+	(*WorkspaceSetting_ShortcutRelatedSetting)(nil),  // 4: monotreme.store.WorkspaceSetting.ShortcutRelatedSetting
+	(*WorkspaceSetting_IdentityProviderSetting)(nil), // 5: monotreme.store.WorkspaceSetting.IdentityProviderSetting
+	(Visibility)(0),                                  // 6: monotreme.store.Visibility
+	(*IdentityProvider)(nil),                         // 7: monotreme.store.IdentityProvider
 }
 var file_store_workspace_setting_proto_depIdxs = []int32{
-	0, // 0: slash.store.WorkspaceSetting.key:type_name -> slash.store.WorkspaceSettingKey
-	2, // 1: slash.store.WorkspaceSetting.general:type_name -> slash.store.WorkspaceSetting.GeneralSetting
-	3, // 2: slash.store.WorkspaceSetting.security:type_name -> slash.store.WorkspaceSetting.SecuritySetting
-	4, // 3: slash.store.WorkspaceSetting.shortcut_related:type_name -> slash.store.WorkspaceSetting.ShortcutRelatedSetting
-	5, // 4: slash.store.WorkspaceSetting.identity_provider:type_name -> slash.store.WorkspaceSetting.IdentityProviderSetting
-	6, // 5: slash.store.WorkspaceSetting.ShortcutRelatedSetting.default_visibility:type_name -> slash.store.Visibility
-	7, // 6: slash.store.WorkspaceSetting.IdentityProviderSetting.identity_providers:type_name -> slash.store.IdentityProvider
+	0, // 0: monotreme.store.WorkspaceSetting.key:type_name -> monotreme.store.WorkspaceSettingKey
+	2, // 1: monotreme.store.WorkspaceSetting.general:type_name -> monotreme.store.WorkspaceSetting.GeneralSetting
+	3, // 2: monotreme.store.WorkspaceSetting.security:type_name -> monotreme.store.WorkspaceSetting.SecuritySetting
+	4, // 3: monotreme.store.WorkspaceSetting.shortcut_related:type_name -> monotreme.store.WorkspaceSetting.ShortcutRelatedSetting
+	5, // 4: monotreme.store.WorkspaceSetting.identity_provider:type_name -> monotreme.store.WorkspaceSetting.IdentityProviderSetting
+	6, // 5: monotreme.store.WorkspaceSetting.ShortcutRelatedSetting.default_visibility:type_name -> monotreme.store.Visibility
+	7, // 6: monotreme.store.WorkspaceSetting.IdentityProviderSetting.identity_providers:type_name -> monotreme.store.IdentityProvider
 	7, // [7:7] is the sub-list for method output_type
 	7, // [7:7] is the sub-list for method input_type
 	7, // [7:7] is the sub-list for extension type_name

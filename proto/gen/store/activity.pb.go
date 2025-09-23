@@ -189,24 +189,24 @@ var File_store_activity_proto protoreflect.FileDescriptor
 
 const file_store_activity_proto_rawDesc = "" +
 	"\n" +
-	"\x14store/activity.proto\x12\vslash.store\"?\n" +
+	"\x14store/activity.proto\x12\x0fmonotreme.store\"?\n" +
 	"\x1cActivityShorcutCreatePayload\x12\x1f\n" +
 	"\vshortcut_id\x18\x01 \x01(\x05R\n" +
-	"shortcutId\"\xe6\x02\n" +
+	"shortcutId\"\xee\x02\n" +
 	"\x1aActivityShorcutViewPayload\x12\x1f\n" +
 	"\vshortcut_id\x18\x01 \x01(\x05R\n" +
 	"shortcutId\x12\x0e\n" +
 	"\x02ip\x18\x02 \x01(\tR\x02ip\x12\x18\n" +
 	"\areferer\x18\x03 \x01(\tR\areferer\x12\x1d\n" +
 	"\n" +
-	"user_agent\x18\x04 \x01(\tR\tuserAgent\x12K\n" +
-	"\x06params\x18\x05 \x03(\v23.slash.store.ActivityShorcutViewPayload.ParamsEntryR\x06params\x1al\n" +
+	"user_agent\x18\x04 \x01(\tR\tuserAgent\x12O\n" +
+	"\x06params\x18\x05 \x03(\v27.monotreme.store.ActivityShorcutViewPayload.ParamsEntryR\x06params\x1ap\n" +
 	"\vParamsEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12G\n" +
-	"\x05value\x18\x02 \x01(\v21.slash.store.ActivityShorcutViewPayload.ValueListR\x05value:\x028\x01\x1a#\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12K\n" +
+	"\x05value\x18\x02 \x01(\v25.monotreme.store.ActivityShorcutViewPayload.ValueListR\x05value:\x028\x01\x1a#\n" +
 	"\tValueList\x12\x16\n" +
-	"\x06values\x18\x01 \x03(\tR\x06valuesB\x96\x01\n" +
-	"\x0fcom.monotreme.storeB\rActivityProtoP\x01Z'github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03SSX\xaa\x02\vSlash.Store\xca\x02\vSlash\\Store\xe2\x02\x17Slash\\Store\\GPBMetadata\xea\x02\fMonotreme::Storeb\x06proto3"
+	"\x06values\x18\x01 \x03(\tR\x06valuesB\xae\x01\n" +
+	"\x13com.monotreme.storeB\rActivityProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (
 	file_store_activity_proto_rawDescOnce sync.Once
@@ -222,14 +222,14 @@ func file_store_activity_proto_rawDescGZIP() []byte {
 
 var file_store_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_store_activity_proto_goTypes = []any{
-	(*ActivityShorcutCreatePayload)(nil), // 0: slash.store.ActivityShorcutCreatePayload
-	(*ActivityShorcutViewPayload)(nil),   // 1: slash.store.ActivityShorcutViewPayload
-	nil,                                  // 2: slash.store.ActivityShorcutViewPayload.ParamsEntry
-	(*ActivityShorcutViewPayload_ValueList)(nil), // 3: slash.store.ActivityShorcutViewPayload.ValueList
+	(*ActivityShorcutCreatePayload)(nil), // 0: monotreme.store.ActivityShorcutCreatePayload
+	(*ActivityShorcutViewPayload)(nil),   // 1: monotreme.store.ActivityShorcutViewPayload
+	nil,                                  // 2: monotreme.store.ActivityShorcutViewPayload.ParamsEntry
+	(*ActivityShorcutViewPayload_ValueList)(nil), // 3: monotreme.store.ActivityShorcutViewPayload.ValueList
 }
 var file_store_activity_proto_depIdxs = []int32{
-	2, // 0: slash.store.ActivityShorcutViewPayload.params:type_name -> slash.store.ActivityShorcutViewPayload.ParamsEntry
-	3, // 1: slash.store.ActivityShorcutViewPayload.ParamsEntry.value:type_name -> slash.store.ActivityShorcutViewPayload.ValueList
+	2, // 0: monotreme.store.ActivityShorcutViewPayload.params:type_name -> monotreme.store.ActivityShorcutViewPayload.ParamsEntry
+	3, // 1: monotreme.store.ActivityShorcutViewPayload.ParamsEntry.value:type_name -> monotreme.store.ActivityShorcutViewPayload.ValueList
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

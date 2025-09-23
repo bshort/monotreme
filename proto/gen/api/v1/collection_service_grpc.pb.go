@@ -26,6 +26,7 @@ const (
 	CollectionService_CreateCollection_FullMethodName    = "/monotreme.api.v1.CollectionService/CreateCollection"
 	CollectionService_UpdateCollection_FullMethodName    = "/monotreme.api.v1.CollectionService/UpdateCollection"
 	CollectionService_DeleteCollection_FullMethodName    = "/monotreme.api.v1.CollectionService/DeleteCollection"
+	CollectionService_ImportBookmarks_FullMethodName     = "/monotreme.api.v1.CollectionService/ImportBookmarks"
 )
 
 // CollectionServiceClient is the client API for CollectionService service.
@@ -44,6 +45,8 @@ type CollectionServiceClient interface {
 	UpdateCollection(ctx context.Context, in *UpdateCollectionRequest, opts ...grpc.CallOption) (*Collection, error)
 	// DeleteCollection deletes a collection by id.
 	DeleteCollection(ctx context.Context, in *DeleteCollectionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts.
+	ImportBookmarks(ctx context.Context, in *ImportBookmarksRequest, opts ...grpc.CallOption) (*ImportBookmarksResponse, error)
 }
 
 type collectionServiceClient struct {
@@ -114,6 +117,16 @@ func (c *collectionServiceClient) DeleteCollection(ctx context.Context, in *Dele
 	return out, nil
 }
 
+func (c *collectionServiceClient) ImportBookmarks(ctx context.Context, in *ImportBookmarksRequest, opts ...grpc.CallOption) (*ImportBookmarksResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ImportBookmarksResponse)
+	err := c.cc.Invoke(ctx, CollectionService_ImportBookmarks_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CollectionServiceServer is the server API for CollectionService service.
 // All implementations must embed UnimplementedCollectionServiceServer
 // for forward compatibility.
@@ -130,6 +143,8 @@ type CollectionServiceServer interface {
 	UpdateCollection(context.Context, *UpdateCollectionRequest) (*Collection, error)
 	// DeleteCollection deletes a collection by id.
 	DeleteCollection(context.Context, *DeleteCollectionRequest) (*emptypb.Empty, error)
+	// ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts.
+	ImportBookmarks(context.Context, *ImportBookmarksRequest) (*ImportBookmarksResponse, error)
 	mustEmbedUnimplementedCollectionServiceServer()
 }
 
@@ -157,6 +172,9 @@ func (UnimplementedCollectionServiceServer) UpdateCollection(context.Context, *U
 }
 func (UnimplementedCollectionServiceServer) DeleteCollection(context.Context, *DeleteCollectionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCollection not implemented")
+}
+func (UnimplementedCollectionServiceServer) ImportBookmarks(context.Context, *ImportBookmarksRequest) (*ImportBookmarksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportBookmarks not implemented")
 }
 func (UnimplementedCollectionServiceServer) mustEmbedUnimplementedCollectionServiceServer() {}
 func (UnimplementedCollectionServiceServer) testEmbeddedByValue()                           {}
@@ -287,6 +305,24 @@ func _CollectionService_DeleteCollection_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CollectionService_ImportBookmarks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportBookmarksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CollectionServiceServer).ImportBookmarks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CollectionService_ImportBookmarks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CollectionServiceServer).ImportBookmarks(ctx, req.(*ImportBookmarksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CollectionService_ServiceDesc is the grpc.ServiceDesc for CollectionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -317,6 +353,10 @@ var CollectionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCollection",
 			Handler:    _CollectionService_DeleteCollection_Handler,
+		},
+		{
+			MethodName: "ImportBookmarks",
+			Handler:    _CollectionService_ImportBookmarks_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

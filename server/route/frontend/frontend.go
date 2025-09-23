@@ -25,7 +25,7 @@ import (
 var embeddedFiles embed.FS
 
 const (
-	headerMetadataPlaceholder = "<!-- slash.metadata -->"
+	headerMetadataPlaceholder = "<!-- monotreme.metadata -->"
 )
 
 type FrontendService struct {

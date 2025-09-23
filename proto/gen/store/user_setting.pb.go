@@ -75,7 +75,7 @@ func (UserSettingKey) EnumDescriptor() ([]byte, []int) {
 type UserSetting struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
 	UserId int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Key    UserSettingKey         `protobuf:"varint,2,opt,name=key,proto3,enum=slash.store.UserSettingKey" json:"key,omitempty"`
+	Key    UserSettingKey         `protobuf:"varint,2,opt,name=key,proto3,enum=monotreme.store.UserSettingKey" json:"key,omitempty"`
 	// Types that are valid to be assigned to Value:
 	//
 	//	*UserSetting_General
@@ -324,18 +324,18 @@ var File_store_user_setting_proto protoreflect.FileDescriptor
 
 const file_store_user_setting_proto_rawDesc = "" +
 	"\n" +
-	"\x18store/user_setting.proto\x12\vslash.store\"\x8e\x04\n" +
+	"\x18store/user_setting.proto\x12\x0fmonotreme.store\"\x9e\x04\n" +
 	"\vUserSetting\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x05R\x06userId\x12-\n" +
-	"\x03key\x18\x02 \x01(\x0e2\x1b.slash.store.UserSettingKeyR\x03key\x12C\n" +
-	"\ageneral\x18\x03 \x01(\v2'.slash.store.UserSetting.GeneralSettingH\x00R\ageneral\x12S\n" +
-	"\raccess_tokens\x18\x04 \x01(\v2,.slash.store.UserSetting.AccessTokensSettingH\x00R\faccessTokens\x1aI\n" +
+	"\auser_id\x18\x01 \x01(\x05R\x06userId\x121\n" +
+	"\x03key\x18\x02 \x01(\x0e2\x1f.monotreme.store.UserSettingKeyR\x03key\x12G\n" +
+	"\ageneral\x18\x03 \x01(\v2+.monotreme.store.UserSetting.GeneralSettingH\x00R\ageneral\x12W\n" +
+	"\raccess_tokens\x18\x04 \x01(\v20.monotreme.store.UserSetting.AccessTokensSettingH\x00R\faccessTokens\x1aI\n" +
 	"\x0eGeneralSetting\x12\x16\n" +
 	"\x06locale\x18\x01 \x01(\tR\x06locale\x12\x1f\n" +
 	"\vcolor_theme\x18\x02 \x01(\tR\n" +
-	"colorTheme\x1a\xc8\x01\n" +
-	"\x13AccessTokensSetting\x12]\n" +
-	"\raccess_tokens\x18\x01 \x03(\v28.slash.store.UserSetting.AccessTokensSetting.AccessTokenR\faccessTokens\x1aR\n" +
+	"colorTheme\x1a\xcc\x01\n" +
+	"\x13AccessTokensSetting\x12a\n" +
+	"\raccess_tokens\x18\x01 \x03(\v2<.monotreme.store.UserSetting.AccessTokensSetting.AccessTokenR\faccessTokens\x1aR\n" +
 	"\vAccessToken\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescriptionB\a\n" +
@@ -343,8 +343,8 @@ const file_store_user_setting_proto_rawDesc = "" +
 	"\x0eUserSettingKey\x12 \n" +
 	"\x1cUSER_SETTING_KEY_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14USER_SETTING_GENERAL\x10\x01\x12\x1e\n" +
-	"\x1aUSER_SETTING_ACCESS_TOKENS\x10\x02B\x99\x01\n" +
-	"\x0fcom.monotreme.storeB\x10UserSettingProtoP\x01Z'github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03SSX\xaa\x02\vSlash.Store\xca\x02\vSlash\\Store\xe2\x02\x17Slash\\Store\\GPBMetadata\xea\x02\fMonotreme::Storeb\x06proto3"
+	"\x1aUSER_SETTING_ACCESS_TOKENS\x10\x02B\xb1\x01\n" +
+	"\x13com.monotreme.storeB\x10UserSettingProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (
 	file_store_user_setting_proto_rawDescOnce sync.Once
@@ -361,17 +361,17 @@ func file_store_user_setting_proto_rawDescGZIP() []byte {
 var file_store_user_setting_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_store_user_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_store_user_setting_proto_goTypes = []any{
-	(UserSettingKey)(0),                                 // 0: slash.store.UserSettingKey
-	(*UserSetting)(nil),                                 // 1: slash.store.UserSetting
-	(*UserSetting_GeneralSetting)(nil),                  // 2: slash.store.UserSetting.GeneralSetting
-	(*UserSetting_AccessTokensSetting)(nil),             // 3: slash.store.UserSetting.AccessTokensSetting
-	(*UserSetting_AccessTokensSetting_AccessToken)(nil), // 4: slash.store.UserSetting.AccessTokensSetting.AccessToken
+	(UserSettingKey)(0),                                 // 0: monotreme.store.UserSettingKey
+	(*UserSetting)(nil),                                 // 1: monotreme.store.UserSetting
+	(*UserSetting_GeneralSetting)(nil),                  // 2: monotreme.store.UserSetting.GeneralSetting
+	(*UserSetting_AccessTokensSetting)(nil),             // 3: monotreme.store.UserSetting.AccessTokensSetting
+	(*UserSetting_AccessTokensSetting_AccessToken)(nil), // 4: monotreme.store.UserSetting.AccessTokensSetting.AccessToken
 }
 var file_store_user_setting_proto_depIdxs = []int32{
-	0, // 0: slash.store.UserSetting.key:type_name -> slash.store.UserSettingKey
-	2, // 1: slash.store.UserSetting.general:type_name -> slash.store.UserSetting.GeneralSetting
-	3, // 2: slash.store.UserSetting.access_tokens:type_name -> slash.store.UserSetting.AccessTokensSetting
-	4, // 3: slash.store.UserSetting.AccessTokensSetting.access_tokens:type_name -> slash.store.UserSetting.AccessTokensSetting.AccessToken
+	0, // 0: monotreme.store.UserSetting.key:type_name -> monotreme.store.UserSettingKey
+	2, // 1: monotreme.store.UserSetting.general:type_name -> monotreme.store.UserSetting.GeneralSetting
+	3, // 2: monotreme.store.UserSetting.access_tokens:type_name -> monotreme.store.UserSetting.AccessTokensSetting
+	4, // 3: monotreme.store.UserSetting.AccessTokensSetting.access_tokens:type_name -> monotreme.store.UserSetting.AccessTokensSetting.AccessToken
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
