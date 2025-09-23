@@ -12,20 +12,20 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/yourselfhosted/slash/server"
-	"github.com/yourselfhosted/slash/server/common"
-	"github.com/yourselfhosted/slash/server/profile"
-	"github.com/yourselfhosted/slash/store"
-	"github.com/yourselfhosted/slash/store/db"
+	"github.com/bshort/monotreme/server"
+	"github.com/bshort/monotreme/server/common"
+	"github.com/bshort/monotreme/server/profile"
+	"github.com/bshort/monotreme/store"
+	"github.com/bshort/monotreme/store/db"
 )
 
 const (
-	greetingBanner = `Welcome to Slash!`
+	greetingBanner = `Welcome to Monotreme!`
 )
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "slash",
+		Use:   "monotreme",
 		Short: `An open source, self-hosted platform for sharing and managing your most frequently used links.`,
 		Run: func(_ *cobra.Command, _ []string) {
 			serverProfile := &profile.Profile{
@@ -116,7 +116,7 @@ func init() {
 		panic(err)
 	}
 
-	viper.SetEnvPrefix("slash")
+	viper.SetEnvPrefix("monotreme")
 	viper.AutomaticEnv()
 }
 
@@ -132,7 +132,7 @@ func printGreetings(serverProfile *profile.Profile) {
 	fmt.Printf("Version %s has been started on port %d\n", serverProfile.Version, serverProfile.Port)
 	println("---")
 	println("See more in:")
-	fmt.Printf("👉GitHub: %s\n", "https://github.com/yourselfhosted/slash")
+	fmt.Printf("👉GitHub: %s\n", "https://github.com/bshort/monotreme")
 	println("---")
 }
 

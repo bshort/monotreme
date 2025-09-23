@@ -382,6 +382,8 @@ paths:
           schema:
             type: object
             properties:
+              uuid:
+                type: string
               creatorId:
                 type: integer
                 format: int32
@@ -710,7 +712,7 @@ paths:
         - WorkspaceService
   /v1/subscription:
     get:
-      summary: GetSubscription gets the current subscription of Slash instance.
+      summary: GetSubscription gets the current subscription of Monotreme instance.
       operationId: SubscriptionService_GetSubscription
       responses:
         "200":
@@ -861,6 +863,8 @@ definitions:
       id:
         type: integer
         format: int32
+      uuid:
+        type: string
       creatorId:
         type: integer
         format: int32

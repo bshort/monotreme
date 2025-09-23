@@ -782,6 +782,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [int32](#int32) |  |  |
+| uuid | [string](#string) |  |  |
 | creator_id | [int32](#int32) |  |  |
 | created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
@@ -947,7 +948,7 @@
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetSubscription | [GetSubscriptionRequest](#slash-api-v1-GetSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | GetSubscription gets the current subscription of Slash instance. |
+| GetSubscription | [GetSubscriptionRequest](#slash-api-v1-GetSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | GetSubscription gets the current subscription of Monotreme instance. |
 | UpdateSubscription | [UpdateSubscriptionRequest](#slash-api-v1-UpdateSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | UpdateSubscription updates the subscription. |
 | DeleteSubscription | [DeleteSubscriptionRequest](#slash-api-v1-DeleteSubscriptionRequest) | [Subscription](#slash-api-v1-Subscription) | DeleteSubscription deletes the subscription. |
 
