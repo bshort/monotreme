@@ -28,11 +28,3 @@ docker run -d --name monotreme -p 5231:5231 -v ~/.monotreme/:/var/opt/monotreme 
 
 Learn more in [Self-hosting Monotreme with Docker](https://github.com/bshort/monotreme/blob/main/docs/install.md).
 
-## Browser Extension
-
-Monotreme provides a browser extension to help you use your shortcuts in the search bar to go to the corresponding URL.
-
-![browser-extension-example](./docs/assets/browser-extension-example.png)
-
-
-
