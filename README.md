@@ -2,24 +2,14 @@
 
 **Monotreme** is an open source, self-hosted platform designed to help you organize, manage, and share your most important links. Easily create customizable, human-readable shortcuts to streamline your link management. Use tags to categorize your links and share them easily with your team or publicly.
 
-🧩 Browser extension(v1.0.0) now available! - [Chrome Web Store](https://chrome.google.com/webstore/detail/slash/ebaiehmkammnacjadffpicipfckgeobg), [Firefox Add-on](https://addons.mozilla.org/firefox/addon/your-slash/)
+Monotreme is a fork of [Slash](https://github.com/yourselfhosted/slash) and was created to allow extensions to Slash's core model to fit one user's bizarre requirements. Monotreme is probably not ready for widespread use and if you're looking for a self-hosted bookmarking application then just use [Slash](https://github.com/yourselfhosted/slash). It's better!
 
-Getting started with Monotreme's [Shortcuts](https://github.com/bshort/monotreme/blob/main/docs/getting-started/shortcuts.md) and [Collections](https://github.com/bshort/monotreme/blob/main/docs/getting-started/collections.md).
-
-[👉 Join our Discord 💬](https://discord.gg/QZqUuUAhDV)
-
-<p>
-  <a href="https://hub.docker.com/r/bshort/monotreme"><img alt="Docker pull" src="https://img.shields.io/docker/pulls/bshort/monotreme.svg"/></a>
-  <a href="https://discord.gg/QZqUuUAhDV"><img alt="Discord" src="https://img.shields.io/badge/discord-chat-5865f2?logo=discord&logoColor=f5f5f5" /></a>
-</p>
-
-![demo](./docs/assets/demo.png)
 
 ## Background
 
 In today's workplace, essential information is often scattered across the cloud in the form of links. We understand the frustration of endlessly searching through emails, messages, and websites just to find the right link. Links are notorious for being unwieldy, complex, and easily lost in the shuffle. Remembering and sharing them can be a challenge.
 
-That's why we developed Monotreme, a solution that transforms these links into easily accessible, discoverable, and shareable shortcuts(e.g., `s/shortcut`). Say goodbye to link chaos and welcome the organizational ease of Monotreme into your daily online workflow.
+That's why we developed Monotreme (forked from [Slash](https://github.com/yourselfhosted/slash)), a solution that transforms these links into easily accessible, discoverable, and shareable shortcuts(e.g., `s/shortcut`). Say goodbye to link chaos and welcome the organizational ease of Monotreme into your daily online workflow.
 
 ## Features
 
@@ -44,12 +34,5 @@ Monotreme provides a browser extension to help you use your shortcuts in the sea
 
 ![browser-extension-example](./docs/assets/browser-extension-example.png)
 
-Learn more in [The Browser Extension of Monotreme](https://github.com/bshort/monotreme/blob/main/docs/install-browser-extension.md).
 
-### Chromium based browsers
 
-For Chromium based browsers(Chrome, Edge, Arc, ...), you can install the extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/slash/ebaiehmkammnacjadffpicipfckgeobg).
-
-### Firefox
-
-For Firefox, you can install the extension from the [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/your-slash/).
