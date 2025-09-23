@@ -20,13 +20,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ShortcutService_ListShortcuts_FullMethodName        = "/slash.api.v1.ShortcutService/ListShortcuts"
-	ShortcutService_GetShortcut_FullMethodName          = "/slash.api.v1.ShortcutService/GetShortcut"
-	ShortcutService_GetShortcutByName_FullMethodName    = "/slash.api.v1.ShortcutService/GetShortcutByName"
-	ShortcutService_CreateShortcut_FullMethodName       = "/slash.api.v1.ShortcutService/CreateShortcut"
-	ShortcutService_UpdateShortcut_FullMethodName       = "/slash.api.v1.ShortcutService/UpdateShortcut"
-	ShortcutService_DeleteShortcut_FullMethodName       = "/slash.api.v1.ShortcutService/DeleteShortcut"
-	ShortcutService_GetShortcutAnalytics_FullMethodName = "/slash.api.v1.ShortcutService/GetShortcutAnalytics"
+	ShortcutService_ListShortcuts_FullMethodName        = "/monotreme.api.v1.ShortcutService/ListShortcuts"
+	ShortcutService_GetShortcut_FullMethodName          = "/monotreme.api.v1.ShortcutService/GetShortcut"
+	ShortcutService_GetShortcutByName_FullMethodName    = "/monotreme.api.v1.ShortcutService/GetShortcutByName"
+	ShortcutService_CreateShortcut_FullMethodName       = "/monotreme.api.v1.ShortcutService/CreateShortcut"
+	ShortcutService_UpdateShortcut_FullMethodName       = "/monotreme.api.v1.ShortcutService/UpdateShortcut"
+	ShortcutService_DeleteShortcut_FullMethodName       = "/monotreme.api.v1.ShortcutService/DeleteShortcut"
+	ShortcutService_GetShortcutAnalytics_FullMethodName = "/monotreme.api.v1.ShortcutService/GetShortcutAnalytics"
 )
 
 // ShortcutServiceClient is the client API for ShortcutService service.
@@ -327,7 +327,7 @@ func _ShortcutService_GetShortcutAnalytics_Handler(srv interface{}, ctx context.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ShortcutService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.ShortcutService",
+	ServiceName: "monotreme.api.v1.ShortcutService",
 	HandlerType: (*ShortcutServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

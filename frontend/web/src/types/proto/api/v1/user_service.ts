@@ -11,7 +11,7 @@ import { FieldMask } from "../../google/protobuf/field_mask";
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { State, stateFromJSON, stateToNumber } from "./common";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export enum Role {
   ROLE_UNSPECIFIED = "ROLE_UNSPECIFIED",
@@ -842,7 +842,7 @@ export const UserAccessToken: MessageFns<UserAccessToken> = {
 export type UserServiceDefinition = typeof UserServiceDefinition;
 export const UserServiceDefinition = {
   name: "UserService",
-  fullName: "slash.api.v1.UserService",
+  fullName: "monotreme.api.v1.UserService",
   methods: {
     /** ListUsers returns a list of users. */
     listUsers: {

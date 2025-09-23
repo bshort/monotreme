@@ -21,12 +21,12 @@ const AboutDialog: React.FC<Props> = (props: Props) => {
         </div>
         <div className="max-w-full w-80 sm:w-96">
           <p>
-            <span className="font-medium">Slash</span> is an open source, self-hosted platform for sharing and managing your most frequently
+            <span className="font-medium">Monotreme</span> is an open source, self-hosted platform for sharing and managing your most frequently
             used links.
           </p>
           <div className="mt-1">
             <span className="mr-2">Source code:</span>
-            <Link variant="plain" href="https://github.com/yourselfhosted/slash" target="_blank">
+            <Link variant="plain" href="https://github.com/bshort/monotreme" target="_blank">
               GitHub
             </Link>
           </div>

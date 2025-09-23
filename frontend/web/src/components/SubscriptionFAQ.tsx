@@ -20,7 +20,7 @@ const SubscriptionFAQ = () => {
           <AccordionDetails>{`It's unlimited for now, but please do not abuse it.`}</AccordionDetails>
         </Accordion>
         <Accordion>
-          <AccordionSummary>{`Can I get a refund if Slash doesn't meet my needs?`}</AccordionSummary>
+          <AccordionSummary>{`Can I get a refund if Monotreme doesn't meet my needs?`}</AccordionSummary>
           <AccordionDetails>
             Yes, absolutely! You can contact us with `yourselfhosted@gmail.com`. I will refund you as soon as possible.
           </AccordionDetails>

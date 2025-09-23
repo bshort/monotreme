@@ -9,7 +9,7 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Empty } from "../../google/protobuf/empty";
 import { User } from "./user_service";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export interface GetAuthStatusRequest {
 }
@@ -306,7 +306,7 @@ export const SignOutRequest: MessageFns<SignOutRequest> = {
 export type AuthServiceDefinition = typeof AuthServiceDefinition;
 export const AuthServiceDefinition = {
   name: "AuthService",
-  fullName: "slash.api.v1.AuthService",
+  fullName: "monotreme.api.v1.AuthService",
   methods: {
     /** GetAuthStatus returns the current auth status of the user. */
     getAuthStatus: {

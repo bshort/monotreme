@@ -10,7 +10,7 @@ import { FieldMask } from "../../google/protobuf/field_mask";
 import { Visibility, visibilityFromJSON, visibilityToNumber } from "./common";
 import { Subscription } from "./subscription_service";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export interface WorkspaceProfile {
   /** Current workspace mode: dev, prod. */
@@ -807,7 +807,7 @@ export const UpdateWorkspaceSettingRequest: MessageFns<UpdateWorkspaceSettingReq
 export type WorkspaceServiceDefinition = typeof WorkspaceServiceDefinition;
 export const WorkspaceServiceDefinition = {
   name: "WorkspaceService",
-  fullName: "slash.api.v1.WorkspaceService",
+  fullName: "monotreme.api.v1.WorkspaceService",
   methods: {
     getWorkspaceProfile: {
       name: "GetWorkspaceProfile",

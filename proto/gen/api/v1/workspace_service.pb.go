@@ -169,7 +169,7 @@ type WorkspaceSetting struct {
 	// The custom style.
 	CustomStyle string `protobuf:"bytes,3,opt,name=custom_style,json=customStyle,proto3" json:"custom_style,omitempty"`
 	// The default visibility of shortcuts and collections.
-	DefaultVisibility Visibility `protobuf:"varint,4,opt,name=default_visibility,json=defaultVisibility,proto3,enum=slash.api.v1.Visibility" json:"default_visibility,omitempty"`
+	DefaultVisibility Visibility `protobuf:"varint,4,opt,name=default_visibility,json=defaultVisibility,proto3,enum=monotreme.api.v1.Visibility" json:"default_visibility,omitempty"`
 	// The identity providers.
 	IdentityProviders []*IdentityProvider `protobuf:"bytes,5,rep,name=identity_providers,json=identityProviders,proto3" json:"identity_providers,omitempty"`
 	// Whether to disallow user registration by email&password.
@@ -264,7 +264,7 @@ type IdentityProvider struct {
 	// The unique identifier of the identity provider.
 	Id            string                  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                  `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Type          IdentityProvider_Type   `protobuf:"varint,3,opt,name=type,proto3,enum=slash.api.v1.IdentityProvider_Type" json:"type,omitempty"`
+	Type          IdentityProvider_Type   `protobuf:"varint,3,opt,name=type,proto3,enum=monotreme.api.v1.IdentityProvider_Type" json:"type,omitempty"`
 	Config        *IdentityProviderConfig `protobuf:"bytes,4,opt,name=config,proto3" json:"config,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -668,33 +668,33 @@ var File_api_v1_workspace_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1eapi/v1/workspace_service.proto\x12\fslash.api.v1\x1a\x13api/v1/common.proto\x1a!api/v1/subscription_service.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a google/protobuf/field_mask.proto\"\xd5\x01\n" +
+	"\x1eapi/v1/workspace_service.proto\x12\fmonotreme.api.v1\x1a\x13api/v1/common.proto\x1a!api/v1/subscription_service.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a google/protobuf/field_mask.proto\"\xd5\x01\n" +
 	"\x10WorkspaceProfile\x12\x12\n" +
 	"\x04mode\x18\x01 \x01(\tR\x04mode\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x14\n" +
 	"\x05owner\x18\x03 \x01(\tR\x05owner\x12>\n" +
-	"\fsubscription\x18\x04 \x01(\v2\x1a.slash.api.v1.SubscriptionR\fsubscription\x12!\n" +
+	"\fsubscription\x18\x04 \x01(\v2\x1a.monotreme.api.v1.SubscriptionR\fsubscription\x12!\n" +
 	"\fcustom_style\x18\x05 \x01(\tR\vcustomStyle\x12\x1a\n" +
 	"\bbranding\x18\x06 \x01(\fR\bbranding\"\x80\x03\n" +
 	"\x10WorkspaceSetting\x12!\n" +
 	"\finstance_url\x18\x01 \x01(\tR\vinstanceUrl\x12\x1a\n" +
 	"\bbranding\x18\x02 \x01(\fR\bbranding\x12!\n" +
 	"\fcustom_style\x18\x03 \x01(\tR\vcustomStyle\x12G\n" +
-	"\x12default_visibility\x18\x04 \x01(\x0e2\x18.slash.api.v1.VisibilityR\x11defaultVisibility\x12M\n" +
-	"\x12identity_providers\x18\x05 \x03(\v2\x1e.slash.api.v1.IdentityProviderR\x11identityProviders\x12<\n" +
+	"\x12default_visibility\x18\x04 \x01(\x0e2\x18.monotreme.api.v1.VisibilityR\x11defaultVisibility\x12M\n" +
+	"\x12identity_providers\x18\x05 \x03(\v2\x1e.monotreme.api.v1.IdentityProviderR\x11identityProviders\x12<\n" +
 	"\x1adisallow_user_registration\x18\x06 \x01(\bR\x18disallowUserRegistration\x124\n" +
 	"\x16disallow_password_auth\x18\a \x01(\bR\x14disallowPasswordAuth\"\xd9\x01\n" +
 	"\x10IdentityProvider\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x127\n" +
-	"\x04type\x18\x03 \x01(\x0e2#.slash.api.v1.IdentityProvider.TypeR\x04type\x12<\n" +
-	"\x06config\x18\x04 \x01(\v2$.slash.api.v1.IdentityProviderConfigR\x06config\"(\n" +
+	"\x04type\x18\x03 \x01(\x0e2#.monotreme.api.v1.IdentityProvider.TypeR\x04type\x12<\n" +
+	"\x06config\x18\x04 \x01(\v2$.monotreme.api.v1.IdentityProviderConfigR\x06config\"(\n" +
 	"\x04Type\x12\x14\n" +
 	"\x10TYPE_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06OAUTH2\x10\x01\"\xe1\x03\n" +
 	"\x16IdentityProviderConfig\x12K\n" +
-	"\x06oauth2\x18\x01 \x01(\v21.slash.api.v1.IdentityProviderConfig.OAuth2ConfigH\x00R\x06oauth2\x1aQ\n" +
+	"\x06oauth2\x18\x01 \x01(\v21.monotreme.api.v1.IdentityProviderConfig.OAuth2ConfigH\x00R\x06oauth2\x1aQ\n" +
 	"\fFieldMapping\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
@@ -707,18 +707,18 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\ttoken_url\x18\x04 \x01(\tR\btokenUrl\x12\"\n" +
 	"\ruser_info_url\x18\x05 \x01(\tR\vuserInfoUrl\x12\x16\n" +
 	"\x06scopes\x18\x06 \x03(\tR\x06scopes\x12V\n" +
-	"\rfield_mapping\x18\a \x01(\v21.slash.api.v1.IdentityProviderConfig.FieldMappingR\ffieldMappingB\b\n" +
+	"\rfield_mapping\x18\a \x01(\v21.monotreme.api.v1.IdentityProviderConfig.FieldMappingR\ffieldMappingB\b\n" +
 	"\x06config\"\x1c\n" +
 	"\x1aGetWorkspaceProfileRequest\"\x1c\n" +
 	"\x1aGetWorkspaceSettingRequest\"\x96\x01\n" +
 	"\x1dUpdateWorkspaceSettingRequest\x128\n" +
-	"\asetting\x18\x01 \x01(\v2\x1e.slash.api.v1.WorkspaceSettingR\asetting\x12;\n" +
+	"\asetting\x18\x01 \x01(\v2\x1e.monotreme.api.v1.WorkspaceSettingR\asetting\x12;\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
 	"updateMask2\xc6\x03\n" +
 	"\x10WorkspaceService\x12\x82\x01\n" +
-	"\x13GetWorkspaceProfile\x12(.slash.api.v1.GetWorkspaceProfileRequest\x1a\x1e.slash.api.v1.WorkspaceProfile\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/profile\x12\x82\x01\n" +
-	"\x13GetWorkspaceSetting\x12(.slash.api.v1.GetWorkspaceSettingRequest\x1a\x1e.slash.api.v1.WorkspaceSetting\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/setting\x12\xa7\x01\n" +
-	"\x16UpdateWorkspaceSetting\x12+.slash.api.v1.UpdateWorkspaceSettingRequest\x1a\x1e.slash.api.v1.WorkspaceSetting\"@\xdaA\x13setting,update_mask\x82\xd3\xe4\x93\x02$:\asetting2\x19/api/v1/workspace/settingB\xab\x01\n" +
+	"\x13GetWorkspaceProfile\x12(.monotreme.api.v1.GetWorkspaceProfileRequest\x1a\x1e.monotreme.api.v1.WorkspaceProfile\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/profile\x12\x82\x01\n" +
+	"\x13GetWorkspaceSetting\x12(.monotreme.api.v1.GetWorkspaceSettingRequest\x1a\x1e.monotreme.api.v1.WorkspaceSetting\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/setting\x12\xa7\x01\n" +
+	"\x16UpdateWorkspaceSetting\x12+.monotreme.api.v1.UpdateWorkspaceSettingRequest\x1a\x1e.monotreme.api.v1.WorkspaceSetting\"@\xdaA\x13setting,update_mask\x82\xd3\xe4\x93\x02$:\asetting2\x19/api/v1/workspace/settingB\xab\x01\n" +
 	"\x10com.monotreme.api.v1B\x15WorkspaceServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
 
 var (
@@ -736,36 +736,36 @@ func file_api_v1_workspace_service_proto_rawDescGZIP() []byte {
 var file_api_v1_workspace_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_api_v1_workspace_service_proto_goTypes = []any{
-	(IdentityProvider_Type)(0),                  // 0: slash.api.v1.IdentityProvider.Type
-	(*WorkspaceProfile)(nil),                    // 1: slash.api.v1.WorkspaceProfile
-	(*WorkspaceSetting)(nil),                    // 2: slash.api.v1.WorkspaceSetting
-	(*IdentityProvider)(nil),                    // 3: slash.api.v1.IdentityProvider
-	(*IdentityProviderConfig)(nil),              // 4: slash.api.v1.IdentityProviderConfig
-	(*GetWorkspaceProfileRequest)(nil),          // 5: slash.api.v1.GetWorkspaceProfileRequest
-	(*GetWorkspaceSettingRequest)(nil),          // 6: slash.api.v1.GetWorkspaceSettingRequest
-	(*UpdateWorkspaceSettingRequest)(nil),       // 7: slash.api.v1.UpdateWorkspaceSettingRequest
-	(*IdentityProviderConfig_FieldMapping)(nil), // 8: slash.api.v1.IdentityProviderConfig.FieldMapping
-	(*IdentityProviderConfig_OAuth2Config)(nil), // 9: slash.api.v1.IdentityProviderConfig.OAuth2Config
-	(*Subscription)(nil),                        // 10: slash.api.v1.Subscription
-	(Visibility)(0),                             // 11: slash.api.v1.Visibility
+	(IdentityProvider_Type)(0),                  // 0: monotreme.api.v1.IdentityProvider.Type
+	(*WorkspaceProfile)(nil),                    // 1: monotreme.api.v1.WorkspaceProfile
+	(*WorkspaceSetting)(nil),                    // 2: monotreme.api.v1.WorkspaceSetting
+	(*IdentityProvider)(nil),                    // 3: monotreme.api.v1.IdentityProvider
+	(*IdentityProviderConfig)(nil),              // 4: monotreme.api.v1.IdentityProviderConfig
+	(*GetWorkspaceProfileRequest)(nil),          // 5: monotreme.api.v1.GetWorkspaceProfileRequest
+	(*GetWorkspaceSettingRequest)(nil),          // 6: monotreme.api.v1.GetWorkspaceSettingRequest
+	(*UpdateWorkspaceSettingRequest)(nil),       // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest
+	(*IdentityProviderConfig_FieldMapping)(nil), // 8: monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	(*IdentityProviderConfig_OAuth2Config)(nil), // 9: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	(*Subscription)(nil),                        // 10: monotreme.api.v1.Subscription
+	(Visibility)(0),                             // 11: monotreme.api.v1.Visibility
 	(*fieldmaskpb.FieldMask)(nil),               // 12: google.protobuf.FieldMask
 }
 var file_api_v1_workspace_service_proto_depIdxs = []int32{
-	10, // 0: slash.api.v1.WorkspaceProfile.subscription:type_name -> slash.api.v1.Subscription
-	11, // 1: slash.api.v1.WorkspaceSetting.default_visibility:type_name -> slash.api.v1.Visibility
-	3,  // 2: slash.api.v1.WorkspaceSetting.identity_providers:type_name -> slash.api.v1.IdentityProvider
-	0,  // 3: slash.api.v1.IdentityProvider.type:type_name -> slash.api.v1.IdentityProvider.Type
-	4,  // 4: slash.api.v1.IdentityProvider.config:type_name -> slash.api.v1.IdentityProviderConfig
-	9,  // 5: slash.api.v1.IdentityProviderConfig.oauth2:type_name -> slash.api.v1.IdentityProviderConfig.OAuth2Config
-	2,  // 6: slash.api.v1.UpdateWorkspaceSettingRequest.setting:type_name -> slash.api.v1.WorkspaceSetting
-	12, // 7: slash.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
-	8,  // 8: slash.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> slash.api.v1.IdentityProviderConfig.FieldMapping
-	5,  // 9: slash.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> slash.api.v1.GetWorkspaceProfileRequest
-	6,  // 10: slash.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> slash.api.v1.GetWorkspaceSettingRequest
-	7,  // 11: slash.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> slash.api.v1.UpdateWorkspaceSettingRequest
-	1,  // 12: slash.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> slash.api.v1.WorkspaceProfile
-	2,  // 13: slash.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> slash.api.v1.WorkspaceSetting
-	2,  // 14: slash.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> slash.api.v1.WorkspaceSetting
+	10, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
+	11, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
+	3,  // 2: monotreme.api.v1.WorkspaceSetting.identity_providers:type_name -> monotreme.api.v1.IdentityProvider
+	0,  // 3: monotreme.api.v1.IdentityProvider.type:type_name -> monotreme.api.v1.IdentityProvider.Type
+	4,  // 4: monotreme.api.v1.IdentityProvider.config:type_name -> monotreme.api.v1.IdentityProviderConfig
+	9,  // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	2,  // 6: monotreme.api.v1.UpdateWorkspaceSettingRequest.setting:type_name -> monotreme.api.v1.WorkspaceSetting
+	12, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
+	8,  // 8: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	5,  // 9: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
+	6,  // 10: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
+	7,  // 11: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
+	1,  // 12: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
+	2,  // 13: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	2,  // 14: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
 	12, // [12:15] is the sub-list for method output_type
 	9,  // [9:12] is the sub-list for method input_type
 	9,  // [9:9] is the sub-list for extension type_name

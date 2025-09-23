@@ -23,7 +23,7 @@ const IndexPopup = () => {
       <div className="w-full flex flex-row justify-between items-center">
         <div className="flex flex-row justify-start items-center dark:text-gray-400">
           <Logo className="w-6 h-auto mr-1" />
-          <span className="">Slash</span>
+          <span className="">Monotreme</span>
         </div>
       </div>
 

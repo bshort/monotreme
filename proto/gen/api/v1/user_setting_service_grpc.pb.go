@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserSettingService_GetUserSetting_FullMethodName    = "/slash.api.v1.UserSettingService/GetUserSetting"
-	UserSettingService_UpdateUserSetting_FullMethodName = "/slash.api.v1.UserSettingService/UpdateUserSetting"
+	UserSettingService_GetUserSetting_FullMethodName    = "/monotreme.api.v1.UserSettingService/GetUserSetting"
+	UserSettingService_UpdateUserSetting_FullMethodName = "/monotreme.api.v1.UserSettingService/UpdateUserSetting"
 )
 
 // UserSettingServiceClient is the client API for UserSettingService service.
@@ -146,7 +146,7 @@ func _UserSettingService_UpdateUserSetting_Handler(srv interface{}, ctx context.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserSettingService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.UserSettingService",
+	ServiceName: "monotreme.api.v1.UserSettingService",
 	HandlerType: (*UserSettingServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

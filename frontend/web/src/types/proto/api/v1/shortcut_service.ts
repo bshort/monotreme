@@ -11,7 +11,7 @@ import { FieldMask } from "../../google/protobuf/field_mask";
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { Visibility, visibilityFromJSON, visibilityToNumber } from "./common";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export interface Shortcut {
   id: number;
@@ -859,7 +859,7 @@ export const GetShortcutAnalyticsResponse_AnalyticsItem: MessageFns<GetShortcutA
 export type ShortcutServiceDefinition = typeof ShortcutServiceDefinition;
 export const ShortcutServiceDefinition = {
   name: "ShortcutService",
-  fullName: "slash.api.v1.ShortcutService",
+  fullName: "monotreme.api.v1.ShortcutService",
   methods: {
     /** ListShortcuts returns a list of shortcuts. */
     listShortcuts: {

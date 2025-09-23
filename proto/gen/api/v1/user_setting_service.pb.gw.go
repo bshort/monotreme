@@ -167,7 +167,7 @@ func RegisterUserSettingServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserSettingService/GetUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserSettingService/GetUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -187,7 +187,7 @@ func RegisterUserSettingServiceHandlerServer(ctx context.Context, mux *runtime.S
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.UserSettingService/UpdateUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.UserSettingService/UpdateUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -245,7 +245,7 @@ func RegisterUserSettingServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserSettingService/GetUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserSettingService/GetUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -262,7 +262,7 @@ func RegisterUserSettingServiceHandlerClient(ctx context.Context, mux *runtime.S
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.UserSettingService/UpdateUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.UserSettingService/UpdateUserSetting", runtime.WithHTTPPathPattern("/api/v1/users/{id}/settings"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

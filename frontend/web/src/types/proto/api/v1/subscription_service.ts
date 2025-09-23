@@ -8,7 +8,7 @@
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Timestamp } from "../../google/protobuf/timestamp";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export enum PlanType {
   PLAN_TYPE_UNSPECIFIED = "PLAN_TYPE_UNSPECIFIED",
@@ -318,9 +318,9 @@ export const DeleteSubscriptionRequest: MessageFns<DeleteSubscriptionRequest> = 
 export type SubscriptionServiceDefinition = typeof SubscriptionServiceDefinition;
 export const SubscriptionServiceDefinition = {
   name: "SubscriptionService",
-  fullName: "slash.api.v1.SubscriptionService",
+  fullName: "monotreme.api.v1.SubscriptionService",
   methods: {
-    /** GetSubscription gets the current subscription of Slash instance. */
+    /** GetSubscription gets the current subscription of Monotreme instance. */
     getSubscription: {
       name: "GetSubscription",
       requestType: GetSubscriptionRequest,

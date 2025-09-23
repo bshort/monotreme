@@ -1,12 +1,15 @@
 import classNames from "classnames";
-import Icon from "./Icon";
 
 interface Props {
   className?: string;
 }
 
 const Logo = ({ className }: Props) => {
-  return <Icon.CircleSlash className={classNames("dark:text-gray-500", className)} strokeWidth={1.5} />;
+  return (
+    <div className={classNames("w-8 h-8 rounded-lg overflow-hidden", className)}>
+      <img src="../assets/monotreme.png" alt="Monotreme Logo" className="max-w-full max-h-full" />
+    </div>
+  );
 };
 
 export default Logo;

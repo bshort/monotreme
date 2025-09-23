@@ -33,12 +33,8 @@ const Header: React.FC = () => {
           <div className="flex flex-row justify-start items-center shrink mr-2">
             <Link to="/" className="cursor-pointer flex flex-row justify-start items-center dark:text-gray-400" viewTransition>
               <Logo className="mr-2" />
-              Farfetch
+              Monotreme
             </Link>
-            {[PlanType.PRO, PlanType.ENTERPRISE].includes(subscription.plan) && (
-              <span className="ml-1 text-xs px-1.5 leading-5 border rounded-full bg-blue-600 border-blue-700 text-white shadow dark:opacity-70">
-              </span>
-            )}
             {shouldShowRouterSwitch && (
               <>
                 <span className="font-mono opacity-60 mx-1 dark:text-gray-400">/</span>

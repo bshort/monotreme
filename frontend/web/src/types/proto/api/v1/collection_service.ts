@@ -11,7 +11,7 @@ import { FieldMask } from "../../google/protobuf/field_mask";
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { Visibility, visibilityFromJSON, visibilityToNumber } from "./common";
 
-export const protobufPackage = "slash.api.v1";
+export const protobufPackage = "monotreme.api.v1";
 
 export interface Collection {
   id: number;
@@ -546,7 +546,7 @@ export const DeleteCollectionRequest: MessageFns<DeleteCollectionRequest> = {
 export type CollectionServiceDefinition = typeof CollectionServiceDefinition;
 export const CollectionServiceDefinition = {
   name: "CollectionService",
-  fullName: "slash.api.v1.CollectionService",
+  fullName: "monotreme.api.v1.CollectionService",
   methods: {
     /** ListCollections returns a list of collections. */
     listCollections: {

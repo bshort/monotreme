@@ -42,7 +42,7 @@ const CollectionSpace = () => {
             // Do nothing.
           }
         }
-        document.title = `${collection.title} - Slash`;
+        document.title = `${collection.title} - Monotreme`;
       } catch (error: any) {
         console.error(error);
         toast.error(error.details);

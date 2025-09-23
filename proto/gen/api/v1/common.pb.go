@@ -123,7 +123,7 @@ var File_api_v1_common_proto protoreflect.FileDescriptor
 
 const file_api_v1_common_proto_rawDesc = "" +
 	"\n" +
-	"\x13api/v1/common.proto\x12\fslash.api.v1*8\n" +
+	"\x13api/v1/common.proto\x12\fmonotreme.api.v1*8\n" +
 	"\x05State\x12\x15\n" +
 	"\x11STATE_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
@@ -151,8 +151,8 @@ func file_api_v1_common_proto_rawDescGZIP() []byte {
 
 var file_api_v1_common_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_api_v1_common_proto_goTypes = []any{
-	(State)(0),      // 0: slash.api.v1.State
-	(Visibility)(0), // 1: slash.api.v1.Visibility
+	(State)(0),      // 0: monotreme.api.v1.State
+	(Visibility)(0), // 1: monotreme.api.v1.Visibility
 }
 var file_api_v1_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

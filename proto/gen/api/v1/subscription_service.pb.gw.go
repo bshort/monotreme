@@ -116,7 +116,7 @@ func RegisterSubscriptionServiceHandlerServer(ctx context.Context, mux *runtime.
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.SubscriptionService/GetSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.SubscriptionService/GetSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -136,7 +136,7 @@ func RegisterSubscriptionServiceHandlerServer(ctx context.Context, mux *runtime.
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.SubscriptionService/UpdateSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.SubscriptionService/UpdateSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -156,7 +156,7 @@ func RegisterSubscriptionServiceHandlerServer(ctx context.Context, mux *runtime.
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/slash.api.v1.SubscriptionService/DeleteSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.SubscriptionService/DeleteSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -214,7 +214,7 @@ func RegisterSubscriptionServiceHandlerClient(ctx context.Context, mux *runtime.
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.SubscriptionService/GetSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.SubscriptionService/GetSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -231,7 +231,7 @@ func RegisterSubscriptionServiceHandlerClient(ctx context.Context, mux *runtime.
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.SubscriptionService/UpdateSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.SubscriptionService/UpdateSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -248,7 +248,7 @@ func RegisterSubscriptionServiceHandlerClient(ctx context.Context, mux *runtime.
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/slash.api.v1.SubscriptionService/DeleteSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.SubscriptionService/DeleteSubscription", runtime.WithHTTPPathPattern("/v1/subscription"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

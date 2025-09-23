@@ -77,7 +77,7 @@ func (PlanType) EnumDescriptor() ([]byte, []int) {
 
 type Subscription struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
-	Plan             PlanType               `protobuf:"varint,1,opt,name=plan,proto3,enum=slash.api.v1.PlanType" json:"plan,omitempty"`
+	Plan             PlanType               `protobuf:"varint,1,opt,name=plan,proto3,enum=monotreme.api.v1.PlanType" json:"plan,omitempty"`
 	StartedTime      *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=started_time,json=startedTime,proto3" json:"started_time,omitempty"`
 	ExpiresTime      *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_time,json=expiresTime,proto3" json:"expires_time,omitempty"`
 	Features         []string               `protobuf:"bytes,4,rep,name=features,proto3" json:"features,omitempty"`
@@ -287,9 +287,9 @@ var File_api_v1_subscription_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_subscription_service_proto_rawDesc = "" +
 	"\n" +
-	"!api/v1/subscription_service.proto\x12\fslash.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xea\x02\n" +
+	"!api/v1/subscription_service.proto\x12\fmonotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xea\x02\n" +
 	"\fSubscription\x120\n" +
-	"\x04plan\x18\x01 \x01(\x0e2\x16.slash.api.v1.PlanTypeB\x04\xe2A\x01\x03R\x04plan\x12C\n" +
+	"\x04plan\x18\x01 \x01(\x0e2\x16.monotreme.api.v1.PlanTypeB\x04\xe2A\x01\x03R\x04plan\x12C\n" +
 	"\fstarted_time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampB\x04\xe2A\x01\x03R\vstartedTime\x12C\n" +
 	"\fexpires_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampB\x04\xe2A\x01\x03R\vexpiresTime\x12 \n" +
 	"\bfeatures\x18\x04 \x03(\tB\x04\xe2A\x01\x03R\bfeatures\x12\x1a\n" +
@@ -308,9 +308,9 @@ const file_api_v1_subscription_service_proto_rawDesc = "" +
 	"\n" +
 	"ENTERPRISE\x10\x032\xf1\x02\n" +
 	"\x13SubscriptionService\x12m\n" +
-	"\x0fGetSubscription\x12$.slash.api.v1.GetSubscriptionRequest\x1a\x1a.slash.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/subscription\x12v\n" +
-	"\x12UpdateSubscription\x12'.slash.api.v1.UpdateSubscriptionRequest\x1a\x1a.slash.api.v1.Subscription\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*2\x10/v1/subscription\x12s\n" +
-	"\x12DeleteSubscription\x12'.slash.api.v1.DeleteSubscriptionRequest\x1a\x1a.slash.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/subscriptionB\xae\x01\n" +
+	"\x0fGetSubscription\x12$.monotreme.api.v1.GetSubscriptionRequest\x1a\x1a.monotreme.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/subscription\x12v\n" +
+	"\x12UpdateSubscription\x12'.monotreme.api.v1.UpdateSubscriptionRequest\x1a\x1a.monotreme.api.v1.Subscription\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*2\x10/v1/subscription\x12s\n" +
+	"\x12DeleteSubscription\x12'.monotreme.api.v1.DeleteSubscriptionRequest\x1a\x1a.monotreme.api.v1.Subscription\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/subscriptionB\xae\x01\n" +
 	"\x10com.monotreme.api.v1B\x18SubscriptionServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
 
 var (
@@ -328,23 +328,23 @@ func file_api_v1_subscription_service_proto_rawDescGZIP() []byte {
 var file_api_v1_subscription_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_api_v1_subscription_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_api_v1_subscription_service_proto_goTypes = []any{
-	(PlanType)(0),                     // 0: slash.api.v1.PlanType
-	(*Subscription)(nil),              // 1: slash.api.v1.Subscription
-	(*GetSubscriptionRequest)(nil),    // 2: slash.api.v1.GetSubscriptionRequest
-	(*UpdateSubscriptionRequest)(nil), // 3: slash.api.v1.UpdateSubscriptionRequest
-	(*DeleteSubscriptionRequest)(nil), // 4: slash.api.v1.DeleteSubscriptionRequest
+	(PlanType)(0),                     // 0: monotreme.api.v1.PlanType
+	(*Subscription)(nil),              // 1: monotreme.api.v1.Subscription
+	(*GetSubscriptionRequest)(nil),    // 2: monotreme.api.v1.GetSubscriptionRequest
+	(*UpdateSubscriptionRequest)(nil), // 3: monotreme.api.v1.UpdateSubscriptionRequest
+	(*DeleteSubscriptionRequest)(nil), // 4: monotreme.api.v1.DeleteSubscriptionRequest
 	(*timestamppb.Timestamp)(nil),     // 5: google.protobuf.Timestamp
 }
 var file_api_v1_subscription_service_proto_depIdxs = []int32{
-	0, // 0: slash.api.v1.Subscription.plan:type_name -> slash.api.v1.PlanType
-	5, // 1: slash.api.v1.Subscription.started_time:type_name -> google.protobuf.Timestamp
-	5, // 2: slash.api.v1.Subscription.expires_time:type_name -> google.protobuf.Timestamp
-	2, // 3: slash.api.v1.SubscriptionService.GetSubscription:input_type -> slash.api.v1.GetSubscriptionRequest
-	3, // 4: slash.api.v1.SubscriptionService.UpdateSubscription:input_type -> slash.api.v1.UpdateSubscriptionRequest
-	4, // 5: slash.api.v1.SubscriptionService.DeleteSubscription:input_type -> slash.api.v1.DeleteSubscriptionRequest
-	1, // 6: slash.api.v1.SubscriptionService.GetSubscription:output_type -> slash.api.v1.Subscription
-	1, // 7: slash.api.v1.SubscriptionService.UpdateSubscription:output_type -> slash.api.v1.Subscription
-	1, // 8: slash.api.v1.SubscriptionService.DeleteSubscription:output_type -> slash.api.v1.Subscription
+	0, // 0: monotreme.api.v1.Subscription.plan:type_name -> monotreme.api.v1.PlanType
+	5, // 1: monotreme.api.v1.Subscription.started_time:type_name -> google.protobuf.Timestamp
+	5, // 2: monotreme.api.v1.Subscription.expires_time:type_name -> google.protobuf.Timestamp
+	2, // 3: monotreme.api.v1.SubscriptionService.GetSubscription:input_type -> monotreme.api.v1.GetSubscriptionRequest
+	3, // 4: monotreme.api.v1.SubscriptionService.UpdateSubscription:input_type -> monotreme.api.v1.UpdateSubscriptionRequest
+	4, // 5: monotreme.api.v1.SubscriptionService.DeleteSubscription:input_type -> monotreme.api.v1.DeleteSubscriptionRequest
+	1, // 6: monotreme.api.v1.SubscriptionService.GetSubscription:output_type -> monotreme.api.v1.Subscription
+	1, // 7: monotreme.api.v1.SubscriptionService.UpdateSubscription:output_type -> monotreme.api.v1.Subscription
+	1, // 8: monotreme.api.v1.SubscriptionService.DeleteSubscription:output_type -> monotreme.api.v1.Subscription
 	6, // [6:9] is the sub-list for method output_type
 	3, // [3:6] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

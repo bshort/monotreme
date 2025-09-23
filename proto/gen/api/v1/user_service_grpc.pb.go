@@ -20,14 +20,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_ListUsers_FullMethodName             = "/slash.api.v1.UserService/ListUsers"
-	UserService_GetUser_FullMethodName               = "/slash.api.v1.UserService/GetUser"
-	UserService_CreateUser_FullMethodName            = "/slash.api.v1.UserService/CreateUser"
-	UserService_UpdateUser_FullMethodName            = "/slash.api.v1.UserService/UpdateUser"
-	UserService_DeleteUser_FullMethodName            = "/slash.api.v1.UserService/DeleteUser"
-	UserService_ListUserAccessTokens_FullMethodName  = "/slash.api.v1.UserService/ListUserAccessTokens"
-	UserService_CreateUserAccessToken_FullMethodName = "/slash.api.v1.UserService/CreateUserAccessToken"
-	UserService_DeleteUserAccessToken_FullMethodName = "/slash.api.v1.UserService/DeleteUserAccessToken"
+	UserService_ListUsers_FullMethodName             = "/monotreme.api.v1.UserService/ListUsers"
+	UserService_GetUser_FullMethodName               = "/monotreme.api.v1.UserService/GetUser"
+	UserService_CreateUser_FullMethodName            = "/monotreme.api.v1.UserService/CreateUser"
+	UserService_UpdateUser_FullMethodName            = "/monotreme.api.v1.UserService/UpdateUser"
+	UserService_DeleteUser_FullMethodName            = "/monotreme.api.v1.UserService/DeleteUser"
+	UserService_ListUserAccessTokens_FullMethodName  = "/monotreme.api.v1.UserService/ListUserAccessTokens"
+	UserService_CreateUserAccessToken_FullMethodName = "/monotreme.api.v1.UserService/CreateUserAccessToken"
+	UserService_DeleteUserAccessToken_FullMethodName = "/monotreme.api.v1.UserService/DeleteUserAccessToken"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -361,7 +361,7 @@ func _UserService_DeleteUserAccessToken_Handler(srv interface{}, ctx context.Con
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "slash.api.v1.UserService",
+	ServiceName: "monotreme.api.v1.UserService",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

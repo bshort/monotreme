@@ -274,7 +274,7 @@ var File_api_v1_auth_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_auth_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19api/v1/auth_service.proto\x12\fslash.api.v1\x1a\x19api/v1/user_service.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x16\n" +
+	"\x19api/v1/auth_service.proto\x12\fmonotreme.api.v1\x1a\x19api/v1/user_service.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x16\n" +
 	"\x14GetAuthStatusRequest\"A\n" +
 	"\rSignInRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
@@ -289,11 +289,11 @@ const file_api_v1_auth_service_proto_rawDesc = "" +
 	"\fredirect_uri\x18\x03 \x01(\tR\vredirectUri\"\x10\n" +
 	"\x0eSignOutRequest2\xec\x03\n" +
 	"\vAuthService\x12d\n" +
-	"\rGetAuthStatus\x12\".slash.api.v1.GetAuthStatusRequest\x1a\x12.slash.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/status\x12V\n" +
-	"\x06SignIn\x12\x1b.slash.api.v1.SignInRequest\x1a\x12.slash.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signin\x12h\n" +
-	"\rSignInWithSSO\x12\".slash.api.v1.SignInWithSSORequest\x1a\x12.slash.api.v1.User\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x17/api/v1/auth/signin/sso\x12V\n" +
-	"\x06SignUp\x12\x1b.slash.api.v1.SignUpRequest\x1a\x12.slash.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signup\x12]\n" +
-	"\aSignOut\x12\x1c.slash.api.v1.SignOutRequest\x1a\x16.google.protobuf.Empty\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x14/api/v1/auth/signoutB\xa6\x01\n" +
+	"\rGetAuthStatus\x12\".monotreme.api.v1.GetAuthStatusRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/status\x12V\n" +
+	"\x06SignIn\x12\x1b.monotreme.api.v1.SignInRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signin\x12h\n" +
+	"\rSignInWithSSO\x12\".monotreme.api.v1.SignInWithSSORequest\x1a\x12.monotreme.api.v1.User\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x17/api/v1/auth/signin/sso\x12V\n" +
+	"\x06SignUp\x12\x1b.monotreme.api.v1.SignUpRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/auth/signup\x12]\n" +
+	"\aSignOut\x12\x1c.monotreme.api.v1.SignOutRequest\x1a\x16.google.protobuf.Empty\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x14/api/v1/auth/signoutB\xa6\x01\n" +
 	"\x10com.monotreme.api.v1B\x10AuthServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
 
 var (
@@ -310,25 +310,25 @@ func file_api_v1_auth_service_proto_rawDescGZIP() []byte {
 
 var file_api_v1_auth_service_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_api_v1_auth_service_proto_goTypes = []any{
-	(*GetAuthStatusRequest)(nil), // 0: slash.api.v1.GetAuthStatusRequest
-	(*SignInRequest)(nil),        // 1: slash.api.v1.SignInRequest
-	(*SignUpRequest)(nil),        // 2: slash.api.v1.SignUpRequest
-	(*SignInWithSSORequest)(nil), // 3: slash.api.v1.SignInWithSSORequest
-	(*SignOutRequest)(nil),       // 4: slash.api.v1.SignOutRequest
-	(*User)(nil),                 // 5: slash.api.v1.User
+	(*GetAuthStatusRequest)(nil), // 0: monotreme.api.v1.GetAuthStatusRequest
+	(*SignInRequest)(nil),        // 1: monotreme.api.v1.SignInRequest
+	(*SignUpRequest)(nil),        // 2: monotreme.api.v1.SignUpRequest
+	(*SignInWithSSORequest)(nil), // 3: monotreme.api.v1.SignInWithSSORequest
+	(*SignOutRequest)(nil),       // 4: monotreme.api.v1.SignOutRequest
+	(*User)(nil),                 // 5: monotreme.api.v1.User
 	(*emptypb.Empty)(nil),        // 6: google.protobuf.Empty
 }
 var file_api_v1_auth_service_proto_depIdxs = []int32{
-	0, // 0: slash.api.v1.AuthService.GetAuthStatus:input_type -> slash.api.v1.GetAuthStatusRequest
-	1, // 1: slash.api.v1.AuthService.SignIn:input_type -> slash.api.v1.SignInRequest
-	3, // 2: slash.api.v1.AuthService.SignInWithSSO:input_type -> slash.api.v1.SignInWithSSORequest
-	2, // 3: slash.api.v1.AuthService.SignUp:input_type -> slash.api.v1.SignUpRequest
-	4, // 4: slash.api.v1.AuthService.SignOut:input_type -> slash.api.v1.SignOutRequest
-	5, // 5: slash.api.v1.AuthService.GetAuthStatus:output_type -> slash.api.v1.User
-	5, // 6: slash.api.v1.AuthService.SignIn:output_type -> slash.api.v1.User
-	5, // 7: slash.api.v1.AuthService.SignInWithSSO:output_type -> slash.api.v1.User
-	5, // 8: slash.api.v1.AuthService.SignUp:output_type -> slash.api.v1.User
-	6, // 9: slash.api.v1.AuthService.SignOut:output_type -> google.protobuf.Empty
+	0, // 0: monotreme.api.v1.AuthService.GetAuthStatus:input_type -> monotreme.api.v1.GetAuthStatusRequest
+	1, // 1: monotreme.api.v1.AuthService.SignIn:input_type -> monotreme.api.v1.SignInRequest
+	3, // 2: monotreme.api.v1.AuthService.SignInWithSSO:input_type -> monotreme.api.v1.SignInWithSSORequest
+	2, // 3: monotreme.api.v1.AuthService.SignUp:input_type -> monotreme.api.v1.SignUpRequest
+	4, // 4: monotreme.api.v1.AuthService.SignOut:input_type -> monotreme.api.v1.SignOutRequest
+	5, // 5: monotreme.api.v1.AuthService.GetAuthStatus:output_type -> monotreme.api.v1.User
+	5, // 6: monotreme.api.v1.AuthService.SignIn:output_type -> monotreme.api.v1.User
+	5, // 7: monotreme.api.v1.AuthService.SignInWithSSO:output_type -> monotreme.api.v1.User
+	5, // 8: monotreme.api.v1.AuthService.SignUp:output_type -> monotreme.api.v1.User
+	6, // 9: monotreme.api.v1.AuthService.SignOut:output_type -> google.protobuf.Empty
 	5, // [5:10] is the sub-list for method output_type
 	0, // [0:5] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

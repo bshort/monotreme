@@ -10,6 +10,7 @@ import { Visibility } from "@/types/proto/api/v1/common";
 import { WorkspaceSetting } from "@/types/proto/api/v1/workspace_service";
 import FeatureBadge from "../FeatureBadge";
 import Icon from "../Icon";
+import monotremeLogo from "@/images/monotreme.png";
 
 const getDefaultVisibility = (visibility?: Visibility) => {
   if (!visibility || [Visibility.VISIBILITY_UNSPECIFIED, Visibility.UNRECOGNIZED].includes(visibility)) {
@@ -113,7 +114,7 @@ const WorkspaceGeneralSettingSection = () => {
                 />
               </div>
             ) : (
-              <Icon.CircleSlash className="w-12 h-auto dark:text-gray-500 mr-2" strokeWidth={1} />
+              <img src={monotremeLogo} alt="Monotreme Logo" className="w-12 h-12 rounded-lg mr-2" />
             )}
             <input
               className="absolute inset-0 z-1 opacity-0"

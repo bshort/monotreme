@@ -77,10 +77,10 @@ func (Role) EnumDescriptor() ([]byte, []int) {
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	State         State                  `protobuf:"varint,2,opt,name=state,proto3,enum=slash.api.v1.State" json:"state,omitempty"`
+	State         State                  `protobuf:"varint,2,opt,name=state,proto3,enum=monotreme.api.v1.State" json:"state,omitempty"`
 	CreatedTime   *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_time,json=createdTime,proto3" json:"created_time,omitempty"`
 	UpdatedTime   *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_time,json=updatedTime,proto3" json:"updated_time,omitempty"`
-	Role          Role                   `protobuf:"varint,6,opt,name=role,proto3,enum=slash.api.v1.Role" json:"role,omitempty"`
+	Role          Role                   `protobuf:"varint,6,opt,name=role,proto3,enum=monotreme.api.v1.Role" json:"role,omitempty"`
 	Email         string                 `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
 	Nickname      string                 `protobuf:"bytes,8,opt,name=nickname,proto3" json:"nickname,omitempty"`
 	Password      string                 `protobuf:"bytes,9,opt,name=password,proto3" json:"password,omitempty"`
@@ -717,25 +717,25 @@ var File_api_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_user_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19api/v1/user_service.proto\x12\fslash.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb5\x02\n" +
+	"\x19api/v1/user_service.proto\x12\fmonotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb5\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12)\n" +
-	"\x05state\x18\x02 \x01(\x0e2\x13.slash.api.v1.StateR\x05state\x12=\n" +
+	"\x05state\x18\x02 \x01(\x0e2\x13.monotreme.api.v1.StateR\x05state\x12=\n" +
 	"\fcreated_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\vcreatedTime\x12=\n" +
 	"\fupdated_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\vupdatedTime\x12&\n" +
-	"\x04role\x18\x06 \x01(\x0e2\x12.slash.api.v1.RoleR\x04role\x12\x14\n" +
+	"\x04role\x18\x06 \x01(\x0e2\x12.monotreme.api.v1.RoleR\x04role\x12\x14\n" +
 	"\x05email\x18\a \x01(\tR\x05email\x12\x1a\n" +
 	"\bnickname\x18\b \x01(\tR\bnickname\x12\x1a\n" +
 	"\bpassword\x18\t \x01(\tR\bpassword\"\x12\n" +
 	"\x10ListUsersRequest\"=\n" +
 	"\x11ListUsersResponse\x12(\n" +
-	"\x05users\x18\x01 \x03(\v2\x12.slash.api.v1.UserR\x05users\" \n" +
+	"\x05users\x18\x01 \x03(\v2\x12.monotreme.api.v1.UserR\x05users\" \n" +
 	"\x0eGetUserRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\";\n" +
 	"\x11CreateUserRequest\x12&\n" +
-	"\x04user\x18\x01 \x01(\v2\x12.slash.api.v1.UserR\x04user\"x\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.monotreme.api.v1.UserR\x04user\"x\n" +
 	"\x11UpdateUserRequest\x12&\n" +
-	"\x04user\x18\x01 \x01(\v2\x12.slash.api.v1.UserR\x04user\x12;\n" +
+	"\x04user\x18\x01 \x01(\v2\x12.monotreme.api.v1.UserR\x04user\x12;\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
 	"updateMask\"#\n" +
 	"\x11DeleteUserRequest\x12\x0e\n" +
@@ -743,7 +743,7 @@ const file_api_v1_user_service_proto_rawDesc = "" +
 	"\x1bListUserAccessTokensRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"b\n" +
 	"\x1cListUserAccessTokensResponse\x12B\n" +
-	"\raccess_tokens\x18\x01 \x03(\v2\x1d.slash.api.v1.UserAccessTokenR\faccessTokens\"\x9f\x01\n" +
+	"\raccess_tokens\x18\x01 \x03(\v2\x1d.monotreme.api.v1.UserAccessTokenR\faccessTokens\"\x9f\x01\n" +
 	"\x1cCreateUserAccessTokenRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12>\n" +
@@ -764,17 +764,17 @@ const file_api_v1_user_service_proto_rawDesc = "" +
 	"\x05ADMIN\x10\x01\x12\b\n" +
 	"\x04USER\x10\x022\xf4\a\n" +
 	"\vUserService\x12c\n" +
-	"\tListUsers\x12\x1e.slash.api.v1.ListUsersRequest\x1a\x1f.slash.api.v1.ListUsersResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/api/v1/users\x12\\\n" +
-	"\aGetUser\x12\x1c.slash.api.v1.GetUserRequest\x1a\x12.slash.api.v1.User\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/users/{id}\x12^\n" +
+	"\tListUsers\x12\x1e.monotreme.api.v1.ListUsersRequest\x1a\x1f.monotreme.api.v1.ListUsersResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/api/v1/users\x12\\\n" +
+	"\aGetUser\x12\x1c.monotreme.api.v1.GetUserRequest\x1a\x12.monotreme.api.v1.User\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/users/{id}\x12^\n" +
 	"\n" +
-	"CreateUser\x12\x1f.slash.api.v1.CreateUserRequest\x1a\x12.slash.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15:\x04user\"\r/api/v1/users\x12{\n" +
+	"CreateUser\x12\x1f.monotreme.api.v1.CreateUserRequest\x1a\x12.monotreme.api.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15:\x04user\"\r/api/v1/users\x12{\n" +
 	"\n" +
-	"UpdateUser\x12\x1f.slash.api.v1.UpdateUserRequest\x1a\x12.slash.api.v1.User\"8\xdaA\x10user,update_mask\x82\xd3\xe4\x93\x02\x1f:\x04user2\x17/api/v1/users/{user.id}\x12f\n" +
+	"UpdateUser\x12\x1f.monotreme.api.v1.UpdateUserRequest\x1a\x12.monotreme.api.v1.User\"8\xdaA\x10user,update_mask\x82\xd3\xe4\x93\x02\x1f:\x04user2\x17/api/v1/users/{user.id}\x12f\n" +
 	"\n" +
-	"DeleteUser\x12\x1f.slash.api.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14*\x12/api/v1/users/{id}\x12\x9c\x01\n" +
-	"\x14ListUserAccessTokens\x12).slash.api.v1.ListUserAccessTokensRequest\x1a*.slash.api.v1.ListUserAccessTokensResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/users/{id}/access_tokens\x12\x94\x01\n" +
-	"\x15CreateUserAccessToken\x12*.slash.api.v1.CreateUserAccessTokenRequest\x1a\x1d.slash.api.v1.UserAccessToken\"0\xdaA\x02id\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/users/{id}/access_tokens\x12\xa6\x01\n" +
-	"\x15DeleteUserAccessToken\x12*.slash.api.v1.DeleteUserAccessTokenRequest\x1a\x16.google.protobuf.Empty\"I\xdaA\x0fid,access_token\x82\xd3\xe4\x93\x021*//api/v1/users/{id}/access_tokens/{access_token}B\xa6\x01\n" +
+	"DeleteUser\x12\x1f.monotreme.api.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14*\x12/api/v1/users/{id}\x12\x9c\x01\n" +
+	"\x14ListUserAccessTokens\x12).monotreme.api.v1.ListUserAccessTokensRequest\x1a*.monotreme.api.v1.ListUserAccessTokensResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/users/{id}/access_tokens\x12\x94\x01\n" +
+	"\x15CreateUserAccessToken\x12*.monotreme.api.v1.CreateUserAccessTokenRequest\x1a\x1d.monotreme.api.v1.UserAccessToken\"0\xdaA\x02id\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/users/{id}/access_tokens\x12\xa6\x01\n" +
+	"\x15DeleteUserAccessToken\x12*.monotreme.api.v1.DeleteUserAccessTokenRequest\x1a\x16.google.protobuf.Empty\"I\xdaA\x0fid,access_token\x82\xd3\xe4\x93\x021*//api/v1/users/{id}/access_tokens/{access_token}B\xa6\x01\n" +
 	"\x10com.monotreme.api.v1B\x10UserServiceProtoP\x01Z.github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03SAX\xaa\x02\fSlash.Api.V1\xca\x02\fSlash\\Api\\V1\xe2\x02\x18Slash\\Api\\V1\\GPBMetadata\xea\x02\x0eMonotreme::Api::V1b\x06proto3"
 
 var (
@@ -792,53 +792,53 @@ func file_api_v1_user_service_proto_rawDescGZIP() []byte {
 var file_api_v1_user_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_api_v1_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_api_v1_user_service_proto_goTypes = []any{
-	(Role)(0),                            // 0: slash.api.v1.Role
-	(*User)(nil),                         // 1: slash.api.v1.User
-	(*ListUsersRequest)(nil),             // 2: slash.api.v1.ListUsersRequest
-	(*ListUsersResponse)(nil),            // 3: slash.api.v1.ListUsersResponse
-	(*GetUserRequest)(nil),               // 4: slash.api.v1.GetUserRequest
-	(*CreateUserRequest)(nil),            // 5: slash.api.v1.CreateUserRequest
-	(*UpdateUserRequest)(nil),            // 6: slash.api.v1.UpdateUserRequest
-	(*DeleteUserRequest)(nil),            // 7: slash.api.v1.DeleteUserRequest
-	(*ListUserAccessTokensRequest)(nil),  // 8: slash.api.v1.ListUserAccessTokensRequest
-	(*ListUserAccessTokensResponse)(nil), // 9: slash.api.v1.ListUserAccessTokensResponse
-	(*CreateUserAccessTokenRequest)(nil), // 10: slash.api.v1.CreateUserAccessTokenRequest
-	(*DeleteUserAccessTokenRequest)(nil), // 11: slash.api.v1.DeleteUserAccessTokenRequest
-	(*UserAccessToken)(nil),              // 12: slash.api.v1.UserAccessToken
-	(State)(0),                           // 13: slash.api.v1.State
+	(Role)(0),                            // 0: monotreme.api.v1.Role
+	(*User)(nil),                         // 1: monotreme.api.v1.User
+	(*ListUsersRequest)(nil),             // 2: monotreme.api.v1.ListUsersRequest
+	(*ListUsersResponse)(nil),            // 3: monotreme.api.v1.ListUsersResponse
+	(*GetUserRequest)(nil),               // 4: monotreme.api.v1.GetUserRequest
+	(*CreateUserRequest)(nil),            // 5: monotreme.api.v1.CreateUserRequest
+	(*UpdateUserRequest)(nil),            // 6: monotreme.api.v1.UpdateUserRequest
+	(*DeleteUserRequest)(nil),            // 7: monotreme.api.v1.DeleteUserRequest
+	(*ListUserAccessTokensRequest)(nil),  // 8: monotreme.api.v1.ListUserAccessTokensRequest
+	(*ListUserAccessTokensResponse)(nil), // 9: monotreme.api.v1.ListUserAccessTokensResponse
+	(*CreateUserAccessTokenRequest)(nil), // 10: monotreme.api.v1.CreateUserAccessTokenRequest
+	(*DeleteUserAccessTokenRequest)(nil), // 11: monotreme.api.v1.DeleteUserAccessTokenRequest
+	(*UserAccessToken)(nil),              // 12: monotreme.api.v1.UserAccessToken
+	(State)(0),                           // 13: monotreme.api.v1.State
 	(*timestamppb.Timestamp)(nil),        // 14: google.protobuf.Timestamp
 	(*fieldmaskpb.FieldMask)(nil),        // 15: google.protobuf.FieldMask
 	(*emptypb.Empty)(nil),                // 16: google.protobuf.Empty
 }
 var file_api_v1_user_service_proto_depIdxs = []int32{
-	13, // 0: slash.api.v1.User.state:type_name -> slash.api.v1.State
-	14, // 1: slash.api.v1.User.created_time:type_name -> google.protobuf.Timestamp
-	14, // 2: slash.api.v1.User.updated_time:type_name -> google.protobuf.Timestamp
-	0,  // 3: slash.api.v1.User.role:type_name -> slash.api.v1.Role
-	1,  // 4: slash.api.v1.ListUsersResponse.users:type_name -> slash.api.v1.User
-	1,  // 5: slash.api.v1.CreateUserRequest.user:type_name -> slash.api.v1.User
-	1,  // 6: slash.api.v1.UpdateUserRequest.user:type_name -> slash.api.v1.User
-	15, // 7: slash.api.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
-	12, // 8: slash.api.v1.ListUserAccessTokensResponse.access_tokens:type_name -> slash.api.v1.UserAccessToken
-	14, // 9: slash.api.v1.CreateUserAccessTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
-	14, // 10: slash.api.v1.UserAccessToken.issued_at:type_name -> google.protobuf.Timestamp
-	14, // 11: slash.api.v1.UserAccessToken.expires_at:type_name -> google.protobuf.Timestamp
-	2,  // 12: slash.api.v1.UserService.ListUsers:input_type -> slash.api.v1.ListUsersRequest
-	4,  // 13: slash.api.v1.UserService.GetUser:input_type -> slash.api.v1.GetUserRequest
-	5,  // 14: slash.api.v1.UserService.CreateUser:input_type -> slash.api.v1.CreateUserRequest
-	6,  // 15: slash.api.v1.UserService.UpdateUser:input_type -> slash.api.v1.UpdateUserRequest
-	7,  // 16: slash.api.v1.UserService.DeleteUser:input_type -> slash.api.v1.DeleteUserRequest
-	8,  // 17: slash.api.v1.UserService.ListUserAccessTokens:input_type -> slash.api.v1.ListUserAccessTokensRequest
-	10, // 18: slash.api.v1.UserService.CreateUserAccessToken:input_type -> slash.api.v1.CreateUserAccessTokenRequest
-	11, // 19: slash.api.v1.UserService.DeleteUserAccessToken:input_type -> slash.api.v1.DeleteUserAccessTokenRequest
-	3,  // 20: slash.api.v1.UserService.ListUsers:output_type -> slash.api.v1.ListUsersResponse
-	1,  // 21: slash.api.v1.UserService.GetUser:output_type -> slash.api.v1.User
-	1,  // 22: slash.api.v1.UserService.CreateUser:output_type -> slash.api.v1.User
-	1,  // 23: slash.api.v1.UserService.UpdateUser:output_type -> slash.api.v1.User
-	16, // 24: slash.api.v1.UserService.DeleteUser:output_type -> google.protobuf.Empty
-	9,  // 25: slash.api.v1.UserService.ListUserAccessTokens:output_type -> slash.api.v1.ListUserAccessTokensResponse
-	12, // 26: slash.api.v1.UserService.CreateUserAccessToken:output_type -> slash.api.v1.UserAccessToken
-	16, // 27: slash.api.v1.UserService.DeleteUserAccessToken:output_type -> google.protobuf.Empty
+	13, // 0: monotreme.api.v1.User.state:type_name -> monotreme.api.v1.State
+	14, // 1: monotreme.api.v1.User.created_time:type_name -> google.protobuf.Timestamp
+	14, // 2: monotreme.api.v1.User.updated_time:type_name -> google.protobuf.Timestamp
+	0,  // 3: monotreme.api.v1.User.role:type_name -> monotreme.api.v1.Role
+	1,  // 4: monotreme.api.v1.ListUsersResponse.users:type_name -> monotreme.api.v1.User
+	1,  // 5: monotreme.api.v1.CreateUserRequest.user:type_name -> monotreme.api.v1.User
+	1,  // 6: monotreme.api.v1.UpdateUserRequest.user:type_name -> monotreme.api.v1.User
+	15, // 7: monotreme.api.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
+	12, // 8: monotreme.api.v1.ListUserAccessTokensResponse.access_tokens:type_name -> monotreme.api.v1.UserAccessToken
+	14, // 9: monotreme.api.v1.CreateUserAccessTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
+	14, // 10: monotreme.api.v1.UserAccessToken.issued_at:type_name -> google.protobuf.Timestamp
+	14, // 11: monotreme.api.v1.UserAccessToken.expires_at:type_name -> google.protobuf.Timestamp
+	2,  // 12: monotreme.api.v1.UserService.ListUsers:input_type -> monotreme.api.v1.ListUsersRequest
+	4,  // 13: monotreme.api.v1.UserService.GetUser:input_type -> monotreme.api.v1.GetUserRequest
+	5,  // 14: monotreme.api.v1.UserService.CreateUser:input_type -> monotreme.api.v1.CreateUserRequest
+	6,  // 15: monotreme.api.v1.UserService.UpdateUser:input_type -> monotreme.api.v1.UpdateUserRequest
+	7,  // 16: monotreme.api.v1.UserService.DeleteUser:input_type -> monotreme.api.v1.DeleteUserRequest
+	8,  // 17: monotreme.api.v1.UserService.ListUserAccessTokens:input_type -> monotreme.api.v1.ListUserAccessTokensRequest
+	10, // 18: monotreme.api.v1.UserService.CreateUserAccessToken:input_type -> monotreme.api.v1.CreateUserAccessTokenRequest
+	11, // 19: monotreme.api.v1.UserService.DeleteUserAccessToken:input_type -> monotreme.api.v1.DeleteUserAccessTokenRequest
+	3,  // 20: monotreme.api.v1.UserService.ListUsers:output_type -> monotreme.api.v1.ListUsersResponse
+	1,  // 21: monotreme.api.v1.UserService.GetUser:output_type -> monotreme.api.v1.User
+	1,  // 22: monotreme.api.v1.UserService.CreateUser:output_type -> monotreme.api.v1.User
+	1,  // 23: monotreme.api.v1.UserService.UpdateUser:output_type -> monotreme.api.v1.User
+	16, // 24: monotreme.api.v1.UserService.DeleteUser:output_type -> google.protobuf.Empty
+	9,  // 25: monotreme.api.v1.UserService.ListUserAccessTokens:output_type -> monotreme.api.v1.ListUserAccessTokensResponse
+	12, // 26: monotreme.api.v1.UserService.CreateUserAccessToken:output_type -> monotreme.api.v1.UserAccessToken
+	16, // 27: monotreme.api.v1.UserService.DeleteUserAccessToken:output_type -> google.protobuf.Empty
 	20, // [20:28] is the sub-list for method output_type
 	12, // [12:20] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name

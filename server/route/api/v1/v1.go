@@ -119,7 +119,7 @@ func (s *APIV1Service) RegisterGateway(_ context.Context, e *echo.Echo) error {
 		}),
 	}
 	wrappedGrpc := grpcweb.WrapServer(s.grpcServer, options...)
-	e.Any("/slash.api.v1.*", echo.WrapHandler(wrappedGrpc))
+	e.Any("/monotreme.api.v1.*", echo.WrapHandler(wrappedGrpc))
 
 	return nil
 }
