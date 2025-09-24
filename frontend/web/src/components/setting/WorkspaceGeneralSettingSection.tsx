@@ -1,4 +1,4 @@
-import { Button, Option, Select, Textarea } from "@mui/joy";
+import { Button, Input, Option, Select, Textarea } from "@mui/joy";
 import { head, isEqual } from "lodash-es";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -62,7 +62,43 @@ const WorkspaceGeneralSettingSection = () => {
     });
   };
 
+  const validateShortcutPrefix = (prefix: string): string | null => {
+    if (!prefix || prefix.trim() === "") {
+      return "Prefix cannot be empty";
+    }
+
+    const trimmedPrefix = prefix.trim();
+
+    // Check for invalid characters
+    if (!/^[a-zA-Z0-9_-]+$/.test(trimmedPrefix)) {
+      return "Prefix can only contain letters, numbers, hyphens, and underscores";
+    }
+
+    // Check for conflicts with existing routes
+    const reservedPaths = ["api", "auth", "setting", "admin", "c", "shortcuts", "collections", "tags"];
+    if (reservedPaths.includes(trimmedPrefix.toLowerCase())) {
+      return "This prefix conflicts with an existing route";
+    }
+
+    return null;
+  };
+
+  const handleShortcutPrefixChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPrefix = event.target.value;
+    setWorkspaceSetting({
+      ...workspaceSetting,
+      shortcutPrefix: newPrefix,
+    });
+  };
+
   const handleSaveWorkspaceSetting = async () => {
+    // Validate shortcut prefix before saving
+    const prefixError = validateShortcutPrefix(workspaceSetting.shortcutPrefix || "s");
+    if (prefixError) {
+      toast.error(prefixError);
+      return;
+    }
+
     const updateMask: string[] = [];
     if (!isEqual(originalWorkspaceSetting.current.branding, workspaceSetting.branding)) {
       updateMask.push("branding");
@@ -72,6 +108,9 @@ const WorkspaceGeneralSettingSection = () => {
     }
     if (!isEqual(originalWorkspaceSetting.current.defaultVisibility, workspaceSetting.defaultVisibility)) {
       updateMask.push("default_visibility");
+    }
+    if (!isEqual(originalWorkspaceSetting.current.shortcutPrefix, workspaceSetting.shortcutPrefix)) {
+      updateMask.push("shortcut_prefix");
     }
     if (updateMask.length === 0) {
       toast.error("No changes made");
@@ -139,6 +178,18 @@ const WorkspaceGeneralSettingSection = () => {
             <Option value={Visibility.WORKSPACE}>{t(`shortcut.visibility.workspace.self`)}</Option>
             <Option value={Visibility.PUBLIC}>{t(`shortcut.visibility.public.self`)}</Option>
           </Select>
+        </div>
+        <div className="w-full flex flex-row justify-between items-center">
+          <div className="w-full flex flex-col justify-start items-start">
+            <p className="font-medium dark:text-gray-400">Shortcut URL prefix</p>
+            <p className="text-sm text-gray-500 leading-tight">The prefix used in shortcut URLs (e.g., "s" for "/s/shortcut-name").</p>
+          </div>
+          <Input
+            className="w-36"
+            placeholder="s"
+            value={workspaceSetting.shortcutPrefix || "s"}
+            onChange={handleShortcutPrefixChange}
+          />
         </div>
         <div className="w-full flex flex-col justify-start items-start">
           <p className="mt-2 font-medium dark:text-gray-400">{t("settings.workspace.custom-style")}</p>

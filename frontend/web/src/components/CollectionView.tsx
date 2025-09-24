@@ -9,6 +9,7 @@ import { absolutifyLink } from "@/helpers/utils";
 import useNavigateTo from "@/hooks/useNavigateTo";
 import useResponsiveWidth from "@/hooks/useResponsiveWidth";
 import { useCollectionStore, useShortcutStore, useUserStore } from "@/stores";
+import { getShortcutUrl } from "@/utils/shortcut";
 import { Collection } from "@/types/proto/api/v1/collection_service";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import { showCommonDialog } from "./Alert";
@@ -57,7 +58,7 @@ const CollectionView = (props: Props) => {
   };
 
   const handleOpenAllShortcutsButtonClick = () => {
-    shortcuts.forEach((shortcut: Shortcut) => window.open(`/s/${shortcut.name}`));
+    shortcuts.forEach((shortcut: Shortcut) => window.open(getShortcutUrl(shortcut.name)));
   };
 
   return (

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { absolutifyLink } from "@/helpers/utils";
+import { getShortcutUrl } from "@/utils/shortcut";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import Icon from "./Icon";
 
@@ -16,7 +17,7 @@ const GenerateQRCodeDialog: React.FC<Props> = (props: Props) => {
   const { shortcut, onClose } = props;
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const shortcutLink = absolutifyLink(`/s/${shortcut.name}`);
+  const shortcutLink = absolutifyLink(getShortcutUrl(shortcut.name));
 
   const handleCloseBtnClick = () => {
     onClose();

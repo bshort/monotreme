@@ -62,6 +62,11 @@ func (s *APIV1Service) GetWorkspaceSetting(ctx context.Context, _ *v1pb.GetWorks
 		} else if v.Key == storepb.WorkspaceSettingKey_WORKSPACE_SETTING_SHORTCUT_RELATED {
 			shortcutRelatedSetting := v.GetShortcutRelated()
 			workspaceSetting.DefaultVisibility = convertVisibilityFromStorepb(shortcutRelatedSetting.GetDefaultVisibility())
+			workspaceSetting.ShortcutPrefix = shortcutRelatedSetting.GetShortcutPrefix()
+			// Set default if empty
+			if workspaceSetting.ShortcutPrefix == "" {
+				workspaceSetting.ShortcutPrefix = "s"
+			}
 		} else if v.Key == storepb.WorkspaceSettingKey_WORKSPACE_SETTING_IDENTITY_PROVIDER {
 			identityProviderSetting := v.GetIdentityProvider()
 			workspaceSetting.IdentityProviders = []*v1pb.IdentityProvider{}
@@ -130,6 +135,30 @@ func (s *APIV1Service) UpdateWorkspaceSetting(ctx context.Context, request *v1pb
 				}
 			}
 			shortcutRelatedSetting.GetShortcutRelated().DefaultVisibility = convertVisibilityToStorepb(request.Setting.DefaultVisibility)
+			if _, err := s.Store.UpsertWorkspaceSetting(ctx, &storepb.WorkspaceSetting{
+				Key: storepb.WorkspaceSettingKey_WORKSPACE_SETTING_SHORTCUT_RELATED,
+				Value: &storepb.WorkspaceSetting_ShortcutRelated{
+					ShortcutRelated: shortcutRelatedSetting.GetShortcutRelated(),
+				},
+			}); err != nil {
+				return nil, status.Errorf(codes.Internal, "failed to update workspace setting: %v", err)
+			}
+		} else if path == "shortcut_prefix" {
+			shortcutRelatedSetting, err := s.Store.GetWorkspaceSetting(ctx, &store.FindWorkspaceSetting{
+				Key: storepb.WorkspaceSettingKey_WORKSPACE_SETTING_SHORTCUT_RELATED,
+			})
+			if err != nil {
+				return nil, status.Errorf(codes.Internal, "failed to get workspace setting: %v", err)
+			}
+			if shortcutRelatedSetting == nil {
+				shortcutRelatedSetting = &storepb.WorkspaceSetting{
+					Key: storepb.WorkspaceSettingKey_WORKSPACE_SETTING_SHORTCUT_RELATED,
+					Value: &storepb.WorkspaceSetting_ShortcutRelated{
+						ShortcutRelated: &storepb.WorkspaceSetting_ShortcutRelatedSetting{},
+					},
+				}
+			}
+			shortcutRelatedSetting.GetShortcutRelated().ShortcutPrefix = request.Setting.ShortcutPrefix
 			if _, err := s.Store.UpsertWorkspaceSetting(ctx, &storepb.WorkspaceSetting{
 				Key: storepb.WorkspaceSettingKey_WORKSPACE_SETTING_SHORTCUT_RELATED,
 				Value: &storepb.WorkspaceSetting_ShortcutRelated{

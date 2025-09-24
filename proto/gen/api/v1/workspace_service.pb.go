@@ -176,6 +176,8 @@ type WorkspaceSetting struct {
 	DisallowUserRegistration bool `protobuf:"varint,6,opt,name=disallow_user_registration,json=disallowUserRegistration,proto3" json:"disallow_user_registration,omitempty"`
 	// Whether to disallow password authentication.
 	DisallowPasswordAuth bool `protobuf:"varint,7,opt,name=disallow_password_auth,json=disallowPasswordAuth,proto3" json:"disallow_password_auth,omitempty"`
+	// The prefix used for shortcut URLs (e.g. "s" for "/s/shortcut-name").
+	ShortcutPrefix       string `protobuf:"bytes,8,opt,name=shortcut_prefix,json=shortcutPrefix,proto3" json:"shortcut_prefix,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -257,6 +259,13 @@ func (x *WorkspaceSetting) GetDisallowPasswordAuth() bool {
 		return x.DisallowPasswordAuth
 	}
 	return false
+}
+
+func (x *WorkspaceSetting) GetShortcutPrefix() string {
+	if x != nil {
+		return x.ShortcutPrefix
+	}
+	return ""
 }
 
 type IdentityProvider struct {

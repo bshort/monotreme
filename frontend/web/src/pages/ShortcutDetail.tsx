@@ -17,6 +17,7 @@ import { absolutifyLink } from "@/helpers/utils";
 import useLoading from "@/hooks/useLoading";
 import useNavigateTo from "@/hooks/useNavigateTo";
 import { useUserStore, useShortcutStore } from "@/stores";
+import { getShortcutUrl } from "@/utils/shortcut";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import { Role } from "@/types/proto/api/v1/user_service";
 
@@ -40,7 +41,7 @@ const ShortcutDetail = () => {
   const loadingState = useLoading(true);
   const creator = userStore.getUserById(shortcut.creatorId);
   const havePermission = currentUser.role === Role.ADMIN || shortcut.creatorId === currentUser.id;
-  const shortcutLink = absolutifyLink(`/s/${shortcut.name}`);
+  const shortcutLink = absolutifyLink(getShortcutUrl(shortcut.name));
 
   useEffect(() => {
     (async () => {

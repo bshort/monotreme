@@ -121,6 +121,7 @@ export interface WorkspaceSetting_SecuritySetting {
 
 export interface WorkspaceSetting_ShortcutRelatedSetting {
   defaultVisibility: Visibility;
+  shortcutPrefix: string;
 }
 
 export interface WorkspaceSetting_IdentityProviderSetting {
@@ -401,13 +402,16 @@ export const WorkspaceSetting_SecuritySetting: MessageFns<WorkspaceSetting_Secur
 };
 
 function createBaseWorkspaceSetting_ShortcutRelatedSetting(): WorkspaceSetting_ShortcutRelatedSetting {
-  return { defaultVisibility: Visibility.VISIBILITY_UNSPECIFIED };
+  return { defaultVisibility: Visibility.VISIBILITY_UNSPECIFIED, shortcutPrefix: "" };
 }
 
 export const WorkspaceSetting_ShortcutRelatedSetting: MessageFns<WorkspaceSetting_ShortcutRelatedSetting> = {
   encode(message: WorkspaceSetting_ShortcutRelatedSetting, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.defaultVisibility !== Visibility.VISIBILITY_UNSPECIFIED) {
       writer.uint32(8).int32(visibilityToNumber(message.defaultVisibility));
+    }
+    if (message.shortcutPrefix !== "") {
+      writer.uint32(18).string(message.shortcutPrefix);
     }
     return writer;
   },
@@ -427,6 +431,14 @@ export const WorkspaceSetting_ShortcutRelatedSetting: MessageFns<WorkspaceSettin
           message.defaultVisibility = visibilityFromJSON(reader.int32());
           continue;
         }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.shortcutPrefix = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -442,6 +454,7 @@ export const WorkspaceSetting_ShortcutRelatedSetting: MessageFns<WorkspaceSettin
   fromPartial(object: DeepPartial<WorkspaceSetting_ShortcutRelatedSetting>): WorkspaceSetting_ShortcutRelatedSetting {
     const message = createBaseWorkspaceSetting_ShortcutRelatedSetting();
     message.defaultVisibility = object.defaultVisibility ?? Visibility.VISIBILITY_UNSPECIFIED;
+    message.shortcutPrefix = object.shortcutPrefix ?? "";
     return message;
   },
 };

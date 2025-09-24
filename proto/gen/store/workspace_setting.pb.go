@@ -358,6 +358,7 @@ func (x *WorkspaceSetting_SecuritySetting) GetDisallowPasswordAuth() bool {
 type WorkspaceSetting_ShortcutRelatedSetting struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	DefaultVisibility Visibility             `protobuf:"varint,1,opt,name=default_visibility,json=defaultVisibility,proto3,enum=monotreme.store.Visibility" json:"default_visibility,omitempty"`
+	ShortcutPrefix    string                 `protobuf:"bytes,2,opt,name=shortcut_prefix,json=shortcutPrefix,proto3" json:"shortcut_prefix,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -397,6 +398,13 @@ func (x *WorkspaceSetting_ShortcutRelatedSetting) GetDefaultVisibility() Visibil
 		return x.DefaultVisibility
 	}
 	return Visibility_VISIBILITY_UNSPECIFIED
+}
+
+func (x *WorkspaceSetting_ShortcutRelatedSetting) GetShortcutPrefix() string {
+	if x != nil {
+		return x.ShortcutPrefix
+	}
+	return ""
 }
 
 type WorkspaceSetting_IdentityProviderSetting struct {

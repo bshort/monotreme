@@ -47,6 +47,8 @@ export interface WorkspaceSetting {
   disallowUserRegistration: boolean;
   /** Whether to disallow password authentication. */
   disallowPasswordAuth: boolean;
+  /** The prefix used for shortcut URLs (e.g. "s" for "/s/shortcut-name"). */
+  shortcutPrefix: string;
 }
 
 export interface IdentityProvider {
@@ -241,6 +243,7 @@ function createBaseWorkspaceSetting(): WorkspaceSetting {
     identityProviders: [],
     disallowUserRegistration: false,
     disallowPasswordAuth: false,
+    shortcutPrefix: "",
   };
 }
 
@@ -266,6 +269,9 @@ export const WorkspaceSetting: MessageFns<WorkspaceSetting> = {
     }
     if (message.disallowPasswordAuth !== false) {
       writer.uint32(56).bool(message.disallowPasswordAuth);
+    }
+    if (message.shortcutPrefix !== "") {
+      writer.uint32(66).string(message.shortcutPrefix);
     }
     return writer;
   },
@@ -333,6 +339,14 @@ export const WorkspaceSetting: MessageFns<WorkspaceSetting> = {
           message.disallowPasswordAuth = reader.bool();
           continue;
         }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.shortcutPrefix = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -354,6 +368,7 @@ export const WorkspaceSetting: MessageFns<WorkspaceSetting> = {
     message.identityProviders = object.identityProviders?.map((e) => IdentityProvider.fromPartial(e)) || [];
     message.disallowUserRegistration = object.disallowUserRegistration ?? false;
     message.disallowPasswordAuth = object.disallowPasswordAuth ?? false;
+    message.shortcutPrefix = object.shortcutPrefix ?? "";
     return message;
   },
 };

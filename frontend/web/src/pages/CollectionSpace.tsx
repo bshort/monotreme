@@ -10,6 +10,7 @@ import useResponsiveWidth from "@/hooks/useResponsiveWidth";
 import { useUserStore, useCollectionStore, useShortcutStore } from "@/stores";
 import { Collection } from "@/types/proto/api/v1/collection_service";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
+import { getShortcutUrl } from "@/utils/shortcut";
 
 const CollectionSpace = () => {
   const params = useParams();
@@ -60,7 +61,7 @@ const CollectionSpace = () => {
     if (sm) {
       setSelectedShortcut(shortcut);
     } else {
-      window.open(`/s/${shortcut.name}`);
+      window.open(getShortcutUrl(shortcut.name));
     }
   };
 

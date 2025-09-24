@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { absolutifyLink } from "@/helpers/utils";
 import { useUserStore, useViewStore } from "@/stores";
+import { getShortcutUrl } from "@/utils/shortcut";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import Icon from "./Icon";
 import LinkFavicon from "./LinkFavicon";
@@ -23,7 +24,7 @@ const ShortcutCard = (props: Props) => {
   const userStore = useUserStore();
   const viewStore = useViewStore();
   const creator = userStore.getUserById(shortcut.creatorId);
-  const shortcutLink = absolutifyLink(`/s/${shortcut.name}`);
+  const shortcutLink = absolutifyLink(getShortcutUrl(shortcut.name));
 
   useEffect(() => {
     userStore.getOrFetchUserById(shortcut.creatorId);

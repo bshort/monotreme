@@ -4,16 +4,7 @@ services:
     container_name: monotreme
     ports:
       - 5231:5231
-    networks:
-      macvlan_network:
-# Keep commented out until docker pulls an IP that's available      
-        ipv4_address: 192.168.1.136
 
     volumes:
       - /Primer/Media/data/monotreme:/var/opt/monotreme
     restart: unless-stopped
-
-networks:
-  macvlan_network:
-    name: MyMacVlan
-    external: true    

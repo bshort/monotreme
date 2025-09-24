@@ -1,5 +1,6 @@
 import { Storage } from "@plasmohq/storage";
 import { apiService } from "./services/api";
+import { getShortcutUrl } from "./utils/shortcut";
 
 const storage = new Storage();
 const urlRegex = /https?:\/\/s\/(.+)/;
@@ -14,7 +15,8 @@ chrome.webRequest.onBeforeRequest.addListener(
       const shortcutName = getShortcutNameFromUrl(param.url);
       if (shortcutName) {
         const instanceUrl = (await storage.getItem<string>("instance_url")) || "";
-        const url = new URL(`/s/${shortcutName}`, instanceUrl);
+        const shortcutPath = await getShortcutUrl(shortcutName);
+        const url = new URL(shortcutPath, instanceUrl);
         return chrome.tabs.update({ url: url.toString() });
       }
     })();

@@ -33,6 +33,7 @@ message WorkspaceSetting {
 
   message ShortcutRelatedSetting {
     Visibility default_visibility = 1;
+    string shortcut_prefix = 2;
   }
 
   message IdentityProviderSetting {

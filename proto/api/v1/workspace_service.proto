@@ -57,6 +57,8 @@ message WorkspaceSetting {
   bool disallow_user_registration = 6;
   // Whether to disallow password authentication.
   bool disallow_password_auth = 7;
+  // The prefix used for shortcut URLs (e.g. "s" for "/s/shortcut-name").
+  string shortcut_prefix = 8;
 }
 
 message IdentityProvider {

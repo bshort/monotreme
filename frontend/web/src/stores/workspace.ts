@@ -21,6 +21,7 @@ interface WorkspaceState {
   fetchWorkspaceSetting: () => Promise<WorkspaceSetting>;
   getSubscription: () => Subscription;
   checkFeatureAvailable: (feature: FeatureType) => boolean;
+  getShortcutPrefix: () => string;
 }
 
 const useWorkspaceStore = create<WorkspaceState>()((set, get) => ({
@@ -39,6 +40,9 @@ const useWorkspaceStore = create<WorkspaceState>()((set, get) => ({
   getSubscription: () => Subscription.fromPartial(get().profile.subscription || {}),
   checkFeatureAvailable: (feature: FeatureType): boolean => {
     return get().profile.subscription?.features.includes(feature) || false;
+  },
+  getShortcutPrefix: (): string => {
+    return get().setting.shortcutPrefix || "s";
   },
 }));
 
