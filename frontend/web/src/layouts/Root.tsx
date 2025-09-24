@@ -5,20 +5,28 @@ import { Outlet } from "react-router-dom";
 import Header from "@/components/Header";
 import Navigator from "@/components/Navigator";
 import useNavigateTo from "@/hooks/useNavigateTo";
-import { useUserStore } from "@/stores";
+import { useUserStore, useWorkspaceStore } from "@/stores";
 
 const Root: React.FC = () => {
   const navigateTo = useNavigateTo();
   const { setMode } = useColorScheme();
   const { i18n } = useTranslation();
   const userStore = useUserStore();
+  const workspaceStore = useWorkspaceStore();
   const currentUser = userStore.getCurrentUser();
   const currentUserSetting = userStore.getCurrentUserSetting();
   const isInitialized = Boolean(currentUser) && Boolean(currentUserSetting);
 
   useEffect(() => {
+    // Wait for workspace profile to be loaded before making decisions
+    if (!workspaceStore.profile.mode) {
+      // Profile not loaded yet, don't redirect
+      return;
+    }
+
+    // Always redirect non-logged-in users to landing page
     if (!currentUser) {
-      navigateTo("/auth", {
+      navigateTo("/landing", {
         replace: true,
       });
       return;
@@ -26,7 +34,7 @@ const Root: React.FC = () => {
 
     // Prepare user setting.
     userStore.fetchUserSetting(currentUser.id);
-  }, []);
+  }, [workspaceStore.profile, currentUser]);
 
   useEffect(() => {
     if (!currentUserSetting) {

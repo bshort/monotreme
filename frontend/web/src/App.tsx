@@ -2,22 +2,12 @@ import { useColorScheme } from "@mui/joy";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useWorkspaceStore } from "@/stores";
-import useNavigateTo from "./hooks/useNavigateTo";
 import { FeatureType } from "./stores/workspace";
 
 function App() {
-  const navigateTo = useNavigateTo();
   const { mode: colorScheme } = useColorScheme();
   const workspaceStore = useWorkspaceStore();
 
-  // Redirect to landing page if no instance owner.
-  useEffect(() => {
-    if (!workspaceStore.profile.owner) {
-      navigateTo("/landing", {
-        replace: true,
-      });
-    }
-  }, [workspaceStore.profile]);
 
   useEffect(() => {
     const styleEl = document.createElement("style");

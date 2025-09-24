@@ -7,7 +7,34 @@ services:
       - 5231:5231
     volumes:
       - monotreme:/var/opt/monotreme
+    depends_on:
+      - monotreme-redis
+    environment:
+      - REDIS_URL=redis://redis:6379
     restart: unless-stopped
+
+  monotreme-redis:
+    image: redis:7-alpine
+    container_name: monotreme-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: monotreme-redisinsight
+    ports:
+      - 5540:5540
+    volumes:
+      - redisinsight:/data
+    restart: unless-stopped
+    depends_on:
+      - monotreme-redis
 
 volumes:
   monotreme:
+  redis:
+  redisinsight:
