@@ -7,6 +7,7 @@ import BookmarkImport from "@/pages/BookmarkImport";
 import CollectionDashboard from "@/pages/CollectionDashboard";
 import CollectionSpace from "@/pages/CollectionSpace";
 import Home from "@/pages/Home";
+import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
 import ShortcutDashboard from "@/pages/ShortcutDashboard";
 import ShortcutDetail from "@/pages/ShortcutDetail";
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/landing",
+        element: <Landing />,
+      },
       {
         path: "/auth",
         children: [

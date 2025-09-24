@@ -10,10 +10,10 @@ function App() {
   const { mode: colorScheme } = useColorScheme();
   const workspaceStore = useWorkspaceStore();
 
-  // Redirect to sign up page if no instance owner.
+  // Redirect to landing page if no instance owner.
   useEffect(() => {
     if (!workspaceStore.profile.owner) {
-      navigateTo("/auth/signup", {
+      navigateTo("/landing", {
         replace: true,
       });
     }

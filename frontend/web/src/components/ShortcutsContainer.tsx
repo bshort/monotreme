@@ -24,7 +24,7 @@ const ShortcutsContainer: React.FC<Props> = (props: Props) => {
   }
 
   const handleShortcutClick = (shortcut: Shortcut) => {
-    navigateTo(`/shortcut/${shortcut.id}`);
+    window.open(shortcut.link, '_blank');
   };
 
   let gridClasses = "w-full grid grid-cols-1 gap-3 sm:gap-4";
