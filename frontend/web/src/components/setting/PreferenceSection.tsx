@@ -1,15 +1,20 @@
-import { Option, Select } from "@mui/joy";
+import { Option, Select, Switch } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import BetaBadge from "@/components/BetaBadge";
 import { useUserStore } from "@/stores";
-import { UserSetting } from "@/types/proto/api/v1/user_setting_service";
+import { User } from "@/types/proto/api/v1/user_service";
+import { Visibility } from "@/types/proto/api/v1/common";
 
 const PreferenceSection: React.FC = () => {
   const { t } = useTranslation();
   const userStore = useUserStore();
-  const userSetting = userStore.getCurrentUserSetting();
-  const language = userSetting.general?.locale || "EN";
-  const colorTheme = userSetting.general?.colorTheme || "SYSTEM";
+  const currentUser = userStore.getCurrentUser();
+  const language = currentUser.locale || "EN";
+  const colorTheme = currentUser.colorTheme || "SYSTEM";
+  const defaultVisibility = currentUser.defaultVisibility || "WORKSPACE";
+  const autoGenerateTitle = currentUser.autoGenerateTitle ?? true;
+  const autoGenerateIcon = currentUser.autoGenerateIcon ?? true;
+  const autoGenerateName = currentUser.autoGenerateName ?? true;
 
   const languageOptions = [
     {
@@ -57,30 +62,95 @@ const PreferenceSection: React.FC = () => {
     },
   ];
 
+  const visibilityOptions = [
+    {
+      value: "PRIVATE",
+      label: "Private",
+    },
+    {
+      value: "WORKSPACE",
+      label: "Workspace",
+    },
+    {
+      value: "PUBLIC",
+      label: "Public",
+    },
+  ];
+
   const handleSelectLanguage = async (locale: string) => {
-    await userStore.updateUserSetting(
+    await userStore.patchUser(
       {
-        ...userSetting,
-        general: {
-          ...userSetting.general,
-          locale: locale,
-        },
-      } as UserSetting,
-      ["general"],
+        ...currentUser,
+        locale: locale,
+      },
+      ["locale"],
     );
   };
 
   const handleSelectColorTheme = async (colorTheme: string) => {
-    await userStore.updateUserSetting(
+    await userStore.patchUser(
       {
-        ...userSetting,
-        general: {
-          ...userSetting.general,
-          colorTheme: colorTheme,
-        },
-      } as UserSetting,
-      ["general"],
+        ...currentUser,
+        colorTheme: colorTheme,
+      },
+      ["colorTheme"],
     );
+  };
+
+  const handleSelectDefaultVisibility = async (visibility: string) => {
+    try {
+      await userStore.patchUser(
+        {
+          ...currentUser,
+          defaultVisibility: visibility,
+        },
+        ["defaultVisibility"],
+      );
+    } catch (error) {
+      console.error('Failed to update default visibility setting:', error);
+    }
+  };
+
+  const handleToggleAutoGenerateTitle = async (enabled: boolean) => {
+    try {
+      await userStore.patchUser(
+        {
+          ...currentUser,
+          autoGenerateTitle: enabled,
+        },
+        ["autoGenerateTitle"],
+      );
+    } catch (error) {
+      console.error('Failed to update auto-generate title setting:', error);
+    }
+  };
+
+  const handleToggleAutoGenerateIcon = async (enabled: boolean) => {
+    try {
+      await userStore.patchUser(
+        {
+          ...currentUser,
+          autoGenerateIcon: enabled,
+        },
+        ["autoGenerateIcon"],
+      );
+    } catch (error) {
+      console.error('Failed to update auto-generate icon setting:', error);
+    }
+  };
+
+  const handleToggleAutoGenerateName = async (enabled: boolean) => {
+    try {
+      await userStore.patchUser(
+        {
+          ...currentUser,
+          autoGenerateName: enabled,
+        },
+        ["autoGenerateName"],
+      );
+    } catch (error) {
+      console.error('Failed to update auto-generate name setting:', error);
+    }
   };
 
   return (
@@ -115,6 +185,57 @@ const PreferenceSection: React.FC = () => {
               );
             })}
           </Select>
+        </div>
+
+        {/* Shortcut Creation Preferences */}
+        <div className="w-full border-t pt-4 mt-2 dark:border-zinc-700">
+          <h4 className="text-lg font-semibold mb-3 dark:text-gray-300">Shortcut Creation Preferences</h4>
+
+          <div className="w-full flex flex-row justify-between items-center mb-3">
+            <span className="dark:text-gray-400">Default Visibility</span>
+            <Select value={defaultVisibility} onChange={(_, value) => handleSelectDefaultVisibility(value as string)}>
+              {visibilityOptions.map((option) => {
+                return (
+                  <Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Option>
+                );
+              })}
+            </Select>
+          </div>
+
+          <div className="w-full flex flex-row justify-between items-center mb-3">
+            <div className="flex flex-col">
+              <span className="dark:text-gray-400">Auto-generate Title</span>
+              <span className="text-sm text-gray-500 dark:text-gray-600">Automatically fetch page title from URL</span>
+            </div>
+            <Switch
+              checked={autoGenerateTitle}
+              onChange={(event) => handleToggleAutoGenerateTitle(event.target.checked)}
+            />
+          </div>
+
+          <div className="w-full flex flex-row justify-between items-center mb-3">
+            <div className="flex flex-col">
+              <span className="dark:text-gray-400">Auto-generate Icon</span>
+              <span className="text-sm text-gray-500 dark:text-gray-600">Automatically fetch favicon from website</span>
+            </div>
+            <Switch
+              checked={autoGenerateIcon}
+              onChange={(event) => handleToggleAutoGenerateIcon(event.target.checked)}
+            />
+          </div>
+
+          <div className="w-full flex flex-row justify-between items-center">
+            <div className="flex flex-col">
+              <span className="dark:text-gray-400">Auto-generate Shortcut</span>
+              <span className="text-sm text-gray-500 dark:text-gray-600">Automatically create URL-friendly shortcut name from title</span>
+            </div>
+            <Switch
+              checked={autoGenerateName}
+              onChange={(event) => handleToggleAutoGenerateName(event.target.checked)}
+            />
+          </div>
         </div>
       </div>
     </div>

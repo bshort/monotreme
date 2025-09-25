@@ -61,6 +61,13 @@ export interface User {
   email: string;
   nickname: string;
   password: string;
+  /** Personal preferences */
+  locale: string;
+  colorTheme: string;
+  defaultVisibility: string;
+  autoGenerateTitle: boolean;
+  autoGenerateIcon: boolean;
+  autoGenerateName: boolean;
 }
 
 export interface ListUsersRequest {
@@ -132,6 +139,12 @@ function createBaseUser(): User {
     email: "",
     nickname: "",
     password: "",
+    locale: "",
+    colorTheme: "",
+    defaultVisibility: "",
+    autoGenerateTitle: false,
+    autoGenerateIcon: false,
+    autoGenerateName: false,
   };
 }
 
@@ -160,6 +173,24 @@ export const User: MessageFns<User> = {
     }
     if (message.password !== "") {
       writer.uint32(74).string(message.password);
+    }
+    if (message.locale !== "") {
+      writer.uint32(82).string(message.locale);
+    }
+    if (message.colorTheme !== "") {
+      writer.uint32(90).string(message.colorTheme);
+    }
+    if (message.defaultVisibility !== "") {
+      writer.uint32(98).string(message.defaultVisibility);
+    }
+    if (message.autoGenerateTitle !== false) {
+      writer.uint32(104).bool(message.autoGenerateTitle);
+    }
+    if (message.autoGenerateIcon !== false) {
+      writer.uint32(112).bool(message.autoGenerateIcon);
+    }
+    if (message.autoGenerateName !== false) {
+      writer.uint32(120).bool(message.autoGenerateName);
     }
     return writer;
   },
@@ -235,6 +266,54 @@ export const User: MessageFns<User> = {
           message.password = reader.string();
           continue;
         }
+        case 10: {
+          if (tag !== 82) {
+            break;
+          }
+
+          message.locale = reader.string();
+          continue;
+        }
+        case 11: {
+          if (tag !== 90) {
+            break;
+          }
+
+          message.colorTheme = reader.string();
+          continue;
+        }
+        case 12: {
+          if (tag !== 98) {
+            break;
+          }
+
+          message.defaultVisibility = reader.string();
+          continue;
+        }
+        case 13: {
+          if (tag !== 104) {
+            break;
+          }
+
+          message.autoGenerateTitle = reader.bool();
+          continue;
+        }
+        case 14: {
+          if (tag !== 112) {
+            break;
+          }
+
+          message.autoGenerateIcon = reader.bool();
+          continue;
+        }
+        case 15: {
+          if (tag !== 120) {
+            break;
+          }
+
+          message.autoGenerateName = reader.bool();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -257,6 +336,12 @@ export const User: MessageFns<User> = {
     message.email = object.email ?? "";
     message.nickname = object.nickname ?? "";
     message.password = object.password ?? "";
+    message.locale = object.locale ?? "";
+    message.colorTheme = object.colorTheme ?? "";
+    message.defaultVisibility = object.defaultVisibility ?? "";
+    message.autoGenerateTitle = object.autoGenerateTitle ?? false;
+    message.autoGenerateIcon = object.autoGenerateIcon ?? false;
+    message.autoGenerateName = object.autoGenerateName ?? false;
     return message;
   },
 };

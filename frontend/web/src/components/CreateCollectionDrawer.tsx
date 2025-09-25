@@ -9,6 +9,7 @@ import { Collection } from "@/types/proto/api/v1/collection_service";
 import { Visibility } from "@/types/proto/api/v1/common";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import Icon from "./Icon";
+import IconUpload from "./IconUpload";
 import ShortcutView from "./ShortcutView";
 
 interface Props {
@@ -30,6 +31,7 @@ const CreateCollectionDrawer: React.FC<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
     collectionCreate: Collection.fromPartial({
       visibility: Visibility.WORKSPACE,
+      customIcon: "",
     }),
   });
   const [selectedShortcuts, setSelectedShortcuts] = useState<Shortcut[]>([]);
@@ -115,6 +117,14 @@ const CreateCollectionDrawer: React.FC<Props> = (props: Props) => {
     });
   };
 
+  const handleCustomIconChange = (iconData: string) => {
+    setPartialState({
+      collectionCreate: Object.assign(state.collectionCreate, {
+        customIcon: iconData,
+      }),
+    });
+  };
+
   const handleSaveBtnClick = async () => {
     if (!state.collectionCreate.name || !state.collectionCreate.title) {
       toast.error("Please fill in required fields.");
@@ -134,9 +144,10 @@ const CreateCollectionDrawer: React.FC<Props> = (props: Props) => {
             title: state.collectionCreate.title,
             description: state.collectionCreate.description,
             visibility: state.collectionCreate.visibility,
+            customIcon: state.collectionCreate.customIcon,
             shortcutIds: selectedShortcuts.map((shortcut) => shortcut.id),
           },
-          ["name", "title", "description", "visibility", "shortcut_ids"],
+          ["name", "title", "description", "visibility", "custom_icon", "shortcut_ids"],
         );
       } else {
         await collectionStore.createCollection({
@@ -200,6 +211,17 @@ const CreateCollectionDrawer: React.FC<Props> = (props: Props) => {
                 onChange={handleDescriptionInputChange}
               />
             </div>
+          </div>
+          <div className="w-full flex flex-col justify-start items-start mb-3">
+            <span className="mb-2">Custom Icon</span>
+            <IconUpload
+              value={state.collectionCreate.customIcon}
+              onChange={handleCustomIconChange}
+              className="w-16 h-16"
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Upload a custom icon (PNG, JPG, ICO) for this collection
+            </p>
           </div>
           <div className="w-full flex flex-col justify-start items-start mb-3">
             <Checkbox

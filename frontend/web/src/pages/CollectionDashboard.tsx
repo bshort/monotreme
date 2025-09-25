@@ -1,4 +1,4 @@
-import { Button, Input } from "@mui/joy";
+import { Button, Input, Select, Option } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useLocalStorage from "react-use/lib/useLocalStorage";
@@ -8,10 +8,13 @@ import FilterView from "@/components/FilterView";
 import Icon from "@/components/Icon";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useCollectionStore } from "@/stores";
+import { Collection } from "@/types/proto/api/v1/collection_service";
 
 interface State {
   showCreateCollectionDrawer: boolean;
 }
+
+type SortOption = "date" | "name" | "shortcuts";
 
 const CollectionDashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -23,13 +26,31 @@ const CollectionDashboard: React.FC = () => {
     showCreateCollectionDrawer: false,
   });
   const [search, setSearch] = useState<string>("");
-  const filteredCollections = collectionStore.getCollectionList().filter((collection) => {
-    return (
-      collection.name.toLowerCase().includes(search.toLowerCase()) ||
-      collection.title.toLowerCase().includes(search.toLowerCase()) ||
-      collection.description.toLowerCase().includes(search.toLowerCase())
-    );
-  });
+  const [sortBy, setSortBy] = useState<SortOption>("date");
+  const sortCollections = (collections: Collection[], sortBy: SortOption): Collection[] => {
+    return [...collections].sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+        case "shortcuts":
+          return b.shortcutIds.length - a.shortcutIds.length;
+        case "date":
+        default:
+          return b.createdTs - a.createdTs;
+      }
+    });
+  };
+
+  const filteredAndSortedCollections = sortCollections(
+    collectionStore.getCollectionList().filter((collection) => {
+      return (
+        collection.name.toLowerCase().includes(search.toLowerCase()) ||
+        collection.title.toLowerCase().includes(search.toLowerCase()) ||
+        collection.description.toLowerCase().includes(search.toLowerCase())
+      );
+    }),
+    sortBy
+  );
 
   useEffect(() => {
     setLastVisited("/collections");
@@ -49,9 +70,9 @@ const CollectionDashboard: React.FC = () => {
     <>
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
         <div className="w-full flex flex-row justify-between items-center mb-4">
-          <div>
+          <div className="flex flex-row items-center gap-2">
             <Input
-              className="w-32 mr-2"
+              className="w-32"
               type="text"
               size="sm"
               placeholder={t("common.search")}
@@ -59,6 +80,16 @@ const CollectionDashboard: React.FC = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            <Select
+              size="sm"
+              value={sortBy}
+              onChange={(_, value) => setSortBy(value as SortOption)}
+              startDecorator={<Icon.ArrowUpDown className="w-4 h-auto" />}
+            >
+              <Option value="date">By Date</Option>
+              <Option value="name">By Name</Option>
+              <Option value="shortcuts">By Shortcuts</Option>
+            </Select>
           </div>
           <div className="flex flex-row justify-start items-center">
             <Button className="hover:shadow" variant="soft" size="sm" onClick={() => setShowCreateCollectionDrawer(true)}>
@@ -73,7 +104,7 @@ const CollectionDashboard: React.FC = () => {
             <Icon.Loader className="mr-2 w-5 h-auto animate-spin" />
             {t("common.loading")}
           </div>
-        ) : filteredCollections.length === 0 ? (
+        ) : filteredAndSortedCollections.length === 0 ? (
           <div className="py-16 w-full flex flex-col justify-center items-center text-gray-400">
             <Icon.PackageOpen size={64} strokeWidth={1} />
             <p className="mt-2">No collections found.</p>
@@ -88,7 +119,7 @@ const CollectionDashboard: React.FC = () => {
           </div>
         ) : (
           <div className="w-full flex flex-col justify-start items-start gap-3">
-            {filteredCollections.map((collection) => {
+            {filteredAndSortedCollections.map((collection) => {
               return <CollectionView key={collection.id} collection={collection} />;
             })}
           </div>

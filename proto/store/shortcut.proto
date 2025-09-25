@@ -30,6 +30,8 @@ message Shortcut {
   Visibility visibility = 11;
 
   OpenGraphMetadata og_metadata = 12;
+
+  string custom_icon = 13;
 }
 
 message OpenGraphMetadata {

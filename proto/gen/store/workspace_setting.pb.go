@@ -455,7 +455,7 @@ var File_store_workspace_setting_proto protoreflect.FileDescriptor
 
 const file_store_workspace_setting_proto_rawDesc = "" +
 	"\n" +
-	"\x1dstore/workspace_setting.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\x1a\x0fstore/idp.proto\"\xed\a\n" +
+	"\x1dstore/workspace_setting.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\x1a\x0fstore/idp.proto\"\x97\b\n" +
 	"\x10WorkspaceSetting\x126\n" +
 	"\x03key\x18\x01 \x01(\x0e2$.monotreme.store.WorkspaceSettingKeyR\x03key\x12\x10\n" +
 	"\x03raw\x18\x02 \x01(\tR\x03raw\x12L\n" +
@@ -472,9 +472,10 @@ const file_store_workspace_setting_proto_rawDesc = "" +
 	"\fcustom_style\x18\x05 \x01(\tR\vcustomStyle\x1a\x85\x01\n" +
 	"\x0fSecuritySetting\x12<\n" +
 	"\x1adisallow_user_registration\x18\x01 \x01(\bR\x18disallowUserRegistration\x124\n" +
-	"\x16disallow_password_auth\x18\x02 \x01(\bR\x14disallowPasswordAuth\x1ad\n" +
+	"\x16disallow_password_auth\x18\x02 \x01(\bR\x14disallowPasswordAuth\x1a\x8d\x01\n" +
 	"\x16ShortcutRelatedSetting\x12J\n" +
-	"\x12default_visibility\x18\x01 \x01(\x0e2\x1b.monotreme.store.VisibilityR\x11defaultVisibility\x1ak\n" +
+	"\x12default_visibility\x18\x01 \x01(\x0e2\x1b.monotreme.store.VisibilityR\x11defaultVisibility\x12'\n" +
+	"\x0fshortcut_prefix\x18\x02 \x01(\tR\x0eshortcutPrefix\x1ak\n" +
 	"\x17IdentityProviderSetting\x12P\n" +
 	"\x12identity_providers\x18\x01 \x03(\v2!.monotreme.store.IdentityProviderR\x11identityProvidersB\a\n" +
 	"\x05value*\xe3\x02\n" +

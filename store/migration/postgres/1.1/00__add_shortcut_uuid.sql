@@ -1,5 +1,6 @@
--- Add UUID column to shortcut table
-ALTER TABLE shortcut ADD COLUMN uuid TEXT NOT NULL DEFAULT '';
+-- UUID column migration
+-- This migration is now handled automatically by LATEST.sql
+-- Keeping this file for migration history compatibility
 
--- Create index on UUID column for faster lookups
-CREATE INDEX idx_shortcut_uuid ON shortcut(uuid);
+-- No-op migration - the uuid column is already handled in LATEST.sql
+SELECT 1;

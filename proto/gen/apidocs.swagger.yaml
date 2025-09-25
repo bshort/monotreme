@@ -681,6 +681,19 @@ paths:
                 type: string
               password:
                 type: string
+              locale:
+                type: string
+                title: Personal preferences
+              colorTheme:
+                type: string
+              defaultVisibility:
+                type: string
+              autoGenerateTitle:
+                type: boolean
+              autoGenerateIcon:
+                type: boolean
+              autoGenerateName:
+                type: boolean
       tags:
         - UserService
   /api/v1/workspace/profile:
@@ -949,6 +962,19 @@ definitions:
         type: string
       colorTheme:
         type: string
+      defaultVisibility:
+        type: string
+        description: '"PUBLIC" or "PRIVATE" or "WORKSPACE"'
+        title: Shortcut creation preferences
+      autoGenerateTitle:
+        type: boolean
+        title: Whether to auto-fetch title from URL
+      autoGenerateIcon:
+        type: boolean
+        title: Whether to auto-fetch favicon
+      autoGenerateName:
+        type: boolean
+        title: Whether to auto-generate URL-friendly name
   apiv1Visibility:
     type: string
     enum:
@@ -984,6 +1010,9 @@ definitions:
       disallowPasswordAuth:
         type: boolean
         description: Whether to disallow password authentication.
+      shortcutPrefix:
+        type: string
+        description: The prefix used for shortcut URLs (e.g. "s" for "/s/shortcut-name").
   protobufAny:
     type: object
     properties:
@@ -1175,6 +1204,19 @@ definitions:
         type: string
       password:
         type: string
+      locale:
+        type: string
+        title: Personal preferences
+      colorTheme:
+        type: string
+      defaultVisibility:
+        type: string
+      autoGenerateTitle:
+        type: boolean
+      autoGenerateIcon:
+        type: boolean
+      autoGenerateName:
+        type: boolean
   v1UserAccessToken:
     type: object
     properties:

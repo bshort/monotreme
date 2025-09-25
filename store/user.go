@@ -29,6 +29,14 @@ type User struct {
 	Nickname     string
 	PasswordHash string
 	Role         Role
+
+	// Personal preferences
+	Locale            string
+	ColorTheme        string
+	DefaultVisibility string
+	AutoGenerateTitle bool
+	AutoGenerateIcon  bool
+	AutoGenerateName  bool
 }
 
 type UpdateUser struct {
@@ -39,6 +47,14 @@ type UpdateUser struct {
 	Nickname     *string
 	PasswordHash *string
 	Role         *Role
+
+	// Personal preferences
+	Locale            *string
+	ColorTheme        *string
+	DefaultVisibility *string
+	AutoGenerateTitle *bool
+	AutoGenerateIcon  *bool
+	AutoGenerateName  *bool
 }
 
 type FindUser struct {

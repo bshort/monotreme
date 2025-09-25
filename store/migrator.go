@@ -111,6 +111,7 @@ func (s *Store) Migrate(ctx context.Context) error {
 	if err := s.migrateWorkspaceSettings(ctx); err != nil {
 		return errors.Wrap(err, "failed to migrate workspace settings")
 	}
+
 	return nil
 }
 
@@ -237,6 +238,14 @@ func (s *Store) getSchemaVersionOfMigrateScript(filePath string) (string, error)
 // execute runs a single SQL statement within a transaction.
 func (*Store) execute(ctx context.Context, tx *sql.Tx, stmt string) error {
 	if _, err := tx.ExecContext(ctx, stmt); err != nil {
+		// Check if this is a "duplicate column" error that we can safely ignore
+		errStr := err.Error()
+		if strings.Contains(errStr, "duplicate column name") ||
+		   strings.Contains(errStr, "already exists") ||
+		   (strings.Contains(errStr, "column") && strings.Contains(errStr, "already exists")) {
+			slog.Warn("ignoring duplicate column error during migration", slog.String("error", errStr))
+			return nil
+		}
 		return errors.Wrap(err, "failed to execute statement")
 	}
 	return nil

@@ -192,11 +192,16 @@ func (x *UpdateUserSettingRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
 }
 
 type UserSetting_GeneralSetting struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Locale        string                 `protobuf:"bytes,1,opt,name=locale,proto3" json:"locale,omitempty"`
-	ColorTheme    string                 `protobuf:"bytes,2,opt,name=color_theme,json=colorTheme,proto3" json:"color_theme,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Locale     string                 `protobuf:"bytes,1,opt,name=locale,proto3" json:"locale,omitempty"`
+	ColorTheme string                 `protobuf:"bytes,2,opt,name=color_theme,json=colorTheme,proto3" json:"color_theme,omitempty"`
+	// Shortcut creation preferences
+	DefaultVisibility string `protobuf:"bytes,3,opt,name=default_visibility,json=defaultVisibility,proto3" json:"default_visibility,omitempty"`    // "PUBLIC" or "PRIVATE" or "WORKSPACE"
+	AutoGenerateTitle bool   `protobuf:"varint,4,opt,name=auto_generate_title,json=autoGenerateTitle,proto3" json:"auto_generate_title,omitempty"` // Whether to auto-fetch title from URL
+	AutoGenerateIcon  bool   `protobuf:"varint,5,opt,name=auto_generate_icon,json=autoGenerateIcon,proto3" json:"auto_generate_icon,omitempty"`    // Whether to auto-fetch favicon
+	AutoGenerateName  bool   `protobuf:"varint,6,opt,name=auto_generate_name,json=autoGenerateName,proto3" json:"auto_generate_name,omitempty"`    // Whether to auto-generate URL-friendly name
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *UserSetting_GeneralSetting) Reset() {
@@ -241,6 +246,34 @@ func (x *UserSetting_GeneralSetting) GetColorTheme() string {
 		return x.ColorTheme
 	}
 	return ""
+}
+
+func (x *UserSetting_GeneralSetting) GetDefaultVisibility() string {
+	if x != nil {
+		return x.DefaultVisibility
+	}
+	return ""
+}
+
+func (x *UserSetting_GeneralSetting) GetAutoGenerateTitle() bool {
+	if x != nil {
+		return x.AutoGenerateTitle
+	}
+	return false
+}
+
+func (x *UserSetting_GeneralSetting) GetAutoGenerateIcon() bool {
+	if x != nil {
+		return x.AutoGenerateIcon
+	}
+	return false
+}
+
+func (x *UserSetting_GeneralSetting) GetAutoGenerateName() bool {
+	if x != nil {
+		return x.AutoGenerateName
+	}
+	return false
 }
 
 type UserSetting_AccessTokensSetting struct {
@@ -345,15 +378,19 @@ var File_api_v1_user_setting_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_user_setting_service_proto_rawDesc = "" +
 	"\n" +
-	"!api/v1/user_setting_service.proto\x12\x10monotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a google/protobuf/field_mask.proto\"\xe1\x03\n" +
+	"!api/v1/user_setting_service.proto\x12\x10monotreme.api.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a google/protobuf/field_mask.proto\"\x9d\x05\n" +
 	"\vUserSetting\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x05R\x06userId\x12F\n" +
 	"\ageneral\x18\x02 \x01(\v2,.monotreme.api.v1.UserSetting.GeneralSettingR\ageneral\x12V\n" +
-	"\raccess_tokens\x18\x03 \x01(\v21.monotreme.api.v1.UserSetting.AccessTokensSettingR\faccessTokens\x1aI\n" +
+	"\raccess_tokens\x18\x03 \x01(\v21.monotreme.api.v1.UserSetting.AccessTokensSettingR\faccessTokens\x1a\x84\x02\n" +
 	"\x0eGeneralSetting\x12\x16\n" +
 	"\x06locale\x18\x01 \x01(\tR\x06locale\x12\x1f\n" +
 	"\vcolor_theme\x18\x02 \x01(\tR\n" +
-	"colorTheme\x1a\xcd\x01\n" +
+	"colorTheme\x12-\n" +
+	"\x12default_visibility\x18\x03 \x01(\tR\x11defaultVisibility\x12.\n" +
+	"\x13auto_generate_title\x18\x04 \x01(\bR\x11autoGenerateTitle\x12,\n" +
+	"\x12auto_generate_icon\x18\x05 \x01(\bR\x10autoGenerateIcon\x12,\n" +
+	"\x12auto_generate_name\x18\x06 \x01(\bR\x10autoGenerateName\x1a\xcd\x01\n" +
 	"\x13AccessTokensSetting\x12b\n" +
 	"\raccess_tokens\x18\x01 \x03(\v2=.monotreme.api.v1.UserSetting.AccessTokensSetting.AccessTokenR\faccessTokens\x1aR\n" +
 	"\vAccessToken\x12!\n" +

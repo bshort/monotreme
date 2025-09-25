@@ -1,0 +1,7 @@
+-- Add user preference columns
+ALTER TABLE user ADD COLUMN locale TEXT NOT NULL DEFAULT 'EN';
+ALTER TABLE user ADD COLUMN color_theme TEXT NOT NULL DEFAULT 'SYSTEM';
+ALTER TABLE user ADD COLUMN default_visibility TEXT NOT NULL DEFAULT 'WORKSPACE';
+ALTER TABLE user ADD COLUMN auto_generate_title BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE user ADD COLUMN auto_generate_icon BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE user ADD COLUMN auto_generate_name BOOLEAN NOT NULL DEFAULT true;

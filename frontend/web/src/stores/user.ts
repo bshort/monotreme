@@ -34,7 +34,7 @@ const useUserStore = create<UserState>()((set, get) => ({
     users.forEach((user) => {
       userMap[user.id] = user;
     });
-    set(userMap);
+    set({ userMapById: userMap });
     return users;
   },
   fetchCurrentUser: async () => {
@@ -57,7 +57,7 @@ const useUserStore = create<UserState>()((set, get) => ({
       id: id,
     });
     userMap[id] = user;
-    set(userMap);
+    set({ userMapById: userMap });
     return user;
   },
   createUser: async (userCreate: Partial<User>) => {
@@ -66,7 +66,7 @@ const useUserStore = create<UserState>()((set, get) => ({
     });
     const userMap = get().userMapById;
     userMap[user.id] = user;
-    set(userMap);
+    set({ userMapById: userMap });
     return user;
   },
   patchUser: async (userPatch: Partial<User>, updateMask: string[]) => {
@@ -76,7 +76,7 @@ const useUserStore = create<UserState>()((set, get) => ({
     });
     const userMap = get().userMapById;
     userMap[user.id] = user;
-    set(userMap);
+    set({ userMapById: userMap });
   },
   deleteUser: async (userId: number) => {
     await userServiceClient.deleteUser({
@@ -84,7 +84,7 @@ const useUserStore = create<UserState>()((set, get) => ({
     });
     const userMap = get().userMapById;
     delete userMap[userId];
-    set(userMap);
+    set({ userMapById: userMap });
   },
   getUserById: (id: number) => {
     const userMap = get().userMapById;
@@ -106,7 +106,7 @@ const useUserStore = create<UserState>()((set, get) => ({
     });
     const userSettingMap = get().userSettingMapById;
     userSettingMap[userId] = userSetting;
-    set(userSettingMap);
+    set({ userSettingMapById: userSettingMap });
     return userSetting;
   },
   updateUserSetting: async (userSetting: UserSetting, updateMask: string[]) => {
@@ -118,7 +118,7 @@ const useUserStore = create<UserState>()((set, get) => ({
     });
     const userSettingMap = get().userSettingMapById;
     userSettingMap[userId] = updatedUserSetting;
-    set(userSettingMap);
+    set({ userSettingMapById: userSettingMap });
     return updatedUserSetting;
   },
   getCurrentUserSetting: () => {

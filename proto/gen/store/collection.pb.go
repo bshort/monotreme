@@ -32,6 +32,7 @@ type Collection struct {
 	Description   string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
 	ShortcutIds   []int32                `protobuf:"varint,9,rep,packed,name=shortcut_ids,json=shortcutIds,proto3" json:"shortcut_ids,omitempty"`
 	Visibility    Visibility             `protobuf:"varint,10,opt,name=visibility,proto3,enum=monotreme.store.Visibility" json:"visibility,omitempty"`
+	CustomIcon    string                 `protobuf:"bytes,11,opt,name=custom_icon,json=customIcon,proto3" json:"custom_icon,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -129,11 +130,18 @@ func (x *Collection) GetVisibility() Visibility {
 	return Visibility_VISIBILITY_UNSPECIFIED
 }
 
+func (x *Collection) GetCustomIcon() string {
+	if x != nil {
+		return x.CustomIcon
+	}
+	return ""
+}
+
 var File_store_collection_proto protoreflect.FileDescriptor
 
 const file_store_collection_proto_rawDesc = "" +
 	"\n" +
-	"\x16store/collection.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\xa5\x02\n" +
+	"\x16store/collection.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\xc6\x02\n" +
 	"\n" +
 	"Collection\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x1d\n" +
@@ -150,7 +158,9 @@ const file_store_collection_proto_rawDesc = "" +
 	"\n" +
 	"visibility\x18\n" +
 	" \x01(\x0e2\x1b.monotreme.store.VisibilityR\n" +
-	"visibilityB\xb0\x01\n" +
+	"visibility\x12\x1f\n" +
+	"\vcustom_icon\x18\v \x01(\tR\n" +
+	"customIconB\xb0\x01\n" +
 	"\x13com.monotreme.storeB\x0fCollectionProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (

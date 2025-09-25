@@ -58,10 +58,16 @@ func (s *APIV1Service) CreateUser(ctx context.Context, request *v1pb.CreateUserR
 	}
 
 	user, err := s.Store.CreateUser(ctx, &store.User{
-		Email:        request.User.Email,
-		Nickname:     request.User.Nickname,
-		Role:         store.RoleUser,
-		PasswordHash: string(passwordHash),
+		Email:             request.User.Email,
+		Nickname:          request.User.Nickname,
+		Role:              store.RoleUser,
+		PasswordHash:      string(passwordHash),
+		Locale:            "EN",
+		ColorTheme:        "SYSTEM",
+		DefaultVisibility: "WORKSPACE",
+		AutoGenerateTitle: true,
+		AutoGenerateIcon:  true,
+		AutoGenerateName:  true,
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create user: %v", err)
@@ -89,6 +95,18 @@ func (s *APIV1Service) UpdateUser(ctx context.Context, request *v1pb.UpdateUserR
 			userUpdate.Email = &request.User.Email
 		} else if path == "nickname" {
 			userUpdate.Nickname = &request.User.Nickname
+		} else if path == "locale" {
+			userUpdate.Locale = &request.User.Locale
+		} else if path == "colorTheme" {
+			userUpdate.ColorTheme = &request.User.ColorTheme
+		} else if path == "defaultVisibility" {
+			userUpdate.DefaultVisibility = &request.User.DefaultVisibility
+		} else if path == "autoGenerateTitle" {
+			userUpdate.AutoGenerateTitle = &request.User.AutoGenerateTitle
+		} else if path == "autoGenerateIcon" {
+			userUpdate.AutoGenerateIcon = &request.User.AutoGenerateIcon
+		} else if path == "autoGenerateName" {
+			userUpdate.AutoGenerateName = &request.User.AutoGenerateName
 		}
 	}
 	user, err = s.Store.UpdateUser(ctx, userUpdate)
@@ -274,13 +292,19 @@ func (s *APIV1Service) UpsertAccessTokenToStore(ctx context.Context, user *store
 
 func convertUserFromStore(user *store.User) *v1pb.User {
 	return &v1pb.User{
-		Id:          int32(user.ID),
-		State:       convertStateFromRowStatus(user.RowStatus),
-		CreatedTime: timestamppb.New(time.Unix(user.CreatedTs, 0)),
-		UpdatedTime: timestamppb.New(time.Unix(user.UpdatedTs, 0)),
-		Role:        convertUserRoleFromStore(user.Role),
-		Email:       user.Email,
-		Nickname:    user.Nickname,
+		Id:                int32(user.ID),
+		State:             convertStateFromRowStatus(user.RowStatus),
+		CreatedTime:       timestamppb.New(time.Unix(user.CreatedTs, 0)),
+		UpdatedTime:       timestamppb.New(time.Unix(user.UpdatedTs, 0)),
+		Role:              convertUserRoleFromStore(user.Role),
+		Email:             user.Email,
+		Nickname:          user.Nickname,
+		Locale:            user.Locale,
+		ColorTheme:        user.ColorTheme,
+		DefaultVisibility: user.DefaultVisibility,
+		AutoGenerateTitle: user.AutoGenerateTitle,
+		AutoGenerateIcon:  user.AutoGenerateIcon,
+		AutoGenerateName:  user.AutoGenerateName,
 	}
 }
 

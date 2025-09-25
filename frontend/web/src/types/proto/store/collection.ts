@@ -20,6 +20,7 @@ export interface Collection {
   description: string;
   shortcutIds: number[];
   visibility: Visibility;
+  customIcon: string;
 }
 
 function createBaseCollection(): Collection {
@@ -33,6 +34,7 @@ function createBaseCollection(): Collection {
     description: "",
     shortcutIds: [],
     visibility: Visibility.VISIBILITY_UNSPECIFIED,
+    customIcon: "",
   };
 }
 
@@ -66,6 +68,9 @@ export const Collection: MessageFns<Collection> = {
     writer.join();
     if (message.visibility !== Visibility.VISIBILITY_UNSPECIFIED) {
       writer.uint32(80).int32(visibilityToNumber(message.visibility));
+    }
+    if (message.customIcon !== "") {
+      writer.uint32(90).string(message.customIcon);
     }
     return writer;
   },
@@ -159,6 +164,14 @@ export const Collection: MessageFns<Collection> = {
           message.visibility = visibilityFromJSON(reader.int32());
           continue;
         }
+        case 11: {
+          if (tag !== 90) {
+            break;
+          }
+
+          message.customIcon = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -182,6 +195,7 @@ export const Collection: MessageFns<Collection> = {
     message.description = object.description ?? "";
     message.shortcutIds = object.shortcutIds?.map((e) => e) || [];
     message.visibility = object.visibility ?? Visibility.VISIBILITY_UNSPECIFIED;
+    message.customIcon = object.customIcon ?? "";
     return message;
   },
 };

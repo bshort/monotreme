@@ -317,6 +317,12 @@
 | email | [string](#string) |  |  |
 | nickname | [string](#string) |  |  |
 | password | [string](#string) |  |  |
+| locale | [string](#string) |  | Personal preferences |
+| color_theme | [string](#string) |  |  |
+| default_visibility | [string](#string) |  |  |
+| auto_generate_title | [bool](#bool) |  |  |
+| auto_generate_icon | [bool](#bool) |  |  |
+| auto_generate_name | [bool](#bool) |  |  |
 
 
 
@@ -1092,6 +1098,12 @@
 | ----- | ---- | ----- | ----------- |
 | locale | [string](#string) |  |  |
 | color_theme | [string](#string) |  |  |
+| default_visibility | [string](#string) |  | Shortcut creation preferences
+
+&#34;PUBLIC&#34; or &#34;PRIVATE&#34; or &#34;WORKSPACE&#34; |
+| auto_generate_title | [bool](#bool) |  | Whether to auto-fetch title from URL |
+| auto_generate_icon | [bool](#bool) |  | Whether to auto-fetch favicon |
+| auto_generate_name | [bool](#bool) |  | Whether to auto-generate URL-friendly name |
 
 
 
@@ -1266,6 +1278,7 @@
 | identity_providers | [IdentityProvider](#monotreme-api-v1-IdentityProvider) | repeated | The identity providers. |
 | disallow_user_registration | [bool](#bool) |  | Whether to disallow user registration by email&amp;password. |
 | disallow_password_auth | [bool](#bool) |  | Whether to disallow password authentication. |
+| shortcut_prefix | [string](#string) |  | The prefix used for shortcut URLs (e.g. &#34;s&#34; for &#34;/s/shortcut-name&#34;). |
 
 
 

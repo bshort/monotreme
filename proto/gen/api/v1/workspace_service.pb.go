@@ -177,9 +177,9 @@ type WorkspaceSetting struct {
 	// Whether to disallow password authentication.
 	DisallowPasswordAuth bool `protobuf:"varint,7,opt,name=disallow_password_auth,json=disallowPasswordAuth,proto3" json:"disallow_password_auth,omitempty"`
 	// The prefix used for shortcut URLs (e.g. "s" for "/s/shortcut-name").
-	ShortcutPrefix       string `protobuf:"bytes,8,opt,name=shortcut_prefix,json=shortcutPrefix,proto3" json:"shortcut_prefix,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	ShortcutPrefix string `protobuf:"bytes,8,opt,name=shortcut_prefix,json=shortcutPrefix,proto3" json:"shortcut_prefix,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *WorkspaceSetting) Reset() {
@@ -684,7 +684,7 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\x05owner\x18\x03 \x01(\tR\x05owner\x12B\n" +
 	"\fsubscription\x18\x04 \x01(\v2\x1e.monotreme.api.v1.SubscriptionR\fsubscription\x12!\n" +
 	"\fcustom_style\x18\x05 \x01(\tR\vcustomStyle\x12\x1a\n" +
-	"\bbranding\x18\x06 \x01(\fR\bbranding\"\x88\x03\n" +
+	"\bbranding\x18\x06 \x01(\fR\bbranding\"\xb1\x03\n" +
 	"\x10WorkspaceSetting\x12!\n" +
 	"\finstance_url\x18\x01 \x01(\tR\vinstanceUrl\x12\x1a\n" +
 	"\bbranding\x18\x02 \x01(\fR\bbranding\x12!\n" +
@@ -692,7 +692,8 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\x12default_visibility\x18\x04 \x01(\x0e2\x1c.monotreme.api.v1.VisibilityR\x11defaultVisibility\x12Q\n" +
 	"\x12identity_providers\x18\x05 \x03(\v2\".monotreme.api.v1.IdentityProviderR\x11identityProviders\x12<\n" +
 	"\x1adisallow_user_registration\x18\x06 \x01(\bR\x18disallowUserRegistration\x124\n" +
-	"\x16disallow_password_auth\x18\a \x01(\bR\x14disallowPasswordAuth\"\xe1\x01\n" +
+	"\x16disallow_password_auth\x18\a \x01(\bR\x14disallowPasswordAuth\x12'\n" +
+	"\x0fshortcut_prefix\x18\b \x01(\tR\x0eshortcutPrefix\"\xe1\x01\n" +
 	"\x10IdentityProvider\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12;\n" +

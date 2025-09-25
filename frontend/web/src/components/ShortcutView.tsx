@@ -2,8 +2,8 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import { getShortcutUrl } from "@/utils/shortcut";
+import CustomIcon from "./CustomIcon";
 import Icon from "./Icon";
-import LinkFavicon from "./LinkFavicon";
 import ShortcutActionsDropdown from "./ShortcutActionsDropdown";
 
 interface Props {
@@ -26,7 +26,7 @@ const ShortcutView = (props: Props) => {
       onClick={onClick}
     >
       <div className={classNames("w-5 h-5 flex justify-center items-center overflow-clip shrink-0")}>
-        <LinkFavicon url={shortcut.link} />
+        <CustomIcon customIcon={shortcut.customIcon} url={shortcut.link} />
       </div>
       <div className="ml-2 w-full truncate">
         {shortcut.title ? (

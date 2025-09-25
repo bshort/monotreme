@@ -76,6 +76,14 @@ message User {
   string nickname = 8;
 
   string password = 9;
+
+  // Personal preferences
+  string locale = 10;
+  string color_theme = 11;
+  string default_visibility = 12;
+  bool auto_generate_title = 13;
+  bool auto_generate_icon = 14;
+  bool auto_generate_name = 15;
 }
 
 enum Role {

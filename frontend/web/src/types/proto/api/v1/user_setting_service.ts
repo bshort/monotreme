@@ -19,6 +19,14 @@ export interface UserSetting {
 export interface UserSetting_GeneralSetting {
   locale: string;
   colorTheme: string;
+  /** Shortcut creation preferences */
+  defaultVisibility: string;
+  /** Whether to auto-fetch title from URL */
+  autoGenerateTitle: boolean;
+  /** Whether to auto-fetch favicon */
+  autoGenerateIcon: boolean;
+  /** Whether to auto-generate URL-friendly name */
+  autoGenerateName: boolean;
 }
 
 export interface UserSetting_AccessTokensSetting {
@@ -124,7 +132,14 @@ export const UserSetting: MessageFns<UserSetting> = {
 };
 
 function createBaseUserSetting_GeneralSetting(): UserSetting_GeneralSetting {
-  return { locale: "", colorTheme: "" };
+  return {
+    locale: "",
+    colorTheme: "",
+    defaultVisibility: "",
+    autoGenerateTitle: false,
+    autoGenerateIcon: false,
+    autoGenerateName: false,
+  };
 }
 
 export const UserSetting_GeneralSetting: MessageFns<UserSetting_GeneralSetting> = {
@@ -134,6 +149,18 @@ export const UserSetting_GeneralSetting: MessageFns<UserSetting_GeneralSetting> 
     }
     if (message.colorTheme !== "") {
       writer.uint32(18).string(message.colorTheme);
+    }
+    if (message.defaultVisibility !== "") {
+      writer.uint32(26).string(message.defaultVisibility);
+    }
+    if (message.autoGenerateTitle !== false) {
+      writer.uint32(32).bool(message.autoGenerateTitle);
+    }
+    if (message.autoGenerateIcon !== false) {
+      writer.uint32(40).bool(message.autoGenerateIcon);
+    }
+    if (message.autoGenerateName !== false) {
+      writer.uint32(48).bool(message.autoGenerateName);
     }
     return writer;
   },
@@ -161,6 +188,38 @@ export const UserSetting_GeneralSetting: MessageFns<UserSetting_GeneralSetting> 
           message.colorTheme = reader.string();
           continue;
         }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.defaultVisibility = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.autoGenerateTitle = reader.bool();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.autoGenerateIcon = reader.bool();
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.autoGenerateName = reader.bool();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -177,6 +236,10 @@ export const UserSetting_GeneralSetting: MessageFns<UserSetting_GeneralSetting> 
     const message = createBaseUserSetting_GeneralSetting();
     message.locale = object.locale ?? "";
     message.colorTheme = object.colorTheme ?? "";
+    message.defaultVisibility = object.defaultVisibility ?? "";
+    message.autoGenerateTitle = object.autoGenerateTitle ?? false;
+    message.autoGenerateIcon = object.autoGenerateIcon ?? false;
+    message.autoGenerateName = object.autoGenerateName ?? false;
     return message;
   },
 };

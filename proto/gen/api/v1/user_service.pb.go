@@ -75,17 +75,24 @@ func (Role) EnumDescriptor() ([]byte, []int) {
 }
 
 type User struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	State         State                  `protobuf:"varint,2,opt,name=state,proto3,enum=monotreme.api.v1.State" json:"state,omitempty"`
-	CreatedTime   *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_time,json=createdTime,proto3" json:"created_time,omitempty"`
-	UpdatedTime   *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_time,json=updatedTime,proto3" json:"updated_time,omitempty"`
-	Role          Role                   `protobuf:"varint,6,opt,name=role,proto3,enum=monotreme.api.v1.Role" json:"role,omitempty"`
-	Email         string                 `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
-	Nickname      string                 `protobuf:"bytes,8,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	Password      string                 `protobuf:"bytes,9,opt,name=password,proto3" json:"password,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	State       State                  `protobuf:"varint,2,opt,name=state,proto3,enum=monotreme.api.v1.State" json:"state,omitempty"`
+	CreatedTime *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_time,json=createdTime,proto3" json:"created_time,omitempty"`
+	UpdatedTime *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_time,json=updatedTime,proto3" json:"updated_time,omitempty"`
+	Role        Role                   `protobuf:"varint,6,opt,name=role,proto3,enum=monotreme.api.v1.Role" json:"role,omitempty"`
+	Email       string                 `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
+	Nickname    string                 `protobuf:"bytes,8,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Password    string                 `protobuf:"bytes,9,opt,name=password,proto3" json:"password,omitempty"`
+	// Personal preferences
+	Locale            string `protobuf:"bytes,10,opt,name=locale,proto3" json:"locale,omitempty"`
+	ColorTheme        string `protobuf:"bytes,11,opt,name=color_theme,json=colorTheme,proto3" json:"color_theme,omitempty"`
+	DefaultVisibility string `protobuf:"bytes,12,opt,name=default_visibility,json=defaultVisibility,proto3" json:"default_visibility,omitempty"`
+	AutoGenerateTitle bool   `protobuf:"varint,13,opt,name=auto_generate_title,json=autoGenerateTitle,proto3" json:"auto_generate_title,omitempty"`
+	AutoGenerateIcon  bool   `protobuf:"varint,14,opt,name=auto_generate_icon,json=autoGenerateIcon,proto3" json:"auto_generate_icon,omitempty"`
+	AutoGenerateName  bool   `protobuf:"varint,15,opt,name=auto_generate_name,json=autoGenerateName,proto3" json:"auto_generate_name,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *User) Reset() {
@@ -172,6 +179,48 @@ func (x *User) GetPassword() string {
 		return x.Password
 	}
 	return ""
+}
+
+func (x *User) GetLocale() string {
+	if x != nil {
+		return x.Locale
+	}
+	return ""
+}
+
+func (x *User) GetColorTheme() string {
+	if x != nil {
+		return x.ColorTheme
+	}
+	return ""
+}
+
+func (x *User) GetDefaultVisibility() string {
+	if x != nil {
+		return x.DefaultVisibility
+	}
+	return ""
+}
+
+func (x *User) GetAutoGenerateTitle() bool {
+	if x != nil {
+		return x.AutoGenerateTitle
+	}
+	return false
+}
+
+func (x *User) GetAutoGenerateIcon() bool {
+	if x != nil {
+		return x.AutoGenerateIcon
+	}
+	return false
+}
+
+func (x *User) GetAutoGenerateName() bool {
+	if x != nil {
+		return x.AutoGenerateName
+	}
+	return false
 }
 
 type ListUsersRequest struct {
@@ -717,7 +766,7 @@ var File_api_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_user_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19api/v1/user_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbd\x02\n" +
+	"\x19api/v1/user_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb1\x04\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12-\n" +
 	"\x05state\x18\x02 \x01(\x0e2\x17.monotreme.api.v1.StateR\x05state\x12=\n" +
@@ -726,7 +775,15 @@ const file_api_v1_user_service_proto_rawDesc = "" +
 	"\x04role\x18\x06 \x01(\x0e2\x16.monotreme.api.v1.RoleR\x04role\x12\x14\n" +
 	"\x05email\x18\a \x01(\tR\x05email\x12\x1a\n" +
 	"\bnickname\x18\b \x01(\tR\bnickname\x12\x1a\n" +
-	"\bpassword\x18\t \x01(\tR\bpassword\"\x12\n" +
+	"\bpassword\x18\t \x01(\tR\bpassword\x12\x16\n" +
+	"\x06locale\x18\n" +
+	" \x01(\tR\x06locale\x12\x1f\n" +
+	"\vcolor_theme\x18\v \x01(\tR\n" +
+	"colorTheme\x12-\n" +
+	"\x12default_visibility\x18\f \x01(\tR\x11defaultVisibility\x12.\n" +
+	"\x13auto_generate_title\x18\r \x01(\bR\x11autoGenerateTitle\x12,\n" +
+	"\x12auto_generate_icon\x18\x0e \x01(\bR\x10autoGenerateIcon\x12,\n" +
+	"\x12auto_generate_name\x18\x0f \x01(\bR\x10autoGenerateName\"\x12\n" +
 	"\x10ListUsersRequest\"A\n" +
 	"\x11ListUsersResponse\x12,\n" +
 	"\x05users\x18\x01 \x03(\v2\x16.monotreme.api.v1.UserR\x05users\" \n" +

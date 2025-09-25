@@ -14,9 +14,15 @@ func (d *DB) CreateUser(ctx context.Context, create *store.User) (*store.User, e
 			email,
 			nickname,
 			password_hash,
-			role
+			role,
+			locale,
+			color_theme,
+			default_visibility,
+			auto_generate_title,
+			auto_generate_icon,
+			auto_generate_name
 		)
-		VALUES ($1, $2, $3, $4)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 		RETURNING id, created_ts, updated_ts, row_status
 	`
 	var rowStatus string
@@ -25,6 +31,12 @@ func (d *DB) CreateUser(ctx context.Context, create *store.User) (*store.User, e
 		create.Nickname,
 		create.PasswordHash,
 		create.Role,
+		create.Locale,
+		create.ColorTheme,
+		create.DefaultVisibility,
+		create.AutoGenerateTitle,
+		create.AutoGenerateIcon,
+		create.AutoGenerateName,
 	).Scan(
 		&create.ID,
 		&create.CreatedTs,
@@ -56,6 +68,24 @@ func (d *DB) UpdateUser(ctx context.Context, update *store.UpdateUser) (*store.U
 	if v := update.Role; v != nil {
 		set, args = append(set, "role = "+placeholder(len(args)+1)), append(args, *v)
 	}
+	if v := update.Locale; v != nil {
+		set, args = append(set, "locale = "+placeholder(len(args)+1)), append(args, *v)
+	}
+	if v := update.ColorTheme; v != nil {
+		set, args = append(set, "color_theme = "+placeholder(len(args)+1)), append(args, *v)
+	}
+	if v := update.DefaultVisibility; v != nil {
+		set, args = append(set, "default_visibility = "+placeholder(len(args)+1)), append(args, *v)
+	}
+	if v := update.AutoGenerateTitle; v != nil {
+		set, args = append(set, "auto_generate_title = "+placeholder(len(args)+1)), append(args, *v)
+	}
+	if v := update.AutoGenerateIcon; v != nil {
+		set, args = append(set, "auto_generate_icon = "+placeholder(len(args)+1)), append(args, *v)
+	}
+	if v := update.AutoGenerateName; v != nil {
+		set, args = append(set, "auto_generate_name = "+placeholder(len(args)+1)), append(args, *v)
+	}
 	if len(set) == 0 {
 		return nil, errors.New("no fields to update")
 	}
@@ -64,7 +94,7 @@ func (d *DB) UpdateUser(ctx context.Context, update *store.UpdateUser) (*store.U
 		UPDATE "user"
 		SET ` + strings.Join(set, ", ") + `
 		WHERE id = ` + placeholder(len(args)+1) + `
-		RETURNING id, created_ts, updated_ts, row_status, email, nickname, password_hash, role
+		RETURNING id, created_ts, updated_ts, row_status, email, nickname, password_hash, role, locale, color_theme, default_visibility, auto_generate_title, auto_generate_icon, auto_generate_name
 	`
 	args = append(args, update.ID)
 	user := &store.User{}
@@ -78,6 +108,12 @@ func (d *DB) UpdateUser(ctx context.Context, update *store.UpdateUser) (*store.U
 		&user.Nickname,
 		&user.PasswordHash,
 		&user.Role,
+		&user.Locale,
+		&user.ColorTheme,
+		&user.DefaultVisibility,
+		&user.AutoGenerateTitle,
+		&user.AutoGenerateIcon,
+		&user.AutoGenerateName,
 	); err != nil {
 		return nil, err
 	}
@@ -106,7 +142,7 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 	}
 
 	query := `
-		SELECT 
+		SELECT
 			id,
 			created_ts,
 			updated_ts,
@@ -114,7 +150,13 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 			email,
 			nickname,
 			password_hash,
-			role
+			role,
+			locale,
+			color_theme,
+			default_visibility,
+			auto_generate_title,
+			auto_generate_icon,
+			auto_generate_name
 		FROM "user"
 		WHERE ` + strings.Join(where, " AND ") + `
 		ORDER BY updated_ts DESC, created_ts DESC
@@ -138,6 +180,12 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 			&user.Nickname,
 			&user.PasswordHash,
 			&user.Role,
+			&user.Locale,
+			&user.ColorTheme,
+			&user.DefaultVisibility,
+			&user.AutoGenerateTitle,
+			&user.AutoGenerateIcon,
+			&user.AutoGenerateName,
 		); err != nil {
 			return nil, err
 		}

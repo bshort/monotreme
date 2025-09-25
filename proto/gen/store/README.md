@@ -196,6 +196,7 @@
 | description | [string](#string) |  |  |
 | shortcut_ids | [int32](#int32) | repeated |  |
 | visibility | [Visibility](#monotreme-store-Visibility) |  |  |
+| custom_icon | [string](#string) |  |  |
 
 
 
@@ -353,6 +354,7 @@
 | description | [string](#string) |  |  |
 | visibility | [Visibility](#monotreme-store-Visibility) |  |  |
 | og_metadata | [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata) |  |  |
+| custom_icon | [string](#string) |  |  |
 
 
 
@@ -548,6 +550,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | default_visibility | [Visibility](#monotreme-store-Visibility) |  |  |
+| shortcut_prefix | [string](#string) |  |  |
 
 
 

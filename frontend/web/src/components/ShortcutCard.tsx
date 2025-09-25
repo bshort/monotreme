@@ -9,8 +9,8 @@ import { absolutifyLink } from "@/helpers/utils";
 import { useUserStore, useViewStore } from "@/stores";
 import { getShortcutUrl } from "@/utils/shortcut";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
+import CustomIcon from "./CustomIcon";
 import Icon from "./Icon";
-import LinkFavicon from "./LinkFavicon";
 import ShortcutActionsDropdown from "./ShortcutActionsDropdown";
 import VisibilityIcon from "./VisibilityIcon";
 
@@ -48,7 +48,7 @@ const ShortcutCard = (props: Props) => {
             to={`/shortcut/${shortcut.id}`}
             viewTransition
           >
-            <LinkFavicon url={shortcut.link} />
+            <CustomIcon customIcon={shortcut.customIcon} url={shortcut.link} />
           </Link>
           <div className="ml-2 w-[calc(100%-24px)] flex flex-col justify-start items-start">
             <div className="w-full flex flex-row justify-start items-center leading-tight">

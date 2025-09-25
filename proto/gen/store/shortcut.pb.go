@@ -35,6 +35,7 @@ type Shortcut struct {
 	Description   string                 `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
 	Visibility    Visibility             `protobuf:"varint,11,opt,name=visibility,proto3,enum=monotreme.store.Visibility" json:"visibility,omitempty"`
 	OgMetadata    *OpenGraphMetadata     `protobuf:"bytes,12,opt,name=og_metadata,json=ogMetadata,proto3" json:"og_metadata,omitempty"`
+	CustomIcon    string                 `protobuf:"bytes,13,opt,name=custom_icon,json=customIcon,proto3" json:"custom_icon,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -153,6 +154,13 @@ func (x *Shortcut) GetOgMetadata() *OpenGraphMetadata {
 	return nil
 }
 
+func (x *Shortcut) GetCustomIcon() string {
+	if x != nil {
+		return x.CustomIcon
+	}
+	return ""
+}
+
 type OpenGraphMetadata struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
@@ -217,7 +225,7 @@ var File_store_shortcut_proto protoreflect.FileDescriptor
 
 const file_store_shortcut_proto_rawDesc = "" +
 	"\n" +
-	"\x14store/shortcut.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\x81\x03\n" +
+	"\x14store/shortcut.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\xa2\x03\n" +
 	"\bShortcut\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04uuid\x18\x05 \x01(\tR\x04uuid\x12\x1d\n" +
@@ -237,7 +245,9 @@ const file_store_shortcut_proto_rawDesc = "" +
 	"visibility\x18\v \x01(\x0e2\x1b.monotreme.store.VisibilityR\n" +
 	"visibility\x12C\n" +
 	"\vog_metadata\x18\f \x01(\v2\".monotreme.store.OpenGraphMetadataR\n" +
-	"ogMetadata\"a\n" +
+	"ogMetadata\x12\x1f\n" +
+	"\vcustom_icon\x18\r \x01(\tR\n" +
+	"customIcon\"a\n" +
 	"\x11OpenGraphMetadata\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +

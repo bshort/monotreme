@@ -14,6 +14,7 @@ import { Collection } from "@/types/proto/api/v1/collection_service";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import { showCommonDialog } from "./Alert";
 import CreateCollectionDialog from "./CreateCollectionDrawer";
+import CustomIcon from "./CustomIcon";
 import Icon from "./Icon";
 import ShortcutView from "./ShortcutView";
 import Dropdown from "./common/Dropdown";
@@ -65,8 +66,14 @@ const CollectionView = (props: Props) => {
     <>
       <div className={classNames("w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-800")}>
         <div className="bg-gray-100 dark:bg-zinc-800 px-3 py-2 w-full flex flex-row justify-between items-center rounded-t-lg">
-          <div className="w-auto flex flex-col justify-start items-start mr-2">
-            <div className="w-full truncate">
+          <div className="w-auto flex flex-row justify-start items-center mr-2">
+            {collection.customIcon && (
+              <div className="w-6 h-6 mr-2 flex justify-center items-center overflow-clip shrink-0">
+                <CustomIcon customIcon={collection.customIcon} className="w-full h-full object-cover rounded" />
+              </div>
+            )}
+            <div className="flex flex-col justify-start items-start">
+              <div className="w-full truncate">
               <Link className="leading-6 font-medium dark:text-gray-400" to={`/c/${collection.name}`} viewTransition>
                 {collection.title}
               </Link>
@@ -74,7 +81,8 @@ const CollectionView = (props: Props) => {
                 (c/{collection.name})
               </span>
             </div>
-            <p className="text-sm text-gray-500">{collection.description}</p>
+              <p className="text-sm text-gray-500">{collection.description}</p>
+            </div>
           </div>
           <div className="flex flex-row justify-end items-center shrink-0 gap-2">
             <Tooltip title="Share" placement="top" arrow>

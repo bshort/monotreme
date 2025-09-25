@@ -16,6 +16,7 @@ type UpdateShortcut struct {
 	Visibility        *storepb.Visibility
 	Tag               *string
 	OpenGraphMetadata *storepb.OpenGraphMetadata
+	CustomIcon        *string
 }
 
 type FindShortcut struct {

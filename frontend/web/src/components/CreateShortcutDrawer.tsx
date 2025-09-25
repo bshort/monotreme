@@ -1,15 +1,17 @@
 import { Button, Checkbox, DialogActions, DialogContent, DialogTitle, Divider, Drawer, Input, ModalClose, Textarea } from "@mui/joy";
 import classnames from "classnames";
 import { isUndefined, uniq } from "lodash-es";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/useLoading";
-import { useShortcutStore, useWorkspaceStore } from "@/stores";
+import { useShortcutStore, useWorkspaceStore, useUserStore } from "@/stores";
 import { getShortcutUpdateMask } from "@/stores/shortcut";
 import { Visibility } from "@/types/proto/api/v1/common";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
+import { fetchPageTitle, debounce, generateUrlFriendlyName } from "@/utils/urlMetadata";
 import Icon from "./Icon";
+import IconUpload from "./IconUpload";
 
 interface Props {
   shortcutId?: number;
@@ -33,11 +35,14 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
         description: "",
         image: "",
       },
+      customIcon: "",
       ...initialShortcut,
     }),
   });
   const shortcutStore = useShortcutStore();
   const workspaceStore = useWorkspaceStore();
+  const userStore = useUserStore();
+  const currentUser = userStore.getCurrentUser();
   const [showOpenGraphMetadata, setShowOpenGraphMetadata] = useState<boolean>(false);
   const shortcutList = shortcutStore.getShortcutList();
   const [tag, setTag] = useState<string>("");
@@ -45,6 +50,9 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
   const isCreating = isUndefined(shortcutId);
   const loadingState = useLoading(!isCreating);
   const requestState = useLoading(false);
+  const [isFetchingTitle, setIsFetchingTitle] = useState<boolean>(false);
+  const [titleWasManuallyEdited, setTitleWasManuallyEdited] = useState<boolean>(false);
+  const [nameWasManuallyEdited, setNameWasManuallyEdited] = useState<boolean>(false);
 
   const setPartialState = (partialState: Partial<State>) => {
     setState({
@@ -53,15 +61,76 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
     });
   };
 
-  useEffect(() => {
-    if (workspaceStore.setting.defaultVisibility !== Visibility.VISIBILITY_UNSPECIFIED) {
+  // Helper function to auto-generate name from title
+  const autoGenerateNameFromTitle = useCallback((title: string) => {
+    const autoGenerateName = currentUser.autoGenerateName ?? true;
+    if (!isCreating || nameWasManuallyEdited || !title || !autoGenerateName) return;
+
+    const generatedName = generateUrlFriendlyName(title);
+    if (generatedName) {
       setPartialState({
         shortcutCreate: Object.assign(state.shortcutCreate, {
-          visibility: workspaceStore.setting.defaultVisibility,
+          name: generatedName,
         }),
       });
     }
-  }, []);
+  }, [isCreating, nameWasManuallyEdited, state.shortcutCreate, currentUser.autoGenerateName]);
+
+  // Create debounced function for fetching page title
+  const debouncedFetchTitle = useCallback(
+    debounce(async (url: string) => {
+      const autoGenerateTitle = currentUser.autoGenerateTitle ?? true;
+      if (!url || titleWasManuallyEdited || !autoGenerateTitle) return;
+
+      setIsFetchingTitle(true);
+      try {
+        const title = await fetchPageTitle(url);
+        if (title && !titleWasManuallyEdited) {
+          setPartialState({
+            shortcutCreate: Object.assign(state.shortcutCreate, {
+              title: title,
+            }),
+          });
+          // Also auto-generate name from the fetched title
+          autoGenerateNameFromTitle(title);
+        }
+      } catch (error) {
+        console.warn('Failed to fetch page title:', error);
+      } finally {
+        setIsFetchingTitle(false);
+      }
+    }, 1000), // 1 second delay
+    [titleWasManuallyEdited, state.shortcutCreate, autoGenerateNameFromTitle, currentUser.autoGenerateTitle]
+  );
+
+  useEffect(() => {
+    // Set default visibility based on user preference, then workspace setting
+    let defaultVisibility = Visibility.WORKSPACE;
+
+    if (currentUser.defaultVisibility) {
+      // Map string to enum
+      switch (currentUser.defaultVisibility) {
+        case "PUBLIC":
+          defaultVisibility = Visibility.PUBLIC;
+          break;
+        case "PRIVATE":
+          defaultVisibility = Visibility.PRIVATE;
+          break;
+        case "WORKSPACE":
+        default:
+          defaultVisibility = Visibility.WORKSPACE;
+          break;
+      }
+    } else if (workspaceStore.setting.defaultVisibility !== Visibility.VISIBILITY_UNSPECIFIED) {
+      defaultVisibility = workspaceStore.setting.defaultVisibility;
+    }
+
+    setPartialState({
+      shortcutCreate: Object.assign(state.shortcutCreate, {
+        visibility: defaultVisibility,
+      }),
+    });
+  }, [currentUser.defaultVisibility]);
 
   useEffect(() => {
     if (shortcutId) {
@@ -76,9 +145,14 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
             description: shortcut.description,
             visibility: shortcut.visibility,
             ogMetadata: shortcut.ogMetadata,
+            customIcon: shortcut.customIcon,
           }),
         });
         setTag(shortcut.tags.join(" "));
+        // When editing an existing shortcut, consider both title and name as manually edited
+        // so we don't override them with auto-generated values
+        setTitleWasManuallyEdited(true);
+        setNameWasManuallyEdited(true);
         loadingState.setFinish();
       }
     }
@@ -89,6 +163,9 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
   }
 
   const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Mark that the name has been manually edited
+    setNameWasManuallyEdited(true);
+
     setPartialState({
       shortcutCreate: Object.assign(state.shortcutCreate, {
         name: e.target.value.replace(/\s+/g, "-"),
@@ -97,19 +174,33 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
   };
 
   const handleLinkInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newLink = e.target.value;
     setPartialState({
       shortcutCreate: Object.assign(state.shortcutCreate, {
-        link: e.target.value,
+        link: newLink,
       }),
     });
+
+    // Only fetch title for new shortcuts and if title hasn't been manually edited and user preference allows it
+    const autoGenerateTitle = currentUser.autoGenerateTitle ?? true;
+    if (isCreating && !titleWasManuallyEdited && newLink.trim() && autoGenerateTitle) {
+      debouncedFetchTitle(newLink.trim());
+    }
   };
 
   const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Mark that the title has been manually edited
+    setTitleWasManuallyEdited(true);
+
+    const newTitle = e.target.value;
     setPartialState({
       shortcutCreate: Object.assign(state.shortcutCreate, {
-        title: e.target.value,
+        title: newTitle,
       }),
     });
+
+    // Auto-generate name from manually entered title
+    autoGenerateNameFromTitle(newTitle);
   };
 
   const handleDescriptionInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,6 +257,14 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
     }
   };
 
+  const handleCustomIconChange = (iconData: string) => {
+    setPartialState({
+      shortcutCreate: Object.assign(state.shortcutCreate, {
+        customIcon: iconData,
+      }),
+    });
+  };
+
   const handleSaveBtnClick = async () => {
     if (!state.shortcutCreate.name || !state.shortcutCreate.link) {
       toast.error("Please fill in required fields.");
@@ -208,19 +307,6 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
         <div className="overflow-y-auto w-full mt-2 px-4 pb-4 sm:w-[24rem]">
           <div className="w-full flex flex-col justify-start items-start mb-3">
             <span className="mb-2">
-              Name <span className="text-red-600">*</span>
-            </span>
-            <Input
-              className="w-full"
-              type="text"
-              startDecorator="s/"
-              placeholder="An easy name to remember"
-              value={state.shortcutCreate.name}
-              onChange={handleNameInputChange}
-            />
-          </div>
-          <div className="w-full flex flex-col justify-start items-start mb-3">
-            <span className="mb-2">
               Link <span className="text-red-600">*</span>
             </span>
             <Input
@@ -232,13 +318,44 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
             />
           </div>
           <div className="w-full flex flex-col justify-start items-start mb-3">
+            <span className="mb-2">
+              Name <span className="text-red-600">*</span>
+              {isCreating && !nameWasManuallyEdited && (currentUser.autoGenerateName ?? true) && (
+                <span className="text-xs text-gray-500 ml-2">(auto-generated from title)</span>
+              )}
+            </span>
+            <Input
+              className="w-full"
+              type="text"
+              startDecorator="s/"
+              placeholder={
+                isCreating && !nameWasManuallyEdited && (currentUser.autoGenerateName ?? true)
+                  ? "Will be generated from title..."
+                  : "An easy name to remember"
+              }
+              value={state.shortcutCreate.name}
+              onChange={handleNameInputChange}
+            />
+          </div>
+          <div className="w-full flex flex-col justify-start items-start mb-3">
             <span className="mb-2">Title</span>
             <Input
               className="w-full"
               type="text"
-              placeholder="The title of the shortcut"
+              placeholder={
+                isFetchingTitle
+                  ? "Fetching page title..."
+                  : (currentUser.autoGenerateTitle ?? true) && isCreating
+                  ? "Auto-filled from URL or enter manually"
+                  : "The title of the shortcut"
+              }
               value={state.shortcutCreate.title}
               onChange={handleTitleInputChange}
+              endDecorator={
+                isFetchingTitle ? (
+                  <Icon.Loader className="w-4 h-4 animate-spin text-gray-400" />
+                ) : null
+              }
             />
           </div>
           <div className="w-full flex flex-col justify-start items-start mb-3">
@@ -250,6 +367,18 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
               value={state.shortcutCreate.description}
               onChange={handleDescriptionInputChange}
             />
+          </div>
+          <div className="w-full flex flex-col justify-start items-start mb-3">
+            <span className="mb-2">Custom Icon</span>
+            <IconUpload
+              value={state.shortcutCreate.customIcon}
+              onChange={handleCustomIconChange}
+              fallbackUrl={state.shortcutCreate.link}
+              className="w-16 h-16"
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Upload a custom icon (PNG, JPG, ICO) or leave empty to use favicon
+            </p>
           </div>
           <div className="w-full flex flex-col justify-start items-start mb-3">
             <span className="mb-2">Tags</span>

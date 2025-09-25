@@ -14,8 +14,8 @@ import (
 )
 
 func (d *DB) CreateCollection(ctx context.Context, create *storepb.Collection) (*storepb.Collection, error) {
-	set := []string{"creator_id", "name", "title", "description", "shortcut_ids", "visibility"}
-	args := []any{create.CreatorId, create.Name, create.Title, create.Description, pq.Array(create.ShortcutIds), create.Visibility.String()}
+	set := []string{"creator_id", "name", "title", "description", "shortcut_ids", "visibility", "custom_icon"}
+	args := []any{create.CreatorId, create.Name, create.Title, create.Description, pq.Array(create.ShortcutIds), create.Visibility.String(), create.CustomIcon}
 
 	stmt := `
 		INSERT INTO collection (` + strings.Join(set, ", ") + `)
@@ -50,6 +50,9 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 	if update.Visibility != nil {
 		set, args = append(set, "visibility = "+placeholder(len(args)+1)), append(args, update.Visibility.String())
 	}
+	if update.CustomIcon != nil {
+		set, args = append(set, "custom_icon = "+placeholder(len(args)+1)), append(args, *update.CustomIcon)
+	}
 	if len(set) == 0 {
 		return nil, errors.New("no update specified")
 	}
@@ -58,7 +61,7 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 		UPDATE collection
 		SET ` + strings.Join(set, ", ") + `
 		WHERE id = ` + placeholder(len(args)+1) + `
-		RETURNING id, creator_id, created_ts, updated_ts, name, title, description, shortcut_ids, visibility
+		RETURNING id, creator_id, created_ts, updated_ts, name, title, description, shortcut_ids, visibility, custom_icon
 	`
 	args = append(args, update.ID)
 	collection := &storepb.Collection{}
@@ -74,6 +77,7 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 		&collection.Description,
 		pq.Array(&shortcutIDs),
 		&visibility,
+		&collection.CustomIcon,
 	); err != nil {
 		return nil, err
 	}
@@ -117,7 +121,8 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			title,
 			description,
 			shortcut_ids,
-			visibility
+			visibility,
+			custom_icon
 		FROM collection
 		WHERE `+strings.Join(where, " AND ")+`
 		ORDER BY created_ts DESC`,
@@ -143,6 +148,7 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			&collection.Description,
 			pq.Array(&shortcutIDs),
 			&visibility,
+			&collection.CustomIcon,
 		); err != nil {
 			return nil, err
 		}

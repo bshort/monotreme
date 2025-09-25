@@ -34,6 +34,12 @@ message UserSetting {
   message GeneralSetting {
     string locale = 1;
     string color_theme = 2;
+
+    // Shortcut creation preferences
+    string default_visibility = 3; // "PUBLIC" or "PRIVATE" or "WORKSPACE"
+    bool auto_generate_title = 4;  // Whether to auto-fetch title from URL
+    bool auto_generate_icon = 5;   // Whether to auto-fetch favicon
+    bool auto_generate_name = 6;   // Whether to auto-generate URL-friendly name
   }
 
   message AccessTokensSetting {
