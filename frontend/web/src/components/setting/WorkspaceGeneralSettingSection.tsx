@@ -138,10 +138,9 @@ const WorkspaceGeneralSettingSection = () => {
         <div className="w-full flex flex-row justify-between items-center">
           <div className="w-full flex flex-col justify-start items-start">
             <p className="flex flex-row justify-start items-center">
-              <span className="font-medium dark:text-gray-400">Custom branding</span>
-              <FeatureBadge className="w-5 h-auto ml-1 text-blue-600" feature={FeatureType.CustomeBranding} />
+              <span className="font-medium dark:text-gray-400">Custom brandings</span>
             </p>
-            <p className="text-sm text-gray-500 leading-tight">Recommand logo ratio: 1:1</p>
+            <p className="text-sm text-gray-500 leading-tight">Recommended logo ratio: 1:1</p>
           </div>
           <div className="relative shrink-0 hover:opacity-80 flex flex-col items-end justify-center">
             {branding ? (

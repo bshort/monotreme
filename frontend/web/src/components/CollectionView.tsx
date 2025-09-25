@@ -5,6 +5,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { userServiceClient } from "@/grpcweb";
 import { absolutifyLink } from "@/helpers/utils";
 import useNavigateTo from "@/hooks/useNavigateTo";
 import useResponsiveWidth from "@/hooks/useResponsiveWidth";
@@ -62,6 +63,24 @@ const CollectionView = (props: Props) => {
     shortcuts.forEach((shortcut: Shortcut) => window.open(getShortcutUrl(shortcut.name)));
   };
 
+  const handleCopyRSSLink = async () => {
+    try {
+      // Generate a new access token for RSS feed
+      const { accessToken } = await userServiceClient.createUserAccessToken({
+        id: currentUser.id,
+        description: "RSS Feed",
+        expiresAt: undefined, // Never expires
+      });
+
+      const rssUrl = `${window.location.origin}/rss/collection/${collection.id}.xml?token=${accessToken}`;
+      copy(rssUrl);
+      toast.success("RSS feed URL with access token copied to clipboard!");
+    } catch (error: any) {
+      console.error("Failed to create RSS access token:", error);
+      toast.error("Failed to generate RSS feed URL. Please try again.");
+    }
+  };
+
   return (
     <>
       <div className={classNames("w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-800")}>
@@ -96,6 +115,14 @@ const CollectionView = (props: Props) => {
                 onClick={() => handleOpenAllShortcutsButtonClick()}
               >
                 <Icon.ArrowUpRight className="w-5 h-auto" />
+              </button>
+            </Tooltip>
+            <Tooltip title="Copy RSS feed URL" placement="top" arrow>
+              <button
+                className="w-auto text-gray-400 cursor-pointer hover:text-gray-500"
+                onClick={() => handleCopyRSSLink()}
+              >
+                <Icon.Rss className="w-4 h-auto" />
               </button>
             </Tooltip>
             {showAdminActions && (

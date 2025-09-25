@@ -61,7 +61,6 @@ const SSOSection = () => {
         <div className="w-full flex flex-row justify-between items-center gap-1">
           <div className="flex flex-row justify-start items-center">
             <span className="font-medium dark:text-gray-400">SSO</span>
-            <FeatureBadge className="w-5 h-auto ml-1 text-blue-600" feature={FeatureType.SSO} />
             <a
               className="text-blue-600 text-sm hover:underline flex flex-row justify-center items-center ml-2"
               href="https://github.com/bshort/monotreme/blob/main/docs/getting-started/sso.md"
@@ -74,7 +73,7 @@ const SSOSection = () => {
           <Button
             variant="outlined"
             color="neutral"
-            disabled={!isSSOFeatureEnabled}
+            disabled={false}
             onClick={() =>
               setEditState({
                 open: true,

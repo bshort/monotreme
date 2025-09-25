@@ -200,7 +200,7 @@ const SubscriptionSetting: React.FC = () => {
                 <ul className="mt-4 space-y-3">
                   <li className="flex items-center dark:text-gray-300">
                     <Icon.BadgeCheck className="w-5 h-auto text-green-600 mr-1 shrink-0" />
-                    Custom branding
+                    Custom brandingsasdf
                   </li>
                   <li className="flex items-center dark:text-gray-300">
                     <Icon.BarChart3 className="w-5 h-auto text-green-600 mr-1 shrink-0" />

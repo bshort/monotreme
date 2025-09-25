@@ -17,7 +17,9 @@ import (
 	storepb "github.com/bshort/monotreme/proto/gen/store"
 	"github.com/bshort/monotreme/server/profile"
 	apiv1 "github.com/bshort/monotreme/server/route/api/v1"
+	"github.com/bshort/monotreme/server/route/export"
 	"github.com/bshort/monotreme/server/route/frontend"
+	"github.com/bshort/monotreme/server/route/rss"
 	"github.com/bshort/monotreme/server/route/swagger"
 	licensern "github.com/bshort/monotreme/server/runner/license"
 	"github.com/bshort/monotreme/server/runner/version"
@@ -81,6 +83,14 @@ func NewServer(ctx context.Context, profile *profile.Profile, store *store.Store
 	}
 	swaggerService := swagger.NewSwaggerService(swaggerSpec)
 	swaggerService.RegisterRoutes(e)
+
+	// Register RSS feeds
+	rssService := rss.NewRSSService(profile, store, secret)
+	rssService.RegisterRoutes(e)
+
+	// Register export endpoints
+	exportService := export.NewExportService(profile, store, secret)
+	exportService.RegisterRoutes(e)
 
 	s.apiV1Service = apiv1.NewAPIV1Service(secret, profile, store, licenseService, s.Profile.Port+1)
 	// Register gRPC gateway as api v1.

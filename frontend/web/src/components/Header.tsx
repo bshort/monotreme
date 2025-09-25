@@ -83,7 +83,7 @@ const Header: React.FC = () => {
                   <Icon.ChevronDown className="ml-1 w-5 h-auto text-gray-600 dark:text-gray-400" />
                 </button>
               }
-              actionsClassName="!w-32"
+              actionsClassName="!w-48"
               actions={
                 <>
                   <Link

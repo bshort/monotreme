@@ -1,13 +1,16 @@
-import { Button, Input, Select, Option } from "@mui/joy";
+import { Button, Input, Select, Option, Tooltip } from "@mui/joy";
+import copy from "copy-to-clipboard";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 import CollectionView from "@/components/CollectionView";
 import CreateCollectionDrawer from "@/components/CreateCollectionDrawer";
 import FilterView from "@/components/FilterView";
 import Icon from "@/components/Icon";
+import { userServiceClient } from "@/grpcweb";
 import useLoading from "@/hooks/useLoading";
-import { useShortcutStore, useCollectionStore } from "@/stores";
+import { useShortcutStore, useCollectionStore, useUserStore } from "@/stores";
 import { Collection } from "@/types/proto/api/v1/collection_service";
 
 interface State {
@@ -22,6 +25,8 @@ const CollectionDashboard: React.FC = () => {
   const loadingState = useLoading();
   const shortcutStore = useShortcutStore();
   const collectionStore = useCollectionStore();
+  const userStore = useUserStore();
+  const currentUser = userStore.getCurrentUser();
   const [state, setState] = useState<State>({
     showCreateCollectionDrawer: false,
   });
@@ -66,6 +71,24 @@ const CollectionDashboard: React.FC = () => {
     });
   };
 
+  const handleCopyCollectionsRSSLink = async () => {
+    try {
+      // Generate a new access token for RSS feed
+      const { accessToken } = await userServiceClient.createUserAccessToken({
+        id: currentUser.id,
+        description: "RSS Feed",
+        expiresAt: undefined, // Never expires
+      });
+
+      const rssUrl = `${window.location.origin}/rss/collections.xml?token=${accessToken}`;
+      copy(rssUrl);
+      toast.success("RSS feed URL with access token copied to clipboard!");
+    } catch (error: any) {
+      console.error("Failed to create RSS access token:", error);
+      toast.error("Failed to generate RSS feed URL. Please try again.");
+    }
+  };
+
   return (
     <>
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
@@ -91,7 +114,12 @@ const CollectionDashboard: React.FC = () => {
               <Option value="shortcuts">By Shortcuts</Option>
             </Select>
           </div>
-          <div className="flex flex-row justify-start items-center">
+          <div className="flex flex-row justify-start items-center gap-2">
+            <Tooltip title="Copy RSS feed URL for all collections" placement="top" arrow>
+              <Button className="hover:shadow" variant="plain" size="sm" onClick={() => handleCopyCollectionsRSSLink()}>
+                <Icon.Rss className="w-4 h-auto" />
+              </Button>
+            </Tooltip>
             <Button className="hover:shadow" variant="soft" size="sm" onClick={() => setShowCreateCollectionDrawer(true)}>
               <Icon.Plus className="w-5 h-auto" />
               <span className="ml-0.5">{t("common.create")}</span>
