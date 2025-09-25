@@ -9,6 +9,7 @@ import CollectionSpace from "@/pages/CollectionSpace";
 import Home from "@/pages/Home";
 import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
+import QuickSave from "@/pages/QuickSave";
 import ShortcutDashboard from "@/pages/ShortcutDashboard";
 import ShortcutDetail from "@/pages/ShortcutDetail";
 import ShortcutSpace from "@/pages/ShortcutSpace";
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
             element: <BookmarkImport />,
           },
         ],
+      },
+      {
+        path: "/quick-save",
+        element: <QuickSave />,
       },
       {
         path: "s/*",
