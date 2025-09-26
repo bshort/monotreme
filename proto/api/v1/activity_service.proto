@@ -1,0 +1,208 @@
+syntax = "proto3";
+
+package monotreme.api.v1;
+
+import "api/v1/common.proto";
+import "api/v1/user_service.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/api/v1";
+
+service ActivityService {
+  // GetRecentActivity returns recent activity data for the dashboard
+  rpc GetRecentActivity(GetRecentActivityRequest) returns (GetRecentActivityResponse) {
+    option (google.api.http) = {get: "/api/v1/activities/recent"};
+  }
+
+  // GetActivitySummary returns summary statistics for the workspace
+  rpc GetActivitySummary(GetActivitySummaryRequest) returns (GetActivitySummaryResponse) {
+    option (google.api.http) = {get: "/api/v1/activities/summary"};
+  }
+
+  // ListActivities returns a paginated list of activities with filtering
+  rpc ListActivities(ListActivitiesRequest) returns (ListActivitiesResponse) {
+    option (google.api.http) = {get: "/api/v1/activities"};
+  }
+}
+
+message GetRecentActivityRequest {
+  // Number of items to return for each activity type (default: 5)
+  optional int32 limit = 1;
+}
+
+message GetRecentActivityResponse {
+  repeated RecentUser recent_users = 1;
+  repeated RecentShortcut recent_shortcuts = 2;
+  repeated RecentCollection recent_collections = 3;
+  repeated RecentClick recent_clicks = 4;
+  repeated MostClickedShortcut most_clicked_shortcuts = 5;
+}
+
+message GetActivitySummaryRequest {}
+
+message GetActivitySummaryResponse {
+  // Total counts
+  int32 total_users = 1;
+  int32 total_shortcuts = 2;
+  int32 total_collections = 3;
+  int32 total_clicks = 4;
+
+  // Recent activity counts (last 24 hours)
+  int32 recent_users_count = 5;
+  int32 recent_shortcuts_count = 6;
+  int32 recent_collections_count = 7;
+  int32 recent_clicks_count = 8;
+
+  // User-specific summary (for current user)
+  UserSummary user_summary = 9;
+}
+
+message ListActivitiesRequest {
+  // Activity type filter
+  optional ActivityType activity_type = 1;
+
+  // User ID filter (if not specified, returns activities for all users)
+  optional int32 user_id = 2;
+
+  // Time range filter
+  optional google.protobuf.Timestamp created_after = 3;
+  optional google.protobuf.Timestamp created_before = 4;
+
+  // Pagination
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListActivitiesResponse {
+  repeated ActivityItem activities = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+// Activity Types
+enum ActivityType {
+  ACTIVITY_TYPE_UNSPECIFIED = 0;
+  USER_CREATED = 1;
+  SHORTCUT_CREATED = 2;
+  SHORTCUT_VIEWED = 3;
+  COLLECTION_CREATED = 4;
+  COLLECTION_VIEWED = 5;
+}
+
+// Recent Activity Items
+message RecentUser {
+  int32 id = 1;
+  string email = 2;
+  string nickname = 3;
+  google.protobuf.Timestamp created_time = 4;
+  Role role = 5;
+}
+
+message RecentShortcut {
+  int32 id = 1;
+  string name = 2;
+  string title = 3;
+  string link = 4;
+  int32 creator_id = 5;
+  string creator_name = 6;
+  google.protobuf.Timestamp created_time = 7;
+  int32 view_count = 8;
+  repeated string tags = 9;
+}
+
+message RecentCollection {
+  int32 id = 1;
+  string name = 2;
+  string title = 3;
+  string description = 4;
+  int32 creator_id = 5;
+  string creator_name = 6;
+  google.protobuf.Timestamp created_time = 7;
+  int32 shortcut_count = 8;
+}
+
+message RecentClick {
+  int32 shortcut_id = 1;
+  string shortcut_name = 2;
+  string shortcut_title = 3;
+  string shortcut_link = 4;
+  int32 creator_id = 5;
+  string creator_name = 6;
+  google.protobuf.Timestamp clicked_time = 7;
+  string user_agent = 8;
+  string referer = 9;
+}
+
+message MostClickedShortcut {
+  int32 id = 1;
+  string name = 2;
+  string title = 3;
+  string link = 4;
+  int32 creator_id = 5;
+  string creator_name = 6;
+  int32 view_count = 7;
+  google.protobuf.Timestamp last_clicked = 8;
+}
+
+message ActivityItem {
+  int32 id = 1;
+  ActivityType type = 2;
+  int32 user_id = 3;
+  string user_name = 4;
+  google.protobuf.Timestamp created_time = 5;
+
+  // Activity-specific data
+  oneof data {
+    UserCreatedData user_created = 10;
+    ShortcutCreatedData shortcut_created = 11;
+    ShortcutViewedData shortcut_viewed = 12;
+    CollectionCreatedData collection_created = 13;
+    CollectionViewedData collection_viewed = 14;
+  }
+}
+
+message UserCreatedData {
+  int32 user_id = 1;
+  string email = 2;
+  string nickname = 3;
+  Role role = 4;
+}
+
+message ShortcutCreatedData {
+  int32 shortcut_id = 1;
+  string name = 2;
+  string title = 3;
+  string link = 4;
+}
+
+message ShortcutViewedData {
+  int32 shortcut_id = 1;
+  string name = 2;
+  string title = 3;
+  string user_agent = 4;
+  string referer = 5;
+}
+
+message CollectionCreatedData {
+  int32 collection_id = 1;
+  string name = 2;
+  string title = 3;
+  string description = 4;
+}
+
+message CollectionViewedData {
+  int32 collection_id = 1;
+  string name = 2;
+  string title = 3;
+}
+
+message UserSummary {
+  int32 user_shortcuts_count = 1;
+  int32 user_collections_count = 2;
+  int32 user_total_clicks = 3;
+  repeated string user_tags = 4;
+}
+

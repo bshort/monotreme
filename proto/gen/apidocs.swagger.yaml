@@ -4,6 +4,7 @@ info:
   version: version not set
 tags:
   - name: UserService
+  - name: ActivityService
   - name: AuthService
   - name: CollectionService
   - name: ShortcutService
@@ -15,6 +16,99 @@ consumes:
 produces:
   - application/json
 paths:
+  /api/v1/activities:
+    get:
+      summary: ListActivities returns a paginated list of activities with filtering
+      operationId: ActivityService_ListActivities
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListActivitiesResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: activityType
+          description: Activity type filter
+          in: query
+          required: false
+          type: string
+          enum:
+            - ACTIVITY_TYPE_UNSPECIFIED
+            - USER_CREATED
+            - SHORTCUT_CREATED
+            - SHORTCUT_VIEWED
+            - COLLECTION_CREATED
+            - COLLECTION_VIEWED
+          default: ACTIVITY_TYPE_UNSPECIFIED
+        - name: userId
+          description: User ID filter (if not specified, returns activities for all users)
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: createdAfter
+          description: Time range filter
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: createdBefore
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: pageSize
+          description: Pagination
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          in: query
+          required: false
+          type: string
+      tags:
+        - ActivityService
+  /api/v1/activities/recent:
+    get:
+      summary: GetRecentActivity returns recent activity data for the dashboard
+      operationId: ActivityService_GetRecentActivity
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetRecentActivityResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: limit
+          description: 'Number of items to return for each activity type (default: 5)'
+          in: query
+          required: false
+          type: integer
+          format: int32
+      tags:
+        - ActivityService
+  /api/v1/activities/summary:
+    get:
+      summary: GetActivitySummary returns summary statistics for the workspace
+      operationId: ActivityService_GetActivitySummary
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetActivitySummaryResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - ActivityService
   /api/v1/auth/signin:
     post:
       summary: SignIn signs in the user with the given username and password.
@@ -1069,6 +1163,125 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/protobufAny'
+  v1ActivityItem:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      type:
+        $ref: '#/definitions/v1ActivityType'
+      userId:
+        type: integer
+        format: int32
+      userName:
+        type: string
+      createdTime:
+        type: string
+        format: date-time
+      userCreated:
+        $ref: '#/definitions/v1UserCreatedData'
+      shortcutCreated:
+        $ref: '#/definitions/v1ShortcutCreatedData'
+      shortcutViewed:
+        $ref: '#/definitions/v1ShortcutViewedData'
+      collectionCreated:
+        $ref: '#/definitions/v1CollectionCreatedData'
+      collectionViewed:
+        $ref: '#/definitions/v1CollectionViewedData'
+  v1ActivityType:
+    type: string
+    enum:
+      - ACTIVITY_TYPE_UNSPECIFIED
+      - USER_CREATED
+      - SHORTCUT_CREATED
+      - SHORTCUT_VIEWED
+      - COLLECTION_CREATED
+      - COLLECTION_VIEWED
+    default: ACTIVITY_TYPE_UNSPECIFIED
+    title: Activity Types
+  v1CollectionCreatedData:
+    type: object
+    properties:
+      collectionId:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+  v1CollectionViewedData:
+    type: object
+    properties:
+      collectionId:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+  v1GetActivitySummaryResponse:
+    type: object
+    properties:
+      totalUsers:
+        type: integer
+        format: int32
+        title: Total counts
+      totalShortcuts:
+        type: integer
+        format: int32
+      totalCollections:
+        type: integer
+        format: int32
+      totalClicks:
+        type: integer
+        format: int32
+      recentUsersCount:
+        type: integer
+        format: int32
+        title: Recent activity counts (last 24 hours)
+      recentShortcutsCount:
+        type: integer
+        format: int32
+      recentCollectionsCount:
+        type: integer
+        format: int32
+      recentClicksCount:
+        type: integer
+        format: int32
+      userSummary:
+        $ref: '#/definitions/v1UserSummary'
+        title: User-specific summary (for current user)
+  v1GetRecentActivityResponse:
+    type: object
+    properties:
+      recentUsers:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1RecentUser'
+      recentShortcuts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1RecentShortcut'
+      recentCollections:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1RecentCollection'
+      recentClicks:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1RecentClick'
+      mostClickedShortcuts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1MostClickedShortcut'
   v1GetShortcutAnalyticsResponse:
     type: object
     properties:
@@ -1118,6 +1331,19 @@ definitions:
       collectionsUpdated:
         type: integer
         format: int32
+  v1ListActivitiesResponse:
+    type: object
+    properties:
+      activities:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1ActivityItem'
+      nextPageToken:
+        type: string
+      totalCount:
+        type: integer
+        format: int32
   v1ListCollectionsResponse:
     type: object
     properties:
@@ -1150,6 +1376,29 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/v1User'
+  v1MostClickedShortcut:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+      link:
+        type: string
+      creatorId:
+        type: integer
+        format: int32
+      creatorName:
+        type: string
+      viewCount:
+        type: integer
+        format: int32
+      lastClicked:
+        type: string
+        format: date-time
   v1PlanType:
     type: string
     enum:
@@ -1158,6 +1407,96 @@ definitions:
       - PRO
       - ENTERPRISE
     default: PLAN_TYPE_UNSPECIFIED
+  v1RecentClick:
+    type: object
+    properties:
+      shortcutId:
+        type: integer
+        format: int32
+      shortcutName:
+        type: string
+      shortcutTitle:
+        type: string
+      shortcutLink:
+        type: string
+      creatorId:
+        type: integer
+        format: int32
+      creatorName:
+        type: string
+      clickedTime:
+        type: string
+        format: date-time
+      userAgent:
+        type: string
+      referer:
+        type: string
+  v1RecentCollection:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      creatorId:
+        type: integer
+        format: int32
+      creatorName:
+        type: string
+      createdTime:
+        type: string
+        format: date-time
+      shortcutCount:
+        type: integer
+        format: int32
+  v1RecentShortcut:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+      link:
+        type: string
+      creatorId:
+        type: integer
+        format: int32
+      creatorName:
+        type: string
+      createdTime:
+        type: string
+        format: date-time
+      viewCount:
+        type: integer
+        format: int32
+      tags:
+        type: array
+        items:
+          type: string
+  v1RecentUser:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      email:
+        type: string
+      nickname:
+        type: string
+      createdTime:
+        type: string
+        format: date-time
+      role:
+        $ref: '#/definitions/v1Role'
+    title: Recent Activity Items
   v1Role:
     type: string
     enum:
@@ -1165,6 +1504,18 @@ definitions:
       - ADMIN
       - USER
     default: ROLE_UNSPECIFIED
+  v1ShortcutCreatedData:
+    type: object
+    properties:
+      shortcutId:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+      link:
+        type: string
   v1ShortcutOpenGraphMetadata:
     type: object
     properties:
@@ -1173,6 +1524,20 @@ definitions:
       description:
         type: string
       image:
+        type: string
+  v1ShortcutViewedData:
+    type: object
+    properties:
+      shortcutId:
+        type: integer
+        format: int32
+      name:
+        type: string
+      title:
+        type: string
+      userAgent:
+        type: string
+      referer:
         type: string
   v1State:
     type: string
@@ -1267,6 +1632,34 @@ definitions:
       expiresAt:
         type: string
         format: date-time
+  v1UserCreatedData:
+    type: object
+    properties:
+      userId:
+        type: integer
+        format: int32
+      email:
+        type: string
+      nickname:
+        type: string
+      role:
+        $ref: '#/definitions/v1Role'
+  v1UserSummary:
+    type: object
+    properties:
+      userShortcutsCount:
+        type: integer
+        format: int32
+      userCollectionsCount:
+        type: integer
+        format: int32
+      userTotalClicks:
+        type: integer
+        format: int32
+      userTags:
+        type: array
+        items:
+          type: string
   v1WorkspaceProfile:
     type: object
     properties:

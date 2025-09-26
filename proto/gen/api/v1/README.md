@@ -25,6 +25,30 @@
   
     - [UserService](#monotreme-api-v1-UserService)
   
+- [api/v1/activity_service.proto](#api_v1_activity_service-proto)
+    - [ActivityItem](#monotreme-api-v1-ActivityItem)
+    - [CollectionCreatedData](#monotreme-api-v1-CollectionCreatedData)
+    - [CollectionViewedData](#monotreme-api-v1-CollectionViewedData)
+    - [GetActivitySummaryRequest](#monotreme-api-v1-GetActivitySummaryRequest)
+    - [GetActivitySummaryResponse](#monotreme-api-v1-GetActivitySummaryResponse)
+    - [GetRecentActivityRequest](#monotreme-api-v1-GetRecentActivityRequest)
+    - [GetRecentActivityResponse](#monotreme-api-v1-GetRecentActivityResponse)
+    - [ListActivitiesRequest](#monotreme-api-v1-ListActivitiesRequest)
+    - [ListActivitiesResponse](#monotreme-api-v1-ListActivitiesResponse)
+    - [MostClickedShortcut](#monotreme-api-v1-MostClickedShortcut)
+    - [RecentClick](#monotreme-api-v1-RecentClick)
+    - [RecentCollection](#monotreme-api-v1-RecentCollection)
+    - [RecentShortcut](#monotreme-api-v1-RecentShortcut)
+    - [RecentUser](#monotreme-api-v1-RecentUser)
+    - [ShortcutCreatedData](#monotreme-api-v1-ShortcutCreatedData)
+    - [ShortcutViewedData](#monotreme-api-v1-ShortcutViewedData)
+    - [UserCreatedData](#monotreme-api-v1-UserCreatedData)
+    - [UserSummary](#monotreme-api-v1-UserSummary)
+  
+    - [ActivityType](#monotreme-api-v1-ActivityType)
+  
+    - [ActivityService](#monotreme-api-v1-ActivityService)
+  
 - [api/v1/auth_service.proto](#api_v1_auth_service-proto)
     - [GetAuthStatusRequest](#monotreme-api-v1-GetAuthStatusRequest)
     - [SignInRequest](#monotreme-api-v1-SignInRequest)
@@ -384,6 +408,395 @@
 | ListUserAccessTokens | [ListUserAccessTokensRequest](#monotreme-api-v1-ListUserAccessTokensRequest) | [ListUserAccessTokensResponse](#monotreme-api-v1-ListUserAccessTokensResponse) | ListUserAccessTokens returns a list of access tokens for a user. |
 | CreateUserAccessToken | [CreateUserAccessTokenRequest](#monotreme-api-v1-CreateUserAccessTokenRequest) | [UserAccessToken](#monotreme-api-v1-UserAccessToken) | CreateUserAccessToken creates a new access token for a user. |
 | DeleteUserAccessToken | [DeleteUserAccessTokenRequest](#monotreme-api-v1-DeleteUserAccessTokenRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteUserAccessToken deletes an access token for a user. |
+
+ 
+
+
+
+<a name="api_v1_activity_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/activity_service.proto
+
+
+
+<a name="monotreme-api-v1-ActivityItem"></a>
+
+### ActivityItem
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| type | [ActivityType](#monotreme-api-v1-ActivityType) |  |  |
+| user_id | [int32](#int32) |  |  |
+| user_name | [string](#string) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| user_created | [UserCreatedData](#monotreme-api-v1-UserCreatedData) |  |  |
+| shortcut_created | [ShortcutCreatedData](#monotreme-api-v1-ShortcutCreatedData) |  |  |
+| shortcut_viewed | [ShortcutViewedData](#monotreme-api-v1-ShortcutViewedData) |  |  |
+| collection_created | [CollectionCreatedData](#monotreme-api-v1-CollectionCreatedData) |  |  |
+| collection_viewed | [CollectionViewedData](#monotreme-api-v1-CollectionViewedData) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-CollectionCreatedData"></a>
+
+### CollectionCreatedData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| collection_id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-CollectionViewedData"></a>
+
+### CollectionViewedData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| collection_id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetActivitySummaryRequest"></a>
+
+### GetActivitySummaryRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetActivitySummaryResponse"></a>
+
+### GetActivitySummaryResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| total_users | [int32](#int32) |  | Total counts |
+| total_shortcuts | [int32](#int32) |  |  |
+| total_collections | [int32](#int32) |  |  |
+| total_clicks | [int32](#int32) |  |  |
+| recent_users_count | [int32](#int32) |  | Recent activity counts (last 24 hours) |
+| recent_shortcuts_count | [int32](#int32) |  |  |
+| recent_collections_count | [int32](#int32) |  |  |
+| recent_clicks_count | [int32](#int32) |  |  |
+| user_summary | [UserSummary](#monotreme-api-v1-UserSummary) |  | User-specific summary (for current user) |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetRecentActivityRequest"></a>
+
+### GetRecentActivityRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| limit | [int32](#int32) | optional | Number of items to return for each activity type (default: 5) |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetRecentActivityResponse"></a>
+
+### GetRecentActivityResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| recent_users | [RecentUser](#monotreme-api-v1-RecentUser) | repeated |  |
+| recent_shortcuts | [RecentShortcut](#monotreme-api-v1-RecentShortcut) | repeated |  |
+| recent_collections | [RecentCollection](#monotreme-api-v1-RecentCollection) | repeated |  |
+| recent_clicks | [RecentClick](#monotreme-api-v1-RecentClick) | repeated |  |
+| most_clicked_shortcuts | [MostClickedShortcut](#monotreme-api-v1-MostClickedShortcut) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListActivitiesRequest"></a>
+
+### ListActivitiesRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| activity_type | [ActivityType](#monotreme-api-v1-ActivityType) | optional | Activity type filter |
+| user_id | [int32](#int32) | optional | User ID filter (if not specified, returns activities for all users) |
+| created_after | [google.protobuf.Timestamp](#google-protobuf-Timestamp) | optional | Time range filter |
+| created_before | [google.protobuf.Timestamp](#google-protobuf-Timestamp) | optional |  |
+| page_size | [int32](#int32) |  | Pagination |
+| page_token | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListActivitiesResponse"></a>
+
+### ListActivitiesResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| activities | [ActivityItem](#monotreme-api-v1-ActivityItem) | repeated |  |
+| next_page_token | [string](#string) |  |  |
+| total_count | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-MostClickedShortcut"></a>
+
+### MostClickedShortcut
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| link | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| creator_name | [string](#string) |  |  |
+| view_count | [int32](#int32) |  |  |
+| last_clicked | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RecentClick"></a>
+
+### RecentClick
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut_id | [int32](#int32) |  |  |
+| shortcut_name | [string](#string) |  |  |
+| shortcut_title | [string](#string) |  |  |
+| shortcut_link | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| creator_name | [string](#string) |  |  |
+| clicked_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| user_agent | [string](#string) |  |  |
+| referer | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RecentCollection"></a>
+
+### RecentCollection
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| creator_name | [string](#string) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| shortcut_count | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RecentShortcut"></a>
+
+### RecentShortcut
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| link | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| creator_name | [string](#string) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| view_count | [int32](#int32) |  |  |
+| tags | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RecentUser"></a>
+
+### RecentUser
+Recent Activity Items
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| email | [string](#string) |  |  |
+| nickname | [string](#string) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| role | [Role](#monotreme-api-v1-Role) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ShortcutCreatedData"></a>
+
+### ShortcutCreatedData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut_id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| link | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ShortcutViewedData"></a>
+
+### ShortcutViewedData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut_id | [int32](#int32) |  |  |
+| name | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| user_agent | [string](#string) |  |  |
+| referer | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-UserCreatedData"></a>
+
+### UserCreatedData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_id | [int32](#int32) |  |  |
+| email | [string](#string) |  |  |
+| nickname | [string](#string) |  |  |
+| role | [Role](#monotreme-api-v1-Role) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-UserSummary"></a>
+
+### UserSummary
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_shortcuts_count | [int32](#int32) |  |  |
+| user_collections_count | [int32](#int32) |  |  |
+| user_total_clicks | [int32](#int32) |  |  |
+| user_tags | [string](#string) | repeated |  |
+
+
+
+
+
+ 
+
+
+<a name="monotreme-api-v1-ActivityType"></a>
+
+### ActivityType
+Activity Types
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| ACTIVITY_TYPE_UNSPECIFIED | 0 |  |
+| USER_CREATED | 1 |  |
+| SHORTCUT_CREATED | 2 |  |
+| SHORTCUT_VIEWED | 3 |  |
+| COLLECTION_CREATED | 4 |  |
+| COLLECTION_VIEWED | 5 |  |
+
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-ActivityService"></a>
+
+### ActivityService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| GetRecentActivity | [GetRecentActivityRequest](#monotreme-api-v1-GetRecentActivityRequest) | [GetRecentActivityResponse](#monotreme-api-v1-GetRecentActivityResponse) | GetRecentActivity returns recent activity data for the dashboard |
+| GetActivitySummary | [GetActivitySummaryRequest](#monotreme-api-v1-GetActivitySummaryRequest) | [GetActivitySummaryResponse](#monotreme-api-v1-GetActivitySummaryResponse) | GetActivitySummary returns summary statistics for the workspace |
+| ListActivities | [ListActivitiesRequest](#monotreme-api-v1-ListActivitiesRequest) | [ListActivitiesResponse](#monotreme-api-v1-ListActivitiesResponse) | ListActivities returns a paginated list of activities with filtering |
 
  
 
