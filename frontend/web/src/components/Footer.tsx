@@ -20,9 +20,16 @@ const Footer: React.FC = () => {
          <span>
            <Icon.Github className="size-6" strokeWidth={1.5}/> 
          </span>
-         <span>
-           https://github.com/bshort/monotreme
-         </span>
+        <a
+          href="https://github.com/bshort/monotreme"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center space-x-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+        >
+           <span>
+             https://github.com/bshort/monotreme
+           </span>
+         </a>
       </div>
     </footer>
   );
