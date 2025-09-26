@@ -5,6 +5,7 @@ import AccessTokenSection from "@/components/setting/AccessTokenSection";
 import AccountSection from "@/components/setting/AccountSection";
 import PreferenceSection from "@/components/setting/PreferenceSection";
 import UserSummarySection from "@/components/setting/UserSummarySection";
+import RecentActivitySection from "@/components/setting/RecentActivitySection";
 import Icon from "@/components/Icon";
 import { userServiceClient } from "@/grpcweb";
 import { useUserStore } from "@/stores";
@@ -38,6 +39,7 @@ const Setting: React.FC = () => {
     <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 py-6 flex flex-col justify-start items-start gap-y-12">
       <AccountSection />
       <UserSummarySection />
+      <RecentActivitySection />
       <AccessTokenSection />
       <PreferenceSection />
 
