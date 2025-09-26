@@ -41,7 +41,8 @@ func (s *SwaggerService) serveSwaggerUI(c echo.Context) error {
 <head>
     <title>Monotreme API Documentation</title>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui.css" />
-    <style>
+    <link rel="icon" href="/monotreme.png" type="image/png">
+   <style>
         html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
         *, *:before, *:after { box-sizing: inherit; }
         body { margin:0; background: #fafafa; }
