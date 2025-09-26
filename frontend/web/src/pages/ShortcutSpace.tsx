@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import CreateShortcutDrawer from "@/components/CreateShortcutDrawer";
 import { isURL } from "@/helpers/utils";
 import useNavigateTo from "@/hooks/useNavigateTo";
-import { useShortcutStore, useUserStore } from "@/stores";
+import { useShortcutStore, useUserStore, useWorkspaceStore } from "@/stores";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 
 const ShortcutSpace = () => {
@@ -16,12 +16,23 @@ const ShortcutSpace = () => {
   const userStore = useUserStore();
   const currentUser = userStore.getCurrentUser();
   const shortcutStore = useShortcutStore();
+  const workspaceStore = useWorkspaceStore();
   const [shortcut, setShortcut] = useState<Shortcut>();
   const [loading, setLoading] = useState(true);
   const [showCreateShortcutDrawer, setShowCreateShortcutDrawer] = useState(false);
 
+  // Check if the current route matches the workspace shortcut prefix
+  const requestedPrefix = params["prefix"] || "s"; // "s" for legacy route, or the dynamic prefix
+  const currentShortcutPrefix = workspaceStore.getShortcutPrefix();
+
   useEffect(() => {
     (async () => {
+      // Only fetch shortcut if the requested prefix matches the current shortcut prefix
+      if (requestedPrefix !== currentShortcutPrefix) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const shortcut = await shortcutStore.fetchShortcutByName(shortcutName);
         setShortcut(shortcut);
@@ -31,9 +42,15 @@ const ShortcutSpace = () => {
       }
       setLoading(false);
     })();
-  }, [shortcutName]);
+  }, [shortcutName, requestedPrefix, currentShortcutPrefix]);
 
   if (loading) {
+    return null;
+  }
+
+  // If the requested prefix doesn't match the current shortcut prefix, show 404
+  if (requestedPrefix !== currentShortcutPrefix) {
+    navigateTo("/404");
     return null;
   }
 

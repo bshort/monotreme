@@ -173,6 +173,7 @@ func (es *ExportService) authenticateUser(ctx context.Context, accessToken strin
 }
 
 func (es *ExportService) generateBookmarkHTML(shortcuts []*storepb.Shortcut, user *store.User) (string, error) {
+	ctx := context.Background()
 
 	htmlHeader := fmt.Sprintf(`<!DOCTYPE NETSCAPE-Bookmark-file-1>
 <!-- This is an automatically generated file.
@@ -181,29 +182,77 @@ func (es *ExportService) generateBookmarkHTML(shortcuts []*storepb.Shortcut, use
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <TITLE>Bookmarks</TITLE>
 <H1>Bookmarks</H1>
-<DL><p>
-    <DT><H3 ADD_DATE="%d" LAST_MODIFIED="%d" PERSONAL_TOOLBAR_FOLDER="true">Monotreme Shortcuts - %s</H3>
-    <DL><p>
-`, time.Now().Unix(), time.Now().Unix(), user.Nickname)
+<DL><p>`)
 
-	htmlFooter := `    </DL><p>
-</DL><p>`
+	htmlFooter := `</DL><p>`
 
-	bookmarks := ""
-	for _, shortcut := range shortcuts {
-		// Generate bookmark entry
-		addDate := shortcut.CreatedTs
-
-		bookmarkHTML := fmt.Sprintf(`        <DT><A HREF="%s" ADD_DATE="%d">%s</A>
-`,
-			escapeHTML(shortcut.Link),
-			addDate,
-			escapeHTML(shortcut.Title))
-
-		bookmarks += bookmarkHTML
+	// Get user's collections
+	collections, err := es.Store.ListCollections(ctx, &store.FindCollection{
+		CreatorID: &user.ID,
+	})
+	if err != nil {
+		return "", errors.Wrap(err, "failed to get collections")
 	}
 
-	return htmlHeader + bookmarks + htmlFooter, nil
+	// Create a map of shortcut ID to shortcut for quick lookup
+	shortcutMap := make(map[int32]*storepb.Shortcut)
+	for _, shortcut := range shortcuts {
+		shortcutMap[shortcut.Id] = shortcut
+	}
+
+	// Track which shortcuts are in collections
+	shortcutsInCollections := make(map[int32]bool)
+
+	content := ""
+
+	// Generate collections with their shortcuts
+	for _, collection := range collections {
+		if len(collection.ShortcutIds) == 0 {
+			continue // Skip empty collections
+		}
+
+		// Collection header
+		content += fmt.Sprintf(`    <DT><H3 ADD_DATE="%d" LAST_MODIFIED="%d">%s</H3>
+    <DL><p>
+`, collection.CreatedTs, collection.UpdatedTs, escapeHTML(collection.Title))
+
+		// Add shortcuts in this collection
+		for _, shortcutID := range collection.ShortcutIds {
+			if shortcut, exists := shortcutMap[shortcutID]; exists {
+				shortcutsInCollections[shortcutID] = true
+				content += fmt.Sprintf(`        <DT><A HREF="%s" ADD_DATE="%d">%s</A>
+`, escapeHTML(shortcut.Link), shortcut.CreatedTs, escapeHTML(shortcut.Title))
+			}
+		}
+
+		// Collection footer
+		content += `    </DL><p>
+`
+	}
+
+	// Add uncollected shortcuts in a default folder
+	uncollectedShortcuts := []*storepb.Shortcut{}
+	for _, shortcut := range shortcuts {
+		if !shortcutsInCollections[shortcut.Id] {
+			uncollectedShortcuts = append(uncollectedShortcuts, shortcut)
+		}
+	}
+
+	if len(uncollectedShortcuts) > 0 {
+		content += fmt.Sprintf(`    <DT><H3 ADD_DATE="%d" LAST_MODIFIED="%d">Uncollected Shortcuts</H3>
+    <DL><p>
+`, time.Now().Unix(), time.Now().Unix())
+
+		for _, shortcut := range uncollectedShortcuts {
+			content += fmt.Sprintf(`        <DT><A HREF="%s" ADD_DATE="%d">%s</A>
+`, escapeHTML(shortcut.Link), shortcut.CreatedTs, escapeHTML(shortcut.Title))
+		}
+
+		content += `    </DL><p>
+`
+	}
+
+	return htmlHeader + content + htmlFooter, nil
 }
 
 func escapeHTML(s string) string {

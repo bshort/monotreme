@@ -2,6 +2,7 @@ import { useColorScheme } from "@mui/joy";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Navigator from "@/components/Navigator";
 import useNavigateTo from "@/hooks/useNavigateTo";
@@ -54,10 +55,13 @@ const Root: React.FC = () => {
 
   return (
     isInitialized && (
-      <div className="w-full h-auto flex flex-col justify-start items-start dark:bg-zinc-900">
+      <div className="w-full min-h-screen flex flex-col justify-start items-start dark:bg-zinc-900">
         <Header />
         <Navigator />
-        <Outlet />
+        <div className="flex-1 w-full">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
     )
   );

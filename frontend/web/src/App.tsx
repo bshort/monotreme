@@ -1,12 +1,21 @@
 import { useColorScheme } from "@mui/joy";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import Footer from "@/components/Footer";
 import { useWorkspaceStore } from "@/stores";
 import { FeatureType } from "./stores/workspace";
 
 function App() {
   const { mode: colorScheme } = useColorScheme();
   const workspaceStore = useWorkspaceStore();
+  const location = useLocation();
+
+  // Check if we're on a page that uses the Root layout (which already has a footer)
+  const isRootLayoutPage = location.pathname.startsWith('/') &&
+    !location.pathname.startsWith('/landing') &&
+    !location.pathname.startsWith('/auth') &&
+    !location.pathname.startsWith('/quick-save') &&
+    !location.pathname.match(/^\/[^\/]+\/[^\/]+$/); // Not shortcut/collection routes
 
 
   useEffect(() => {
@@ -60,9 +69,11 @@ function App() {
   }, [colorScheme]);
 
   return (
-    <>
-      <Outlet />
-    </>
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1">
+        <Outlet />
+      </div>
+    </div>
   );
 }
 

@@ -327,7 +327,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
             <Input
               className="w-full"
               type="text"
-              startDecorator="s/"
+              startDecorator={`${workspaceStore.setting.shortcutPrefix || "s"}/`}
               placeholder={
                 isCreating && !nameWasManuallyEdited && (currentUser.autoGenerateName ?? true)
                   ? "Will be generated from title..."

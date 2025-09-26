@@ -40,14 +40,124 @@ func NewFrontendService(profile *profile.Profile, store *store.Store) *FrontendS
 	}
 }
 
-func (s *FrontendService) Serve(_ context.Context, e *echo.Echo) {
+func (s *FrontendService) getShortcutPrefix(ctx context.Context) string {
+	shortcutRelatedSetting, err := s.Store.GetWorkspaceSetting(ctx, &store.FindWorkspaceSetting{
+		Key: storepb.WorkspaceSettingKey_WORKSPACE_SETTING_SHORTCUT_RELATED,
+	})
+	if err != nil || shortcutRelatedSetting == nil {
+		return "s" // Default fallback
+	}
+	prefix := shortcutRelatedSetting.GetShortcutRelated().GetShortcutPrefix()
+	if prefix == "" {
+		return "s" // Default fallback
+	}
+	return prefix
+}
+
+func (s *FrontendService) isShortcutRoute(c echo.Context) bool {
+	path := c.Path()
+	if path == "/" {
+		return false
+	}
+
+	// Split path into segments
+	segments := strings.Split(strings.Trim(path, "/"), "/")
+	if len(segments) != 2 {
+		return false
+	}
+
+	// Check if the first segment matches the current shortcut prefix
+	ctx := c.Request().Context()
+	currentPrefix := s.getShortcutPrefix(ctx)
+	isShortcut := segments[0] == currentPrefix
+
+	// Log for debugging
+	slog.Info("isShortcutRoute check",
+		slog.String("path", path),
+		slog.String("prefix", segments[0]),
+		slog.String("current", currentPrefix),
+		slog.Bool("isShortcut", isShortcut))
+
+	return isShortcut
+}
+
+func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
+	rawIndexHTML := getRawIndexHTML()
+
+	// Add middleware to handle shortcut/collection routes BEFORE static middleware
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			path := c.Path()
+			slog.Info("Middleware check", slog.String("path", path), slog.String("method", c.Request().Method))
+
+			// Only handle GET requests
+			if c.Request().Method != "GET" {
+				return next(c)
+			}
+
+			// Split path into segments
+			segments := strings.Split(strings.Trim(path, "/"), "/")
+			if len(segments) != 2 {
+				return next(c)
+			}
+
+			prefix := segments[0]
+			name := segments[1]
+			ctx := c.Request().Context()
+
+			// Handle collection routes
+			if prefix == "c" {
+				collection, err := s.Store.GetCollection(ctx, &store.FindCollection{
+					Name: &name,
+				})
+				if err == nil && collection != nil {
+					indexHTML := strings.ReplaceAll(rawIndexHTML, headerMetadataPlaceholder, generateCollectionMetadata(collection).String())
+					return c.HTML(http.StatusOK, indexHTML)
+				}
+			}
+
+			// Handle shortcut routes
+			currentPrefix := s.getShortcutPrefix(ctx)
+			slog.Info("Checking shortcut middleware", slog.String("current", currentPrefix), slog.String("requested", prefix))
+
+			if prefix == currentPrefix {
+				shortcut, err := s.Store.GetShortcut(ctx, &store.FindShortcut{
+					Name: &name,
+				})
+				if err == nil && shortcut != nil {
+					// Create shortcut view activity.
+					if err := s.createShortcutViewActivity(ctx, c.Request(), shortcut); err != nil {
+						slog.Warn("failed to create shortcut view activity", slog.String("error", err.Error()))
+					}
+
+					// Copy query parameters to the target URL
+					targetURL := shortcut.Link
+					if c.Request().URL.RawQuery != "" {
+						separator := "?"
+						if strings.Contains(targetURL, "?") {
+							separator = "&"
+						}
+						targetURL = fmt.Sprintf("%s%s%s", targetURL, separator, c.Request().URL.RawQuery)
+					}
+
+					// Redirect to the shortcut's target URL
+					return c.Redirect(http.StatusFound, targetURL)
+				}
+			}
+
+			// Continue to next middleware (static files)
+			return next(c)
+		}
+	})
+
 	// Use echo static middleware to serve the built dist folder.
 	// Reference: https://github.com/labstack/echo/blob/master/middleware/static.go
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 		HTML5:      true,
 		Filesystem: getFileSystem("dist"),
 		Skipper: func(c echo.Context) bool {
-			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1", "/s/:shortcutName", "/c/:collectionName")
+			// Skip static serving for API routes
+			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1")
 		},
 	}))
 
@@ -56,7 +166,8 @@ func (s *FrontendService) Serve(_ context.Context, e *echo.Echo) {
 	// Reference: https://echo.labstack.com/docs/middleware/gzip
 	assetsGroup.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Skipper: func(c echo.Context) bool {
-			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1", "/s/:shortcutName", "/c/:collectionName")
+			// Skip gzip for API routes
+			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1")
 		},
 		Level: 5,
 	}))
@@ -70,53 +181,13 @@ func (s *FrontendService) Serve(_ context.Context, e *echo.Echo) {
 		HTML5:      true,
 		Filesystem: getFileSystem("dist/assets"),
 		Skipper: func(c echo.Context) bool {
-			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1", "/s/:shortcutName", "/c/:collectionName")
+			// Skip static serving for API routes
+			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1")
 		},
 	}))
-
-	s.registerRoutes(e)
 }
 
-func (s *FrontendService) registerRoutes(e *echo.Echo) {
-	rawIndexHTML := getRawIndexHTML()
-
-	e.GET("/s/:shortcutName", func(c echo.Context) error {
-		ctx := c.Request().Context()
-		shortcutName := c.Param("shortcutName")
-		shortcut, err := s.Store.GetShortcut(ctx, &store.FindShortcut{
-			Name: &shortcutName,
-		})
-		// If any error occurs or the shortcut is not found, return the raw `index.html`.
-		if err != nil || shortcut == nil {
-			return c.HTML(http.StatusOK, rawIndexHTML)
-		}
-
-		// Create shortcut view activity.
-		if err := s.createShortcutViewActivity(ctx, c.Request(), shortcut); err != nil {
-			slog.Warn("failed to create shortcut view activity", slog.String("error", err.Error()))
-		}
-
-		// Inject shortcut metadata into `index.html`.
-		indexHTML := strings.ReplaceAll(rawIndexHTML, headerMetadataPlaceholder, generateShortcutMetadata(shortcut).String())
-		return c.HTML(http.StatusOK, indexHTML)
-	})
-
-	e.GET("/c/:collectionName", func(c echo.Context) error {
-		ctx := c.Request().Context()
-		collectionName := c.Param("collectionName")
-		collection, err := s.Store.GetCollection(ctx, &store.FindCollection{
-			Name: &collectionName,
-		})
-		// If any error occurs or the collection is not found, return the raw `index.html`.
-		if err != nil || collection == nil {
-			return c.HTML(http.StatusOK, rawIndexHTML)
-		}
-
-		// Inject collection metadata into `index.html`.
-		indexHTML := strings.ReplaceAll(rawIndexHTML, headerMetadataPlaceholder, generateCollectionMetadata(collection).String())
-		return c.HTML(http.StatusOK, indexHTML)
-	})
-}
+// Routes are now handled by middleware in the Serve method
 
 func (s *FrontendService) createShortcutViewActivity(ctx context.Context, request *http.Request, shortcut *storepb.Shortcut) error {
 	ip := getReadUserIP(request)

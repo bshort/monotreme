@@ -97,6 +97,10 @@ const router = createBrowserRouter([
         element: <ShortcutSpace />,
       },
       {
+        path: ":prefix/*",
+        element: <ShortcutSpace />,
+      },
+      {
         path: "c/*",
         element: <CollectionSpace />,
       },

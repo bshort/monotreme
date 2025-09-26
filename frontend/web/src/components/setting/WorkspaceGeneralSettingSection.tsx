@@ -93,23 +93,30 @@ const WorkspaceGeneralSettingSection = () => {
 
   const handleSaveWorkspaceSetting = async () => {
     // Validate shortcut prefix before saving
-    const prefixError = validateShortcutPrefix(workspaceSetting.shortcutPrefix || "s");
+    const prefix = workspaceSetting.shortcutPrefix || "s";
+    const prefixError = validateShortcutPrefix(prefix);
     if (prefixError) {
       toast.error(prefixError);
       return;
     }
 
+    // Ensure we save the actual prefix (defaulting to "s" if empty)
+    const settingToSave = {
+      ...workspaceSetting,
+      shortcutPrefix: prefix
+    };
+
     const updateMask: string[] = [];
-    if (!isEqual(originalWorkspaceSetting.current.branding, workspaceSetting.branding)) {
+    if (!isEqual(originalWorkspaceSetting.current.branding, settingToSave.branding)) {
       updateMask.push("branding");
     }
-    if (!isEqual(originalWorkspaceSetting.current.customStyle, workspaceSetting.customStyle)) {
+    if (!isEqual(originalWorkspaceSetting.current.customStyle, settingToSave.customStyle)) {
       updateMask.push("custom_style");
     }
-    if (!isEqual(originalWorkspaceSetting.current.defaultVisibility, workspaceSetting.defaultVisibility)) {
+    if (!isEqual(originalWorkspaceSetting.current.defaultVisibility, settingToSave.defaultVisibility)) {
       updateMask.push("default_visibility");
     }
-    if (!isEqual(originalWorkspaceSetting.current.shortcutPrefix, workspaceSetting.shortcutPrefix)) {
+    if (!isEqual(originalWorkspaceSetting.current.shortcutPrefix, settingToSave.shortcutPrefix)) {
       updateMask.push("shortcut_prefix");
     }
     if (updateMask.length === 0) {
@@ -119,7 +126,7 @@ const WorkspaceGeneralSettingSection = () => {
 
     try {
       const setting = await workspaceServiceClient.updateWorkspaceSetting({
-        setting: workspaceSetting,
+        setting: settingToSave,
         updateMask: updateMask,
       });
       setWorkspaceSetting(setting);
@@ -186,7 +193,7 @@ const WorkspaceGeneralSettingSection = () => {
           <Input
             className="w-36"
             placeholder="s"
-            value={workspaceSetting.shortcutPrefix || "s"}
+            value={workspaceSetting.shortcutPrefix || ""}
             onChange={handleShortcutPrefixChange}
           />
         </div>
