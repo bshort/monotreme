@@ -84,21 +84,14 @@ const ShortcutSpace = () => {
     );
   }
 
-  // If shortcut is a URL, redirect through the server to register the visit.
+  // If shortcut is a URL, redirect to it directly.
   if (isURL(shortcut.link)) {
     window.document.title = "Redirecting...";
-
-    // Construct the server URL that will handle the visit tracking and redirect
-    const serverUrl = new URL(window.location.origin);
-    serverUrl.pathname = `/${currentShortcutPrefix}/${shortcutName}`;
-
-    // Add any query parameters from the current URL
+    const url = new URL(shortcut.link);
     searchParams.forEach((value, key) => {
-      serverUrl.searchParams.append(key, value);
+      url.searchParams.append(key, value);
     });
-
-    // Redirect to the server route which will track the visit and redirect to the target
-    window.location.href = serverUrl.toString();
+    window.location.href = url.toString();
     return null;
   }
 
