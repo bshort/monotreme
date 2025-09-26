@@ -2,11 +2,9 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"time"
 
-	"github.com/pkg/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -108,27 +106,42 @@ func (s *APIV1Service) GetActivitySummary(ctx context.Context, request *v1pb.Get
 	// Get recent activity counts (last 24 hours)
 	oneDayAgo := time.Now().AddDate(0, 0, -1).Unix()
 
-	recentUsers, err := s.Store.ListUsers(ctx, &store.FindUser{
-		CreatedTsAfter: &oneDayAgo,
-	})
+	allUsers, err := s.Store.ListUsers(ctx, &store.FindUser{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list recent users: %v", err)
 	}
+	// Filter users created in the last 24 hours
+	recentUsers := make([]*store.User, 0)
+	for _, user := range allUsers {
+		if user.CreatedTs > oneDayAgo {
+			recentUsers = append(recentUsers, user)
+		}
+	}
 	response.RecentUsersCount = int32(len(recentUsers))
 
-	recentShortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{
-		CreatedTsAfter: &oneDayAgo,
-	})
+	allShortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list recent shortcuts: %v", err)
 	}
+	// Filter shortcuts created in the last 24 hours
+	recentShortcuts := make([]*storepb.Shortcut, 0)
+	for _, shortcut := range allShortcuts {
+		if shortcut.CreatedTs > oneDayAgo {
+			recentShortcuts = append(recentShortcuts, shortcut)
+		}
+	}
 	response.RecentShortcutsCount = int32(len(recentShortcuts))
 
-	recentCollections, err := s.Store.ListCollections(ctx, &store.FindCollection{
-		CreatedTsAfter: &oneDayAgo,
-	})
+	allCollections, err := s.Store.ListCollections(ctx, &store.FindCollection{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list recent collections: %v", err)
+	}
+	// Filter collections created in the last 24 hours
+	recentCollections := make([]*storepb.Collection, 0)
+	for _, collection := range allCollections {
+		if collection.CreatedTs > oneDayAgo {
+			recentCollections = append(recentCollections, collection)
+		}
 	}
 	response.RecentCollectionsCount = int32(len(recentCollections))
 
@@ -143,7 +156,7 @@ func (s *APIV1Service) GetActivitySummary(ctx context.Context, request *v1pb.Get
 
 	// Get user-specific summary
 	if currentUser != nil {
-		userSummary, err := s.getUserSummary(ctx, currentUser.Id)
+		userSummary, err := s.getUserSummary(ctx, currentUser.ID)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "failed to get user summary: %v", err)
 		}
@@ -240,7 +253,7 @@ func (s *APIV1Service) getRecentUsers(ctx context.Context, limit int) ([]*v1pb.R
 	}
 
 	// Sort by created time (most recent first)
-	sortedUsers := make([]*storepb.User, len(users))
+	sortedUsers := make([]*store.User, len(users))
 	copy(sortedUsers, users)
 
 	// Simple bubble sort by CreatedTs (newest first)
@@ -260,7 +273,7 @@ func (s *APIV1Service) getRecentUsers(ctx context.Context, limit int) ([]*v1pb.R
 	recentUsers := make([]*v1pb.RecentUser, len(sortedUsers))
 	for i, user := range sortedUsers {
 		recentUsers[i] = &v1pb.RecentUser{
-			Id:          user.Id,
+			Id:          user.ID,
 			Email:       user.Email,
 			Nickname:    user.Nickname,
 			CreatedTime: timestampFromUnix(user.CreatedTs),
@@ -304,6 +317,12 @@ func (s *APIV1Service) getRecentShortcuts(ctx context.Context, limit int) ([]*v1
 			}
 		}
 
+		viewCount, err := s.calculateViewCount(ctx, shortcut.Id)
+		if err != nil {
+			// If we can't get view count, default to 0 rather than failing
+			viewCount = 0
+		}
+
 		recentShortcuts[i] = &v1pb.RecentShortcut{
 			Id:          shortcut.Id,
 			Name:        shortcut.Name,
@@ -312,7 +331,7 @@ func (s *APIV1Service) getRecentShortcuts(ctx context.Context, limit int) ([]*v1
 			CreatorId:   shortcut.CreatorId,
 			CreatorName: creatorName,
 			CreatedTime: timestampFromUnix(shortcut.CreatedTs),
-			ViewCount:   shortcut.ViewCount,
+			ViewCount:   viewCount,
 			Tags:        shortcut.Tags,
 		}
 	}
@@ -354,13 +373,7 @@ func (s *APIV1Service) getRecentCollections(ctx context.Context, limit int) ([]*
 		}
 
 		// Count shortcuts in collection
-		shortcuts, _ := s.Store.ListShortcuts(ctx, &store.FindShortcut{
-			CollectionIds: []int32{collection.Id},
-		})
-		shortcutCount := int32(0)
-		if shortcuts != nil {
-			shortcutCount = int32(len(shortcuts))
-		}
+		shortcutCount := int32(len(collection.ShortcutIds))
 
 		recentCollections[i] = &v1pb.RecentCollection{
 			Id:            collection.Id,
@@ -441,29 +454,43 @@ func (s *APIV1Service) getMostClickedShortcuts(ctx context.Context, limit int) (
 		return nil, err
 	}
 
-	// Filter shortcuts with clicks and sort by view count (descending)
-	clickedShortcuts := make([]*storepb.Shortcut, 0)
+	// Calculate view counts for all shortcuts and filter/sort
+	type shortcutWithCount struct {
+		shortcut  *storepb.Shortcut
+		viewCount int32
+	}
+
+	shortcutsWithCounts := make([]shortcutWithCount, 0)
 	for _, shortcut := range shortcuts {
-		if shortcut.ViewCount > 0 {
-			clickedShortcuts = append(clickedShortcuts, shortcut)
+		viewCount, err := s.calculateViewCount(ctx, shortcut.Id)
+		if err != nil {
+			// If we can't get view count, default to 0
+			viewCount = 0
+		}
+		if viewCount > 0 {
+			shortcutsWithCounts = append(shortcutsWithCounts, shortcutWithCount{
+				shortcut:  shortcut,
+				viewCount: viewCount,
+			})
 		}
 	}
 
 	// Sort by view count (highest first)
-	for i := 0; i < len(clickedShortcuts); i++ {
-		for j := i + 1; j < len(clickedShortcuts); j++ {
-			if clickedShortcuts[i].ViewCount < clickedShortcuts[j].ViewCount {
-				clickedShortcuts[i], clickedShortcuts[j] = clickedShortcuts[j], clickedShortcuts[i]
+	for i := 0; i < len(shortcutsWithCounts); i++ {
+		for j := i + 1; j < len(shortcutsWithCounts); j++ {
+			if shortcutsWithCounts[i].viewCount < shortcutsWithCounts[j].viewCount {
+				shortcutsWithCounts[i], shortcutsWithCounts[j] = shortcutsWithCounts[j], shortcutsWithCounts[i]
 			}
 		}
 	}
 
-	if len(clickedShortcuts) > limit {
-		clickedShortcuts = clickedShortcuts[:limit]
+	if len(shortcutsWithCounts) > limit {
+		shortcutsWithCounts = shortcutsWithCounts[:limit]
 	}
 
-	mostClickedShortcuts := make([]*v1pb.MostClickedShortcut, len(clickedShortcuts))
-	for i, shortcut := range clickedShortcuts {
+	mostClickedShortcuts := make([]*v1pb.MostClickedShortcut, len(shortcutsWithCounts))
+	for i, sc := range shortcutsWithCounts {
+		shortcut := sc.shortcut
 		creator, _ := s.Store.GetUser(ctx, &store.FindUser{ID: &shortcut.CreatorId})
 		creatorName := ""
 		if creator != nil {
@@ -480,7 +507,7 @@ func (s *APIV1Service) getMostClickedShortcuts(ctx context.Context, limit int) (
 			Link:        shortcut.Link,
 			CreatorId:   shortcut.CreatorId,
 			CreatorName: creatorName,
-			ViewCount:   shortcut.ViewCount,
+			ViewCount:   sc.viewCount,
 			LastClicked: timestampFromUnix(shortcut.UpdatedTs), // Using updated timestamp as proxy
 		}
 	}
@@ -510,7 +537,13 @@ func (s *APIV1Service) getUserSummary(ctx context.Context, userID int32) (*v1pb.
 	tagMap := make(map[string]bool)
 
 	for _, shortcut := range userShortcuts {
-		totalClicks += shortcut.ViewCount
+		viewCount, err := s.calculateViewCount(ctx, shortcut.Id)
+		if err != nil {
+			// If we can't get view count, default to 0
+			viewCount = 0
+		}
+		totalClicks += viewCount
+
 		for _, tag := range shortcut.Tags {
 			tagMap[tag] = true
 		}
@@ -595,11 +628,11 @@ func (s *APIV1Service) convertActivityToActivityItem(ctx context.Context, activi
 }
 
 // Helper functions for type conversion
-func convertRoleFromStore(role storepb.User_Role) v1pb.Role {
+func convertRoleFromStore(role store.Role) v1pb.Role {
 	switch role {
-	case storepb.User_ADMIN:
+	case store.RoleAdmin:
 		return v1pb.Role_ADMIN
-	case storepb.User_USER:
+	case store.RoleUser:
 		return v1pb.Role_USER
 	default:
 		return v1pb.Role_ROLE_UNSPECIFIED
@@ -608,4 +641,16 @@ func convertRoleFromStore(role storepb.User_Role) v1pb.Role {
 
 func timestampFromUnix(ts int64) *timestamppb.Timestamp {
 	return timestamppb.New(time.Unix(ts, 0))
+}
+
+// calculateViewCount calculates view count for a shortcut by counting SHORTCUT_VIEW activities
+func (s *APIV1Service) calculateViewCount(ctx context.Context, shortcutID int32) (int32, error) {
+	activities, err := s.Store.ListActivities(ctx, &store.FindActivity{
+		Type:              store.ActivityShortcutView,
+		PayloadShortcutID: &shortcutID,
+	})
+	if err != nil {
+		return 0, err
+	}
+	return int32(len(activities)), nil
 }
