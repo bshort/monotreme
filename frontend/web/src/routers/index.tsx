@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "@/App";
 import Root from "@/layouts/Root";
+import About from "@/pages/About";
 import AdminSignIn from "@/pages/AdminSignIn";
 import AuthCallback from "@/pages/AuthCallback";
 import BookmarkImport from "@/pages/BookmarkImport";
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
           {
             path: "/stats",
             element: <Stats />,
+          },
+          {
+            path: "/about",
+            element: <About />,
           },
           {
             path: "/admin/import",

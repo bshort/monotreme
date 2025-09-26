@@ -1,4 +1,4 @@
-import { Card, Typography } from "@mui/joy";
+import { Button, Card, Typography } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import useLocalStorage from "react-use/lib/useLocalStorage";
 import Icon from "@/components/Icon";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useUserStore } from "@/stores";
+import { getShortcutUrl } from "@/utils/shortcut";
 import { getAllUniqueTags } from "@/stores/view";
 
 const TagsDashboard: React.FC = () => {
@@ -71,6 +72,13 @@ const TagsDashboard: React.FC = () => {
     setTagData(sortedTagMap);
   }, [shortcutList]);
 
+  const handleReload = () => {
+    loadingState.setLoading();
+    Promise.all([shortcutStore.fetchShortcutList()]).finally(() => {
+      loadingState.setFinish();
+    });
+  };
+
   if (loadingState.isLoading) {
     return (
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
@@ -96,13 +104,19 @@ const TagsDashboard: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
-      <div className="w-full mb-6">
-        <Typography level="h2" className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          Tags
-        </Typography>
-        <Typography level="body-md" className="text-gray-600 dark:text-gray-400">
-          Browse shortcuts organized by tags
-        </Typography>
+      <div className="w-full flex flex-row justify-between items-end mb-6">
+        <div>
+          <Typography level="h2" className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            Tags
+          </Typography>
+          <Typography level="body-md" className="text-gray-600 dark:text-gray-400">
+            Browse shortcuts organized by tags
+          </Typography>
+        </div>
+        <Button className="hover:shadow" variant="plain" size="sm" onClick={handleReload} disabled={loadingState.isLoading}>
+          <Icon.RotateCcw className="w-4 h-auto" />
+          <span className="ml-0.5">{t("common.reload")}</span>
+        </Button>
       </div>
 
       <div className="w-full space-y-6">
@@ -183,7 +197,7 @@ const TagsDashboard: React.FC = () => {
                       <Icon.Edit className="w-4 h-4" />
                     </Link>
                     <a
-                      href={shortcut.link}
+                      href={getShortcutUrl(shortcut.name)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"

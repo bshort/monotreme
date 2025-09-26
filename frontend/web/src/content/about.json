@@ -1,0 +1,16 @@
+{
+  "title": "About",
+  "description": "Monotreme is an open source, self-hosted platform for sharing and managing your most frequently used links.",
+  "sections": [
+    {
+      "type": "paragraph",
+      "content": "Monotreme is an open source, self-hosted platform for sharing and managing your most frequently used links."
+    },
+    {
+      "type": "link",
+      "label": "Source code:",
+      "url": "https://github.com/bshort/monotreme",
+      "text": "GitHub"
+    }
+  ]
+}

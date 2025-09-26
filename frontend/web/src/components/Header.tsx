@@ -5,7 +5,6 @@ import { authServiceClient } from "@/grpcweb";
 import { useWorkspaceStore, useUserStore } from "@/stores";
 import { PlanType } from "@/types/proto/api/v1/subscription_service";
 import { Role } from "@/types/proto/api/v1/user_service";
-import AboutDialog from "./AboutDialog";
 import Icon from "./Icon";
 import Logo from "./Logo";
 import Dropdown from "./common/Dropdown";
@@ -15,7 +14,6 @@ const Header: React.FC = () => {
   const location = useLocation();
   const workspaceStore = useWorkspaceStore();
   const currentUser = useUserStore().getCurrentUser();
-  const [showAboutDialog, setShowAboutDialog] = useState<boolean>(false);
   const subscription = workspaceStore.getSubscription();
   const isAdmin = currentUser.role === Role.ADMIN;
   const shouldShowRouterSwitch = location.pathname === "/shortcuts" || location.pathname === "/collections" || location.pathname === "/tags";
@@ -111,12 +109,13 @@ const Header: React.FC = () => {
                       <Icon.BarChart3 className="w-5 h-auto mr-2 opacity-70" /> {t("stats.title")}
                     </Link>
                   )}
-                  <button
+                  <Link
                     className="w-full px-2 flex flex-row justify-start items-center text-left dark:text-gray-400 leading-8 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60"
-                    onClick={() => setShowAboutDialog(true)}
+                    to="/about"
+                    viewTransition
                   >
                     <Icon.Info className="w-5 h-auto mr-2 opacity-70" /> {t("common.about")}
-                  </button>
+                  </Link>
                   <button
                     className="w-full px-2 flex flex-row justify-start items-center text-left dark:text-gray-400 leading-8 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60"
                     onClick={() => handleSignOutButtonClick()}
@@ -129,8 +128,6 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {showAboutDialog && <AboutDialog onClose={() => setShowAboutDialog(false)} />}
     </>
   );
 };

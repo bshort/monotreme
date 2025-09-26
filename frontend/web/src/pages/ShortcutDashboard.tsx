@@ -57,6 +57,13 @@ const ShortcutDashboard: React.FC = () => {
     });
   };
 
+  const handleReload = () => {
+    loadingState.setLoading();
+    Promise.all([shortcutStore.fetchShortcutList()]).finally(() => {
+      loadingState.setFinish();
+    });
+  };
+
   return (
     <>
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
@@ -73,7 +80,11 @@ const ShortcutDashboard: React.FC = () => {
               onChange={(e) => viewStore.setFilter({ search: e.target.value })}
             />
           </div>
-          <div className="flex flex-row justify-end items-center">
+          <div className="flex flex-row justify-end items-center gap-2">
+            <Button className="hover:shadow" variant="plain" size="sm" onClick={handleReload} disabled={loadingState.isLoading}>
+              <Icon.RotateCcw className="w-4 h-auto" />
+              <span className="ml-0.5">{t("common.reload")}</span>
+            </Button>
             <Button className="hover:shadow" variant="soft" size="sm" onClick={() => setShowCreateShortcutDrawer(true)}>
               <Icon.Plus className="w-5 h-auto" />
               <span className="ml-0.5">{t("common.create")}</span>

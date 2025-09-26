@@ -1,7 +1,8 @@
 import classNames from "classnames";
 import useNavigateTo from "@/hooks/useNavigateTo";
-import { useViewStore } from "@/stores";
+import { useViewStore, useWorkspaceStore } from "@/stores";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
+import { getShortcutUrl } from "@/utils/shortcut";
 import ShortcutCard from "./ShortcutCard";
 import ShortcutView from "./ShortcutView";
 import ShortcutListView from "./ShortcutListView";
@@ -14,6 +15,7 @@ const ShortcutsContainer: React.FC<Props> = (props: Props) => {
   const { shortcutList } = props;
   const navigateTo = useNavigateTo();
   const viewStore = useViewStore();
+  const workspaceStore = useWorkspaceStore();
   const displayStyle = viewStore.displayStyle || "full";
 
   let ShortcutItemView = ShortcutCard;
@@ -24,7 +26,9 @@ const ShortcutsContainer: React.FC<Props> = (props: Props) => {
   }
 
   const handleShortcutClick = (shortcut: Shortcut) => {
-    window.open(shortcut.link, '_blank');
+    // Use the server route to ensure visit tracking
+    const shortcutUrl = getShortcutUrl(shortcut.name);
+    window.open(shortcutUrl, '_blank');
   };
 
   let gridClasses = "w-full grid grid-cols-1 gap-3 sm:gap-4";

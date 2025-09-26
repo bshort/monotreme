@@ -89,6 +89,13 @@ const CollectionDashboard: React.FC = () => {
     }
   };
 
+  const handleReload = () => {
+    loadingState.setLoading();
+    Promise.all([shortcutStore.fetchShortcutList(), collectionStore.fetchCollectionList()]).finally(() => {
+      loadingState.setFinish();
+    });
+  };
+
   return (
     <>
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
@@ -115,6 +122,10 @@ const CollectionDashboard: React.FC = () => {
             </Select>
           </div>
           <div className="flex flex-row justify-start items-center gap-2">
+            <Button className="hover:shadow" variant="plain" size="sm" onClick={handleReload} disabled={loadingState.isLoading}>
+              <Icon.RotateCcw className="w-4 h-auto" />
+              <span className="ml-0.5">{t("common.reload")}</span>
+            </Button>
             <Tooltip title="Copy RSS feed URL for all collections" placement="top" arrow>
               <Button className="hover:shadow" variant="plain" size="sm" onClick={() => handleCopyCollectionsRSSLink()}>
                 <Icon.Rss className="w-4 h-auto" />

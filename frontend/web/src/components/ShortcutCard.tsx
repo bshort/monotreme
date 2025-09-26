@@ -16,10 +16,11 @@ import VisibilityIcon from "./VisibilityIcon";
 
 interface Props {
   shortcut: Shortcut;
+  onClick?: () => void;
 }
 
 const ShortcutCard = (props: Props) => {
-  const { shortcut } = props;
+  const { shortcut, onClick } = props;
   const { t } = useTranslation();
   const userStore = useUserStore();
   const viewStore = useViewStore();
@@ -38,8 +39,9 @@ const ShortcutCard = (props: Props) => {
   return (
     <div
       className={classNames(
-        "group px-4 py-3 w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-700",
+        "group px-4 py-3 w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-700 cursor-pointer",
       )}
+      onClick={onClick}
     >
       <div className="w-full flex flex-row justify-between items-center">
         <div className="w-[calc(100%-16px)] flex flex-row justify-start items-center mr-1 shrink-0">
@@ -47,6 +49,7 @@ const ShortcutCard = (props: Props) => {
             className={classNames("w-8 h-8 flex justify-center items-center overflow-clip shrink-0")}
             to={`/shortcut/${shortcut.id}`}
             viewTransition
+            onClick={(e) => e.stopPropagation()}
           >
             <CustomIcon customIcon={shortcut.customIcon} url={shortcut.link} />
           </Link>
@@ -58,6 +61,7 @@ const ShortcutCard = (props: Props) => {
                 )}
                 target="_blank"
                 href={shortcutLink}
+                onClick={(e) => e.stopPropagation()}
               >
                 <div className="truncate">
                   <span className="dark:text-gray-400">{shortcut.title}</span>
@@ -74,19 +78,36 @@ const ShortcutCard = (props: Props) => {
               <Tooltip title="Copy" variant="solid" placement="top" arrow>
                 <button
                   className="hidden group-hover:block cursor-pointer text-gray-500 hover:opacity-80"
-                  onClick={() => handleCopyButtonClick()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCopyButtonClick();
+                  }}
                 >
                   <Icon.Clipboard className="w-4 h-auto mx-auto" />
                 </button>
               </Tooltip>
             </div>
-            <a
-              className="pr-4 leading-tight w-full text-sm truncate text-gray-400 dark:text-gray-500 hover:underline"
-              href={shortcut.link}
-              target="_blank"
-            >
-              {shortcut.link}
-            </a>
+            <div className="pr-4 leading-tight w-full text-sm space-y-1">
+              <a
+                className="block truncate text-gray-400 dark:text-gray-500 hover:underline"
+                href={shortcut.link}
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {shortcut.link}
+              </a>
+              <div className="flex items-center space-x-2">
+                <span className="text-xs text-gray-500">Shortcut:</span>
+                <a
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline truncate"
+                  href={shortcutLink}
+                  target="_blank"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {shortcutLink}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div className="h-full pt-2 flex flex-row justify-end items-start">
@@ -99,7 +120,10 @@ const ShortcutCard = (props: Props) => {
             <span
               key={tag}
               className="max-w-[8rem] truncate text-gray-400 dark:text-gray-500 text-sm leading-4 cursor-pointer hover:opacity-80"
-              onClick={() => viewStore.setFilter({ tag: tag })}
+              onClick={(e) => {
+                e.stopPropagation();
+                viewStore.setFilter({ tag: tag });
+              }}
             >
               #{tag}
             </span>
@@ -120,7 +144,10 @@ const ShortcutCard = (props: Props) => {
         <Tooltip title={t(`shortcut.visibility.${shortcut.visibility.toLowerCase()}.description`)} variant="solid" placement="top" arrow>
           <div
             className="w-auto leading-5 flex flex-row justify-start items-center flex-nowrap whitespace-nowrap cursor-pointer text-gray-400 text-sm"
-            onClick={() => viewStore.setFilter({ visibility: shortcut.visibility })}
+            onClick={(e) => {
+              e.stopPropagation();
+              viewStore.setFilter({ visibility: shortcut.visibility });
+            }}
           >
             <VisibilityIcon className="w-4 h-auto mr-1 opacity-70" visibility={shortcut.visibility} />
             {t(`shortcut.visibility.${shortcut.visibility.toLowerCase()}.self`)}
@@ -131,6 +158,7 @@ const ShortcutCard = (props: Props) => {
             className="w-auto leading-5 flex flex-row justify-start items-center flex-nowrap whitespace-nowrap cursor-pointer text-gray-400 text-sm"
             to={`/shortcut/${shortcut.id}#analytics`}
             viewTransition
+            onClick={(e) => e.stopPropagation()}
           >
             <Icon.BarChart2 className="w-4 h-auto mr-1 opacity-70" />
             {t("shortcut.visits", { count: shortcut.viewCount })}
