@@ -88,21 +88,41 @@ func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			path := c.Path()
-			slog.Info("Middleware check", slog.String("path", path), slog.String("method", c.Request().Method))
+			urlPath := c.Request().URL.Path
+			method := c.Request().Method
+			requestURI := c.Request().RequestURI
+			slog.Info("Middleware check", slog.String("path", path), slog.String("urlPath", urlPath), slog.String("method", method))
+
+			// Add debug header to test if middleware is working
+			c.Response().Header().Set("X-Debug-Middleware", "active")
+			c.Response().Header().Set("X-Debug-Path", path)
+			c.Response().Header().Set("X-Debug-URL-Path", urlPath)
+			c.Response().Header().Set("X-Debug-Method", method)
+			c.Response().Header().Set("X-Debug-RequestURI", requestURI)
+
+			// Use URL.Path if c.Path() is empty
+			if path == "" {
+				path = urlPath
+			}
 
 			// Only handle GET requests
-			if c.Request().Method != "GET" {
+			if method != "GET" {
+				c.Response().Header().Set("X-Debug-Skip", "non-GET")
 				return next(c)
 			}
 
 			// Split path into segments
 			segments := strings.Split(strings.Trim(path, "/"), "/")
+			c.Response().Header().Set("X-Debug-Segments", fmt.Sprintf("%d", len(segments)))
 			if len(segments) != 2 {
+				c.Response().Header().Set("X-Debug-Skip", "not-2-segments")
 				return next(c)
 			}
 
 			prefix := segments[0]
 			name := segments[1]
+			c.Response().Header().Set("X-Debug-Prefix", prefix)
+			c.Response().Header().Set("X-Debug-Name", name)
 			ctx := c.Request().Context()
 
 			// Handle collection routes
@@ -119,12 +139,16 @@ func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 			// Handle shortcut routes
 			currentPrefix := s.getShortcutPrefix(ctx)
 			slog.Info("Checking shortcut middleware", slog.String("current", currentPrefix), slog.String("requested", prefix))
+			c.Response().Header().Set("X-Debug-Current-Prefix", currentPrefix)
 
 			if prefix == currentPrefix {
+				c.Response().Header().Set("X-Debug-Prefix-Match", "true")
 				shortcut, err := s.Store.GetShortcut(ctx, &store.FindShortcut{
 					Name: &name,
 				})
+				c.Response().Header().Set("X-Debug-Shortcut-Error", fmt.Sprintf("%v", err))
 				if err == nil && shortcut != nil {
+					c.Response().Header().Set("X-Debug-Shortcut-Found", "true")
 					// Create shortcut view activity.
 					if err := s.createShortcutViewActivity(ctx, c.Request(), shortcut); err != nil {
 						slog.Warn("failed to create shortcut view activity", slog.String("error", err.Error()))
@@ -142,7 +166,16 @@ func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 
 					// Redirect to the shortcut's target URL
 					return c.Redirect(http.StatusFound, targetURL)
+				} else {
+					c.Response().Header().Set("X-Debug-Shortcut-Found", "false")
+					// Log attempted access to non-existent shortcut
+					if err := s.createShortcutNotFoundActivity(ctx, c.Request(), name); err != nil {
+						slog.Warn("failed to create shortcut not found activity", slog.String("error", err.Error()))
+					}
+					slog.Info("Shortcut not found", slog.String("name", name), slog.String("path", path))
 				}
+			} else {
+				c.Response().Header().Set("X-Debug-Prefix-Match", "false")
 			}
 
 			// Continue to next middleware (static files)
@@ -156,8 +189,23 @@ func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 		HTML5:      true,
 		Filesystem: getFileSystem("dist"),
 		Skipper: func(c echo.Context) bool {
-			// Skip static serving for API routes
-			return util.HasPrefixes(c.Path(), "/api", "/monotreme.api.v1")
+			// Skip static serving for API routes and shortcut routes
+			path := c.Path()
+			if util.HasPrefixes(path, "/api", "/monotreme.api.v1") {
+				return true
+			}
+
+			// Skip static serving for potential shortcut/collection routes
+			segments := strings.Split(strings.Trim(path, "/"), "/")
+			if len(segments) == 2 {
+				prefix := segments[0]
+				// Check if this could be a shortcut route (s prefix) or collection route (c prefix)
+				if prefix == "s" || prefix == "c" {
+					return true
+				}
+			}
+
+			return false
 		},
 	}))
 
@@ -217,6 +265,43 @@ func (s *FrontendService) createShortcutViewActivity(ctx context.Context, reques
 	_, err = s.Store.CreateActivity(ctx, activity)
 	if err != nil {
 		return errors.Wrap(err, "Failed to create activity")
+	}
+	return nil
+}
+
+func (s *FrontendService) createShortcutNotFoundActivity(ctx context.Context, request *http.Request, shortcutName string) error {
+	ip := getReadUserIP(request)
+	referer := request.Header.Get("Referer")
+	userAgent := request.Header.Get("User-Agent")
+	params := map[string]*storepb.ActivityShorcutViewPayload_ValueList{}
+	for key, values := range request.URL.Query() {
+		params[key] = &storepb.ActivityShorcutViewPayload_ValueList{Values: values}
+	}
+
+	// Create a payload for shortcut not found activity
+	// We'll use a similar structure but with ShortcutId = 0 to indicate not found
+	payload := &storepb.ActivityShorcutViewPayload{
+		ShortcutId: 0, // 0 indicates shortcut not found
+		Ip:         ip,
+		Referer:    referer,
+		UserAgent:  userAgent,
+		Params:     params,
+	}
+	payloadStr, err := protojson.Marshal(payload)
+	if err != nil {
+		return errors.Wrap(err, "Failed to marshal shortcut not found activity payload")
+	}
+
+	// Create activity with a custom message indicating the shortcut name that was attempted
+	activity := &store.Activity{
+		CreatorID: common.BotID,
+		Type:      store.ActivityShortcutView, // Reuse same type for consistency
+		Level:     store.ActivityWarn,         // Use Warn level to distinguish from successful visits
+		Payload:   string(payloadStr),
+	}
+	_, err = s.Store.CreateActivity(ctx, activity)
+	if err != nil {
+		return errors.Wrap(err, "Failed to create shortcut not found activity")
 	}
 	return nil
 }
