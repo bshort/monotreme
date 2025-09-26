@@ -15,6 +15,7 @@ import ShortcutDetail from "@/pages/ShortcutDetail";
 import ShortcutSpace from "@/pages/ShortcutSpace";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
+import Stats from "@/pages/Stats";
 //import SubscriptionSetting from "@/pages/SubscriptionSetting";
 import TagsDashboard from "@/pages/TagsDashboard";
 import UserSetting from "@/pages/UserSetting";
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
           {
             path: "/setting/workspace",
             element: <WorkspaceSetting />,
+          },
+          {
+            path: "/stats",
+            element: <Stats />,
           },
           {
             path: "/admin/import",

@@ -126,6 +126,35 @@ export interface UpdateWorkspaceSettingRequest {
   updateMask?: string[] | undefined;
 }
 
+export interface GetWorkspaceStatsRequest {
+}
+
+export interface WorkspaceStats {
+  /** Total number of shortcuts in the system */
+  totalShortcuts: number;
+  /** Total number of users in the system */
+  totalUsers: number;
+  /** Total number of collections in the system */
+  totalCollections: number;
+  /** Total number of hits from all shortcuts in the system */
+  totalHits: number;
+  /** Historical measurements for sparkline graphs (last 100 measurements) */
+  historicalData: StatsMeasurement[];
+}
+
+export interface StatsMeasurement {
+  /** Unix timestamp when the measurement was taken */
+  measuredTs: number;
+  /** Total number of shortcuts at measurement time */
+  shortcutsCount: number;
+  /** Total number of users at measurement time */
+  usersCount: number;
+  /** Total number of collections at measurement time */
+  collectionsCount: number;
+  /** Total number of hits (shortcut views) at measurement time */
+  hitsCount: number;
+}
+
 function createBaseWorkspaceProfile(): WorkspaceProfile {
   return { mode: "", version: "", owner: "", subscription: undefined, customStyle: "", branding: new Uint8Array(0) };
 }
@@ -819,6 +848,228 @@ export const UpdateWorkspaceSettingRequest: MessageFns<UpdateWorkspaceSettingReq
   },
 };
 
+function createBaseGetWorkspaceStatsRequest(): GetWorkspaceStatsRequest {
+  return {};
+}
+
+export const GetWorkspaceStatsRequest: MessageFns<GetWorkspaceStatsRequest> = {
+  encode(_: GetWorkspaceStatsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetWorkspaceStatsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetWorkspaceStatsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetWorkspaceStatsRequest>): GetWorkspaceStatsRequest {
+    return GetWorkspaceStatsRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<GetWorkspaceStatsRequest>): GetWorkspaceStatsRequest {
+    const message = createBaseGetWorkspaceStatsRequest();
+    return message;
+  },
+};
+
+function createBaseWorkspaceStats(): WorkspaceStats {
+  return { totalShortcuts: 0, totalUsers: 0, totalCollections: 0, totalHits: 0, historicalData: [] };
+}
+
+export const WorkspaceStats: MessageFns<WorkspaceStats> = {
+  encode(message: WorkspaceStats, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.totalShortcuts !== 0) {
+      writer.uint32(8).int32(message.totalShortcuts);
+    }
+    if (message.totalUsers !== 0) {
+      writer.uint32(16).int32(message.totalUsers);
+    }
+    if (message.totalCollections !== 0) {
+      writer.uint32(24).int32(message.totalCollections);
+    }
+    if (message.totalHits !== 0) {
+      writer.uint32(32).int32(message.totalHits);
+    }
+    for (const v of message.historicalData) {
+      StatsMeasurement.encode(v!, writer.uint32(42).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): WorkspaceStats {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWorkspaceStats();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.totalShortcuts = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.totalUsers = reader.int32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.totalCollections = reader.int32();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.totalHits = reader.int32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.historicalData.push(StatsMeasurement.decode(reader, reader.uint32()));
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<WorkspaceStats>): WorkspaceStats {
+    return WorkspaceStats.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<WorkspaceStats>): WorkspaceStats {
+    const message = createBaseWorkspaceStats();
+    message.totalShortcuts = object.totalShortcuts ?? 0;
+    message.totalUsers = object.totalUsers ?? 0;
+    message.totalCollections = object.totalCollections ?? 0;
+    message.totalHits = object.totalHits ?? 0;
+    message.historicalData = object.historicalData?.map((e) => StatsMeasurement.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseStatsMeasurement(): StatsMeasurement {
+  return { measuredTs: 0, shortcutsCount: 0, usersCount: 0, collectionsCount: 0, hitsCount: 0 };
+}
+
+export const StatsMeasurement: MessageFns<StatsMeasurement> = {
+  encode(message: StatsMeasurement, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.measuredTs !== 0) {
+      writer.uint32(8).int64(message.measuredTs);
+    }
+    if (message.shortcutsCount !== 0) {
+      writer.uint32(16).int32(message.shortcutsCount);
+    }
+    if (message.usersCount !== 0) {
+      writer.uint32(24).int32(message.usersCount);
+    }
+    if (message.collectionsCount !== 0) {
+      writer.uint32(32).int32(message.collectionsCount);
+    }
+    if (message.hitsCount !== 0) {
+      writer.uint32(40).int32(message.hitsCount);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): StatsMeasurement {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStatsMeasurement();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.measuredTs = longToNumber(reader.int64());
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.shortcutsCount = reader.int32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.usersCount = reader.int32();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.collectionsCount = reader.int32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.hitsCount = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<StatsMeasurement>): StatsMeasurement {
+    return StatsMeasurement.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<StatsMeasurement>): StatsMeasurement {
+    const message = createBaseStatsMeasurement();
+    message.measuredTs = object.measuredTs ?? 0;
+    message.shortcutsCount = object.shortcutsCount ?? 0;
+    message.usersCount = object.usersCount ?? 0;
+    message.collectionsCount = object.collectionsCount ?? 0;
+    message.hitsCount = object.hitsCount ?? 0;
+    return message;
+  },
+};
+
 export type WorkspaceServiceDefinition = typeof WorkspaceServiceDefinition;
 export const WorkspaceServiceDefinition = {
   name: "WorkspaceService",
@@ -986,6 +1237,47 @@ export const WorkspaceServiceDefinition = {
         },
       },
     },
+    getWorkspaceStats: {
+      name: "GetWorkspaceStats",
+      requestType: GetWorkspaceStatsRequest,
+      requestStream: false,
+      responseType: WorkspaceStats,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              25,
+              18,
+              23,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              119,
+              111,
+              114,
+              107,
+              115,
+              112,
+              97,
+              99,
+              101,
+              47,
+              115,
+              116,
+              97,
+              116,
+              115,
+            ]),
+          ],
+        },
+      },
+    },
   },
 } as const;
 
@@ -996,6 +1288,17 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
 
 export interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;

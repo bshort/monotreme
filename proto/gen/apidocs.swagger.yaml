@@ -744,6 +744,20 @@ paths:
             $ref: '#/definitions/apiv1WorkspaceSetting'
       tags:
         - WorkspaceService
+  /api/v1/workspace/stats:
+    get:
+      operationId: WorkspaceService_GetWorkspaceStats
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1WorkspaceStats'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - WorkspaceService
   /v1/subscription:
     get:
       summary: GetSubscription gets the current subscription of Monotreme instance.
@@ -927,6 +941,29 @@ definitions:
         format: int32
       ogMetadata:
         $ref: '#/definitions/v1ShortcutOpenGraphMetadata'
+  apiv1StatsMeasurement:
+    type: object
+    properties:
+      measuredTs:
+        type: string
+        format: int64
+        title: Unix timestamp when the measurement was taken
+      shortcutsCount:
+        type: integer
+        format: int32
+        title: Total number of shortcuts at measurement time
+      usersCount:
+        type: integer
+        format: int32
+        title: Total number of users at measurement time
+      collectionsCount:
+        type: integer
+        format: int32
+        title: Total number of collections at measurement time
+      hitsCount:
+        type: integer
+        format: int32
+        title: Total number of hits (shortcut views) at measurement time
   apiv1UserSetting:
     type: object
     properties:
@@ -1254,3 +1291,28 @@ definitions:
         type: string
         format: byte
         description: The workspace branding.
+  v1WorkspaceStats:
+    type: object
+    properties:
+      totalShortcuts:
+        type: integer
+        format: int32
+        title: Total number of shortcuts in the system
+      totalUsers:
+        type: integer
+        format: int32
+        title: Total number of users in the system
+      totalCollections:
+        type: integer
+        format: int32
+        title: Total number of collections in the system
+      totalHits:
+        type: integer
+        format: int32
+        title: Total number of hits from all shortcuts in the system
+      historicalData:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1StatsMeasurement'
+        title: Historical measurements for sparkline graphs (last 100 measurements)

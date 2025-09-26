@@ -22,6 +22,7 @@ const (
 	WorkspaceService_GetWorkspaceProfile_FullMethodName    = "/monotreme.api.v1.WorkspaceService/GetWorkspaceProfile"
 	WorkspaceService_GetWorkspaceSetting_FullMethodName    = "/monotreme.api.v1.WorkspaceService/GetWorkspaceSetting"
 	WorkspaceService_UpdateWorkspaceSetting_FullMethodName = "/monotreme.api.v1.WorkspaceService/UpdateWorkspaceSetting"
+	WorkspaceService_GetWorkspaceStats_FullMethodName      = "/monotreme.api.v1.WorkspaceService/GetWorkspaceStats"
 )
 
 // WorkspaceServiceClient is the client API for WorkspaceService service.
@@ -31,6 +32,7 @@ type WorkspaceServiceClient interface {
 	GetWorkspaceProfile(ctx context.Context, in *GetWorkspaceProfileRequest, opts ...grpc.CallOption) (*WorkspaceProfile, error)
 	GetWorkspaceSetting(ctx context.Context, in *GetWorkspaceSettingRequest, opts ...grpc.CallOption) (*WorkspaceSetting, error)
 	UpdateWorkspaceSetting(ctx context.Context, in *UpdateWorkspaceSettingRequest, opts ...grpc.CallOption) (*WorkspaceSetting, error)
+	GetWorkspaceStats(ctx context.Context, in *GetWorkspaceStatsRequest, opts ...grpc.CallOption) (*WorkspaceStats, error)
 }
 
 type workspaceServiceClient struct {
@@ -71,6 +73,16 @@ func (c *workspaceServiceClient) UpdateWorkspaceSetting(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *workspaceServiceClient) GetWorkspaceStats(ctx context.Context, in *GetWorkspaceStatsRequest, opts ...grpc.CallOption) (*WorkspaceStats, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WorkspaceStats)
+	err := c.cc.Invoke(ctx, WorkspaceService_GetWorkspaceStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkspaceServiceServer is the server API for WorkspaceService service.
 // All implementations must embed UnimplementedWorkspaceServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type WorkspaceServiceServer interface {
 	GetWorkspaceProfile(context.Context, *GetWorkspaceProfileRequest) (*WorkspaceProfile, error)
 	GetWorkspaceSetting(context.Context, *GetWorkspaceSettingRequest) (*WorkspaceSetting, error)
 	UpdateWorkspaceSetting(context.Context, *UpdateWorkspaceSettingRequest) (*WorkspaceSetting, error)
+	GetWorkspaceStats(context.Context, *GetWorkspaceStatsRequest) (*WorkspaceStats, error)
 	mustEmbedUnimplementedWorkspaceServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedWorkspaceServiceServer) GetWorkspaceSetting(context.Context, 
 }
 func (UnimplementedWorkspaceServiceServer) UpdateWorkspaceSetting(context.Context, *UpdateWorkspaceSettingRequest) (*WorkspaceSetting, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateWorkspaceSetting not implemented")
+}
+func (UnimplementedWorkspaceServiceServer) GetWorkspaceStats(context.Context, *GetWorkspaceStatsRequest) (*WorkspaceStats, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWorkspaceStats not implemented")
 }
 func (UnimplementedWorkspaceServiceServer) mustEmbedUnimplementedWorkspaceServiceServer() {}
 func (UnimplementedWorkspaceServiceServer) testEmbeddedByValue()                          {}
@@ -172,6 +188,24 @@ func _WorkspaceService_UpdateWorkspaceSetting_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkspaceService_GetWorkspaceStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWorkspaceStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceServiceServer).GetWorkspaceStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceService_GetWorkspaceStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceServiceServer).GetWorkspaceStats(ctx, req.(*GetWorkspaceStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkspaceService_ServiceDesc is the grpc.ServiceDesc for WorkspaceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var WorkspaceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateWorkspaceSetting",
 			Handler:    _WorkspaceService_UpdateWorkspaceSetting_Handler,
+		},
+		{
+			MethodName: "GetWorkspaceStats",
+			Handler:    _WorkspaceService_GetWorkspaceStats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

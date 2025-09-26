@@ -28,6 +28,9 @@
     - [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata)
     - [Shortcut](#monotreme-store-Shortcut)
   
+- [store/stats_measurement.proto](#store_stats_measurement-proto)
+    - [StatsMeasurement](#monotreme-store-StatsMeasurement)
+  
 - [store/user_setting.proto](#store_user_setting-proto)
     - [UserSetting](#monotreme-store-UserSetting)
     - [UserSetting.AccessTokensSetting](#monotreme-store-UserSetting-AccessTokensSetting)
@@ -355,6 +358,42 @@
 | visibility | [Visibility](#monotreme-store-Visibility) |  |  |
 | og_metadata | [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata) |  |  |
 | custom_icon | [string](#string) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="store_stats_measurement-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## store/stats_measurement.proto
+
+
+
+<a name="monotreme-store-StatsMeasurement"></a>
+
+### StatsMeasurement
+StatsMeasurement represents a single measurement of workspace statistics at a specific time
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  | Unique identifier for the measurement |
+| measured_ts | [int64](#int64) |  | Unix timestamp when the measurement was taken |
+| shortcuts_count | [int32](#int32) |  | Total number of shortcuts at measurement time |
+| users_count | [int32](#int32) |  | Total number of users at measurement time |
+| collections_count | [int32](#int32) |  | Total number of collections at measurement time |
+| hits_count | [int32](#int32) |  | Total number of hits (shortcut views) at measurement time |
 
 
 

@@ -87,13 +87,16 @@
 - [api/v1/workspace_service.proto](#api_v1_workspace_service-proto)
     - [GetWorkspaceProfileRequest](#monotreme-api-v1-GetWorkspaceProfileRequest)
     - [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest)
+    - [GetWorkspaceStatsRequest](#monotreme-api-v1-GetWorkspaceStatsRequest)
     - [IdentityProvider](#monotreme-api-v1-IdentityProvider)
     - [IdentityProviderConfig](#monotreme-api-v1-IdentityProviderConfig)
     - [IdentityProviderConfig.FieldMapping](#monotreme-api-v1-IdentityProviderConfig-FieldMapping)
     - [IdentityProviderConfig.OAuth2Config](#monotreme-api-v1-IdentityProviderConfig-OAuth2Config)
+    - [StatsMeasurement](#monotreme-api-v1-StatsMeasurement)
     - [UpdateWorkspaceSettingRequest](#monotreme-api-v1-UpdateWorkspaceSettingRequest)
     - [WorkspaceProfile](#monotreme-api-v1-WorkspaceProfile)
     - [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting)
+    - [WorkspaceStats](#monotreme-api-v1-WorkspaceStats)
   
     - [IdentityProvider.Type](#monotreme-api-v1-IdentityProvider-Type)
   
@@ -1157,6 +1160,16 @@
 
 
 
+<a name="monotreme-api-v1-GetWorkspaceStatsRequest"></a>
+
+### GetWorkspaceStatsRequest
+
+
+
+
+
+
+
 <a name="monotreme-api-v1-IdentityProvider"></a>
 
 ### IdentityProvider
@@ -1227,6 +1240,25 @@
 
 
 
+<a name="monotreme-api-v1-StatsMeasurement"></a>
+
+### StatsMeasurement
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| measured_ts | [int64](#int64) |  | Unix timestamp when the measurement was taken |
+| shortcuts_count | [int32](#int32) |  | Total number of shortcuts at measurement time |
+| users_count | [int32](#int32) |  | Total number of users at measurement time |
+| collections_count | [int32](#int32) |  | Total number of collections at measurement time |
+| hits_count | [int32](#int32) |  | Total number of hits (shortcut views) at measurement time |
+
+
+
+
+
+
 <a name="monotreme-api-v1-UpdateWorkspaceSettingRequest"></a>
 
 ### UpdateWorkspaceSettingRequest
@@ -1284,6 +1316,25 @@
 
 
 
+
+<a name="monotreme-api-v1-WorkspaceStats"></a>
+
+### WorkspaceStats
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| total_shortcuts | [int32](#int32) |  | Total number of shortcuts in the system |
+| total_users | [int32](#int32) |  | Total number of users in the system |
+| total_collections | [int32](#int32) |  | Total number of collections in the system |
+| total_hits | [int32](#int32) |  | Total number of hits from all shortcuts in the system |
+| historical_data | [StatsMeasurement](#monotreme-api-v1-StatsMeasurement) | repeated | Historical measurements for sparkline graphs (last 100 measurements) |
+
+
+
+
+
  
 
 
@@ -1313,6 +1364,7 @@
 | GetWorkspaceProfile | [GetWorkspaceProfileRequest](#monotreme-api-v1-GetWorkspaceProfileRequest) | [WorkspaceProfile](#monotreme-api-v1-WorkspaceProfile) |  |
 | GetWorkspaceSetting | [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest) | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  |
 | UpdateWorkspaceSetting | [UpdateWorkspaceSettingRequest](#monotreme-api-v1-UpdateWorkspaceSettingRequest) | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  |
+| GetWorkspaceStats | [GetWorkspaceStatsRequest](#monotreme-api-v1-GetWorkspaceStatsRequest) | [WorkspaceStats](#monotreme-api-v1-WorkspaceStats) |  |
 
  
 

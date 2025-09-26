@@ -222,6 +222,69 @@ func (s *APIV1Service) UpdateWorkspaceSetting(ctx context.Context, request *v1pb
 
 var ownerCache *v1pb.User
 
+func (s *APIV1Service) GetWorkspaceStats(ctx context.Context, _ *v1pb.GetWorkspaceStatsRequest) (*v1pb.WorkspaceStats, error) {
+	// Get total shortcuts count
+	shortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list shortcuts: %v", err)
+	}
+	totalShortcuts := int32(len(shortcuts))
+
+	// Get total users count
+	users, err := s.Store.ListUsers(ctx, &store.FindUser{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list users: %v", err)
+	}
+	totalUsers := int32(len(users))
+
+	// Get total collections count
+	collections, err := s.Store.ListCollections(ctx, &store.FindCollection{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list collections: %v", err)
+	}
+	totalCollections := int32(len(collections))
+
+	// Get total hits count (shortcut views)
+	activities, err := s.Store.ListActivities(ctx, &store.FindActivity{
+		Type: store.ActivityShortcutView,
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list activities: %v", err)
+	}
+	totalHits := int32(len(activities))
+
+	// Get historical measurements (last 100 entries, ordered by timestamp desc)
+	orderByMeasuredTsDesc := true
+	limit := int32(100)
+	measurements, err := s.Store.ListStatsMeasurements(ctx, &store.FindStatsMeasurement{
+		OrderByMeasuredTsDesc: &orderByMeasuredTsDesc,
+		Limit:                 &limit,
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list stats measurements: %v", err)
+	}
+
+	// Convert measurements to API format
+	historicalData := make([]*v1pb.StatsMeasurement, len(measurements))
+	for i, measurement := range measurements {
+		historicalData[i] = &v1pb.StatsMeasurement{
+			MeasuredTs:       measurement.MeasuredTs,
+			ShortcutsCount:   measurement.ShortcutsCount,
+			UsersCount:       measurement.UsersCount,
+			CollectionsCount: measurement.CollectionsCount,
+			HitsCount:        measurement.HitsCount,
+		}
+	}
+
+	return &v1pb.WorkspaceStats{
+		TotalShortcuts:   totalShortcuts,
+		TotalUsers:       totalUsers,
+		TotalCollections: totalCollections,
+		TotalHits:        totalHits,
+		HistoricalData:   historicalData,
+	}, nil
+}
+
 func (s *APIV1Service) GetInstanceOwner(ctx context.Context) (*v1pb.User, error) {
 	if ownerCache != nil {
 		return ownerCache, nil

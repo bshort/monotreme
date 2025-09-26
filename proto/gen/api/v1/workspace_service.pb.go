@@ -529,6 +529,204 @@ func (x *UpdateWorkspaceSettingRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
 	return nil
 }
 
+type GetWorkspaceStatsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetWorkspaceStatsRequest) Reset() {
+	*x = GetWorkspaceStatsRequest{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWorkspaceStatsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWorkspaceStatsRequest) ProtoMessage() {}
+
+func (x *GetWorkspaceStatsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWorkspaceStatsRequest.ProtoReflect.Descriptor instead.
+func (*GetWorkspaceStatsRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{7}
+}
+
+type WorkspaceStats struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Total number of shortcuts in the system
+	TotalShortcuts int32 `protobuf:"varint,1,opt,name=total_shortcuts,json=totalShortcuts,proto3" json:"total_shortcuts,omitempty"`
+	// Total number of users in the system
+	TotalUsers int32 `protobuf:"varint,2,opt,name=total_users,json=totalUsers,proto3" json:"total_users,omitempty"`
+	// Total number of collections in the system
+	TotalCollections int32 `protobuf:"varint,3,opt,name=total_collections,json=totalCollections,proto3" json:"total_collections,omitempty"`
+	// Total number of hits from all shortcuts in the system
+	TotalHits int32 `protobuf:"varint,4,opt,name=total_hits,json=totalHits,proto3" json:"total_hits,omitempty"`
+	// Historical measurements for sparkline graphs (last 100 measurements)
+	HistoricalData []*StatsMeasurement `protobuf:"bytes,5,rep,name=historical_data,json=historicalData,proto3" json:"historical_data,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *WorkspaceStats) Reset() {
+	*x = WorkspaceStats{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkspaceStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkspaceStats) ProtoMessage() {}
+
+func (x *WorkspaceStats) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkspaceStats.ProtoReflect.Descriptor instead.
+func (*WorkspaceStats) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *WorkspaceStats) GetTotalShortcuts() int32 {
+	if x != nil {
+		return x.TotalShortcuts
+	}
+	return 0
+}
+
+func (x *WorkspaceStats) GetTotalUsers() int32 {
+	if x != nil {
+		return x.TotalUsers
+	}
+	return 0
+}
+
+func (x *WorkspaceStats) GetTotalCollections() int32 {
+	if x != nil {
+		return x.TotalCollections
+	}
+	return 0
+}
+
+func (x *WorkspaceStats) GetTotalHits() int32 {
+	if x != nil {
+		return x.TotalHits
+	}
+	return 0
+}
+
+func (x *WorkspaceStats) GetHistoricalData() []*StatsMeasurement {
+	if x != nil {
+		return x.HistoricalData
+	}
+	return nil
+}
+
+type StatsMeasurement struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unix timestamp when the measurement was taken
+	MeasuredTs int64 `protobuf:"varint,1,opt,name=measured_ts,json=measuredTs,proto3" json:"measured_ts,omitempty"`
+	// Total number of shortcuts at measurement time
+	ShortcutsCount int32 `protobuf:"varint,2,opt,name=shortcuts_count,json=shortcutsCount,proto3" json:"shortcuts_count,omitempty"`
+	// Total number of users at measurement time
+	UsersCount int32 `protobuf:"varint,3,opt,name=users_count,json=usersCount,proto3" json:"users_count,omitempty"`
+	// Total number of collections at measurement time
+	CollectionsCount int32 `protobuf:"varint,4,opt,name=collections_count,json=collectionsCount,proto3" json:"collections_count,omitempty"`
+	// Total number of hits (shortcut views) at measurement time
+	HitsCount     int32 `protobuf:"varint,5,opt,name=hits_count,json=hitsCount,proto3" json:"hits_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StatsMeasurement) Reset() {
+	*x = StatsMeasurement{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StatsMeasurement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatsMeasurement) ProtoMessage() {}
+
+func (x *StatsMeasurement) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatsMeasurement.ProtoReflect.Descriptor instead.
+func (*StatsMeasurement) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *StatsMeasurement) GetMeasuredTs() int64 {
+	if x != nil {
+		return x.MeasuredTs
+	}
+	return 0
+}
+
+func (x *StatsMeasurement) GetShortcutsCount() int32 {
+	if x != nil {
+		return x.ShortcutsCount
+	}
+	return 0
+}
+
+func (x *StatsMeasurement) GetUsersCount() int32 {
+	if x != nil {
+		return x.UsersCount
+	}
+	return 0
+}
+
+func (x *StatsMeasurement) GetCollectionsCount() int32 {
+	if x != nil {
+		return x.CollectionsCount
+	}
+	return 0
+}
+
+func (x *StatsMeasurement) GetHitsCount() int32 {
+	if x != nil {
+		return x.HitsCount
+	}
+	return 0
+}
+
 type IdentityProviderConfig_FieldMapping struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Identifier    string                 `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
@@ -539,7 +737,7 @@ type IdentityProviderConfig_FieldMapping struct {
 
 func (x *IdentityProviderConfig_FieldMapping) Reset() {
 	*x = IdentityProviderConfig_FieldMapping{}
-	mi := &file_api_v1_workspace_service_proto_msgTypes[7]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -551,7 +749,7 @@ func (x *IdentityProviderConfig_FieldMapping) String() string {
 func (*IdentityProviderConfig_FieldMapping) ProtoMessage() {}
 
 func (x *IdentityProviderConfig_FieldMapping) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_workspace_service_proto_msgTypes[7]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -596,7 +794,7 @@ type IdentityProviderConfig_OAuth2Config struct {
 
 func (x *IdentityProviderConfig_OAuth2Config) Reset() {
 	*x = IdentityProviderConfig_OAuth2Config{}
-	mi := &file_api_v1_workspace_service_proto_msgTypes[8]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -608,7 +806,7 @@ func (x *IdentityProviderConfig_OAuth2Config) String() string {
 func (*IdentityProviderConfig_OAuth2Config) ProtoMessage() {}
 
 func (x *IdentityProviderConfig_OAuth2Config) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_workspace_service_proto_msgTypes[8]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -724,11 +922,30 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\x1dUpdateWorkspaceSettingRequest\x12<\n" +
 	"\asetting\x18\x01 \x01(\v2\".monotreme.api.v1.WorkspaceSettingR\asetting\x12;\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
-	"updateMask2\xde\x03\n" +
+	"updateMask\"\x1a\n" +
+	"\x18GetWorkspaceStatsRequest\"\xf3\x01\n" +
+	"\x0eWorkspaceStats\x12'\n" +
+	"\x0ftotal_shortcuts\x18\x01 \x01(\x05R\x0etotalShortcuts\x12\x1f\n" +
+	"\vtotal_users\x18\x02 \x01(\x05R\n" +
+	"totalUsers\x12+\n" +
+	"\x11total_collections\x18\x03 \x01(\x05R\x10totalCollections\x12\x1d\n" +
+	"\n" +
+	"total_hits\x18\x04 \x01(\x05R\ttotalHits\x12K\n" +
+	"\x0fhistorical_data\x18\x05 \x03(\v2\".monotreme.api.v1.StatsMeasurementR\x0ehistoricalData\"\xc9\x01\n" +
+	"\x10StatsMeasurement\x12\x1f\n" +
+	"\vmeasured_ts\x18\x01 \x01(\x03R\n" +
+	"measuredTs\x12'\n" +
+	"\x0fshortcuts_count\x18\x02 \x01(\x05R\x0eshortcutsCount\x12\x1f\n" +
+	"\vusers_count\x18\x03 \x01(\x05R\n" +
+	"usersCount\x12+\n" +
+	"\x11collections_count\x18\x04 \x01(\x05R\x10collectionsCount\x12\x1d\n" +
+	"\n" +
+	"hits_count\x18\x05 \x01(\x05R\thitsCount2\xe3\x04\n" +
 	"\x10WorkspaceService\x12\x8a\x01\n" +
 	"\x13GetWorkspaceProfile\x12,.monotreme.api.v1.GetWorkspaceProfileRequest\x1a\".monotreme.api.v1.WorkspaceProfile\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/profile\x12\x8a\x01\n" +
 	"\x13GetWorkspaceSetting\x12,.monotreme.api.v1.GetWorkspaceSettingRequest\x1a\".monotreme.api.v1.WorkspaceSetting\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/setting\x12\xaf\x01\n" +
-	"\x16UpdateWorkspaceSetting\x12/.monotreme.api.v1.UpdateWorkspaceSettingRequest\x1a\".monotreme.api.v1.WorkspaceSetting\"@\xdaA\x13setting,update_mask\x82\xd3\xe4\x93\x02$:\asetting2\x19/api/v1/workspace/settingB\xc3\x01\n" +
+	"\x16UpdateWorkspaceSetting\x12/.monotreme.api.v1.UpdateWorkspaceSettingRequest\x1a\".monotreme.api.v1.WorkspaceSetting\"@\xdaA\x13setting,update_mask\x82\xd3\xe4\x93\x02$:\asetting2\x19/api/v1/workspace/setting\x12\x82\x01\n" +
+	"\x11GetWorkspaceStats\x12*.monotreme.api.v1.GetWorkspaceStatsRequest\x1a .monotreme.api.v1.WorkspaceStats\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/workspace/statsB\xc3\x01\n" +
 	"\x14com.monotreme.api.v1B\x15WorkspaceServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
@@ -744,7 +961,7 @@ func file_api_v1_workspace_service_proto_rawDescGZIP() []byte {
 }
 
 var file_api_v1_workspace_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_api_v1_workspace_service_proto_goTypes = []any{
 	(IdentityProvider_Type)(0),                  // 0: monotreme.api.v1.IdentityProvider.Type
 	(*WorkspaceProfile)(nil),                    // 1: monotreme.api.v1.WorkspaceProfile
@@ -754,33 +971,39 @@ var file_api_v1_workspace_service_proto_goTypes = []any{
 	(*GetWorkspaceProfileRequest)(nil),          // 5: monotreme.api.v1.GetWorkspaceProfileRequest
 	(*GetWorkspaceSettingRequest)(nil),          // 6: monotreme.api.v1.GetWorkspaceSettingRequest
 	(*UpdateWorkspaceSettingRequest)(nil),       // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest
-	(*IdentityProviderConfig_FieldMapping)(nil), // 8: monotreme.api.v1.IdentityProviderConfig.FieldMapping
-	(*IdentityProviderConfig_OAuth2Config)(nil), // 9: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
-	(*Subscription)(nil),                        // 10: monotreme.api.v1.Subscription
-	(Visibility)(0),                             // 11: monotreme.api.v1.Visibility
-	(*fieldmaskpb.FieldMask)(nil),               // 12: google.protobuf.FieldMask
+	(*GetWorkspaceStatsRequest)(nil),            // 8: monotreme.api.v1.GetWorkspaceStatsRequest
+	(*WorkspaceStats)(nil),                      // 9: monotreme.api.v1.WorkspaceStats
+	(*StatsMeasurement)(nil),                    // 10: monotreme.api.v1.StatsMeasurement
+	(*IdentityProviderConfig_FieldMapping)(nil), // 11: monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	(*IdentityProviderConfig_OAuth2Config)(nil), // 12: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	(*Subscription)(nil),                        // 13: monotreme.api.v1.Subscription
+	(Visibility)(0),                             // 14: monotreme.api.v1.Visibility
+	(*fieldmaskpb.FieldMask)(nil),               // 15: google.protobuf.FieldMask
 }
 var file_api_v1_workspace_service_proto_depIdxs = []int32{
-	10, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
-	11, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
+	13, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
+	14, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
 	3,  // 2: monotreme.api.v1.WorkspaceSetting.identity_providers:type_name -> monotreme.api.v1.IdentityProvider
 	0,  // 3: monotreme.api.v1.IdentityProvider.type:type_name -> monotreme.api.v1.IdentityProvider.Type
 	4,  // 4: monotreme.api.v1.IdentityProvider.config:type_name -> monotreme.api.v1.IdentityProviderConfig
-	9,  // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	12, // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
 	2,  // 6: monotreme.api.v1.UpdateWorkspaceSettingRequest.setting:type_name -> monotreme.api.v1.WorkspaceSetting
-	12, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
-	8,  // 8: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
-	5,  // 9: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
-	6,  // 10: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
-	7,  // 11: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
-	1,  // 12: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
-	2,  // 13: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
-	2,  // 14: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
-	12, // [12:15] is the sub-list for method output_type
-	9,  // [9:12] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	15, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
+	10, // 8: monotreme.api.v1.WorkspaceStats.historical_data:type_name -> monotreme.api.v1.StatsMeasurement
+	11, // 9: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	5,  // 10: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
+	6,  // 11: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
+	7,  // 12: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
+	8,  // 13: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:input_type -> monotreme.api.v1.GetWorkspaceStatsRequest
+	1,  // 14: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
+	2,  // 15: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	2,  // 16: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	9,  // 17: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:output_type -> monotreme.api.v1.WorkspaceStats
+	14, // [14:18] is the sub-list for method output_type
+	10, // [10:14] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_api_v1_workspace_service_proto_init() }
@@ -799,7 +1022,7 @@ func file_api_v1_workspace_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_workspace_service_proto_rawDesc), len(file_api_v1_workspace_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   9,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -47,4 +47,10 @@ type Driver interface {
 	UpsertWorkspaceSetting(ctx context.Context, upsert *storepb.WorkspaceSetting) (*storepb.WorkspaceSetting, error)
 	ListWorkspaceSettings(ctx context.Context, find *FindWorkspaceSetting) ([]*storepb.WorkspaceSetting, error)
 	DeleteWorkspaceSetting(ctx context.Context, key storepb.WorkspaceSettingKey) error
+
+	// StatsMeasurement model related methods.
+	CreateStatsMeasurement(ctx context.Context, create *StatsMeasurement) (*StatsMeasurement, error)
+	ListStatsMeasurements(ctx context.Context, find *FindStatsMeasurement) ([]*StatsMeasurement, error)
+	UpdateStatsMeasurement(ctx context.Context, update *UpdateStatsMeasurement) (*StatsMeasurement, error)
+	DeleteStatsMeasurement(ctx context.Context, delete *DeleteStatsMeasurement) error
 }

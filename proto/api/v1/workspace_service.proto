@@ -24,6 +24,9 @@ service WorkspaceService {
     };
     option (google.api.method_signature) = "setting,update_mask";
   }
+  rpc GetWorkspaceStats(GetWorkspaceStatsRequest) returns (WorkspaceStats) {
+    option (google.api.http) = {get: "/api/v1/workspace/stats"};
+  }
 }
 
 message WorkspaceProfile {
@@ -105,4 +108,32 @@ message UpdateWorkspaceSettingRequest {
   WorkspaceSetting setting = 1;
   // The update mask.
   google.protobuf.FieldMask update_mask = 2;
+}
+
+message GetWorkspaceStatsRequest {}
+
+message WorkspaceStats {
+  // Total number of shortcuts in the system
+  int32 total_shortcuts = 1;
+  // Total number of users in the system
+  int32 total_users = 2;
+  // Total number of collections in the system
+  int32 total_collections = 3;
+  // Total number of hits from all shortcuts in the system
+  int32 total_hits = 4;
+  // Historical measurements for sparkline graphs (last 100 measurements)
+  repeated StatsMeasurement historical_data = 5;
+}
+
+message StatsMeasurement {
+  // Unix timestamp when the measurement was taken
+  int64 measured_ts = 1;
+  // Total number of shortcuts at measurement time
+  int32 shortcuts_count = 2;
+  // Total number of users at measurement time
+  int32 users_count = 3;
+  // Total number of collections at measurement time
+  int32 collections_count = 4;
+  // Total number of hits (shortcut views) at measurement time
+  int32 hits_count = 5;
 }

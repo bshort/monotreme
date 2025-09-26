@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package monotreme.store;
+
+option go_package = "gen/store";
+
+// StatsMeasurement represents a single measurement of workspace statistics at a specific time
+message StatsMeasurement {
+  // Unique identifier for the measurement
+  int32 id = 1;
+  // Unix timestamp when the measurement was taken
+  int64 measured_ts = 2;
+  // Total number of shortcuts at measurement time
+  int32 shortcuts_count = 3;
+  // Total number of users at measurement time
+  int32 users_count = 4;
+  // Total number of collections at measurement time
+  int32 collections_count = 5;
+  // Total number of hits (shortcut views) at measurement time
+  int32 hits_count = 6;
+}

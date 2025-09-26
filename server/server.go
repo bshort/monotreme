@@ -22,6 +22,7 @@ import (
 	"github.com/bshort/monotreme/server/route/rss"
 	"github.com/bshort/monotreme/server/route/swagger"
 	licensern "github.com/bshort/monotreme/server/runner/license"
+	"github.com/bshort/monotreme/server/runner/stats"
 	"github.com/bshort/monotreme/server/runner/version"
 	"github.com/bshort/monotreme/server/service/license"
 	"github.com/bshort/monotreme/store"
@@ -143,9 +144,12 @@ func (s *Server) StartBackgroundRunners(ctx context.Context) {
 	licenseRunner.RunOnce(ctx)
 	versionRunner := version.NewRunner(s.Store, s.Profile)
 	versionRunner.RunOnce(ctx)
+	statsRunner := stats.NewRunner(s.Store)
+	statsRunner.RunOnce(ctx)
 
 	go licenseRunner.Run(ctx)
 	go versionRunner.Run(ctx)
+	go statsRunner.Run(ctx)
 }
 
 func (s *Server) getSecretSession(ctx context.Context) (string, error) {
