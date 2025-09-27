@@ -70,8 +70,8 @@ const ViewSetting = () => {
             <span className="text-sm shrink-0 mr-2">{t("filter.order-by")}</span>
             <Select size="sm" value={field} onChange={(_, value) => viewStore.setOrder({ field: value as any })}>
               <Option value={"name"}>Name</Option>
-              <Option value={"updatedTs"}>CreatedAt</Option>
-              <Option value={"createdTs"}>UpdatedAt</Option>
+              <Option value={"updatedTs"}>Created At</Option>
+              <Option value={"createdTs"}>Updated At</Option>
               <Option value={"view"}>Visits</Option>
             </Select>
           </div>

@@ -265,7 +265,12 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
     });
   };
 
-  const handleSaveBtnClick = async () => {
+  const handleSaveBtnClick = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     if (!state.shortcutCreate.name || !state.shortcutCreate.link) {
       toast.error("Please fill in required fields.");
       return;
@@ -303,7 +308,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
     <Drawer anchor="right" open={true} onClose={onClose}>
       <DialogTitle>{isCreating ? "Create Shortcut" : "Edit Shortcut"}</DialogTitle>
       <ModalClose />
-      <DialogContent className="w-full max-w-full">
+      <DialogContent className="w-full max-w-full" onClick={(e) => e.stopPropagation()}>
         <div className="overflow-y-auto w-full mt-2 px-4 pb-4 sm:w-[24rem]">
           <div className="w-full flex flex-col justify-start items-start mb-3">
             <span className="mb-2">
@@ -400,18 +405,22 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
               </div>
             )}
           </div>
-          <div className="w-full flex flex-col justify-start items-start mb-3">
+          <div
+            className="w-full flex flex-col justify-start items-start mb-3"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Checkbox
               className="w-full dark:text-gray-400"
               checked={state.shortcutCreate.visibility === Visibility.PUBLIC}
               label={t(`shortcut.visibility.public.description`)}
-              onChange={(e) =>
+              onChange={(e) => {
+                e.stopPropagation();
                 setPartialState({
                   shortcutCreate: Object.assign(state.shortcutCreate, {
                     visibility: e.target.checked ? Visibility.PUBLIC : Visibility.WORKSPACE,
                   }),
-                })
-              }
+                });
+              }}
             />
           </div>
           <Divider className="text-gray-500">More</Divider>
@@ -472,7 +481,10 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
         </div>
       </DialogContent>
       <DialogActions>
-        <div className="w-full flex flex-row justify-end items-center px-3 py-4 space-x-2">
+        <div
+          className="w-full flex flex-row justify-end items-center px-3 py-4 space-x-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button color="neutral" variant="plain" disabled={requestState.isLoading} loading={requestState.isLoading} onClick={onClose}>
             {t("common.cancel")}
           </Button>

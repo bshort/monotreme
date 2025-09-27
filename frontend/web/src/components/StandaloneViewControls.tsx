@@ -96,8 +96,8 @@ const StandaloneViewControls = () => {
           className="min-w-[100px]"
         >
           <Option value={"name"}>Name</Option>
-          <Option value={"updatedTs"}>CreatedAt</Option>
-          <Option value={"createdTs"}>UpdatedAt</Option>
+          <Option value={"updatedTs"}>Updated At</Option>
+          <Option value={"createdTs"}>Created At</Option>
           <Option value={"view"}>Visits</Option>
         </Select>
       </div>

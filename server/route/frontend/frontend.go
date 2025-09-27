@@ -4,9 +4,11 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"html"
 	"io/fs"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -83,6 +85,12 @@ func (s *FrontendService) isShortcutRoute(c echo.Context) bool {
 
 func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 	rawIndexHTML := getRawIndexHTML()
+
+	// Add route for public user shortcuts display
+	e.GET("/:username/shortcuts", s.handlePublicShortcuts)
+
+	// Add route for public user collections display
+	e.GET("/:username/collections", s.handlePublicCollections)
 
 	// Add middleware to handle shortcut/collection routes BEFORE static middleware
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -236,6 +244,629 @@ func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 }
 
 // Routes are now handled by middleware in the Serve method
+
+func (s *FrontendService) handlePublicShortcuts(c echo.Context) error {
+	ctx := c.Request().Context()
+	username := c.Param("username")
+
+	// Find user by nickname
+	users, err := s.Store.ListUsers(ctx, &store.FindUser{
+		Nickname: &username,
+	})
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to find user",
+		})
+	}
+	if len(users) == 0 {
+		return c.JSON(http.StatusNotFound, map[string]string{
+			"error": "User not found",
+		})
+	}
+
+	user := users[0]
+
+	// Get public shortcuts for this user
+	shortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{
+		CreatorID: &user.ID,
+		VisibilityList: []storepb.Visibility{storepb.Visibility_PUBLIC},
+	})
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch shortcuts",
+		})
+	}
+
+	// Create HTML response
+	html := s.generatePublicShortcutsHTML(username, shortcuts)
+	return c.HTML(http.StatusOK, html)
+}
+
+func (s *FrontendService) generatePublicShortcutsHTML(username string, shortcuts []*storepb.Shortcut) string {
+	ctx := context.Background() // We need context for getShortcutPrefix
+	escapedUsername := html.EscapeString(username)
+	htmlContent := `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>` + escapedUsername + `'s Public Shortcuts</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f8fafc;
+        }
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: #64748b;
+        }
+        .shortcuts-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+        .shortcut-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+            display: flex;
+            gap: 1rem;
+            text-decoration: none;
+            color: inherit;
+        }
+        .shortcut-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: #3b82f6;
+            text-decoration: none;
+            color: inherit;
+        }
+        .shortcut-favicon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 4px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .shortcut-favicon img {
+            width: 24px;
+            height: 24px;
+            border-radius: 2px;
+        }
+        .shortcut-favicon-placeholder {
+            width: 24px;
+            height: 24px;
+            background: #cbd5e1;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .shortcut-favicon-placeholder.hidden {
+            display: none;
+        }
+        .shortcut-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .shortcut-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .shortcut-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+        .shortcut-link {
+            font-size: 0.85rem;
+            color: #3b82f6;
+            word-break: break-all;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+        .shortcut-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #475569;
+            background: #f8fafc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .tags {
+            margin-top: 0.5rem;
+        }
+        .tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .no-shortcuts {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            grid-column: 1 / -1;
+            padding: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>` + escapedUsername + `'s Public Shortcuts</h1>
+        <p>Publicly shared shortcuts and links</p>
+    </div>
+    <div class="shortcuts-grid">`
+
+	if len(shortcuts) == 0 {
+		htmlContent += `<div class="no-shortcuts">No public shortcuts available</div>`
+	} else {
+		shortcutPrefix := s.getShortcutPrefix(ctx)
+		for _, shortcut := range shortcuts {
+			shortcutURL := fmt.Sprintf("/%s/%s", shortcutPrefix, shortcut.Name)
+			htmlContent += `<a href="` + html.EscapeString(shortcutURL) + `" target="_blank" class="shortcut-card">
+                <div class="shortcut-favicon">`
+
+			// Check if there's a custom icon or use favicon from the domain
+			placeholder := "?"
+			if len(shortcut.Name) > 0 {
+				placeholder = strings.ToUpper(string([]rune(shortcut.Name)[0]))
+			}
+
+			if shortcut.CustomIcon != "" {
+				htmlContent += `<img src="` + html.EscapeString(shortcut.CustomIcon) + `" alt="Icon" onerror="this.style.display='none'; this.nextSibling.classList.remove('hidden');">
+					<div class="shortcut-favicon-placeholder hidden">` + placeholder + `</div>`
+			} else {
+				// Try to get favicon from the domain
+				faviconURL := s.getFaviconURL(shortcut.Link)
+				if faviconURL != "" {
+					htmlContent += `<img src="` + html.EscapeString(faviconURL) + `" alt="Favicon" onerror="this.style.display='none'; this.nextSibling.classList.remove('hidden');">
+					<div class="shortcut-favicon-placeholder hidden">` + placeholder + `</div>`
+				} else {
+					htmlContent += `<div class="shortcut-favicon-placeholder">` + placeholder + `</div>`
+				}
+			}
+
+			htmlContent += `</div>
+                <div class="shortcut-content">`
+
+			// 1. Title
+			if shortcut.Title != "" {
+				htmlContent += `<div class="shortcut-title">` + html.EscapeString(shortcut.Title) + `</div>`
+			}
+
+			// 2. Description
+			if shortcut.Description != "" {
+				htmlContent += `<div class="shortcut-description">` + html.EscapeString(shortcut.Description) + `</div>`
+			}
+
+			// 3. Link (display only, no longer clickable since the whole card is clickable)
+			htmlContent += `<div class="shortcut-link">` + html.EscapeString(shortcut.Link) + `</div>`
+
+			// 4. Shortcut name (at the bottom)
+			htmlContent += `<div class="shortcut-name">` + html.EscapeString(shortcut.Name) + `</div>`
+
+			// Tags
+			if len(shortcut.Tags) > 0 {
+				htmlContent += `<div class="tags">`
+				for _, tag := range shortcut.Tags {
+					if tag != "" {
+						htmlContent += `<span class="tag">` + html.EscapeString(tag) + `</span>`
+					}
+				}
+				htmlContent += `</div>`
+			}
+
+			htmlContent += `</div></a>`
+		}
+	}
+
+	htmlContent += `    </div>
+</body>
+</html>`
+	return htmlContent
+}
+
+func (s *FrontendService) handlePublicCollections(c echo.Context) error {
+	ctx := c.Request().Context()
+	username := c.Param("username")
+
+	// Find user by nickname
+	users, err := s.Store.ListUsers(ctx, &store.FindUser{
+		Nickname: &username,
+	})
+	if err != nil {
+		slog.Error("Failed to find user", "error", err, "username", username)
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to find user",
+		})
+	}
+	if len(users) == 0 {
+		slog.Info("User not found", "username", username)
+		return c.JSON(http.StatusNotFound, map[string]string{
+			"error": "User not found",
+		})
+	}
+
+	user := users[0]
+	slog.Info("Found user", "username", username, "userID", user.ID)
+
+	// Get ALL collections for this user first to see what's available
+	allCollections, err := s.Store.ListCollections(ctx, &store.FindCollection{
+		CreatorID: &user.ID,
+	})
+	if err != nil {
+		slog.Error("Failed to fetch all collections", "error", err, "userID", user.ID)
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch collections",
+		})
+	}
+	slog.Info("Found collections for user", "userID", user.ID, "totalCollections", len(allCollections))
+
+	// Get ALL collections for this user (temporarily for debugging)
+	collections, err := s.Store.ListCollections(ctx, &store.FindCollection{
+		CreatorID: &user.ID,
+		// VisibilityList: []storepb.Visibility{storepb.Visibility_PUBLIC}, // Commented out for debugging
+	})
+	if err != nil {
+		slog.Error("Failed to fetch collections", "error", err, "userID", user.ID)
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to fetch collections",
+		})
+	}
+	slog.Info("Found all collections for user", "userID", user.ID, "collections", len(collections))
+
+	// For each collection, get the public shortcuts
+	collectionsWithShortcuts := make([]CollectionWithShortcuts, 0)
+	for _, collection := range collections {
+		slog.Info("Processing collection", "collectionID", collection.Id, "collectionTitle", collection.Title, "shortcutIDs", collection.ShortcutIds)
+		shortcuts := make([]*storepb.Shortcut, 0)
+
+		// Get shortcuts by IDs and filter for public ones
+		for _, shortcutID := range collection.ShortcutIds {
+			shortcut, err := s.Store.GetShortcut(ctx, &store.FindShortcut{
+				ID: &shortcutID,
+			})
+			if err != nil {
+				slog.Warn("Failed to get shortcut", "shortcutID", shortcutID, "error", err)
+				continue // Skip if shortcut not found
+			}
+			slog.Info("Found shortcut", "shortcutID", shortcutID, "name", shortcut.Name, "visibility", shortcut.Visibility.String())
+			// Include ALL shortcuts for debugging (normally would filter for public only)
+			shortcuts = append(shortcuts, shortcut)
+			slog.Info("Added shortcut to collection", "shortcutName", shortcut.Name, "visibility", shortcut.Visibility.String())
+		}
+
+		slog.Info("Collection processed", "collectionTitle", collection.Title, "publicShortcuts", len(shortcuts))
+		collectionsWithShortcuts = append(collectionsWithShortcuts, CollectionWithShortcuts{
+			Collection: collection,
+			Shortcuts:  shortcuts,
+		})
+	}
+
+	// Create HTML response
+	slog.Info("Generating HTML for collections", "username", username, "collectionsCount", len(collectionsWithShortcuts))
+	html := s.generatePublicCollectionsHTML(username, collectionsWithShortcuts)
+	return c.HTML(http.StatusOK, html)
+}
+
+type CollectionWithShortcuts struct {
+	Collection *storepb.Collection
+	Shortcuts  []*storepb.Shortcut
+}
+
+func (s *FrontendService) generatePublicCollectionsHTML(username string, collections []CollectionWithShortcuts) string {
+	ctx := context.Background() // We need context for getShortcutPrefix
+	escapedUsername := html.EscapeString(username)
+	slog.Info("Generating HTML", "username", username, "collectionsToRender", len(collections))
+	htmlContent := `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>` + escapedUsername + `'s Collections (Debug)</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f8fafc;
+        }
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: #64748b;
+        }
+        .collections-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+        .collection-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .collection-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .collection-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .collection-description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+        .shortcuts-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+        .shortcut-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+            display: flex;
+            gap: 1rem;
+            text-decoration: none;
+            color: inherit;
+        }
+        .shortcut-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-color: #3b82f6;
+            text-decoration: none;
+            color: inherit;
+            background: white;
+        }
+        .shortcut-favicon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 4px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .shortcut-favicon img {
+            width: 24px;
+            height: 24px;
+            border-radius: 2px;
+        }
+        .shortcut-favicon-placeholder {
+            width: 24px;
+            height: 24px;
+            background: #cbd5e1;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .shortcut-favicon-placeholder.hidden {
+            display: none;
+        }
+        .shortcut-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .shortcut-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .shortcut-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+        .shortcut-link {
+            font-size: 0.85rem;
+            color: #3b82f6;
+            word-break: break-all;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+        .shortcut-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .tags {
+            margin-top: 0.5rem;
+        }
+        .tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .no-collections {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .no-shortcuts {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>` + escapedUsername + `'s Collections (Debug)</h1>
+        <p>All collections and shortcuts (debug mode)</p>
+    </div>
+    <div class="collections-container">`
+
+	if len(collections) == 0 {
+		htmlContent += `<div class="no-collections">No collections found for this user</div>`
+	} else {
+		shortcutPrefix := s.getShortcutPrefix(ctx)
+		for _, collectionWithShortcuts := range collections {
+			collection := collectionWithShortcuts.Collection
+			shortcuts := collectionWithShortcuts.Shortcuts
+
+			htmlContent += `<div class="collection-section">
+                <div class="collection-header">
+                    <div class="collection-title">` + html.EscapeString(collection.Title) + `</div>`
+
+			if collection.Description != "" {
+				htmlContent += `<div class="collection-description">` + html.EscapeString(collection.Description) + `</div>`
+			}
+
+			htmlContent += `</div><div class="shortcuts-grid">`
+
+			if len(shortcuts) == 0 {
+				htmlContent += `<div class="no-shortcuts">No public shortcuts in this collection</div>`
+			} else {
+				for _, shortcut := range shortcuts {
+					shortcutURL := fmt.Sprintf("/%s/%s", shortcutPrefix, shortcut.Name)
+					htmlContent += `<a href="` + html.EscapeString(shortcutURL) + `" target="_blank" class="shortcut-card">
+                        <div class="shortcut-favicon">`
+
+					// Check if there's a custom icon or use favicon from the domain
+					placeholder := "?"
+					if len(shortcut.Name) > 0 {
+						placeholder = strings.ToUpper(string([]rune(shortcut.Name)[0]))
+					}
+
+					if shortcut.CustomIcon != "" {
+						htmlContent += `<img src="` + html.EscapeString(shortcut.CustomIcon) + `" alt="Icon" onerror="this.style.display='none'; this.nextSibling.classList.remove('hidden');">
+							<div class="shortcut-favicon-placeholder hidden">` + placeholder + `</div>`
+					} else {
+						// Try to get favicon from the domain
+						faviconURL := s.getFaviconURL(shortcut.Link)
+						if faviconURL != "" {
+							htmlContent += `<img src="` + html.EscapeString(faviconURL) + `" alt="Favicon" onerror="this.style.display='none'; this.nextSibling.classList.remove('hidden');">
+							<div class="shortcut-favicon-placeholder hidden">` + placeholder + `</div>`
+						} else {
+							htmlContent += `<div class="shortcut-favicon-placeholder">` + placeholder + `</div>`
+						}
+					}
+
+					htmlContent += `</div>
+                        <div class="shortcut-content">`
+
+					// 1. Title
+					if shortcut.Title != "" {
+						htmlContent += `<div class="shortcut-title">` + html.EscapeString(shortcut.Title) + `</div>`
+					}
+
+					// 2. Description
+					if shortcut.Description != "" {
+						htmlContent += `<div class="shortcut-description">` + html.EscapeString(shortcut.Description) + `</div>`
+					}
+
+					// 3. Link
+					htmlContent += `<div class="shortcut-link">` + html.EscapeString(shortcut.Link) + `</div>`
+
+					// 4. Shortcut name
+					htmlContent += `<div class="shortcut-name">` + html.EscapeString(shortcut.Name) + `</div>`
+
+					// Tags
+					if len(shortcut.Tags) > 0 {
+						htmlContent += `<div class="tags">`
+						for _, tag := range shortcut.Tags {
+							if tag != "" {
+								htmlContent += `<span class="tag">` + html.EscapeString(tag) + `</span>`
+							}
+						}
+						htmlContent += `</div>`
+					}
+
+					htmlContent += `</div></a>`
+				}
+			}
+
+			htmlContent += `</div></div>`
+		}
+	}
+
+	htmlContent += `    </div>
+</body>
+</html>`
+	return htmlContent
+}
+
+func (s *FrontendService) getFaviconURL(link string) string {
+	parsedURL, err := url.Parse(link)
+	if err != nil {
+		return ""
+	}
+
+	// Only support http and https schemes
+	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+		return ""
+	}
+
+	// Use Google's favicon service which is reliable
+	return fmt.Sprintf("https://www.google.com/s2/favicons?domain=%s&sz=32", parsedURL.Host)
+}
 
 func (s *FrontendService) createShortcutViewActivity(ctx context.Context, request *http.Request, shortcut *storepb.Shortcut) error {
 	ip := getReadUserIP(request)
