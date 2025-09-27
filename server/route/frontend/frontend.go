@@ -248,6 +248,7 @@ func (s *FrontendService) Serve(ctx context.Context, e *echo.Echo) {
 func (s *FrontendService) handlePublicShortcuts(c echo.Context) error {
 	ctx := c.Request().Context()
 	username := c.Param("username")
+	filter := c.QueryParam("filter") // Get filter parameter: "public", "private", "all"
 
 	// Find user by nickname
 	users, err := s.Store.ListUsers(ctx, &store.FindUser{
@@ -266,10 +267,29 @@ func (s *FrontendService) handlePublicShortcuts(c echo.Context) error {
 
 	user := users[0]
 
-	// Get public shortcuts for this user
+	// Determine which shortcuts to fetch based on filter
+	var visibilityList []storepb.Visibility
+	var filterDescription string
+
+	switch filter {
+	case "private":
+		visibilityList = []storepb.Visibility{storepb.Visibility_WORKSPACE}
+		filterDescription = "Private shortcuts"
+	case "all":
+		visibilityList = []storepb.Visibility{storepb.Visibility_PUBLIC, storepb.Visibility_WORKSPACE}
+		filterDescription = "All shortcuts"
+	case "public":
+		fallthrough
+	default:
+		visibilityList = []storepb.Visibility{storepb.Visibility_PUBLIC}
+		filterDescription = "Public shortcuts"
+		filter = "public" // Normalize default case
+	}
+
+	// Get shortcuts for this user based on filter
 	shortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{
 		CreatorID: &user.ID,
-		VisibilityList: []storepb.Visibility{storepb.Visibility_PUBLIC},
+		VisibilityList: visibilityList,
 	})
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -278,11 +298,11 @@ func (s *FrontendService) handlePublicShortcuts(c echo.Context) error {
 	}
 
 	// Create HTML response
-	html := s.generatePublicShortcutsHTML(username, shortcuts)
+	html := s.generatePublicShortcutsHTML(username, shortcuts, filter, filterDescription)
 	return c.HTML(http.StatusOK, html)
 }
 
-func (s *FrontendService) generatePublicShortcutsHTML(username string, shortcuts []*storepb.Shortcut) string {
+func (s *FrontendService) generatePublicShortcutsHTML(username string, shortcuts []*storepb.Shortcut, currentFilter string, filterDescription string) string {
 	ctx := context.Background() // We need context for getShortcutPrefix
 	escapedUsername := html.EscapeString(username)
 	htmlContent := `<!DOCTYPE html>
@@ -290,7 +310,7 @@ func (s *FrontendService) generatePublicShortcutsHTML(username string, shortcuts
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>` + escapedUsername + `'s Public Shortcuts</title>
+    <title>` + escapedUsername + `'s Shortcuts</title>
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -309,6 +329,41 @@ func (s *FrontendService) generatePublicShortcutsHTML(username string, shortcuts
         }
         .header p {
             color: #64748b;
+        }
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        .filter-button:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        .filter-button.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .filter-button.active:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+            transform: translateY(-1px);
         }
         .shortcuts-grid {
             display: grid;
@@ -419,13 +474,46 @@ func (s *FrontendService) generatePublicShortcutsHTML(username string, shortcuts
 </head>
 <body>
     <div class="header">
-        <h1>` + escapedUsername + `'s Public Shortcuts</h1>
-        <p>Publicly shared shortcuts and links</p>
+        <h1>` + escapedUsername + `'s Shortcuts</h1>
+        <p>` + html.EscapeString(filterDescription) + `</p>
     </div>
+
+    <div class="filter-container">`
+
+	// Add filter buttons with active state
+	if currentFilter == "public" {
+		htmlContent += `<a href="?filter=public" class="filter-button active">Public</a>`
+	} else {
+		htmlContent += `<a href="?filter=public" class="filter-button">Public</a>`
+	}
+
+	if currentFilter == "private" {
+		htmlContent += `<a href="?filter=private" class="filter-button active">Private</a>`
+	} else {
+		htmlContent += `<a href="?filter=private" class="filter-button">Private</a>`
+	}
+
+	if currentFilter == "all" {
+		htmlContent += `<a href="?filter=all" class="filter-button active">All</a>`
+	} else {
+		htmlContent += `<a href="?filter=all" class="filter-button">All</a>`
+	}
+
+	htmlContent += `</div>
+
     <div class="shortcuts-grid">`
 
 	if len(shortcuts) == 0 {
-		htmlContent += `<div class="no-shortcuts">No public shortcuts available</div>`
+		emptyMessage := "No shortcuts available"
+		switch currentFilter {
+		case "public":
+			emptyMessage = "No public shortcuts available"
+		case "private":
+			emptyMessage = "No private shortcuts available"
+		case "all":
+			emptyMessage = "No shortcuts available"
+		}
+		htmlContent += `<div class="no-shortcuts">` + emptyMessage + `</div>`
 	} else {
 		shortcutPrefix := s.getShortcutPrefix(ctx)
 		for _, shortcut := range shortcuts {
