@@ -2,9 +2,11 @@ package export
 
 import (
 	"context"
+	"encoding/csv"
 	"fmt"
 	"net/http"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -46,6 +48,7 @@ func NewExportService(profile *profile.Profile, store *store.Store, secret strin
 
 func (es *ExportService) RegisterRoutes(e *echo.Echo) {
 	e.GET("/export/shortcuts.html", es.handleShortcutsExport)
+	e.GET("/export/shortcuts.csv", es.handleShortcutsCSVExport)
 }
 
 func (es *ExportService) handleShortcutsExport(c echo.Context) error {
@@ -96,6 +99,48 @@ func (es *ExportService) handleShortcutsExport(c echo.Context) error {
 	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
 
 	return c.String(http.StatusOK, htmlContent)
+}
+
+func (es *ExportService) handleShortcutsCSVExport(c echo.Context) error {
+	ctx := context.Background()
+
+	// Get access token from query parameter
+	accessToken := c.QueryParam("token")
+	if accessToken == "" {
+		return c.String(http.StatusUnauthorized, "Access token required. Use: /export/shortcuts.csv?token=YOUR_ACCESS_TOKEN")
+	}
+
+	// Authenticate the user
+	userID, err := es.authenticateUser(ctx, accessToken)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, fmt.Sprintf("Authentication failed: %s", err.Error()))
+	}
+
+	// Get user's shortcuts only
+	shortcuts, err := es.Store.ListShortcuts(ctx, &store.FindShortcut{
+		CreatorID: &userID,
+	})
+	if err != nil {
+		return errors.Wrap(err, "failed to get shortcuts")
+	}
+
+	// Sort shortcuts by creation time (most recent first)
+	sort.Slice(shortcuts, func(i, j int) bool {
+		return shortcuts[i].CreatedTs > shortcuts[j].CreatedTs
+	})
+
+	csvContent, err := es.generateShortcutsCSV(shortcuts)
+	if err != nil {
+		return errors.Wrap(err, "failed to generate CSV")
+	}
+
+	// Set headers for file download
+	timestamp := time.Now().Format("1_2_06") // M_D_YY format
+	filename := fmt.Sprintf("monotreme_shortcuts_%s.csv", timestamp)
+	c.Response().Header().Set("Content-Type", "text/csv; charset=utf-8")
+	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+
+	return c.String(http.StatusOK, csvContent)
 }
 
 func (es *ExportService) authenticateUser(ctx context.Context, accessToken string) (int32, error) {
@@ -260,4 +305,60 @@ func escapeHTML(s string) string {
 	s = fmt.Sprintf("%s", s)
 	// More comprehensive escaping would be needed for production
 	return s
+}
+
+// generateShortcutsCSV creates a CSV representation of shortcuts
+func (es *ExportService) generateShortcutsCSV(shortcuts []*storepb.Shortcut) (string, error) {
+	var csvBuilder strings.Builder
+	csvWriter := csv.NewWriter(&csvBuilder)
+
+	// Write CSV header
+	header := []string{
+		"Name",
+		"Title",
+		"Description",
+		"Link",
+		"Tags",
+		"Visibility",
+		"Created Date",
+		"Updated Date",
+	}
+	if err := csvWriter.Write(header); err != nil {
+		return "", errors.Wrap(err, "failed to write CSV header")
+	}
+
+	// Write shortcut data
+	for _, shortcut := range shortcuts {
+		// Format tags as comma-separated string
+		tags := strings.Join(shortcut.Tags, "; ")
+
+		// Format dates
+		createdDate := time.Unix(shortcut.CreatedTs, 0).Format("2006-01-02 15:04:05")
+		updatedDate := time.Unix(shortcut.UpdatedTs, 0).Format("2006-01-02 15:04:05")
+
+		// Format visibility
+		visibility := shortcut.Visibility.String()
+
+		record := []string{
+			shortcut.Name,
+			shortcut.Title,
+			shortcut.Description,
+			shortcut.Link,
+			tags,
+			visibility,
+			createdDate,
+			updatedDate,
+		}
+
+		if err := csvWriter.Write(record); err != nil {
+			return "", errors.Wrap(err, "failed to write CSV record")
+		}
+	}
+
+	csvWriter.Flush()
+	if err := csvWriter.Error(); err != nil {
+		return "", errors.Wrap(err, "CSV writer error")
+	}
+
+	return csvBuilder.String(), nil
 }

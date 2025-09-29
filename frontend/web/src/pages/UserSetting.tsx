@@ -1,12 +1,12 @@
 import { Card, Typography, Button } from "@mui/joy";
-import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import Icon from "@/components/Icon";
 import AccessTokenSection from "@/components/setting/AccessTokenSection";
 import AccountSection from "@/components/setting/AccountSection";
 import PreferenceSection from "@/components/setting/PreferenceSection";
-import UserSummarySection from "@/components/setting/UserSummarySection";
 import RecentActivitySection from "@/components/setting/RecentActivitySection";
-import Icon from "@/components/Icon";
+import UserSummarySection from "@/components/setting/UserSummarySection";
 import { userServiceClient } from "@/grpcweb";
 import { useUserStore } from "@/stores";
 
@@ -19,7 +19,7 @@ const Setting: React.FC = () => {
       // Generate a new access token for export
       const { accessToken } = await userServiceClient.createUserAccessToken({
         id: currentUser.id,
-        description: "Export Shortcuts",
+        description: "Export Shortcuts as HTML",
         expiresAt: undefined, // Never expires
       });
 
@@ -27,8 +27,29 @@ const Setting: React.FC = () => {
       const exportUrl = `${window.location.origin}/export/shortcuts.html?token=${accessToken}`;
 
       // Trigger download
-      window.open(exportUrl, '_blank');
+      window.open(exportUrl, "_blank");
       toast.success("Export started! Your browser will download the bookmark file.");
+    } catch (error: any) {
+      console.error("Failed to export shortcuts:", error);
+      toast.error("Failed to export shortcuts. Please try again.");
+    }
+  };
+
+  const handleExportShortcutsCSV = async () => {
+    try {
+      // Generate a new access token for export
+      const { accessToken } = await userServiceClient.createUserAccessToken({
+        id: currentUser.id,
+        description: "Export Shortcuts as CSV",
+        expiresAt: undefined, // Never expires
+      });
+
+      // Create the export URL
+      const exportUrl = `${window.location.origin}/export/shortcuts.csv?token=${accessToken}`;
+
+      // Trigger download
+      window.open(exportUrl, "_blank");
+      toast.success("Export started! Your browser will download the CSV file.");
     } catch (error: any) {
       console.error("Failed to export shortcuts:", error);
       toast.error("Failed to export shortcuts. Please try again.");
@@ -52,21 +73,15 @@ const Setting: React.FC = () => {
         </Typography>
         <div className="flex flex-row gap-3">
           <Link to="/admin/import">
-            <Button
-              variant="outlined"
-              color="primary"
-              startDecorator={<Icon.Upload />}
-            >
+            <Button variant="outlined" color="primary" startDecorator={<Icon.Upload />}>
               Import Bookmarks
             </Button>
           </Link>
-          <Button
-            variant="outlined"
-            color="neutral"
-            startDecorator={<Icon.Download />}
-            onClick={handleExportShortcuts}
-          >
-            Export Shortcuts
+          <Button variant="outlined" color="neutral" startDecorator={<Icon.Download />} onClick={handleExportShortcuts}>
+            Export Shortcuts as HTML
+          </Button>
+          <Button variant="outlined" color="neutral" startDecorator={<Icon.Download />} onClick={handleExportShortcutsCSV}>
+            Export Shortcuts as CSV
           </Button>
         </div>
       </Card>

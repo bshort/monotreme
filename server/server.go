@@ -82,7 +82,7 @@ func NewServer(ctx context.Context, profile *profile.Profile, store *store.Store
 		slog.Warn("Failed to load swagger spec", "error", err)
 		swaggerSpec = "swagger: '2.0'\ninfo:\n  title: Monotreme API\n  version: '1.0'\npaths: {}"
 	}
-	swaggerService := swagger.NewSwaggerService(swaggerSpec, store, secret)
+	swaggerService := swagger.NewSwaggerService(swaggerSpec)
 	swaggerService.RegisterRoutes(e)
 
 	// Register RSS feeds
