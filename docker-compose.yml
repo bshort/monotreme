@@ -6,5 +6,11 @@ services:
       - 5231:5231
 
     volumes:
-      - /Primer/Media/data/monotreme:/var/opt/monotreme
+      - ./data:/var/opt/monotreme
     restart: unless-stopped
+    networks:
+      - monotreme-network
+
+networks:
+  monotreme-network:
+    driver: bridge
