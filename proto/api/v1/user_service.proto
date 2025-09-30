@@ -77,6 +77,8 @@ message User {
 
   string password = 9;
 
+  string profile_picture = 17;
+
   // Personal preferences
   string locale = 10;
   string color_theme = 11;
@@ -84,6 +86,7 @@ message User {
   bool auto_generate_title = 13;
   bool auto_generate_icon = 14;
   bool auto_generate_name = 15;
+  string edit_mode_preference = 16;
 }
 
 enum Role {

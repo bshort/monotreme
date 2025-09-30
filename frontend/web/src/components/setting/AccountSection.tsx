@@ -17,14 +17,28 @@ const AccountSection: React.FC = () => {
     <>
       <div className="w-full flex flex-col justify-start items-start gap-y-2">
         <p className="text-2xl shrink-0 font-semibold text-gray-900 dark:text-gray-500">{t("common.account")}</p>
-        <p className="flex flex-row justify-start items-center mt-2 dark:text-gray-400">
-          <span className="text-xl">{currentUser.nickname}</span>
-          {isAdmin && <span className="ml-2 bg-blue-600 text-white px-2 leading-6 text-sm rounded-full">Admin</span>}
-        </p>
-        <p className="flex flex-row justify-start items-center dark:text-gray-400">
-          <span className="mr-3 text-gray-500">{t("common.email")}: </span>
-          {currentUser.email}
-        </p>
+        <div className="flex flex-row justify-start items-center gap-4 mt-2">
+          {currentUser.profilePicture && (
+            <img
+              src={currentUser.profilePicture}
+              alt={currentUser.nickname}
+              className="w-16 h-16 rounded-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          )}
+          <div className="flex flex-col gap-2">
+            <p className="flex flex-row justify-start items-center dark:text-gray-400">
+              <span className="text-xl">{currentUser.nickname}</span>
+              {isAdmin && <span className="ml-2 bg-blue-600 text-white px-2 leading-6 text-sm rounded-full">Admin</span>}
+            </p>
+            <p className="flex flex-row justify-start items-center dark:text-gray-400">
+              <span className="mr-3 text-gray-500">{t("common.email")}: </span>
+              {currentUser.email}
+            </p>
+          </div>
+        </div>
         <div className="flex flex-row justify-start items-center gap-2 mt-2">
           <Button variant="outlined" color="neutral" onClick={() => setShowEditUserinfoDialog(true)}>
             {t("common.edit")}

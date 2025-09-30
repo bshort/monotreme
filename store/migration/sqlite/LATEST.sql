@@ -19,13 +19,15 @@ CREATE TABLE user (
   email TEXT NOT NULL UNIQUE,
   nickname TEXT NOT NULL,
   password_hash TEXT NOT NULL,
+  profile_picture TEXT NOT NULL DEFAULT '',
   role TEXT NOT NULL CHECK (role IN ('ADMIN', 'USER')) DEFAULT 'USER',
   locale TEXT NOT NULL DEFAULT 'EN',
   color_theme TEXT NOT NULL DEFAULT 'SYSTEM',
   default_visibility TEXT NOT NULL DEFAULT 'WORKSPACE',
   auto_generate_title BOOLEAN NOT NULL DEFAULT true,
   auto_generate_icon BOOLEAN NOT NULL DEFAULT true,
-  auto_generate_name BOOLEAN NOT NULL DEFAULT true
+  auto_generate_name BOOLEAN NOT NULL DEFAULT true,
+  edit_mode_preference TEXT NOT NULL DEFAULT 'FLYOUT'
 );
 
 CREATE INDEX idx_user_email ON user(email);

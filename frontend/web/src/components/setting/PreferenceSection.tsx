@@ -15,6 +15,7 @@ const PreferenceSection: React.FC = () => {
   const autoGenerateTitle = currentUser.autoGenerateTitle ?? true;
   const autoGenerateIcon = currentUser.autoGenerateIcon ?? true;
   const autoGenerateName = currentUser.autoGenerateName ?? true;
+  const editModePreference = currentUser.editModePreference || "FLYOUT";
 
   const bookmarkletCode = `javascript:(function(){try{const title=encodeURIComponent(document.title||'Untitled');const url=encodeURIComponent(window.location.href);window.open('${window.location.origin}/quick-save?url='+url+'&title='+title,'_blank','width=500,height=600,left='+(screen.width/2-250)+',top='+(screen.height/2-300)+',scrollbars=yes,resizable=yes');}catch(error){console.log('Mon.otre.me bookmarklet error:',error);}})();`;
 
@@ -76,6 +77,17 @@ const PreferenceSection: React.FC = () => {
     {
       value: "PUBLIC",
       label: "Public",
+    },
+  ];
+
+  const editModeOptions = [
+    {
+      value: "FLYOUT",
+      label: "Quick Edit Flyout",
+    },
+    {
+      value: "FULL_PAGE",
+      label: "Full Page Edit",
     },
   ];
 
@@ -155,6 +167,20 @@ const PreferenceSection: React.FC = () => {
     }
   };
 
+  const handleSelectEditModePreference = async (mode: string) => {
+    try {
+      await userStore.patchUser(
+        {
+          ...currentUser,
+          editModePreference: mode,
+        },
+        ["editModePreference"],
+      );
+    } catch (error) {
+      console.error('Failed to update edit mode preference setting:', error);
+    }
+  };
+
   return (
     <div className="w-full flex flex-col sm:flex-row justify-start items-start gap-4 sm:gap-x-16">
       <p className="sm:w-1/4 text-2xl shrink-0 font-semibold text-gray-900 dark:text-gray-500">{t("settings.preference.self")}</p>
@@ -187,6 +213,27 @@ const PreferenceSection: React.FC = () => {
               );
             })}
           </Select>
+        </div>
+
+        {/* Shortcut Edit Preferences */}
+        <div className="w-full border-t pt-4 mt-2 dark:border-zinc-700">
+          <h4 className="text-lg font-semibold mb-3 dark:text-gray-300">Shortcut Edit Preferences</h4>
+
+          <div className="w-full flex flex-row justify-between items-center">
+            <div className="flex flex-col">
+              <span className="dark:text-gray-400">Default Edit Mode</span>
+              <span className="text-sm text-gray-500 dark:text-gray-600">Choose how to edit shortcuts by default</span>
+            </div>
+            <Select value={editModePreference} onChange={(_, value) => handleSelectEditModePreference(value as string)}>
+              {editModeOptions.map((option) => {
+                return (
+                  <Option key={option.value} value={option.value}>
+                    {option.label}
+                  </Option>
+                );
+              })}
+            </Select>
+          </div>
         </div>
 
         {/* Shortcut Creation Preferences */}

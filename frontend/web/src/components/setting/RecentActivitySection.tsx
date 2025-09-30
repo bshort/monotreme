@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useUserStore, useShortcutStore } from "@/stores";
 import { activityServiceClient } from "@/grpcweb";
 import { GetRecentActivityResponse, RecentUser, RecentShortcut, RecentCollection, RecentClick, MostClickedShortcut } from "@/types/proto/api/v1/activity_service";
+import { getShortcutUrl } from "@/utils/shortcut";
 import Icon from "@/components/Icon";
 
 const RecentActivitySection = () => {
@@ -12,10 +13,10 @@ const RecentActivitySection = () => {
   const [loading, setLoading] = useState(true);
   const [recentActivity, setRecentActivity] = useState<GetRecentActivityResponse | null>(null);
 
-  // Helper function to get shortcut UUID from ID
-  const getShortcutUuidFromId = (shortcutId: number): string => {
+  // Helper function to get shortcut name from ID
+  const getShortcutNameFromId = (shortcutId: number): string => {
     const shortcut = shortcutStore.getShortcutById(shortcutId);
-    return shortcut.uuid || '';
+    return shortcut.name || '';
   };
 
   useEffect(() => {
@@ -114,7 +115,7 @@ const RecentActivitySection = () => {
           <div className="space-y-2">
             {recentActivity?.recentShortcuts && recentActivity.recentShortcuts.length > 0 ? (
               recentActivity.recentShortcuts.map((shortcut) => (
-                <Link key={shortcut.id} to={`/shortcut/${shortcut.uuid}`} className="block">
+                <a key={shortcut.id} href={getShortcutUrl(shortcut.name)} className="block">
                   <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Icon.Link className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -128,7 +129,7 @@ const RecentActivitySection = () => {
                       </Typography>
                     </div>
                   </div>
-                </Link>
+                </a>
               ))
             ) : (
               <Typography level="body-xs" className="text-gray-400 italic">
@@ -182,7 +183,7 @@ const RecentActivitySection = () => {
           <div className="space-y-2">
             {recentActivity?.recentClicks && recentActivity.recentClicks.length > 0 ? (
               recentActivity.recentClicks.map((click) => (
-                <Link key={click.shortcutId} to={`/shortcut/${getShortcutUuidFromId(click.shortcutId)}`} className="block">
+                <a key={click.shortcutId} href={getShortcutUrl(getShortcutNameFromId(click.shortcutId))} className="block">
                   <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Icon.Clock className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -196,7 +197,7 @@ const RecentActivitySection = () => {
                       </Typography>
                     </div>
                   </div>
-                </Link>
+                </a>
               ))
             ) : (
               <Typography level="body-xs" className="text-gray-400 italic">
@@ -217,7 +218,7 @@ const RecentActivitySection = () => {
           <div className="space-y-2">
             {recentActivity?.mostClickedShortcuts && recentActivity.mostClickedShortcuts.length > 0 ? (
               recentActivity.mostClickedShortcuts.map((shortcut) => (
-                <Link key={shortcut.id} to={`/shortcut/${shortcut.uuid}`} className="block">
+                <a key={shortcut.id} href={getShortcutUrl(shortcut.name)} className="block">
                   <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Icon.MousePointer className="w-4 h-4 text-orange-600 dark:text-orange-400" />
@@ -231,7 +232,7 @@ const RecentActivitySection = () => {
                       </Typography>
                     </div>
                   </div>
-                </Link>
+                </a>
               ))
             ) : (
               <Typography level="body-xs" className="text-gray-400 italic">

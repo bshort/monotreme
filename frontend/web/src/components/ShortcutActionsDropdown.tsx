@@ -23,6 +23,7 @@ const ShortcutActionsDropdown = (props: Props) => {
   const [showEditDrawer, setShowEditDrawer] = useState<boolean>(false);
   const [showQRCodeDialog, setShowQRCodeDialog] = useState<boolean>(false);
   const havePermission = currentUser.role === Role.ADMIN || shortcut.creatorId === currentUser.id;
+  const editModePreference = currentUser.editModePreference || "FLYOUT";
 
   const handleDeleteShortcutButtonClick = (shortcut: Shortcut) => {
     showCommonDialog({
@@ -43,6 +44,14 @@ const ShortcutActionsDropdown = (props: Props) => {
     navigateTo(`/edit/shortcut/${shortcut.uuid}`);
   };
 
+  const handleEditClick = () => {
+    if (editModePreference === "FULL_PAGE") {
+      gotoEditFullPage();
+    } else {
+      setShowEditDrawer(true);
+    }
+  };
+
   return (
     <>
       <Dropdown
@@ -52,17 +61,9 @@ const ShortcutActionsDropdown = (props: Props) => {
             {havePermission && (
               <button
                 className="w-full px-2 flex flex-row justify-start items-center text-left leading-8 cursor-pointer rounded hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60 dark:hover:bg-zinc-800"
-                onClick={() => setShowEditDrawer(true)}
+                onClick={handleEditClick}
               >
-                <Icon.Edit className="w-4 h-auto mr-2 opacity-70" /> Quick Edit
-              </button>
-            )}
-            {havePermission && (
-              <button
-                className="w-full px-2 flex flex-row justify-start items-center text-left leading-8 cursor-pointer rounded hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60 dark:hover:bg-zinc-800"
-                onClick={gotoEditFullPage}
-              >
-                <Icon.ExternalLink className="w-4 h-auto mr-2 opacity-70" /> Edit Full Page
+                <Icon.Edit className="w-4 h-auto mr-2 opacity-70" /> Edit
               </button>
             )}
             <button

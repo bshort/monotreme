@@ -17,6 +17,7 @@ const EditUserinfoDialog: React.FC<Props> = (props: Props) => {
   const currentUser = userStore.getCurrentUser();
   const [email, setEmail] = useState(currentUser.email);
   const [nickname, setNickname] = useState(currentUser.nickname);
+  const [profilePicture, setProfilePicture] = useState(currentUser.profilePicture || "");
   const requestState = useLoading(false);
 
   const handleCloseBtnClick = () => {
@@ -33,6 +34,11 @@ const EditUserinfoDialog: React.FC<Props> = (props: Props) => {
     setNickname(text);
   };
 
+  const handleProfilePictureChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value as string;
+    setProfilePicture(text);
+  };
+
   const handleSaveBtnClick = async () => {
     if (email === "" || nickname === "") {
       toast.error("Please fill all fields");
@@ -46,8 +52,9 @@ const EditUserinfoDialog: React.FC<Props> = (props: Props) => {
           id: currentUser.id,
           email,
           nickname,
+          profilePicture,
         },
-        ["email", "nickname"],
+        ["email", "nickname", "profilePicture"],
       );
       onClose();
       toast("User information updated");
@@ -75,6 +82,10 @@ const EditUserinfoDialog: React.FC<Props> = (props: Props) => {
           <div className="w-full flex flex-col justify-start items-start mb-3">
             <span className="mb-2">{t("user.nickname")}</span>
             <Input className="w-full" type="text" value={nickname} onChange={handleNicknameChanged} />
+          </div>
+          <div className="w-full flex flex-col justify-start items-start mb-3">
+            <span className="mb-2">Profile Picture URL</span>
+            <Input className="w-full" type="text" placeholder="https://example.com/avatar.jpg" value={profilePicture} onChange={handleProfilePictureChanged} />
           </div>
           <div className="w-full flex flex-row justify-end items-center space-x-2">
             <Button variant="plain" disabled={requestState.isLoading} onClick={handleCloseBtnClick}>
