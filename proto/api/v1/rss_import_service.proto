@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package monotreme.api.v1;
+
+import "api/v1/common.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/api/v1";
+
+service RssImportService {
+  // ListRssFeeds returns a list of RSS feeds.
+  rpc ListRssFeeds(ListRssFeedsRequest) returns (ListRssFeedsResponse) {
+    option (google.api.http) = {get: "/api/v1/rss-feeds"};
+  }
+  // GetRssFeed returns an RSS feed by id.
+  rpc GetRssFeed(GetRssFeedRequest) returns (RssFeed) {
+    option (google.api.http) = {get: "/api/v1/rss-feeds/{id}"};
+    option (google.api.method_signature) = "id";
+  }
+  // CreateRssFeed creates a new RSS feed.
+  rpc CreateRssFeed(CreateRssFeedRequest) returns (RssFeed) {
+    option (google.api.http) = {
+      post: "/api/v1/rss-feeds"
+      body: "rss_feed"
+    };
+    option (google.api.method_signature) = "rss_feed";
+  }
+  // UpdateRssFeed updates an RSS feed.
+  rpc UpdateRssFeed(UpdateRssFeedRequest) returns (RssFeed) {
+    option (google.api.http) = {
+      put: "/api/v1/rss-feeds/{rss_feed.id}"
+      body: "rss_feed"
+    };
+    option (google.api.method_signature) = "rss_feed,update_mask";
+  }
+  // DeleteRssFeed deletes an RSS feed.
+  rpc DeleteRssFeed(DeleteRssFeedRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/rss-feeds/{id}"};
+    option (google.api.method_signature) = "id";
+  }
+  // TriggerRssFeedImport manually triggers an import for an RSS feed.
+  rpc TriggerRssFeedImport(TriggerRssFeedImportRequest) returns (RssFeedImportResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/rss-feeds/{id}/import"
+    };
+    option (google.api.method_signature) = "id";
+  }
+}
+
+message RssFeed {
+  int32 id = 1;
+  int32 creator_id = 2;
+  google.protobuf.Timestamp created_time = 3;
+  google.protobuf.Timestamp updated_time = 4;
+
+  string title = 5;
+  string url = 6;
+  string description = 7;
+
+  // Import settings
+  bool auto_import = 8;
+  int32 import_frequency_hours = 9; // How often to check for updates (in hours)
+  google.protobuf.Timestamp last_import_time = 10;
+
+  // Shortcut generation settings
+  repeated string default_tags = 11;
+  Visibility default_visibility = 12;
+  string shortcut_prefix = 13; // Optional prefix for generated shortcut names
+
+  // Status
+  bool is_active = 14;
+  string last_error = 15;
+  int32 total_imported = 16;
+}
+
+message ListRssFeedsRequest {
+  // Empty - returns all feeds for the authenticated user
+}
+
+message ListRssFeedsResponse {
+  repeated RssFeed rss_feeds = 1;
+}
+
+message GetRssFeedRequest {
+  int32 id = 1;
+}
+
+message CreateRssFeedRequest {
+  RssFeed rss_feed = 1;
+}
+
+message UpdateRssFeedRequest {
+  RssFeed rss_feed = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteRssFeedRequest {
+  int32 id = 1;
+}
+
+message TriggerRssFeedImportRequest {
+  int32 id = 1;
+}
+
+message RssFeedImportResponse {
+  int32 imported_count = 1;
+  repeated string imported_shortcuts = 2;
+  repeated string errors = 3;
+}

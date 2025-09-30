@@ -15,6 +15,7 @@ export interface Collection {
   creatorId: number;
   createdTs: number;
   updatedTs: number;
+  uuid: string;
   name: string;
   title: string;
   description: string;
@@ -29,6 +30,7 @@ function createBaseCollection(): Collection {
     creatorId: 0,
     createdTs: 0,
     updatedTs: 0,
+    uuid: "",
     name: "",
     title: "",
     description: "",
@@ -51,6 +53,9 @@ export const Collection: MessageFns<Collection> = {
     }
     if (message.updatedTs !== 0) {
       writer.uint32(32).int64(message.updatedTs);
+    }
+    if (message.uuid !== "") {
+      writer.uint32(42).string(message.uuid);
     }
     if (message.name !== "") {
       writer.uint32(50).string(message.name);
@@ -112,6 +117,14 @@ export const Collection: MessageFns<Collection> = {
           }
 
           message.updatedTs = longToNumber(reader.int64());
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.uuid = reader.string();
           continue;
         }
         case 6: {
@@ -190,6 +203,7 @@ export const Collection: MessageFns<Collection> = {
     message.creatorId = object.creatorId ?? 0;
     message.createdTs = object.createdTs ?? 0;
     message.updatedTs = object.updatedTs ?? 0;
+    message.uuid = object.uuid ?? "";
     message.name = object.name ?? "";
     message.title = object.title ?? "";
     message.description = object.description ?? "";

@@ -14,8 +14,8 @@ import (
 )
 
 func (d *DB) CreateCollection(ctx context.Context, create *storepb.Collection) (*storepb.Collection, error) {
-	set := []string{"creator_id", "name", "title", "description", "shortcut_ids", "visibility", "custom_icon"}
-	args := []any{create.CreatorId, create.Name, create.Title, create.Description, pq.Array(create.ShortcutIds), create.Visibility.String(), create.CustomIcon}
+	set := []string{"creator_id", "name", "title", "description", "shortcut_ids", "visibility", "custom_icon", "uuid"}
+	args := []any{create.CreatorId, create.Name, create.Title, create.Description, pq.Array(create.ShortcutIds), create.Visibility.String(), create.CustomIcon, create.Uuid}
 
 	stmt := `
 		INSERT INTO collection (` + strings.Join(set, ", ") + `)
@@ -53,6 +53,9 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 	if update.CustomIcon != nil {
 		set, args = append(set, "custom_icon = "+placeholder(len(args)+1)), append(args, *update.CustomIcon)
 	}
+	if update.UUID != nil {
+		set, args = append(set, "uuid = "+placeholder(len(args)+1)), append(args, *update.UUID)
+	}
 	if len(set) == 0 {
 		return nil, errors.New("no update specified")
 	}
@@ -61,12 +64,13 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 		UPDATE collection
 		SET ` + strings.Join(set, ", ") + `
 		WHERE id = ` + placeholder(len(args)+1) + `
-		RETURNING id, creator_id, created_ts, updated_ts, name, title, description, shortcut_ids, visibility, custom_icon
+		RETURNING id, creator_id, created_ts, updated_ts, name, title, description, shortcut_ids, visibility, custom_icon, uuid
 	`
 	args = append(args, update.ID)
 	collection := &storepb.Collection{}
 	var shortcutIDs []sql.NullInt32
 	var visibility string
+	var uuid sql.NullString
 	if err := d.db.QueryRowContext(ctx, stmt, args...).Scan(
 		&collection.Id,
 		&collection.CreatorId,
@@ -78,6 +82,7 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 		pq.Array(&shortcutIDs),
 		&visibility,
 		&collection.CustomIcon,
+		&uuid,
 	); err != nil {
 		return nil, err
 	}
@@ -87,6 +92,9 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 		if id.Valid {
 			collection.ShortcutIds = append(collection.ShortcutIds, id.Int32)
 		}
+	}
+	if uuid.Valid {
+		collection.Uuid = uuid.String
 	}
 	collection.Visibility = store.ConvertVisibilityStringToStorepb(visibility)
 	return collection, nil
@@ -122,7 +130,8 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			description,
 			shortcut_ids,
 			visibility,
-			custom_icon
+			custom_icon,
+			uuid
 		FROM collection
 		WHERE `+strings.Join(where, " AND ")+`
 		ORDER BY created_ts DESC`,
@@ -138,6 +147,7 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 		collection := &storepb.Collection{}
 		var shortcutIDs []sql.NullInt32
 		var visibility string
+		var uuid sql.NullString
 		if err := rows.Scan(
 			&collection.Id,
 			&collection.CreatorId,
@@ -149,6 +159,7 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			pq.Array(&shortcutIDs),
 			&visibility,
 			&collection.CustomIcon,
+			&uuid,
 		); err != nil {
 			return nil, err
 		}
@@ -158,6 +169,9 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			if id.Valid {
 				collection.ShortcutIds = append(collection.ShortcutIds, id.Int32)
 			}
+		}
+		if uuid.Valid {
+			collection.Uuid = uuid.String
 		}
 		collection.Visibility = store.ConvertVisibilityStringToStorepb(visibility)
 		list = append(list, collection)

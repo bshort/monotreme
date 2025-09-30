@@ -28,6 +28,7 @@ const (
 	UserService_ListUserAccessTokens_FullMethodName  = "/monotreme.api.v1.UserService/ListUserAccessTokens"
 	UserService_CreateUserAccessToken_FullMethodName = "/monotreme.api.v1.UserService/CreateUserAccessToken"
 	UserService_DeleteUserAccessToken_FullMethodName = "/monotreme.api.v1.UserService/DeleteUserAccessToken"
+	UserService_GetInvitationCode_FullMethodName     = "/monotreme.api.v1.UserService/GetInvitationCode"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -49,6 +50,8 @@ type UserServiceClient interface {
 	CreateUserAccessToken(ctx context.Context, in *CreateUserAccessTokenRequest, opts ...grpc.CallOption) (*UserAccessToken, error)
 	// DeleteUserAccessToken deletes an access token for a user.
 	DeleteUserAccessToken(ctx context.Context, in *DeleteUserAccessTokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// GetInvitationCode returns an invitation code for user signups.
+	GetInvitationCode(ctx context.Context, in *GetInvitationCodeRequest, opts ...grpc.CallOption) (*GetInvitationCodeResponse, error)
 }
 
 type userServiceClient struct {
@@ -139,6 +142,16 @@ func (c *userServiceClient) DeleteUserAccessToken(ctx context.Context, in *Delet
 	return out, nil
 }
 
+func (c *userServiceClient) GetInvitationCode(ctx context.Context, in *GetInvitationCodeRequest, opts ...grpc.CallOption) (*GetInvitationCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetInvitationCodeResponse)
+	err := c.cc.Invoke(ctx, UserService_GetInvitationCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
@@ -158,6 +171,8 @@ type UserServiceServer interface {
 	CreateUserAccessToken(context.Context, *CreateUserAccessTokenRequest) (*UserAccessToken, error)
 	// DeleteUserAccessToken deletes an access token for a user.
 	DeleteUserAccessToken(context.Context, *DeleteUserAccessTokenRequest) (*emptypb.Empty, error)
+	// GetInvitationCode returns an invitation code for user signups.
+	GetInvitationCode(context.Context, *GetInvitationCodeRequest) (*GetInvitationCodeResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -191,6 +206,9 @@ func (UnimplementedUserServiceServer) CreateUserAccessToken(context.Context, *Cr
 }
 func (UnimplementedUserServiceServer) DeleteUserAccessToken(context.Context, *DeleteUserAccessTokenRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserAccessToken not implemented")
+}
+func (UnimplementedUserServiceServer) GetInvitationCode(context.Context, *GetInvitationCodeRequest) (*GetInvitationCodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInvitationCode not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -357,6 +375,24 @@ func _UserService_DeleteUserAccessToken_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetInvitationCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInvitationCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetInvitationCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetInvitationCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetInvitationCode(ctx, req.(*GetInvitationCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -395,6 +431,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUserAccessToken",
 			Handler:    _UserService_DeleteUserAccessToken_Handler,
+		},
+		{
+			MethodName: "GetInvitationCode",
+			Handler:    _UserService_GetInvitationCode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

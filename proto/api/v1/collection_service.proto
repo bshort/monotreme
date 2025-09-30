@@ -61,6 +61,8 @@ message Collection {
 
   google.protobuf.Timestamp updated_time = 4;
 
+  string uuid = 5;
+
   string name = 6;
 
   string title = 7;

@@ -38,7 +38,8 @@ func resetTestingDB(ctx context.Context, profile *profile.Profile, dbDriver stor
 		DROP TABLE IF EXISTS user_setting CASCADE;
 		DROP TABLE IF EXISTS shortcut CASCADE;
 		DROP TABLE IF EXISTS activity CASCADE;
-		DROP TABLE IF EXISTS collection CASCADE;`)
+		DROP TABLE IF EXISTS collection CASCADE;
+		DROP TABLE IF EXISTS invitation CASCADE;`)
 		if err != nil {
 			fmt.Printf("failed to reset testing db, error: %+v\n", err)
 			panic(err)

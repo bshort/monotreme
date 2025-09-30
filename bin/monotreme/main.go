@@ -54,6 +54,16 @@ var (
 				slog.Error("failed to migrate db", "error", err)
 				return
 			}
+
+			// Automatically backfill UUIDs for existing users and collections
+			if err := storeInstance.BackfillUserUUIDs(ctx); err != nil {
+				slog.Error("failed to backfill user UUIDs", "error", err)
+				// Continue startup as this is not critical
+			}
+			if err := storeInstance.BackfillCollectionUUIDs(ctx); err != nil {
+				slog.Error("failed to backfill collection UUIDs", "error", err)
+				// Continue startup as this is not critical
+			}
 			s, err := server.NewServer(ctx, serverProfile, storeInstance)
 			if err != nil {
 				cancel()
@@ -86,9 +96,113 @@ var (
 			<-ctx.Done()
 		},
 	}
+
+	backfillUUIDCmd = &cobra.Command{
+		Use:   "backfill-uuids",
+		Short: "Generate UUIDs for existing users who don't have them",
+		Run: func(_ *cobra.Command, _ []string) {
+			serverProfile := &profile.Profile{
+				Mode:    viper.GetString("mode"),
+				Port:    viper.GetInt("port"),
+				Data:    viper.GetString("data"),
+				DSN:     viper.GetString("dsn"),
+				Driver:  viper.GetString("driver"),
+				Version: common.GetCurrentVersion(viper.GetString("mode")),
+			}
+			if err := serverProfile.Validate(); err != nil {
+				panic(err)
+			}
+
+			ctx := context.Background()
+			dbDriver, err := db.NewDBDriver(serverProfile)
+			if err != nil {
+				slog.Error("failed to create db driver", "error", err)
+				return
+			}
+
+			storeInstance := store.New(dbDriver, serverProfile)
+			if err := storeInstance.Migrate(ctx); err != nil {
+				slog.Error("failed to migrate db", "error", err)
+				return
+			}
+
+			slog.Info("Starting UUID backfill for existing users...")
+			if err := storeInstance.BackfillUserUUIDs(ctx); err != nil {
+				slog.Error("failed to backfill UUIDs", "error", err)
+				return
+			}
+			slog.Info("UUID backfill completed successfully")
+		},
+	}
+
+	verifyUUIDCmd = &cobra.Command{
+		Use:   "verify-uuids",
+		Short: "Verify that all users and collections have UUIDs",
+		Run: func(_ *cobra.Command, _ []string) {
+			serverProfile := &profile.Profile{
+				Mode:    viper.GetString("mode"),
+				Port:    viper.GetInt("port"),
+				Data:    viper.GetString("data"),
+				DSN:     viper.GetString("dsn"),
+				Driver:  viper.GetString("driver"),
+				Version: common.GetCurrentVersion(viper.GetString("mode")),
+			}
+			if err := serverProfile.Validate(); err != nil {
+				panic(err)
+			}
+
+			ctx := context.Background()
+			dbDriver, err := db.NewDBDriver(serverProfile)
+			if err != nil {
+				slog.Error("failed to create db driver", "error", err)
+				return
+			}
+
+			storeInstance := store.New(dbDriver, serverProfile)
+			if err := storeInstance.Migrate(ctx); err != nil {
+				slog.Error("failed to migrate db", "error", err)
+				return
+			}
+
+			users, err := storeInstance.ListUsers(ctx, &store.FindUser{})
+			if err != nil {
+				slog.Error("failed to list users", "error", err)
+				return
+			}
+
+			collections, err := storeInstance.ListCollections(ctx, &store.FindCollection{})
+			if err != nil {
+				slog.Error("failed to list collections", "error", err)
+				return
+			}
+
+			slog.Info("User UUID Verification Results:")
+			for _, user := range users {
+				status := "✓"
+				if user.UUID == "" {
+					status = "✗ (missing UUID)"
+				}
+				slog.Info("User", "id", user.ID, "email", user.Email, "uuid", user.UUID, "status", status)
+			}
+
+			slog.Info("Collection UUID Verification Results:")
+			for _, collection := range collections {
+				status := "✓"
+				if collection.Uuid == "" {
+					status = "✗ (missing UUID)"
+				}
+				slog.Info("Collection", "id", collection.Id, "name", collection.Name, "uuid", collection.Uuid, "status", status)
+			}
+
+			slog.Info("Verification completed", "total_users", len(users), "total_collections", len(collections))
+		},
+	}
 )
 
 func init() {
+	rootCmd.AddCommand(backfillUUIDCmd)
+	rootCmd.AddCommand(verifyUUIDCmd)
+
 	viper.SetDefault("mode", "dev")
 	viper.SetDefault("driver", "sqlite")
 	viper.SetDefault("port", 8082)

@@ -112,12 +112,13 @@ func (x *SignInRequest) GetPassword() string {
 }
 
 type SignUpRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
-	Nickname      string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Email          string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Nickname       string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Password       string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	InvitationCode string                 `protobuf:"bytes,4,opt,name=invitation_code,json=invitationCode,proto3" json:"invitation_code,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *SignUpRequest) Reset() {
@@ -167,6 +168,13 @@ func (x *SignUpRequest) GetNickname() string {
 func (x *SignUpRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
+	}
+	return ""
+}
+
+func (x *SignUpRequest) GetInvitationCode() string {
+	if x != nil {
+		return x.InvitationCode
 	}
 	return ""
 }
@@ -278,11 +286,12 @@ const file_api_v1_auth_service_proto_rawDesc = "" +
 	"\x14GetAuthStatusRequest\"A\n" +
 	"\rSignInRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"]\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x86\x01\n" +
 	"\rSignUpRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
 	"\bnickname\x18\x02 \x01(\tR\bnickname\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"d\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12'\n" +
+	"\x0finvitation_code\x18\x04 \x01(\tR\x0einvitationCode\"d\n" +
 	"\x14SignInWithSSORequest\x12\x15\n" +
 	"\x06idp_id\x18\x01 \x01(\tR\x05idpId\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12!\n" +

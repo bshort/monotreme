@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"strings"
 
@@ -15,6 +16,8 @@ func (d *DB) CreateUser(ctx context.Context, create *store.User) (*store.User, e
 			nickname,
 			password_hash,
 			role,
+			invited_by,
+			uuid,
 			locale,
 			color_theme,
 			default_visibility,
@@ -22,7 +25,7 @@ func (d *DB) CreateUser(ctx context.Context, create *store.User) (*store.User, e
 			auto_generate_icon,
 			auto_generate_name
 		)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 		RETURNING id, created_ts, updated_ts, row_status
 	`
 	var rowStatus string
@@ -31,6 +34,8 @@ func (d *DB) CreateUser(ctx context.Context, create *store.User) (*store.User, e
 		create.Nickname,
 		create.PasswordHash,
 		create.Role,
+		create.InvitedBy,
+		create.UUID,
 		create.Locale,
 		create.ColorTheme,
 		create.DefaultVisibility,
@@ -68,6 +73,12 @@ func (d *DB) UpdateUser(ctx context.Context, update *store.UpdateUser) (*store.U
 	if v := update.Role; v != nil {
 		set, args = append(set, "role = "+placeholder(len(args)+1)), append(args, *v)
 	}
+	if v := update.UUID; v != nil {
+		set, args = append(set, "uuid = "+placeholder(len(args)+1)), append(args, *v)
+	}
+	if v := update.InvitedBy; v != nil {
+		set, args = append(set, "invited_by = "+placeholder(len(args)+1)), append(args, *v)
+	}
 	if v := update.Locale; v != nil {
 		set, args = append(set, "locale = "+placeholder(len(args)+1)), append(args, *v)
 	}
@@ -94,7 +105,7 @@ func (d *DB) UpdateUser(ctx context.Context, update *store.UpdateUser) (*store.U
 		UPDATE "user"
 		SET ` + strings.Join(set, ", ") + `
 		WHERE id = ` + placeholder(len(args)+1) + `
-		RETURNING id, created_ts, updated_ts, row_status, email, nickname, password_hash, role, locale, color_theme, default_visibility, auto_generate_title, auto_generate_icon, auto_generate_name
+		RETURNING id, created_ts, updated_ts, row_status, email, nickname, password_hash, role, invited_by, locale, color_theme, default_visibility, auto_generate_title, auto_generate_icon, auto_generate_name
 	`
 	args = append(args, update.ID)
 	user := &store.User{}
@@ -108,6 +119,7 @@ func (d *DB) UpdateUser(ctx context.Context, update *store.UpdateUser) (*store.U
 		&user.Nickname,
 		&user.PasswordHash,
 		&user.Role,
+		&user.InvitedBy,
 		&user.Locale,
 		&user.ColorTheme,
 		&user.DefaultVisibility,
@@ -151,6 +163,8 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 			nickname,
 			password_hash,
 			role,
+			invited_by,
+			uuid,
 			locale,
 			color_theme,
 			default_visibility,
@@ -171,6 +185,7 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 	for rows.Next() {
 		user := &store.User{}
 		var rowStatus string
+		var uuid sql.NullString
 		if err := rows.Scan(
 			&user.ID,
 			&user.CreatedTs,
@@ -180,6 +195,8 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 			&user.Nickname,
 			&user.PasswordHash,
 			&user.Role,
+			&user.InvitedBy,
+			&uuid,
 			&user.Locale,
 			&user.ColorTheme,
 			&user.DefaultVisibility,
@@ -190,6 +207,9 @@ func (d *DB) ListUsers(ctx context.Context, find *store.FindUser) ([]*store.User
 			return nil, err
 		}
 		user.RowStatus = store.ConvertRowStatusStringToStorepb(rowStatus)
+		if uuid.Valid {
+			user.UUID = uuid.String
+		}
 		list = append(list, user)
 	}
 

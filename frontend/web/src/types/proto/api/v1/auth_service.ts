@@ -23,6 +23,7 @@ export interface SignUpRequest {
   email: string;
   nickname: string;
   password: string;
+  invitationCode: string;
 }
 
 export interface SignInWithSSORequest {
@@ -130,7 +131,7 @@ export const SignInRequest: MessageFns<SignInRequest> = {
 };
 
 function createBaseSignUpRequest(): SignUpRequest {
-  return { email: "", nickname: "", password: "" };
+  return { email: "", nickname: "", password: "", invitationCode: "" };
 }
 
 export const SignUpRequest: MessageFns<SignUpRequest> = {
@@ -143,6 +144,9 @@ export const SignUpRequest: MessageFns<SignUpRequest> = {
     }
     if (message.password !== "") {
       writer.uint32(26).string(message.password);
+    }
+    if (message.invitationCode !== "") {
+      writer.uint32(34).string(message.invitationCode);
     }
     return writer;
   },
@@ -178,6 +182,14 @@ export const SignUpRequest: MessageFns<SignUpRequest> = {
           message.password = reader.string();
           continue;
         }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.invitationCode = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -195,6 +207,7 @@ export const SignUpRequest: MessageFns<SignUpRequest> = {
     message.email = object.email ?? "";
     message.nickname = object.nickname ?? "";
     message.password = object.password ?? "";
+    message.invitationCode = object.invitationCode ?? "";
     return message;
   },
 };

@@ -30,6 +30,7 @@ type APIV1Service struct {
 	v1pb.UnimplementedShortcutServiceServer
 	v1pb.UnimplementedCollectionServiceServer
 	v1pb.UnimplementedActivityServiceServer
+	v1pb.UnimplementedInvitationServiceServer
 
 	Secret         string
 	Profile        *profile.Profile
@@ -65,6 +66,7 @@ func NewAPIV1Service(secret string, profile *profile.Profile, store *store.Store
 	v1pb.RegisterShortcutServiceServer(grpcServer, apiV1Service)
 	v1pb.RegisterCollectionServiceServer(grpcServer, apiV1Service)
 	v1pb.RegisterActivityServiceServer(grpcServer, apiV1Service)
+	v1pb.RegisterInvitationServiceServer(grpcServer, apiV1Service)
 	reflection.Register(grpcServer)
 
 	return apiV1Service
@@ -109,6 +111,9 @@ func (s *APIV1Service) RegisterGateway(_ context.Context, e *echo.Echo) error {
 		return err
 	}
 	if err := v1pb.RegisterActivityServiceHandler(context.Background(), gwMux, conn); err != nil {
+		return err
+	}
+	if err := v1pb.RegisterInvitationServiceHandler(context.Background(), gwMux, conn); err != nil {
 		return err
 	}
 	e.Any("/api/v1/*", echo.WrapHandler(gwMux))

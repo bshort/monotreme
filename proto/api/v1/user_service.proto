@@ -58,6 +58,10 @@ service UserService {
     option (google.api.http) = {delete: "/api/v1/users/{id}/access_tokens/{access_token}"};
     option (google.api.method_signature) = "id,access_token";
   }
+  // GetInvitationCode returns an invitation code for user signups.
+  rpc GetInvitationCode(GetInvitationCodeRequest) returns (GetInvitationCodeResponse) {
+    option (google.api.http) = {get: "/api/v1/users/invitation_code"};
+  }
 }
 
 message User {
@@ -68,6 +72,8 @@ message User {
   google.protobuf.Timestamp created_time = 3;
 
   google.protobuf.Timestamp updated_time = 4;
+
+  string uuid = 5;
 
   Role role = 6;
 
@@ -152,4 +158,11 @@ message UserAccessToken {
   string description = 2;
   google.protobuf.Timestamp issued_at = 3;
   google.protobuf.Timestamp expires_at = 4;
+}
+
+message GetInvitationCodeRequest {}
+
+message GetInvitationCodeResponse {
+  string invitation_code = 1;
+  string invitation_url = 2;
 }

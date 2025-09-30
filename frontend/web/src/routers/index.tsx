@@ -8,8 +8,10 @@ import BookmarkImport from "@/pages/BookmarkImport";
 import CollectionDashboard from "@/pages/CollectionDashboard";
 import CollectionSpace from "@/pages/CollectionSpace";
 import Home from "@/pages/Home";
+import Invite from "@/pages/Invite";
 import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
+import QRCode from "@/pages/QRCode";
 import QuickSave from "@/pages/QuickSave";
 import ShortcutDashboard from "@/pages/ShortcutDashboard";
 import ShortcutDetail from "@/pages/ShortcutDetail";
@@ -86,6 +88,10 @@ const router = createBrowserRouter([
             element: <UserSetting />,
           },
           {
+            path: "/qr-code",
+            element: <QRCode />,
+          },
+          {
             path: "/setting/workspace",
             element: <WorkspaceSetting />,
           },
@@ -110,6 +116,10 @@ const router = createBrowserRouter([
       {
         path: "/quick-save",
         element: <QuickSave />,
+      },
+      {
+        path: "/invite",
+        element: <Invite />,
       },
       {
         path: "s/*",

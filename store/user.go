@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 
+	"github.com/google/uuid"
 	storepb "github.com/bshort/monotreme/proto/gen/store"
 )
 
@@ -29,6 +30,10 @@ type User struct {
 	Nickname     string
 	PasswordHash string
 	Role         Role
+	UUID         string
+
+	// Invitation tracking
+	InvitedBy *int32
 
 	// Personal preferences
 	Locale            string
@@ -47,6 +52,10 @@ type UpdateUser struct {
 	Nickname     *string
 	PasswordHash *string
 	Role         *Role
+	UUID         *string
+
+	// Invitation tracking
+	InvitedBy *int32
 
 	// Personal preferences
 	Locale            *string
@@ -125,5 +134,27 @@ func (s *Store) DeleteUser(ctx context.Context, delete *DeleteUser) error {
 	}
 
 	s.userCache.Delete(delete.ID)
+	return nil
+}
+
+func (s *Store) BackfillUserUUIDs(ctx context.Context) error {
+	users, err := s.ListUsers(ctx, &FindUser{})
+	if err != nil {
+		return err
+	}
+
+	for _, user := range users {
+		if user.UUID == "" {
+			newUUID := uuid.New().String()
+			_, err := s.UpdateUser(ctx, &UpdateUser{
+				ID:   user.ID,
+				UUID: &newUUID,
+			})
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }

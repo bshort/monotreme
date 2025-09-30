@@ -57,6 +57,7 @@ export interface User {
   state: State;
   createdTime?: Date | undefined;
   updatedTime?: Date | undefined;
+  uuid: string;
   role: Role;
   email: string;
   nickname: string;
@@ -129,12 +130,21 @@ export interface UserAccessToken {
   expiresAt?: Date | undefined;
 }
 
+export interface GetInvitationCodeRequest {
+}
+
+export interface GetInvitationCodeResponse {
+  invitationCode: string;
+  invitationUrl: string;
+}
+
 function createBaseUser(): User {
   return {
     id: 0,
     state: State.STATE_UNSPECIFIED,
     createdTime: undefined,
     updatedTime: undefined,
+    uuid: "",
     role: Role.ROLE_UNSPECIFIED,
     email: "",
     nickname: "",
@@ -161,6 +171,9 @@ export const User: MessageFns<User> = {
     }
     if (message.updatedTime !== undefined) {
       Timestamp.encode(toTimestamp(message.updatedTime), writer.uint32(34).fork()).join();
+    }
+    if (message.uuid !== "") {
+      writer.uint32(42).string(message.uuid);
     }
     if (message.role !== Role.ROLE_UNSPECIFIED) {
       writer.uint32(48).int32(roleToNumber(message.role));
@@ -232,6 +245,14 @@ export const User: MessageFns<User> = {
           }
 
           message.updatedTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.uuid = reader.string();
           continue;
         }
         case 6: {
@@ -332,6 +353,7 @@ export const User: MessageFns<User> = {
     message.state = object.state ?? State.STATE_UNSPECIFIED;
     message.createdTime = object.createdTime ?? undefined;
     message.updatedTime = object.updatedTime ?? undefined;
+    message.uuid = object.uuid ?? "";
     message.role = object.role ?? Role.ROLE_UNSPECIFIED;
     message.email = object.email ?? "";
     message.nickname = object.nickname ?? "";
@@ -924,6 +946,98 @@ export const UserAccessToken: MessageFns<UserAccessToken> = {
   },
 };
 
+function createBaseGetInvitationCodeRequest(): GetInvitationCodeRequest {
+  return {};
+}
+
+export const GetInvitationCodeRequest: MessageFns<GetInvitationCodeRequest> = {
+  encode(_: GetInvitationCodeRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetInvitationCodeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetInvitationCodeRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetInvitationCodeRequest>): GetInvitationCodeRequest {
+    return GetInvitationCodeRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<GetInvitationCodeRequest>): GetInvitationCodeRequest {
+    const message = createBaseGetInvitationCodeRequest();
+    return message;
+  },
+};
+
+function createBaseGetInvitationCodeResponse(): GetInvitationCodeResponse {
+  return { invitationCode: "", invitationUrl: "" };
+}
+
+export const GetInvitationCodeResponse: MessageFns<GetInvitationCodeResponse> = {
+  encode(message: GetInvitationCodeResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.invitationCode !== "") {
+      writer.uint32(10).string(message.invitationCode);
+    }
+    if (message.invitationUrl !== "") {
+      writer.uint32(18).string(message.invitationUrl);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetInvitationCodeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetInvitationCodeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.invitationCode = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.invitationUrl = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetInvitationCodeResponse>): GetInvitationCodeResponse {
+    return GetInvitationCodeResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetInvitationCodeResponse>): GetInvitationCodeResponse {
+    const message = createBaseGetInvitationCodeResponse();
+    message.invitationCode = object.invitationCode ?? "";
+    message.invitationUrl = object.invitationUrl ?? "";
+    return message;
+  },
+};
+
 export type UserServiceDefinition = typeof UserServiceDefinition;
 export const UserServiceDefinition = {
   name: "UserService",
@@ -1273,6 +1387,54 @@ export const UserServiceDefinition = {
               101,
               110,
               125,
+            ]),
+          ],
+        },
+      },
+    },
+    /** GetInvitationCode returns an invitation code for user signups. */
+    getInvitationCode: {
+      name: "GetInvitationCode",
+      requestType: GetInvitationCodeRequest,
+      requestStream: false,
+      responseType: GetInvitationCodeResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              31,
+              18,
+              29,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              117,
+              115,
+              101,
+              114,
+              115,
+              47,
+              105,
+              110,
+              118,
+              105,
+              116,
+              97,
+              116,
+              105,
+              111,
+              110,
+              95,
+              99,
+              111,
+              100,
+              101,
             ]),
           ],
         },

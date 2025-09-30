@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package monotreme.store;
+
+import "google/protobuf/timestamp.proto";
+import "store/common.proto";
+
+option go_package = "gen/store";
+
+message RssFeed {
+  int32 id = 1;
+  string uuid = 2;
+  int32 creator_id = 3;
+
+  google.protobuf.Timestamp created_ts = 4;
+  google.protobuf.Timestamp updated_ts = 5;
+
+  string title = 6;
+  string url = 7;
+  string description = 8;
+
+  // Import settings
+  bool auto_import = 9;
+  int32 import_frequency_hours = 10;
+  google.protobuf.Timestamp last_import_ts = 11;
+
+  // Shortcut generation settings
+  repeated string default_tags = 12;
+  Visibility default_visibility = 13;
+  string shortcut_prefix = 14;
+
+  // Status
+  bool is_active = 15;
+  string last_error = 16;
+  int32 total_imported = 17;
+
+  RowStatus row_status = 18;
+}
+
+// Stores information about RSS items that have been processed
+// to avoid duplicate imports
+message RssFeedItem {
+  int32 id = 1;
+  string uuid = 2;
+  int32 rss_feed_id = 3;
+
+  google.protobuf.Timestamp created_ts = 4;
+
+  // RSS item identification
+  string item_guid = 5;
+  string item_link = 6;
+  string item_title = 7;
+  string item_description = 8;
+  google.protobuf.Timestamp item_published_ts = 9;
+
+  // Generated shortcut info
+  int32 shortcut_id = 10; // ID of the created shortcut, if any
+  bool import_success = 11;
+  string import_error = 12;
+
+  RowStatus row_status = 13;
+}

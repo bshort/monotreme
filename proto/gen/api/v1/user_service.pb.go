@@ -80,6 +80,7 @@ type User struct {
 	State       State                  `protobuf:"varint,2,opt,name=state,proto3,enum=monotreme.api.v1.State" json:"state,omitempty"`
 	CreatedTime *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_time,json=createdTime,proto3" json:"created_time,omitempty"`
 	UpdatedTime *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_time,json=updatedTime,proto3" json:"updated_time,omitempty"`
+	Uuid        string                 `protobuf:"bytes,5,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	Role        Role                   `protobuf:"varint,6,opt,name=role,proto3,enum=monotreme.api.v1.Role" json:"role,omitempty"`
 	Email       string                 `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
 	Nickname    string                 `protobuf:"bytes,8,opt,name=nickname,proto3" json:"nickname,omitempty"`
@@ -151,6 +152,13 @@ func (x *User) GetUpdatedTime() *timestamppb.Timestamp {
 		return x.UpdatedTime
 	}
 	return nil
+}
+
+func (x *User) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
 }
 
 func (x *User) GetRole() Role {
@@ -762,16 +770,105 @@ func (x *UserAccessToken) GetExpiresAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type GetInvitationCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetInvitationCodeRequest) Reset() {
+	*x = GetInvitationCodeRequest{}
+	mi := &file_api_v1_user_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetInvitationCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInvitationCodeRequest) ProtoMessage() {}
+
+func (x *GetInvitationCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_user_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInvitationCodeRequest.ProtoReflect.Descriptor instead.
+func (*GetInvitationCodeRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_user_service_proto_rawDescGZIP(), []int{12}
+}
+
+type GetInvitationCodeResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	InvitationCode string                 `protobuf:"bytes,1,opt,name=invitation_code,json=invitationCode,proto3" json:"invitation_code,omitempty"`
+	InvitationUrl  string                 `protobuf:"bytes,2,opt,name=invitation_url,json=invitationUrl,proto3" json:"invitation_url,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GetInvitationCodeResponse) Reset() {
+	*x = GetInvitationCodeResponse{}
+	mi := &file_api_v1_user_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetInvitationCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInvitationCodeResponse) ProtoMessage() {}
+
+func (x *GetInvitationCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_user_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInvitationCodeResponse.ProtoReflect.Descriptor instead.
+func (*GetInvitationCodeResponse) Descriptor() ([]byte, []int) {
+	return file_api_v1_user_service_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetInvitationCodeResponse) GetInvitationCode() string {
+	if x != nil {
+		return x.InvitationCode
+	}
+	return ""
+}
+
+func (x *GetInvitationCodeResponse) GetInvitationUrl() string {
+	if x != nil {
+		return x.InvitationUrl
+	}
+	return ""
+}
+
 var File_api_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_user_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19api/v1/user_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb1\x04\n" +
+	"\x19api/v1/user_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc5\x04\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12-\n" +
 	"\x05state\x18\x02 \x01(\x0e2\x17.monotreme.api.v1.StateR\x05state\x12=\n" +
 	"\fcreated_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\vcreatedTime\x12=\n" +
-	"\fupdated_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\vupdatedTime\x12*\n" +
+	"\fupdated_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\vupdatedTime\x12\x12\n" +
+	"\x04uuid\x18\x05 \x01(\tR\x04uuid\x12*\n" +
 	"\x04role\x18\x06 \x01(\x0e2\x16.monotreme.api.v1.RoleR\x04role\x12\x14\n" +
 	"\x05email\x18\a \x01(\tR\x05email\x12\x1a\n" +
 	"\bnickname\x18\b \x01(\tR\bnickname\x12\x1a\n" +
@@ -815,11 +912,15 @@ const file_api_v1_user_service_proto_rawDesc = "" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x127\n" +
 	"\tissued_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\bissuedAt\x129\n" +
 	"\n" +
-	"expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt*1\n" +
+	"expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"\x1a\n" +
+	"\x18GetInvitationCodeRequest\"k\n" +
+	"\x19GetInvitationCodeResponse\x12'\n" +
+	"\x0finvitation_code\x18\x01 \x01(\tR\x0einvitationCode\x12%\n" +
+	"\x0einvitation_url\x18\x02 \x01(\tR\rinvitationUrl*1\n" +
 	"\x04Role\x12\x14\n" +
 	"\x10ROLE_UNSPECIFIED\x10\x00\x12\t\n" +
 	"\x05ADMIN\x10\x01\x12\b\n" +
-	"\x04USER\x10\x022\xad\b\n" +
+	"\x04USER\x10\x022\xc3\t\n" +
 	"\vUserService\x12k\n" +
 	"\tListUsers\x12\".monotreme.api.v1.ListUsersRequest\x1a#.monotreme.api.v1.ListUsersResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/api/v1/users\x12d\n" +
 	"\aGetUser\x12 .monotreme.api.v1.GetUserRequest\x1a\x16.monotreme.api.v1.User\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/users/{id}\x12f\n" +
@@ -831,7 +932,8 @@ const file_api_v1_user_service_proto_rawDesc = "" +
 	"DeleteUser\x12#.monotreme.api.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x1f\xdaA\x02id\x82\xd3\xe4\x93\x02\x14*\x12/api/v1/users/{id}\x12\xa4\x01\n" +
 	"\x14ListUserAccessTokens\x12-.monotreme.api.v1.ListUserAccessTokensRequest\x1a..monotreme.api.v1.ListUserAccessTokensResponse\"-\xdaA\x02id\x82\xd3\xe4\x93\x02\"\x12 /api/v1/users/{id}/access_tokens\x12\x9c\x01\n" +
 	"\x15CreateUserAccessToken\x12..monotreme.api.v1.CreateUserAccessTokenRequest\x1a!.monotreme.api.v1.UserAccessToken\"0\xdaA\x02id\x82\xd3\xe4\x93\x02%:\x01*\" /api/v1/users/{id}/access_tokens\x12\xaa\x01\n" +
-	"\x15DeleteUserAccessToken\x12..monotreme.api.v1.DeleteUserAccessTokenRequest\x1a\x16.google.protobuf.Empty\"I\xdaA\x0fid,access_token\x82\xd3\xe4\x93\x021*//api/v1/users/{id}/access_tokens/{access_token}B\xbe\x01\n" +
+	"\x15DeleteUserAccessToken\x12..monotreme.api.v1.DeleteUserAccessTokenRequest\x1a\x16.google.protobuf.Empty\"I\xdaA\x0fid,access_token\x82\xd3\xe4\x93\x021*//api/v1/users/{id}/access_tokens/{access_token}\x12\x93\x01\n" +
+	"\x11GetInvitationCode\x12*.monotreme.api.v1.GetInvitationCodeRequest\x1a+.monotreme.api.v1.GetInvitationCodeResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/api/v1/users/invitation_codeB\xbe\x01\n" +
 	"\x14com.monotreme.api.v1B\x10UserServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
@@ -847,7 +949,7 @@ func file_api_v1_user_service_proto_rawDescGZIP() []byte {
 }
 
 var file_api_v1_user_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_v1_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_api_v1_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_api_v1_user_service_proto_goTypes = []any{
 	(Role)(0),                            // 0: monotreme.api.v1.Role
 	(*User)(nil),                         // 1: monotreme.api.v1.User
@@ -862,24 +964,26 @@ var file_api_v1_user_service_proto_goTypes = []any{
 	(*CreateUserAccessTokenRequest)(nil), // 10: monotreme.api.v1.CreateUserAccessTokenRequest
 	(*DeleteUserAccessTokenRequest)(nil), // 11: monotreme.api.v1.DeleteUserAccessTokenRequest
 	(*UserAccessToken)(nil),              // 12: monotreme.api.v1.UserAccessToken
-	(State)(0),                           // 13: monotreme.api.v1.State
-	(*timestamppb.Timestamp)(nil),        // 14: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 15: google.protobuf.FieldMask
-	(*emptypb.Empty)(nil),                // 16: google.protobuf.Empty
+	(*GetInvitationCodeRequest)(nil),     // 13: monotreme.api.v1.GetInvitationCodeRequest
+	(*GetInvitationCodeResponse)(nil),    // 14: monotreme.api.v1.GetInvitationCodeResponse
+	(State)(0),                           // 15: monotreme.api.v1.State
+	(*timestamppb.Timestamp)(nil),        // 16: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 17: google.protobuf.FieldMask
+	(*emptypb.Empty)(nil),                // 18: google.protobuf.Empty
 }
 var file_api_v1_user_service_proto_depIdxs = []int32{
-	13, // 0: monotreme.api.v1.User.state:type_name -> monotreme.api.v1.State
-	14, // 1: monotreme.api.v1.User.created_time:type_name -> google.protobuf.Timestamp
-	14, // 2: monotreme.api.v1.User.updated_time:type_name -> google.protobuf.Timestamp
+	15, // 0: monotreme.api.v1.User.state:type_name -> monotreme.api.v1.State
+	16, // 1: monotreme.api.v1.User.created_time:type_name -> google.protobuf.Timestamp
+	16, // 2: monotreme.api.v1.User.updated_time:type_name -> google.protobuf.Timestamp
 	0,  // 3: monotreme.api.v1.User.role:type_name -> monotreme.api.v1.Role
 	1,  // 4: monotreme.api.v1.ListUsersResponse.users:type_name -> monotreme.api.v1.User
 	1,  // 5: monotreme.api.v1.CreateUserRequest.user:type_name -> monotreme.api.v1.User
 	1,  // 6: monotreme.api.v1.UpdateUserRequest.user:type_name -> monotreme.api.v1.User
-	15, // 7: monotreme.api.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
+	17, // 7: monotreme.api.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
 	12, // 8: monotreme.api.v1.ListUserAccessTokensResponse.access_tokens:type_name -> monotreme.api.v1.UserAccessToken
-	14, // 9: monotreme.api.v1.CreateUserAccessTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
-	14, // 10: monotreme.api.v1.UserAccessToken.issued_at:type_name -> google.protobuf.Timestamp
-	14, // 11: monotreme.api.v1.UserAccessToken.expires_at:type_name -> google.protobuf.Timestamp
+	16, // 9: monotreme.api.v1.CreateUserAccessTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
+	16, // 10: monotreme.api.v1.UserAccessToken.issued_at:type_name -> google.protobuf.Timestamp
+	16, // 11: monotreme.api.v1.UserAccessToken.expires_at:type_name -> google.protobuf.Timestamp
 	2,  // 12: monotreme.api.v1.UserService.ListUsers:input_type -> monotreme.api.v1.ListUsersRequest
 	4,  // 13: monotreme.api.v1.UserService.GetUser:input_type -> monotreme.api.v1.GetUserRequest
 	5,  // 14: monotreme.api.v1.UserService.CreateUser:input_type -> monotreme.api.v1.CreateUserRequest
@@ -888,16 +992,18 @@ var file_api_v1_user_service_proto_depIdxs = []int32{
 	8,  // 17: monotreme.api.v1.UserService.ListUserAccessTokens:input_type -> monotreme.api.v1.ListUserAccessTokensRequest
 	10, // 18: monotreme.api.v1.UserService.CreateUserAccessToken:input_type -> monotreme.api.v1.CreateUserAccessTokenRequest
 	11, // 19: monotreme.api.v1.UserService.DeleteUserAccessToken:input_type -> monotreme.api.v1.DeleteUserAccessTokenRequest
-	3,  // 20: monotreme.api.v1.UserService.ListUsers:output_type -> monotreme.api.v1.ListUsersResponse
-	1,  // 21: monotreme.api.v1.UserService.GetUser:output_type -> monotreme.api.v1.User
-	1,  // 22: monotreme.api.v1.UserService.CreateUser:output_type -> monotreme.api.v1.User
-	1,  // 23: monotreme.api.v1.UserService.UpdateUser:output_type -> monotreme.api.v1.User
-	16, // 24: monotreme.api.v1.UserService.DeleteUser:output_type -> google.protobuf.Empty
-	9,  // 25: monotreme.api.v1.UserService.ListUserAccessTokens:output_type -> monotreme.api.v1.ListUserAccessTokensResponse
-	12, // 26: monotreme.api.v1.UserService.CreateUserAccessToken:output_type -> monotreme.api.v1.UserAccessToken
-	16, // 27: monotreme.api.v1.UserService.DeleteUserAccessToken:output_type -> google.protobuf.Empty
-	20, // [20:28] is the sub-list for method output_type
-	12, // [12:20] is the sub-list for method input_type
+	13, // 20: monotreme.api.v1.UserService.GetInvitationCode:input_type -> monotreme.api.v1.GetInvitationCodeRequest
+	3,  // 21: monotreme.api.v1.UserService.ListUsers:output_type -> monotreme.api.v1.ListUsersResponse
+	1,  // 22: monotreme.api.v1.UserService.GetUser:output_type -> monotreme.api.v1.User
+	1,  // 23: monotreme.api.v1.UserService.CreateUser:output_type -> monotreme.api.v1.User
+	1,  // 24: monotreme.api.v1.UserService.UpdateUser:output_type -> monotreme.api.v1.User
+	18, // 25: monotreme.api.v1.UserService.DeleteUser:output_type -> google.protobuf.Empty
+	9,  // 26: monotreme.api.v1.UserService.ListUserAccessTokens:output_type -> monotreme.api.v1.ListUserAccessTokensResponse
+	12, // 27: monotreme.api.v1.UserService.CreateUserAccessToken:output_type -> monotreme.api.v1.UserAccessToken
+	18, // 28: monotreme.api.v1.UserService.DeleteUserAccessToken:output_type -> google.protobuf.Empty
+	14, // 29: monotreme.api.v1.UserService.GetInvitationCode:output_type -> monotreme.api.v1.GetInvitationCodeResponse
+	21, // [21:30] is the sub-list for method output_type
+	12, // [12:21] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name
 	12, // [12:12] is the sub-list for extension extendee
 	0,  // [0:12] is the sub-list for field type_name
@@ -916,7 +1022,7 @@ func file_api_v1_user_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_user_service_proto_rawDesc), len(file_api_v1_user_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

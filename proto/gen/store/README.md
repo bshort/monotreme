@@ -24,6 +24,13 @@
   
     - [IdentityProvider.Type](#monotreme-store-IdentityProvider-Type)
   
+- [store/invitation.proto](#store_invitation-proto)
+    - [Invitation](#monotreme-store-Invitation)
+  
+- [store/rss_feed.proto](#store_rss_feed-proto)
+    - [RssFeed](#monotreme-store-RssFeed)
+    - [RssFeedItem](#monotreme-store-RssFeedItem)
+  
 - [store/shortcut.proto](#store_shortcut-proto)
     - [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata)
     - [Shortcut](#monotreme-store-Shortcut)
@@ -194,6 +201,7 @@
 | creator_id | [int32](#int32) |  |  |
 | created_ts | [int64](#int64) |  |  |
 | updated_ts | [int64](#int64) |  |  |
+| uuid | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | title | [string](#string) |  |  |
 | description | [string](#string) |  |  |
@@ -304,6 +312,121 @@
 | TYPE_UNSPECIFIED | 0 |  |
 | OAUTH2 | 1 |  |
 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="store_invitation-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## store/invitation.proto
+
+
+
+<a name="monotreme-store-Invitation"></a>
+
+### Invitation
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| created_ts | [int64](#int64) |  |  |
+| updated_ts | [int64](#int64) |  |  |
+| from | [string](#string) |  | Path to inviting user: &#34;/users/[uuid]&#34; |
+| to | [string](#string) |  | Path to invited user: &#34;/users/[uuid]&#34; |
+| accepted_at | [string](#string) |  | ISO 8601 datetime string |
+| deleted_at | [string](#string) |  | ISO 8601 datetime string |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="store_rss_feed-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## store/rss_feed.proto
+
+
+
+<a name="monotreme-store-RssFeed"></a>
+
+### RssFeed
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| uuid | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| created_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| title | [string](#string) |  |  |
+| url | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+| auto_import | [bool](#bool) |  | Import settings |
+| import_frequency_hours | [int32](#int32) |  |  |
+| last_import_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| default_tags | [string](#string) | repeated | Shortcut generation settings |
+| default_visibility | [Visibility](#monotreme-store-Visibility) |  |  |
+| shortcut_prefix | [string](#string) |  |  |
+| is_active | [bool](#bool) |  | Status |
+| last_error | [string](#string) |  |  |
+| total_imported | [int32](#int32) |  |  |
+| row_status | [RowStatus](#monotreme-store-RowStatus) |  |  |
+
+
+
+
+
+
+<a name="monotreme-store-RssFeedItem"></a>
+
+### RssFeedItem
+Stores information about RSS items that have been processed
+to avoid duplicate imports
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| uuid | [string](#string) |  |  |
+| rss_feed_id | [int32](#int32) |  |  |
+| created_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| item_guid | [string](#string) |  | RSS item identification |
+| item_link | [string](#string) |  |  |
+| item_title | [string](#string) |  |  |
+| item_description | [string](#string) |  |  |
+| item_published_ts | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| shortcut_id | [int32](#int32) |  | Generated shortcut info
+
+ID of the created shortcut, if any |
+| import_success | [bool](#bool) |  |  |
+| import_error | [string](#string) |  |  |
+| row_status | [RowStatus](#monotreme-store-RowStatus) |  |  |
+
+
+
+
+
+ 
 
  
 

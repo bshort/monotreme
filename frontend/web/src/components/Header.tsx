@@ -91,6 +91,13 @@ const Header: React.FC = () => {
                   >
                     <Icon.User className="w-5 h-auto mr-2 opacity-70" /> {t("user.profile")}
                   </Link>
+                  <Link
+                    className="w-full px-2 flex flex-row justify-start items-center text-left dark:text-gray-400 leading-8 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60"
+                    to="/qr-code"
+                    viewTransition
+                  >
+                    <Icon.QrCode className="w-5 h-auto mr-2 opacity-70" /> QR Code
+                  </Link>
                   {isAdmin && (
                     <Link
                       className="w-full px-2 flex flex-row justify-start items-center text-left dark:text-gray-400 leading-8 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60"

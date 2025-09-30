@@ -12,6 +12,8 @@
     - [CreateUserRequest](#monotreme-api-v1-CreateUserRequest)
     - [DeleteUserAccessTokenRequest](#monotreme-api-v1-DeleteUserAccessTokenRequest)
     - [DeleteUserRequest](#monotreme-api-v1-DeleteUserRequest)
+    - [GetInvitationCodeRequest](#monotreme-api-v1-GetInvitationCodeRequest)
+    - [GetInvitationCodeResponse](#monotreme-api-v1-GetInvitationCodeResponse)
     - [GetUserRequest](#monotreme-api-v1-GetUserRequest)
     - [ListUserAccessTokensRequest](#monotreme-api-v1-ListUserAccessTokensRequest)
     - [ListUserAccessTokensResponse](#monotreme-api-v1-ListUserAccessTokensResponse)
@@ -71,6 +73,30 @@
     - [UpdateCollectionRequest](#monotreme-api-v1-UpdateCollectionRequest)
   
     - [CollectionService](#monotreme-api-v1-CollectionService)
+  
+- [api/v1/invitation_service.proto](#api_v1_invitation_service-proto)
+    - [AcceptInvitationRequest](#monotreme-api-v1-AcceptInvitationRequest)
+    - [CreateInvitationRequest](#monotreme-api-v1-CreateInvitationRequest)
+    - [DeleteInvitationRequest](#monotreme-api-v1-DeleteInvitationRequest)
+    - [GetInvitationRequest](#monotreme-api-v1-GetInvitationRequest)
+    - [Invitation](#monotreme-api-v1-Invitation)
+    - [ListInvitationsRequest](#monotreme-api-v1-ListInvitationsRequest)
+    - [ListInvitationsResponse](#monotreme-api-v1-ListInvitationsResponse)
+  
+    - [InvitationService](#monotreme-api-v1-InvitationService)
+  
+- [api/v1/rss_import_service.proto](#api_v1_rss_import_service-proto)
+    - [CreateRssFeedRequest](#monotreme-api-v1-CreateRssFeedRequest)
+    - [DeleteRssFeedRequest](#monotreme-api-v1-DeleteRssFeedRequest)
+    - [GetRssFeedRequest](#monotreme-api-v1-GetRssFeedRequest)
+    - [ListRssFeedsRequest](#monotreme-api-v1-ListRssFeedsRequest)
+    - [ListRssFeedsResponse](#monotreme-api-v1-ListRssFeedsResponse)
+    - [RssFeed](#monotreme-api-v1-RssFeed)
+    - [RssFeedImportResponse](#monotreme-api-v1-RssFeedImportResponse)
+    - [TriggerRssFeedImportRequest](#monotreme-api-v1-TriggerRssFeedImportRequest)
+    - [UpdateRssFeedRequest](#monotreme-api-v1-UpdateRssFeedRequest)
+  
+    - [RssImportService](#monotreme-api-v1-RssImportService)
   
 - [api/v1/shortcut_service.proto](#api_v1_shortcut_service-proto)
     - [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest)
@@ -242,6 +268,32 @@
 
 
 
+<a name="monotreme-api-v1-GetInvitationCodeRequest"></a>
+
+### GetInvitationCodeRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetInvitationCodeResponse"></a>
+
+### GetInvitationCodeResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| invitation_code | [string](#string) |  |  |
+| invitation_url | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="monotreme-api-v1-GetUserRequest"></a>
 
 ### GetUserRequest
@@ -340,6 +392,7 @@
 | state | [State](#monotreme-api-v1-State) |  |  |
 | created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| uuid | [string](#string) |  |  |
 | role | [Role](#monotreme-api-v1-Role) |  |  |
 | email | [string](#string) |  |  |
 | nickname | [string](#string) |  |  |
@@ -408,6 +461,7 @@
 | ListUserAccessTokens | [ListUserAccessTokensRequest](#monotreme-api-v1-ListUserAccessTokensRequest) | [ListUserAccessTokensResponse](#monotreme-api-v1-ListUserAccessTokensResponse) | ListUserAccessTokens returns a list of access tokens for a user. |
 | CreateUserAccessToken | [CreateUserAccessTokenRequest](#monotreme-api-v1-CreateUserAccessTokenRequest) | [UserAccessToken](#monotreme-api-v1-UserAccessToken) | CreateUserAccessToken creates a new access token for a user. |
 | DeleteUserAccessToken | [DeleteUserAccessTokenRequest](#monotreme-api-v1-DeleteUserAccessTokenRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteUserAccessToken deletes an access token for a user. |
+| GetInvitationCode | [GetInvitationCodeRequest](#monotreme-api-v1-GetInvitationCodeRequest) | [GetInvitationCodeResponse](#monotreme-api-v1-GetInvitationCodeResponse) | GetInvitationCode returns an invitation code for user signups. |
 
  
 
@@ -873,6 +927,7 @@ Activity Types
 | email | [string](#string) |  |  |
 | nickname | [string](#string) |  |  |
 | password | [string](#string) |  |  |
+| invitation_code | [string](#string) |  |  |
 
 
 
@@ -921,6 +976,7 @@ Activity Types
 | creator_id | [int32](#int32) |  |  |
 | created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| uuid | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | title | [string](#string) |  |  |
 | description | [string](#string) |  |  |
@@ -1089,6 +1145,329 @@ Activity Types
 | UpdateCollection | [UpdateCollectionRequest](#monotreme-api-v1-UpdateCollectionRequest) | [Collection](#monotreme-api-v1-Collection) | UpdateCollection updates a collection. |
 | DeleteCollection | [DeleteCollectionRequest](#monotreme-api-v1-DeleteCollectionRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteCollection deletes a collection by id. |
 | ImportBookmarks | [ImportBookmarksRequest](#monotreme-api-v1-ImportBookmarksRequest) | [ImportBookmarksResponse](#monotreme-api-v1-ImportBookmarksResponse) | ImportBookmarks imports bookmarks from an HTML file and creates collections and shortcuts. |
+
+ 
+
+
+
+<a name="api_v1_invitation_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/invitation_service.proto
+
+
+
+<a name="monotreme-api-v1-AcceptInvitationRequest"></a>
+
+### AcceptInvitationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-CreateInvitationRequest"></a>
+
+### CreateInvitationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| invitation | [Invitation](#monotreme-api-v1-Invitation) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-DeleteInvitationRequest"></a>
+
+### DeleteInvitationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetInvitationRequest"></a>
+
+### GetInvitationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Invitation"></a>
+
+### Invitation
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| from | [string](#string) |  | Path to inviting user: &#34;/users/[uuid]&#34; |
+| to | [string](#string) |  | Path to invited user: &#34;/users/[uuid]&#34; |
+| accepted_at | [string](#string) |  | ISO 8601 datetime string |
+| deleted_at | [string](#string) |  | ISO 8601 datetime string |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListInvitationsRequest"></a>
+
+### ListInvitationsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| from | [string](#string) |  | Optional filter by from user path |
+| to | [string](#string) |  | Optional filter by to user path |
+| accepted | [bool](#bool) | optional | Optional filter by accepted status |
+| deleted | [bool](#bool) | optional | Optional filter by deleted status |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListInvitationsResponse"></a>
+
+### ListInvitationsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| invitations | [Invitation](#monotreme-api-v1-Invitation) | repeated |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-InvitationService"></a>
+
+### InvitationService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListInvitations | [ListInvitationsRequest](#monotreme-api-v1-ListInvitationsRequest) | [ListInvitationsResponse](#monotreme-api-v1-ListInvitationsResponse) | ListInvitations returns a list of invitations. |
+| GetInvitation | [GetInvitationRequest](#monotreme-api-v1-GetInvitationRequest) | [Invitation](#monotreme-api-v1-Invitation) | GetInvitation returns an invitation by id. |
+| CreateInvitation | [CreateInvitationRequest](#monotreme-api-v1-CreateInvitationRequest) | [Invitation](#monotreme-api-v1-Invitation) | CreateInvitation creates an invitation. |
+| AcceptInvitation | [AcceptInvitationRequest](#monotreme-api-v1-AcceptInvitationRequest) | [Invitation](#monotreme-api-v1-Invitation) | AcceptInvitation accepts an invitation. |
+| DeleteInvitation | [DeleteInvitationRequest](#monotreme-api-v1-DeleteInvitationRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteInvitation deletes an invitation by id. |
+
+ 
+
+
+
+<a name="api_v1_rss_import_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/rss_import_service.proto
+
+
+
+<a name="monotreme-api-v1-CreateRssFeedRequest"></a>
+
+### CreateRssFeedRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| rss_feed | [RssFeed](#monotreme-api-v1-RssFeed) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-DeleteRssFeedRequest"></a>
+
+### DeleteRssFeedRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetRssFeedRequest"></a>
+
+### GetRssFeedRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListRssFeedsRequest"></a>
+
+### ListRssFeedsRequest
+Empty - returns all feeds for the authenticated user
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListRssFeedsResponse"></a>
+
+### ListRssFeedsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| rss_feeds | [RssFeed](#monotreme-api-v1-RssFeed) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RssFeed"></a>
+
+### RssFeed
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| title | [string](#string) |  |  |
+| url | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+| auto_import | [bool](#bool) |  | Import settings |
+| import_frequency_hours | [int32](#int32) |  | How often to check for updates (in hours) |
+| last_import_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| default_tags | [string](#string) | repeated | Shortcut generation settings |
+| default_visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
+| shortcut_prefix | [string](#string) |  | Optional prefix for generated shortcut names |
+| is_active | [bool](#bool) |  | Status |
+| last_error | [string](#string) |  |  |
+| total_imported | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RssFeedImportResponse"></a>
+
+### RssFeedImportResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| imported_count | [int32](#int32) |  |  |
+| imported_shortcuts | [string](#string) | repeated |  |
+| errors | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-TriggerRssFeedImportRequest"></a>
+
+### TriggerRssFeedImportRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-UpdateRssFeedRequest"></a>
+
+### UpdateRssFeedRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| rss_feed | [RssFeed](#monotreme-api-v1-RssFeed) |  |  |
+| update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-RssImportService"></a>
+
+### RssImportService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListRssFeeds | [ListRssFeedsRequest](#monotreme-api-v1-ListRssFeedsRequest) | [ListRssFeedsResponse](#monotreme-api-v1-ListRssFeedsResponse) | ListRssFeeds returns a list of RSS feeds. |
+| GetRssFeed | [GetRssFeedRequest](#monotreme-api-v1-GetRssFeedRequest) | [RssFeed](#monotreme-api-v1-RssFeed) | GetRssFeed returns an RSS feed by id. |
+| CreateRssFeed | [CreateRssFeedRequest](#monotreme-api-v1-CreateRssFeedRequest) | [RssFeed](#monotreme-api-v1-RssFeed) | CreateRssFeed creates a new RSS feed. |
+| UpdateRssFeed | [UpdateRssFeedRequest](#monotreme-api-v1-UpdateRssFeedRequest) | [RssFeed](#monotreme-api-v1-RssFeed) | UpdateRssFeed updates an RSS feed. |
+| DeleteRssFeed | [DeleteRssFeedRequest](#monotreme-api-v1-DeleteRssFeedRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteRssFeed deletes an RSS feed. |
+| TriggerRssFeedImport | [TriggerRssFeedImportRequest](#monotreme-api-v1-TriggerRssFeedImportRequest) | [RssFeedImportResponse](#monotreme-api-v1-RssFeedImportResponse) | TriggerRssFeedImport manually triggers an import for an RSS feed. |
 
  
 

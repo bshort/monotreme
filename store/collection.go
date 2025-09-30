@@ -3,11 +3,13 @@ package store
 import (
 	"context"
 
+	"github.com/google/uuid"
 	storepb "github.com/bshort/monotreme/proto/gen/store"
 )
 
 type UpdateCollection struct {
 	ID          int32
+	UUID        *string
 	Name        *string
 	Link        *string
 	Title       *string
@@ -56,4 +58,26 @@ func (s *Store) GetCollection(ctx context.Context, find *FindCollection) (*store
 
 func (s *Store) DeleteCollection(ctx context.Context, delete *DeleteCollection) error {
 	return s.driver.DeleteCollection(ctx, delete)
+}
+
+func (s *Store) BackfillCollectionUUIDs(ctx context.Context) error {
+	collections, err := s.ListCollections(ctx, &FindCollection{})
+	if err != nil {
+		return err
+	}
+
+	for _, collection := range collections {
+		if collection.Uuid == "" {
+			newUUID := uuid.New().String()
+			_, err := s.UpdateCollection(ctx, &UpdateCollection{
+				ID:   collection.Id,
+				UUID: &newUUID,
+			})
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }

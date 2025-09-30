@@ -18,6 +18,7 @@ export interface Collection {
   creatorId: number;
   createdTime?: Date | undefined;
   updatedTime?: Date | undefined;
+  uuid: string;
   name: string;
   title: string;
   description: string;
@@ -73,6 +74,7 @@ function createBaseCollection(): Collection {
     creatorId: 0,
     createdTime: undefined,
     updatedTime: undefined,
+    uuid: "",
     name: "",
     title: "",
     description: "",
@@ -94,6 +96,9 @@ export const Collection: MessageFns<Collection> = {
     }
     if (message.updatedTime !== undefined) {
       Timestamp.encode(toTimestamp(message.updatedTime), writer.uint32(34).fork()).join();
+    }
+    if (message.uuid !== "") {
+      writer.uint32(42).string(message.uuid);
     }
     if (message.name !== "") {
       writer.uint32(50).string(message.name);
@@ -152,6 +157,14 @@ export const Collection: MessageFns<Collection> = {
           }
 
           message.updatedTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.uuid = reader.string();
           continue;
         }
         case 6: {
@@ -222,6 +235,7 @@ export const Collection: MessageFns<Collection> = {
     message.creatorId = object.creatorId ?? 0;
     message.createdTime = object.createdTime ?? undefined;
     message.updatedTime = object.updatedTime ?? undefined;
+    message.uuid = object.uuid ?? "";
     message.name = object.name ?? "";
     message.title = object.title ?? "";
     message.description = object.description ?? "";

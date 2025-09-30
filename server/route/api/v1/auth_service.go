@@ -2,9 +2,12 @@ package v1
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -128,6 +131,7 @@ func (s *APIV1Service) SignInWithSSO(ctx context.Context, request *v1pb.SignInWi
 			Nickname: userInfo.DisplayName,
 			// The new signup user should be normal user by default.
 			Role: store.RoleUser,
+			UUID: uuid.New().String(),
 		}
 		password, err := util.RandomString(20)
 		if err != nil {
@@ -176,7 +180,18 @@ func (s *APIV1Service) SignUp(ctx context.Context, request *v1pb.SignUpRequest) 
 		Email:        request.Email,
 		Nickname:     request.Nickname,
 		PasswordHash: string(passwordHash),
+		UUID:         uuid.New().String(),
 	}
+
+	// Handle invitation code if provided
+	if request.InvitationCode != "" {
+		invitedByID, err := s.decodeInvitationCode(request.InvitationCode)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "invalid invitation code: %v", err)
+		}
+		create.InvitedBy = &invitedByID
+	}
+
 	existingUsers, err := s.Store.ListUsers(ctx, &store.FindUser{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list users: %v", err)
@@ -239,4 +254,32 @@ func (s *APIV1Service) checkSeatAvailability(ctx context.Context) error {
 		}
 	}
 	return nil
+}
+
+// encodeInvitationCode creates an invitation code from a user ID
+func (s *APIV1Service) encodeInvitationCode(userID int32) string {
+	// Simple base64 encoding of user ID for now
+	// In production, you might want a more sophisticated approach
+	return fmt.Sprintf("%d", userID)
+}
+
+// decodeInvitationCode extracts the user ID from an invitation code
+func (s *APIV1Service) decodeInvitationCode(code string) (int32, error) {
+	userID, err := strconv.Atoi(code)
+	if err != nil {
+		return 0, errors.New("invalid invitation code format")
+	}
+
+	// Verify that the user exists
+	user, err := s.Store.GetUser(context.Background(), &store.FindUser{
+		ID: func() *int32 { id := int32(userID); return &id }(),
+	})
+	if err != nil {
+		return 0, errors.New("failed to validate invitation code")
+	}
+	if user == nil {
+		return 0, errors.New("invitation code refers to non-existent user")
+	}
+
+	return int32(userID), nil
 }

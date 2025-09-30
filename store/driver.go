@@ -53,4 +53,21 @@ type Driver interface {
 	ListStatsMeasurements(ctx context.Context, find *FindStatsMeasurement) ([]*StatsMeasurement, error)
 	UpdateStatsMeasurement(ctx context.Context, update *UpdateStatsMeasurement) (*StatsMeasurement, error)
 	DeleteStatsMeasurement(ctx context.Context, delete *DeleteStatsMeasurement) error
+
+	// RssFeed model related methods.
+	CreateRssFeed(ctx context.Context, create *RssFeed) (*RssFeed, error)
+	UpdateRssFeed(ctx context.Context, update *UpdateRssFeed) (*RssFeed, error)
+	ListRssFeeds(ctx context.Context, find *FindRssFeed) ([]*RssFeed, error)
+	DeleteRssFeed(ctx context.Context, delete *DeleteRssFeed) error
+
+	// RssFeedItem model related methods.
+	CreateRssFeedItem(ctx context.Context, create *RssFeedItem) (*RssFeedItem, error)
+	GetRssFeedItem(ctx context.Context, find *FindRssFeedItem) (*RssFeedItem, error)
+	ListRssFeedItems(ctx context.Context, find *FindRssFeedItem) ([]*RssFeedItem, error)
+
+	// Invitation model related methods.
+	CreateInvitation(ctx context.Context, create *storepb.Invitation) (*storepb.Invitation, error)
+	UpdateInvitation(ctx context.Context, update *UpdateInvitation) (*storepb.Invitation, error)
+	ListInvitations(ctx context.Context, find *FindInvitation) ([]*storepb.Invitation, error)
+	DeleteInvitation(ctx context.Context, delete *DeleteInvitation) error
 }

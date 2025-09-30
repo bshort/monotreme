@@ -105,6 +105,7 @@ func (s *APIV1Service) CreateCollection(ctx context.Context, request *v1pb.Creat
 		Description: request.Collection.Description,
 		ShortcutIds: request.Collection.ShortcutIds,
 		Visibility:  convertVisibilityToStorepb(request.Collection.Visibility),
+		Uuid:        uuid.New().String(),
 	}
 	collection, err := s.Store.CreateCollection(ctx, collectionCreate)
 	if err != nil {
@@ -308,6 +309,7 @@ func (s *APIV1Service) ImportBookmarks(ctx context.Context, request *v1pb.Import
 				Description: fmt.Sprintf("Imported bookmark collection: %s", collection.Title),
 				ShortcutIds: shortcutIDs,
 				Visibility:  storepb.Visibility_WORKSPACE,
+				Uuid:        uuid.New().String(),
 			}
 			createdCollection, err := s.Store.CreateCollection(ctx, collectionCreate)
 			if err != nil {
@@ -671,6 +673,7 @@ func convertCollectionFromStore(collection *storepb.Collection) *v1pb.Collection
 		CreatorId:   collection.CreatorId,
 		CreatedTime: timestamppb.New(time.Unix(collection.CreatedTs, 0)),
 		UpdatedTime: timestamppb.New(time.Unix(collection.UpdatedTs, 0)),
+		Uuid:        collection.Uuid,
 		Name:        collection.Name,
 		Title:       collection.Title,
 		Description: collection.Description,

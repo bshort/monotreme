@@ -2,9 +2,11 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/exp/slices"
@@ -62,6 +64,7 @@ func (s *APIV1Service) CreateUser(ctx context.Context, request *v1pb.CreateUserR
 		Nickname:          request.User.Nickname,
 		Role:              store.RoleUser,
 		PasswordHash:      string(passwordHash),
+		UUID:              uuid.New().String(),
 		Locale:            "EN",
 		ColorTheme:        "SYSTEM",
 		DefaultVisibility: "WORKSPACE",
@@ -290,12 +293,35 @@ func (s *APIV1Service) UpsertAccessTokenToStore(ctx context.Context, user *store
 	return nil
 }
 
+func (s *APIV1Service) GetInvitationCode(ctx context.Context, _ *v1pb.GetInvitationCodeRequest) (*v1pb.GetInvitationCodeResponse, error) {
+	currentUser, err := getCurrentUser(ctx, s.Store)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
+	}
+	if currentUser == nil {
+		return nil, status.Errorf(codes.Unauthenticated, "user not found")
+	}
+
+	// Generate invitation code using the current user's ID
+	invitationCode := s.encodeInvitationCode(currentUser.ID)
+
+	// Create the invitation URL
+	invitationURL := fmt.Sprintf("/invite?code=%s", invitationCode)
+
+	return &v1pb.GetInvitationCodeResponse{
+		InvitationCode: invitationCode,
+		InvitationUrl:  invitationURL,
+	}, nil
+}
+
+
 func convertUserFromStore(user *store.User) *v1pb.User {
 	return &v1pb.User{
 		Id:                int32(user.ID),
 		State:             convertStateFromRowStatus(user.RowStatus),
 		CreatedTime:       timestamppb.New(time.Unix(user.CreatedTs, 0)),
 		UpdatedTime:       timestamppb.New(time.Unix(user.UpdatedTs, 0)),
+		Uuid:              user.UUID,
 		Role:              convertUserRoleFromStore(user.Role),
 		Email:             user.Email,
 		Nickname:          user.Nickname,

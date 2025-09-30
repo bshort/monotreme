@@ -27,6 +27,7 @@ type Collection struct {
 	CreatorId     int32                  `protobuf:"varint,2,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
 	CreatedTs     int64                  `protobuf:"varint,3,opt,name=created_ts,json=createdTs,proto3" json:"created_ts,omitempty"`
 	UpdatedTs     int64                  `protobuf:"varint,4,opt,name=updated_ts,json=updatedTs,proto3" json:"updated_ts,omitempty"`
+	Uuid          string                 `protobuf:"bytes,5,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	Name          string                 `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	Title         string                 `protobuf:"bytes,7,opt,name=title,proto3" json:"title,omitempty"`
 	Description   string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
@@ -95,6 +96,13 @@ func (x *Collection) GetUpdatedTs() int64 {
 	return 0
 }
 
+func (x *Collection) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
 func (x *Collection) GetName() string {
 	if x != nil {
 		return x.Name
@@ -141,7 +149,7 @@ var File_store_collection_proto protoreflect.FileDescriptor
 
 const file_store_collection_proto_rawDesc = "" +
 	"\n" +
-	"\x16store/collection.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\xc6\x02\n" +
+	"\x16store/collection.proto\x12\x0fmonotreme.store\x1a\x12store/common.proto\"\xda\x02\n" +
 	"\n" +
 	"Collection\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x1d\n" +
@@ -151,6 +159,7 @@ const file_store_collection_proto_rawDesc = "" +
 	"created_ts\x18\x03 \x01(\x03R\tcreatedTs\x12\x1d\n" +
 	"\n" +
 	"updated_ts\x18\x04 \x01(\x03R\tupdatedTs\x12\x12\n" +
+	"\x04uuid\x18\x05 \x01(\tR\x04uuid\x12\x12\n" +
 	"\x04name\x18\x06 \x01(\tR\x04name\x12\x14\n" +
 	"\x05title\x18\a \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\b \x01(\tR\vdescription\x12!\n" +

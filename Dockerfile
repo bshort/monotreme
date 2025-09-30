@@ -18,7 +18,7 @@ COPY . .
 COPY --from=frontend /frontend-build/frontend/web/dist /backend-build/server/route/frontend/dist
 
 RUN go mod download
-RUN cd proto && ./buf generate
+# RUN cd proto && ./buf generate  # Temporarily disabled due to buf service rate limiting
 RUN CGO_ENABLED=0 go build -o monotreme ./bin/monotreme/main.go
 
 # Make workspace with above generated files.

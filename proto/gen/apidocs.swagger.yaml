@@ -7,6 +7,8 @@ tags:
   - name: ActivityService
   - name: AuthService
   - name: CollectionService
+  - name: InvitationService
+  - name: RssImportService
   - name: ShortcutService
   - name: SubscriptionService
   - name: UserSettingService
@@ -206,6 +208,10 @@ paths:
           in: query
           required: false
           type: string
+        - name: invitationCode
+          in: query
+          required: false
+          type: string
       tags:
         - AuthService
   /api/v1/auth/status:
@@ -313,6 +319,8 @@ paths:
               updatedTime:
                 type: string
                 format: date-time
+              uuid:
+                type: string
               name:
                 type: string
               title:
@@ -374,6 +382,302 @@ paths:
           format: int32
       tags:
         - CollectionService
+  /api/v1/invitations:
+    get:
+      summary: ListInvitations returns a list of invitations.
+      operationId: InvitationService_ListInvitations
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListInvitationsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: from
+          description: Optional filter by from user path
+          in: query
+          required: false
+          type: string
+        - name: to
+          description: Optional filter by to user path
+          in: query
+          required: false
+          type: string
+        - name: accepted
+          description: Optional filter by accepted status
+          in: query
+          required: false
+          type: boolean
+        - name: deleted
+          description: Optional filter by deleted status
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - InvitationService
+    post:
+      summary: CreateInvitation creates an invitation.
+      operationId: InvitationService_CreateInvitation
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Invitation'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: invitation
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/apiv1Invitation'
+      tags:
+        - InvitationService
+  /api/v1/invitations/{id}:
+    get:
+      summary: GetInvitation returns an invitation by id.
+      operationId: InvitationService_GetInvitation
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Invitation'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - InvitationService
+    delete:
+      summary: DeleteInvitation deletes an invitation by id.
+      operationId: InvitationService_DeleteInvitation
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - InvitationService
+  /api/v1/invitations/{id}/accept:
+    post:
+      summary: AcceptInvitation accepts an invitation.
+      operationId: InvitationService_AcceptInvitation
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Invitation'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/InvitationServiceAcceptInvitationBody'
+      tags:
+        - InvitationService
+  /api/v1/rss-feeds:
+    get:
+      summary: ListRssFeeds returns a list of RSS feeds.
+      operationId: RssImportService_ListRssFeeds
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListRssFeedsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - RssImportService
+    post:
+      summary: CreateRssFeed creates a new RSS feed.
+      operationId: RssImportService_CreateRssFeed
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1RssFeed'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: rssFeed
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/apiv1RssFeed'
+      tags:
+        - RssImportService
+  /api/v1/rss-feeds/{id}:
+    get:
+      summary: GetRssFeed returns an RSS feed by id.
+      operationId: RssImportService_GetRssFeed
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1RssFeed'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - RssImportService
+    delete:
+      summary: DeleteRssFeed deletes an RSS feed.
+      operationId: RssImportService_DeleteRssFeed
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - RssImportService
+  /api/v1/rss-feeds/{id}/import:
+    post:
+      summary: TriggerRssFeedImport manually triggers an import for an RSS feed.
+      operationId: RssImportService_TriggerRssFeedImport
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1RssFeedImportResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - RssImportService
+  /api/v1/rss-feeds/{rssFeed.id}:
+    put:
+      summary: UpdateRssFeed updates an RSS feed.
+      operationId: RssImportService_UpdateRssFeed
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1RssFeed'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: rssFeed.id
+          in: path
+          required: true
+          type: integer
+          format: int32
+        - name: rssFeed
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creatorId:
+                type: integer
+                format: int32
+              createdTime:
+                type: string
+                format: date-time
+              updatedTime:
+                type: string
+                format: date-time
+              title:
+                type: string
+              url:
+                type: string
+              description:
+                type: string
+              autoImport:
+                type: boolean
+                title: Import settings
+              importFrequencyHours:
+                type: integer
+                format: int32
+                title: How often to check for updates (in hours)
+              lastImportTime:
+                type: string
+                format: date-time
+              defaultTags:
+                type: array
+                items:
+                  type: string
+                title: Shortcut generation settings
+              defaultVisibility:
+                $ref: '#/definitions/apiv1Visibility'
+              shortcutPrefix:
+                type: string
+                title: Optional prefix for generated shortcut names
+              isActive:
+                type: boolean
+                title: Status
+              lastError:
+                type: string
+              totalImported:
+                type: integer
+                format: int32
+        - name: updateMask
+          in: query
+          required: false
+          type: string
+      tags:
+        - RssImportService
   /api/v1/shortcuts:
     get:
       summary: ListShortcuts returns a list of shortcuts.
@@ -566,6 +870,21 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/v1User'
+      tags:
+        - UserService
+  /api/v1/users/invitation_code:
+    get:
+      summary: GetInvitationCode returns an invitation code for user signups.
+      operationId: UserService_GetInvitationCode
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetInvitationCodeResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
       tags:
         - UserService
   /api/v1/users/{id}:
@@ -767,6 +1086,8 @@ paths:
               updatedTime:
                 type: string
                 format: date-time
+              uuid:
+                type: string
               role:
                 $ref: '#/definitions/v1Role'
               email:
@@ -910,6 +1231,8 @@ definitions:
       count:
         type: integer
         format: int32
+  InvitationServiceAcceptInvitationBody:
+    type: object
   UserServiceCreateUserAccessTokenBody:
     type: object
     properties:
@@ -937,6 +1260,8 @@ definitions:
       updatedTime:
         type: string
         format: date-time
+      uuid:
+        type: string
       name:
         type: string
       title:
@@ -999,6 +1324,79 @@ definitions:
       - TYPE_UNSPECIFIED
       - OAUTH2
     default: TYPE_UNSPECIFIED
+  apiv1Invitation:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      createdTime:
+        type: string
+        format: date-time
+      updatedTime:
+        type: string
+        format: date-time
+      from:
+        type: string
+        title: 'Path to inviting user: "/users/[uuid]"'
+      to:
+        type: string
+        title: 'Path to invited user: "/users/[uuid]"'
+      acceptedAt:
+        type: string
+        title: ISO 8601 datetime string
+      deletedAt:
+        type: string
+        title: ISO 8601 datetime string
+  apiv1RssFeed:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      creatorId:
+        type: integer
+        format: int32
+      createdTime:
+        type: string
+        format: date-time
+      updatedTime:
+        type: string
+        format: date-time
+      title:
+        type: string
+      url:
+        type: string
+      description:
+        type: string
+      autoImport:
+        type: boolean
+        title: Import settings
+      importFrequencyHours:
+        type: integer
+        format: int32
+        title: How often to check for updates (in hours)
+      lastImportTime:
+        type: string
+        format: date-time
+      defaultTags:
+        type: array
+        items:
+          type: string
+        title: Shortcut generation settings
+      defaultVisibility:
+        $ref: '#/definitions/apiv1Visibility'
+      shortcutPrefix:
+        type: string
+        title: Optional prefix for generated shortcut names
+      isActive:
+        type: boolean
+        title: Status
+      lastError:
+        type: string
+      totalImported:
+        type: integer
+        format: int32
   apiv1Shortcut:
     type: object
     properties:
@@ -1254,6 +1652,13 @@ definitions:
       userSummary:
         $ref: '#/definitions/v1UserSummary'
         title: User-specific summary (for current user)
+  v1GetInvitationCodeResponse:
+    type: object
+    properties:
+      invitationCode:
+        type: string
+      invitationUrl:
+        type: string
   v1GetRecentActivityResponse:
     type: object
     properties:
@@ -1352,6 +1757,22 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/apiv1Collection'
+  v1ListInvitationsResponse:
+    type: object
+    properties:
+      invitations:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1Invitation'
+  v1ListRssFeedsResponse:
+    type: object
+    properties:
+      rssFeeds:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1RssFeed'
   v1ListShortcutsResponse:
     type: object
     properties:
@@ -1504,6 +1925,20 @@ definitions:
       - ADMIN
       - USER
     default: ROLE_UNSPECIFIED
+  v1RssFeedImportResponse:
+    type: object
+    properties:
+      importedCount:
+        type: integer
+        format: int32
+      importedShortcuts:
+        type: array
+        items:
+          type: string
+      errors:
+        type: array
+        items:
+          type: string
   v1ShortcutCreatedData:
     type: object
     properties:
@@ -1598,6 +2033,8 @@ definitions:
       updatedTime:
         type: string
         format: date-time
+      uuid:
+        type: string
       role:
         $ref: '#/definitions/v1Role'
       email:
