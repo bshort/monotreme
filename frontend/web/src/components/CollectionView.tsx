@@ -72,7 +72,7 @@ const CollectionView = (props: Props) => {
         expiresAt: undefined, // Never expires
       });
 
-      const rssUrl = `${window.location.origin}/rss/collection/${collection.id}.xml?token=${accessToken}`;
+      const rssUrl = `${window.location.origin}/rss/collection/${collection.id}?token=${accessToken}`;
       copy(rssUrl);
       toast.success("RSS feed URL with access token copied to clipboard!");
     } catch (error: any) {

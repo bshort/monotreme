@@ -1,9 +1,12 @@
-import { Button, Card, Typography } from "@mui/joy";
+import { Button, Card, Typography, Tooltip } from "@mui/joy";
+import copy from "copy-to-clipboard";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 import Icon from "@/components/Icon";
+import { userServiceClient } from "@/grpcweb";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useUserStore } from "@/stores";
 import { getShortcutUrl } from "@/utils/shortcut";
@@ -79,6 +82,24 @@ const TagsDashboard: React.FC = () => {
     });
   };
 
+  const handleCopyTagRSSLink = async (tagName: string) => {
+    try {
+      // Generate a new access token for RSS feed
+      const { accessToken } = await userServiceClient.createUserAccessToken({
+        id: currentUser.id,
+        description: "RSS Feed",
+        expiresAt: undefined, // Never expires
+      });
+
+      const rssUrl = `${window.location.origin}/rss/tag/${encodeURIComponent(tagName)}?token=${accessToken}`;
+      copy(rssUrl);
+      toast.success("RSS feed URL with access token copied to clipboard!");
+    } catch (error: any) {
+      console.error("Failed to create RSS access token:", error);
+      toast.error("Failed to generate RSS feed URL. Please try again.");
+    }
+  };
+
   if (loadingState.isLoading) {
     return (
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
@@ -132,13 +153,23 @@ const TagsDashboard: React.FC = () => {
                   {shortcuts.length} shortcut{shortcuts.length !== 1 ? 's' : ''}
                 </span>
               </div>
-              <Link
-                to={`/shortcuts?tags=${encodeURIComponent(tag)}`}
-                className="text-blue-600 dark:text-blue-400 hover:underline text-sm flex items-center gap-1"
-              >
-                View all
-                <Icon.ExternalLink className="w-3 h-3" />
-              </Link>
+              <div className="flex items-center gap-2">
+                <Tooltip title="Copy RSS feed URL for this tag" placement="top" arrow>
+                  <button
+                    className="w-auto text-gray-400 cursor-pointer hover:text-gray-500"
+                    onClick={() => handleCopyTagRSSLink(tag)}
+                  >
+                    <Icon.Rss className="w-4 h-auto" />
+                  </button>
+                </Tooltip>
+                <Link
+                  to={`/shortcuts?tags=${encodeURIComponent(tag)}`}
+                  className="text-blue-600 dark:text-blue-400 hover:underline text-sm flex items-center gap-1"
+                >
+                  View all
+                  <Icon.ExternalLink className="w-3 h-3" />
+                </Link>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

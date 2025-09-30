@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -46,7 +47,8 @@ func NewRSSService(profile *profile.Profile, store *store.Store, secret string) 
 
 func (rs *RSSService) RegisterRoutes(e *echo.Echo) {
 	e.GET("/rss/collections.xml", rs.handleCollectionsRSS)
-	e.GET("/rss/collection/:id.xml", rs.handleCollectionRSS)
+	e.GET("/rss/collection/:id", rs.handleCollectionRSS)
+	e.GET("/rss/tag/:name", rs.handleTagRSS)
 }
 
 func (rs *RSSService) handleCollectionsRSS(c echo.Context) error {
@@ -91,6 +93,8 @@ func (rs *RSSService) handleCollectionRSS(c echo.Context) error {
 
 	// Get collection ID from path parameter
 	collectionIDStr := c.Param("id")
+	// Strip .xml extension if present
+	collectionIDStr = strings.TrimSuffix(collectionIDStr, ".xml")
 	collectionID, err := util.ConvertStringToInt32(collectionIDStr)
 	if err != nil {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("Invalid collection ID: %s", collectionIDStr))
@@ -129,6 +133,55 @@ func (rs *RSSService) handleCollectionRSS(c echo.Context) error {
 	rssXML, err := rs.generateCollectionRSSXML(collection, shortcuts, userID)
 	if err != nil {
 		return errors.Wrap(err, "failed to generate collection RSS XML")
+	}
+
+	c.Response().Header().Set("Content-Type", "application/rss+xml; charset=utf-8")
+	return c.String(http.StatusOK, rssXML)
+}
+
+func (rs *RSSService) handleTagRSS(c echo.Context) error {
+	ctx := context.Background()
+
+	// Get tag name from path parameter
+	tagName := c.Param("name")
+	if tagName == "" {
+		return c.String(http.StatusBadRequest, "Tag name is required")
+	}
+
+	// Get access token from query parameter
+	accessToken := c.QueryParam("token")
+	if accessToken == "" {
+		return c.String(http.StatusUnauthorized, "Access token required. Use: /rss/tag/TAG_NAME?token=YOUR_ACCESS_TOKEN")
+	}
+
+	// Authenticate the user
+	userID, err := rs.authenticateUser(ctx, accessToken)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, fmt.Sprintf("Authentication failed: %s", err.Error()))
+	}
+
+	// Get all shortcuts with this tag for the authenticated user
+	shortcuts, err := rs.Store.ListShortcuts(ctx, &store.FindShortcut{
+		CreatorID: &userID,
+	})
+	if err != nil {
+		return errors.Wrap(err, "failed to get shortcuts")
+	}
+
+	// Filter shortcuts by tag
+	taggedShortcuts := []*storepb.Shortcut{}
+	for _, shortcut := range shortcuts {
+		for _, tag := range shortcut.Tags {
+			if tag == tagName {
+				taggedShortcuts = append(taggedShortcuts, shortcut)
+				break
+			}
+		}
+	}
+
+	rssXML, err := rs.generateTagRSSXML(tagName, taggedShortcuts, userID)
+	if err != nil {
+		return errors.Wrap(err, "failed to generate tag RSS XML")
 	}
 
 	c.Response().Header().Set("Content-Type", "application/rss+xml; charset=utf-8")
@@ -348,7 +401,7 @@ func (rs *RSSService) generateCollectionRSSXML(collection *storepb.Collection, s
     <description>Latest links from <![CDATA[` + collection.Title + `]]> collection from Monotreme</description>
     <language>en-us</language>
     <lastBuildDate>` + time.Now().Format(time.RFC3339) + `</lastBuildDate>
-    <atom:link href="` + baseURL + `/rss/collection/` + fmt.Sprintf("%d", collection.Id) + `.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="` + baseURL + `/rss/collection/` + fmt.Sprintf("%d", collection.Id) + `" rel="self" type="application/rss+xml" />
 
 `
 
@@ -388,6 +441,80 @@ func (rs *RSSService) generateCollectionRSSXML(collection *storepb.Collection, s
 	}
 
 	rssFooter := `    <category><![CDATA[` + collection.Title + `]]></category>
+</channel>
+</rss>`
+
+	return rssHeader + items + rssFooter, nil
+}
+
+func (rs *RSSService) generateTagRSSXML(tagName string, shortcuts []*storepb.Shortcut, userID int32) (string, error) {
+	baseURL := fmt.Sprintf("http://localhost:%d", rs.Profile.Port)
+	if rs.Profile.Mode == "prod" {
+		// In production, you might want to set this from an environment variable
+		baseURL = fmt.Sprintf("http://localhost:%d", rs.Profile.Port)
+	}
+
+	// Get user info for title
+	user, err := rs.Store.GetUser(context.Background(), &store.FindUser{
+		ID: &userID,
+	})
+	if err != nil {
+		return "", errors.Wrap(err, "failed to get user")
+	}
+
+	// Sort shortcuts by creation time (newest first)
+	sort.Slice(shortcuts, func(i, j int) bool {
+		return shortcuts[i].CreatedTs > shortcuts[j].CreatedTs
+	})
+
+	rssHeader := `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>` + user.Nickname + `'s Monotreme Tag - ` + tagName + `</title>
+    <link>` + baseURL + `/tags</link>
+    <description>Latest links tagged with "` + tagName + `" from Monotreme</description>
+    <language>en-us</language>
+    <lastBuildDate>` + time.Now().Format(time.RFC3339) + `</lastBuildDate>
+    <atom:link href="` + baseURL + `/rss/tag/` + tagName + `" rel="self" type="application/rss+xml" />
+
+`
+
+	items := ""
+	for _, shortcut := range shortcuts {
+		// Build the Monotreme shortcut URL
+		shortcutURL := fmt.Sprintf("%s/s/%s", baseURL, shortcut.Name)
+
+		// Use shortcut UUID as GUID for uniqueness
+		guid := shortcut.Uuid
+
+		// Description - empty if not provided or show as self-closing tag
+		var descriptionXML string
+		if shortcut.Description == "" {
+			descriptionXML = "<description/>"
+		} else {
+			descriptionXML = fmt.Sprintf("<description>%s</description>", escapeHTML(shortcut.Description))
+		}
+
+		itemXML := fmt.Sprintf(`    <item>
+        <title>%s</title>
+        <link>%s</link>
+        <guid>%s</guid>
+        <source>%s</source>
+        <pubDate>%s</pubDate>
+        %s
+    </item>
+`,
+			escapeHTML(shortcut.Title),
+			shortcutURL,
+			guid,
+			shortcut.Link,
+			time.Unix(shortcut.CreatedTs, 0).Format(time.RFC3339),
+			descriptionXML)
+
+		items += itemXML
+	}
+
+	rssFooter := `    <category>` + tagName + `</category>
 </channel>
 </rss>`
 

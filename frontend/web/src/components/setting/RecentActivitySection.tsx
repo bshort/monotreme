@@ -150,19 +150,21 @@ const RecentActivitySection = () => {
           <div className="space-y-2">
             {recentActivity?.recentCollections && recentActivity.recentCollections.length > 0 ? (
               recentActivity.recentCollections.map((collection) => (
-                <div key={collection.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                  <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Icon.FolderOpen className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <Link key={collection.id} to={`/c/${collection.name}`} className="block">
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon.FolderOpen className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <Typography level="body-sm" className="truncate font-medium">
+                        {collection.title || collection.name}
+                      </Typography>
+                      <Typography level="body-xs" className="text-gray-500 truncate">
+                        {formatTimeAgo(new Date(collection.createdTime))}
+                      </Typography>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <Typography level="body-sm" className="truncate font-medium">
-                      {collection.title || collection.name}
-                    </Typography>
-                    <Typography level="body-xs" className="text-gray-500 truncate">
-                      {formatTimeAgo(new Date(collection.createdTime))}
-                    </Typography>
-                  </div>
-                </div>
+                </Link>
               ))
             ) : (
               <Typography level="body-xs" className="text-gray-400 italic">

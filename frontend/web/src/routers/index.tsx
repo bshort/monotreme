@@ -101,6 +101,10 @@ const router = createBrowserRouter([
             path: "/admin/import",
             element: <BookmarkImport />,
           },
+          {
+            path: "/c/:collectionName",
+            element: <CollectionSpace />,
+          },
         ],
       },
       {
@@ -114,10 +118,6 @@ const router = createBrowserRouter([
       {
         path: ":prefix/*",
         element: <ShortcutSpace />,
-      },
-      {
-        path: "c/*",
-        element: <CollectionSpace />,
       },
       {
         path: "*",
