@@ -22,10 +22,11 @@ import Dropdown from "./common/Dropdown";
 
 interface Props {
   collection: Collection;
+  searchQuery?: string;
 }
 
 const CollectionView = (props: Props) => {
-  const { collection } = props;
+  const { collection, searchQuery = "" } = props;
   const { t } = useTranslation();
   const { sm } = useResponsiveWidth();
   const navigateTo = useNavigateTo();
@@ -38,6 +39,19 @@ const CollectionView = (props: Props) => {
     .map((shortcutId) => shortcutList.find((shortcut) => shortcut?.id === shortcutId))
     .filter(Boolean) as any as Shortcut[];
   const showAdminActions = currentUser.id === collection.creatorId;
+
+  const isShortcutMatchingSearch = (shortcut: Shortcut): boolean => {
+    if (!searchQuery) return false;
+
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      shortcut.name.toLowerCase().includes(searchLower) ||
+      shortcut.title.toLowerCase().includes(searchLower) ||
+      shortcut.description.toLowerCase().includes(searchLower) ||
+      shortcut.link.toLowerCase().includes(searchLower) ||
+      shortcut.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+    );
+  };
 
   const handleCopyCollectionLink = () => {
     copy(absolutifyLink(`/c/${collection.name}`));
@@ -164,6 +178,7 @@ const CollectionView = (props: Props) => {
                 shortcut={shortcut}
                 alwaysShowLink={!sm}
                 onClick={() => handleShortcutClick(shortcut)}
+                highlight={isShortcutMatchingSearch(shortcut)}
               />
             );
           })}

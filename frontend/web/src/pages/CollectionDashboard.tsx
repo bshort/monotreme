@@ -48,11 +48,35 @@ const CollectionDashboard: React.FC = () => {
 
   const filteredAndSortedCollections = sortCollections(
     collectionStore.getCollectionList().filter((collection) => {
-      return (
-        collection.name.toLowerCase().includes(search.toLowerCase()) ||
-        collection.title.toLowerCase().includes(search.toLowerCase()) ||
-        collection.description.toLowerCase().includes(search.toLowerCase())
-      );
+      const searchLower = search.toLowerCase();
+
+      // Search collection properties
+      const matchesCollection =
+        collection.name.toLowerCase().includes(searchLower) ||
+        collection.title.toLowerCase().includes(searchLower) ||
+        collection.description.toLowerCase().includes(searchLower);
+
+      if (matchesCollection) {
+        return true;
+      }
+
+      // Search shortcuts within the collection
+      const matchesShortcut = collection.shortcutIds.some((shortcutId) => {
+        const shortcut = shortcutStore.shortcutMapById[shortcutId];
+        if (!shortcut) {
+          return false;
+        }
+
+        return (
+          shortcut.name.toLowerCase().includes(searchLower) ||
+          shortcut.title.toLowerCase().includes(searchLower) ||
+          shortcut.description.toLowerCase().includes(searchLower) ||
+          shortcut.link.toLowerCase().includes(searchLower) ||
+          shortcut.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+        );
+      });
+
+      return matchesShortcut;
     }),
     sortBy
   );
@@ -159,7 +183,7 @@ const CollectionDashboard: React.FC = () => {
         ) : (
           <div className="w-full flex flex-col justify-start items-start gap-3">
             {filteredAndSortedCollections.map((collection) => {
-              return <CollectionView key={collection.id} collection={collection} />;
+              return <CollectionView key={collection.id} collection={collection} searchQuery={search} />;
             })}
           </div>
         )}

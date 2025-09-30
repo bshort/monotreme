@@ -15,10 +15,11 @@ interface Props {
   showActions?: boolean;
   alwaysShowLink?: boolean;
   onClick?: () => void;
+  highlight?: boolean;
 }
 
 const ShortcutView = (props: Props) => {
-  const { shortcut, className, showActions, alwaysShowLink, onClick } = props;
+  const { shortcut, className, showActions, alwaysShowLink, onClick, highlight } = props;
   const shortcutLink = absolutifyLink(getShortcutUrl(shortcut.name));
 
   const handleCopyButtonClick = (e: React.MouseEvent) => {
@@ -32,6 +33,7 @@ const ShortcutView = (props: Props) => {
     <div
       className={classNames(
         "group w-full px-3 py-2 flex flex-col justify-start items-start border rounded-lg hover:bg-gray-100 dark:border-zinc-800 dark:hover:bg-zinc-800",
+        highlight && "ring-2 ring-blue-500 dark:ring-blue-400",
         className,
       )}
       onClick={onClick}
