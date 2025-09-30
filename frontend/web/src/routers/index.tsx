@@ -13,6 +13,7 @@ import NotFound from "@/pages/NotFound";
 import QuickSave from "@/pages/QuickSave";
 import ShortcutDashboard from "@/pages/ShortcutDashboard";
 import ShortcutDetail from "@/pages/ShortcutDetail";
+import ShortcutEditPage from "@/pages/ShortcutEditPage";
 import ShortcutSpace from "@/pages/ShortcutSpace";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
@@ -73,8 +74,12 @@ const router = createBrowserRouter([
             element: <TagsDashboard />,
           },
           {
-            path: "/shortcut/:shortcutId",
+            path: "/shortcut/:shortcutUuid",
             element: <ShortcutDetail />,
+          },
+          {
+            path: "/edit/shortcut/:shortcutUuid",
+            element: <ShortcutEditPage />,
           },
           {
             path: "/setting/general",

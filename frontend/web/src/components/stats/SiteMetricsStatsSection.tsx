@@ -77,7 +77,7 @@ const SiteMetricsStatsSection = () => {
         {t("stats.site-metrics.title")}
       </Typography>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         <Card className="p-6">
           <Typography level="body-sm" color="neutral" className="mb-2">
             {t("stats.site-metrics.total-hits")}
@@ -114,7 +114,7 @@ const SiteMetricsStatsSection = () => {
 
         <Card className="p-6">
           <Typography level="body-sm" color="neutral" className="mb-2">
-            {t("stats.site-metrics.engagement")}
+            {t("stats.site-metrics.hits-per-shortcut")}
           </Typography>
           <Typography level="h2" className="mb-4">
             {stats?.totalShortcuts && stats.totalShortcuts > 0
@@ -123,12 +123,39 @@ const SiteMetricsStatsSection = () => {
             }
           </Typography>
           <Typography level="body-sm" color="neutral">
-            {t("stats.site-metrics.hits-per-shortcut")}
+            {t("stats.site-metrics.engagement")}
+          </Typography>
+        </Card>
+
+        <Card className="p-6">
+          <Typography level="body-sm" color="neutral" className="mb-2">
+            {t("stats.site-metrics.hits-per-user")}
+          </Typography>
+          <Typography level="h2" className="mb-4">
+            {stats?.totalUsers && stats.totalUsers > 0
+              ? Math.round((stats?.totalHits || 0) / stats.totalUsers * 100) / 100
+              : 0
+            }
+          </Typography>
+          <Typography level="body-sm" color="neutral">
+            {t("stats.site-metrics.engagement")}
+          </Typography>
+        </Card>
+
+        <Card className="p-6">
+          <Typography level="body-sm" color="neutral" className="mb-2">
+            {t("stats.site-metrics.avg-visit-duration")}
+          </Typography>
+          <Typography level="h2" className="mb-4">
+            N/A
+          </Typography>
+          <Typography level="body-sm" color="neutral">
+            Coming Soon
           </Typography>
         </Card>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         <Card className="p-4">
           <Typography level="body-sm" color="neutral">
             {t("stats.site-metrics.total-shortcuts")}
@@ -198,6 +225,34 @@ const SiteMetricsStatsSection = () => {
               color="#ef4444"
               className="ml-2"
             />
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <Typography level="body-sm" color="neutral">
+            {t("stats.site-metrics.hits-per-visit")}
+          </Typography>
+          <div className="flex items-center justify-between mt-2">
+            <Typography level="title-lg">
+              N/A
+            </Typography>
+            <Typography level="body-sm" color="neutral" className="ml-2">
+              Soon
+            </Typography>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <Typography level="body-sm" color="neutral">
+            {t("stats.site-metrics.external-hits")}
+          </Typography>
+          <div className="flex items-center justify-between mt-2">
+            <Typography level="title-lg">
+              N/A
+            </Typography>
+            <Typography level="body-sm" color="neutral" className="ml-2">
+              Soon
+            </Typography>
           </div>
         </Card>
       </div>

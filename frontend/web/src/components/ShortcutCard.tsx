@@ -47,7 +47,7 @@ const ShortcutCard = (props: Props) => {
         <div className="w-[calc(100%-16px)] flex flex-row justify-start items-center mr-1 shrink-0">
           <Link
             className={classNames("w-8 h-8 flex justify-center items-center overflow-clip shrink-0")}
-            to={`/shortcut/${shortcut.id}`}
+            to={`/shortcut/${shortcut.uuid}`}
             viewTransition
             onClick={(e) => e.stopPropagation()}
           >
@@ -156,7 +156,7 @@ const ShortcutCard = (props: Props) => {
         <Tooltip title="View count" variant="solid" placement="top" arrow>
           <Link
             className="w-auto leading-5 flex flex-row justify-start items-center flex-nowrap whitespace-nowrap cursor-pointer text-gray-400 text-sm"
-            to={`/shortcut/${shortcut.id}#analytics`}
+            to={`/shortcut/${shortcut.uuid}#analytics`}
             viewTransition
             onClick={(e) => e.stopPropagation()}
           >

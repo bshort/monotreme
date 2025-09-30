@@ -56,7 +56,7 @@ const CollectionView = (props: Props) => {
   };
 
   const handleShortcutClick = (shortcut: Shortcut) => {
-    navigateTo(`/shortcut/${shortcut.id}`);
+    navigateTo(`/shortcut/${shortcut.uuid}`);
   };
 
   const handleOpenAllShortcutsButtonClick = () => {

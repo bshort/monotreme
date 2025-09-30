@@ -24,6 +24,51 @@
     "host-tip": "You are registering as Admin.",
     "sign-in-with": "Sign in with {{provider}}"
   },
+  "stats": {
+    "title": "Statistics",
+    "description": "Overview of the site statistics",
+    "users": {
+      "title": "Users",
+      "total": "Total Users",
+      "activity": "Active Users",
+      "growth": "New Users",
+      "growth-period": "in the last 30 days",
+      "current-count": "Current Count of Active Users"
+    },
+    "shortcuts": {
+      "title": "Shortcuts",
+      "total": "Total Shortcuts",
+      "activity": "Total Views",
+      "growth": "New Shortcuts",
+      "growth-period": "in the last 30 days",
+      "active-shortcuts": "Active Shortcuts",
+      "current-count": "Current Count"
+    },
+    "collections": {
+      "title": "Collections",
+      "total": "Total Collections",
+      "growth": "New Collections",
+      "growth-period": "in the last 30 days",
+      "activity": "Active Collections",
+      "current-count": "Current Count"
+    },
+    "site-metrics": {
+      "title": "Site Metrics",
+      "total-hits": "Total Hits",
+      "visitors": "Total Visitors",
+      "bounce-rate": "Bounce Rate",
+      "total-content": "Total Shortcuts",
+      "total-shortcuts": "Total Shortcuts",
+      "total-users": "Total Users",
+      "total-collections": "Total Collections",
+      "engagement": "Engagement",
+      "avg-visit-duration": "Avg. Visit Duration",
+      "hits-per-visit": "Hits per Visit",
+      "hits-per-shortcut": "Hits per Shortcut",
+      "hits-per-user": "Hits per User",
+      "external-hits": "External Hits"
+    }
+  },
   "analytics": {
     "self": "Analytics",
     "top-sources": "Top sources",

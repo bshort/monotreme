@@ -28,11 +28,11 @@ interface State {
 const ShortcutDetail = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const shortcutId = Number(params["shortcutId"]);
+  const shortcutUuid = params["shortcutUuid"] || "";
   const navigateTo = useNavigateTo();
   const shortcutStore = useShortcutStore();
   const userStore = useUserStore();
-  const shortcut = shortcutStore.getShortcutById(shortcutId);
+  const shortcut = shortcutStore.getShortcutByUuid(shortcutUuid);
   const currentUser = useUserStore().getCurrentUser();
   const [state, setState] = useState<State>({
     showEditDrawer: false,
@@ -45,11 +45,11 @@ const ShortcutDetail = () => {
 
   useEffect(() => {
     (async () => {
-      const shortcut = await shortcutStore.getOrFetchShortcutById(shortcutId);
+      const shortcut = await shortcutStore.getOrFetchShortcutByUuid(shortcutUuid);
       await userStore.getOrFetchUserById(shortcut.creatorId);
       loadingState.setFinish();
     })();
-  }, [shortcutId]);
+  }, [shortcutUuid]);
 
   if (loadingState.isLoading) {
     return null;
@@ -122,6 +122,16 @@ const ShortcutDetail = () => {
             </button>
           </Tooltip>
           {havePermission && (
+            <Tooltip title="Edit Full Page" variant="solid" placement="top" arrow>
+              <button
+                className="w-8 h-8 cursor-pointer border rounded-full text-gray-500 hover:bg-gray-100 hover:shadow dark:border-zinc-800 dark:hover:bg-zinc-800"
+                onClick={() => navigateTo(`/edit/shortcut/${shortcut.uuid}`)}
+              >
+                <Icon.Edit className="w-4 h-auto mx-auto" />
+              </button>
+            </Tooltip>
+          )}
+          {havePermission && (
             <Dropdown
               className="w-8 h-8 flex justify-center items-center border cursor-pointer rounded-full hover:bg-gray-100 hover:shadow dark:border-zinc-800 dark:hover:bg-zinc-800"
               actionsClassName="!w-32 !-right-24 dark:text-gray-500"
@@ -136,7 +146,15 @@ const ShortcutDetail = () => {
                       });
                     }}
                   >
-                    <Icon.Edit className="w-4 h-auto mr-2" /> {t("common.edit")}
+                    <Icon.Edit className="w-4 h-auto mr-2" /> Quick Edit
+                  </button>
+                  <button
+                    className="w-full px-2 flex flex-row justify-start items-center text-left leading-8 cursor-pointer rounded hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60 dark:hover:bg-zinc-800"
+                    onClick={() => {
+                      navigateTo(`/edit/shortcut/${shortcut.uuid}`);
+                    }}
+                  >
+                    <Icon.ExternalLink className="w-4 h-auto mr-2" /> Edit Full Page
                   </button>
                   <button
                     className="w-full px-2 flex flex-row justify-start items-center text-left leading-8 cursor-pointer rounded text-red-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60 dark:hover:bg-zinc-800"

@@ -36,7 +36,11 @@ const ShortcutActionsDropdown = (props: Props) => {
   };
 
   const gotoAnalytics = () => {
-    navigateTo(`/shortcut/${shortcut.id}#analytics`);
+    navigateTo(`/shortcut/${shortcut.uuid}#analytics`);
+  };
+
+  const gotoEditFullPage = () => {
+    navigateTo(`/edit/shortcut/${shortcut.uuid}`);
   };
 
   return (
@@ -50,7 +54,15 @@ const ShortcutActionsDropdown = (props: Props) => {
                 className="w-full px-2 flex flex-row justify-start items-center text-left leading-8 cursor-pointer rounded hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60 dark:hover:bg-zinc-800"
                 onClick={() => setShowEditDrawer(true)}
               >
-                <Icon.Edit className="w-4 h-auto mr-2 opacity-70" /> {t("common.edit")}
+                <Icon.Edit className="w-4 h-auto mr-2 opacity-70" /> Quick Edit
+              </button>
+            )}
+            {havePermission && (
+              <button
+                className="w-full px-2 flex flex-row justify-start items-center text-left leading-8 cursor-pointer rounded hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60 dark:hover:bg-zinc-800"
+                onClick={gotoEditFullPage}
+              >
+                <Icon.ExternalLink className="w-4 h-auto mr-2 opacity-70" /> Edit Full Page
               </button>
             )}
             <button

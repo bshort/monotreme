@@ -151,7 +151,7 @@ const ShortcutListView = (props: Props) => {
           <Tooltip title="View count" variant="solid" placement="top" arrow>
             <Link
               className="flex flex-row justify-start items-center cursor-pointer text-gray-400 text-xs hover:opacity-80"
-              to={`/shortcut/${shortcut.id}#analytics`}
+              to={`/shortcut/${shortcut.uuid}#analytics`}
               viewTransition
               onClick={(e) => e.stopPropagation()}
             >

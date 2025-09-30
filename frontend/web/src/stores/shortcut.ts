@@ -6,11 +6,13 @@ import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 
 interface State {
   shortcutMapById: Record<number, Shortcut>;
+  shortcutMapByUuid: Record<string, Shortcut>;
 }
 
 const getDefaultState = (): State => {
   return {
     shortcutMapById: {},
+    shortcutMapByUuid: {},
   };
 };
 
@@ -18,11 +20,13 @@ const useShortcutStore = create(
   combine(getDefaultState(), (set, get) => ({
     fetchShortcutList: async () => {
       const { shortcuts } = await shortcutServiceClient.listShortcuts({});
-      const shortcutMap = get().shortcutMapById;
+      const shortcutMapById = get().shortcutMapById;
+      const shortcutMapByUuid = get().shortcutMapByUuid;
       shortcuts.forEach((shortcut) => {
-        shortcutMap[shortcut.id] = shortcut;
+        shortcutMapById[shortcut.id] = shortcut;
+        shortcutMapByUuid[shortcut.uuid] = shortcut;
       });
-      set({ shortcutMapById: shortcutMap });
+      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
       return shortcuts;
     },
     fetchShortcutByName: async (name: string) => {
@@ -32,21 +36,38 @@ const useShortcutStore = create(
       return shortcut;
     },
     getOrFetchShortcutById: async (id: number) => {
-      const shortcutMap = get().shortcutMapById;
-      if (shortcutMap[id]) {
-        return shortcutMap[id] as Shortcut;
+      const shortcutMapById = get().shortcutMapById;
+      const shortcutMapByUuid = get().shortcutMapByUuid;
+      if (shortcutMapById[id]) {
+        return shortcutMapById[id] as Shortcut;
       }
 
       const shortcut = await shortcutServiceClient.getShortcut({
         id,
       });
-      shortcutMap[id] = shortcut;
-      set({ shortcutMapById: shortcutMap });
+      shortcutMapById[id] = shortcut;
+      shortcutMapByUuid[shortcut.uuid] = shortcut;
+      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
       return shortcut;
     },
     getShortcutById: (id: number) => {
       const shortcutMap = get().shortcutMapById;
       return shortcutMap[id] || unknownShortcut;
+    },
+    getOrFetchShortcutByUuid: async (uuid: string) => {
+      const shortcutMapById = get().shortcutMapById;
+      const shortcutMapByUuid = get().shortcutMapByUuid;
+      if (shortcutMapByUuid[uuid]) {
+        return shortcutMapByUuid[uuid] as Shortcut;
+      }
+
+      // Since there's no getShortcutByUuid in the API, we need to fetch all shortcuts first
+      await get().fetchShortcutList();
+      return shortcutMapByUuid[uuid] || unknownShortcut;
+    },
+    getShortcutByUuid: (uuid: string) => {
+      const shortcutMap = get().shortcutMapByUuid;
+      return shortcutMap[uuid] || unknownShortcut;
     },
     getShortcutList: () => {
       return Object.values(get().shortcutMapById);
@@ -55,9 +76,11 @@ const useShortcutStore = create(
       const createdShortcut = await shortcutServiceClient.createShortcut({
         shortcut: shortcut,
       });
-      const shortcutMap = get().shortcutMapById;
-      shortcutMap[createdShortcut.id] = createdShortcut;
-      set({ shortcutMapById: shortcutMap });
+      const shortcutMapById = get().shortcutMapById;
+      const shortcutMapByUuid = get().shortcutMapByUuid;
+      shortcutMapById[createdShortcut.id] = createdShortcut;
+      shortcutMapByUuid[createdShortcut.uuid] = createdShortcut;
+      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
       return createdShortcut;
     },
     updateShortcut: async (shortcut: Partial<Shortcut>, updateMask: string[]) => {
@@ -65,18 +88,27 @@ const useShortcutStore = create(
         shortcut: shortcut,
         updateMask,
       });
-      const shortcutMap = get().shortcutMapById;
-      shortcutMap[updatedShortcut.id] = updatedShortcut;
-      set({ shortcutMapById: shortcutMap });
+      const shortcutMapById = get().shortcutMapById;
+      const shortcutMapByUuid = get().shortcutMapByUuid;
+      shortcutMapById[updatedShortcut.id] = updatedShortcut;
+      shortcutMapByUuid[updatedShortcut.uuid] = updatedShortcut;
+      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
       return updatedShortcut;
     },
     deleteShortcut: async (id: number) => {
+      const shortcutMapById = get().shortcutMapById;
+      const shortcutMapByUuid = get().shortcutMapByUuid;
+      const shortcutToDelete = shortcutMapById[id];
+
       await shortcutServiceClient.deleteShortcut({
         id,
       });
-      const shortcutMap = get().shortcutMapById;
-      delete shortcutMap[id];
-      set({ shortcutMapById: shortcutMap });
+
+      delete shortcutMapById[id];
+      if (shortcutToDelete) {
+        delete shortcutMapByUuid[shortcutToDelete.uuid];
+      }
+      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
     },
   })),
 );
