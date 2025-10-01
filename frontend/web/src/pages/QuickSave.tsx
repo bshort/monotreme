@@ -14,6 +14,7 @@ const QuickSave = () => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
+  const [tags, setTags] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState(false);
@@ -73,7 +74,7 @@ const QuickSave = () => {
         name: name.trim(),
         link: url.trim(),
         title: title.trim(),
-        tags: [],
+        tags: tags.trim() ? tags.split(',').map(tag => tag.trim()).filter(tag => tag) : [],
         description: "",
         visibility: currentUser.defaultVisibility || Visibility.WORKSPACE,
         viewCount: 0,
@@ -177,6 +178,23 @@ const QuickSave = () => {
               />
               <Typography level="body-xs" className="mt-1 text-gray-600">
                 URL: /s/{name}
+              </Typography>
+            </div>
+
+            <div>
+              <Typography level="title-sm" className="mb-1">
+                Tags
+              </Typography>
+              <Input
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="tag1, tag2, tag3"
+                disabled={isSaving}
+                fullWidth
+                size="sm"
+              />
+              <Typography level="body-xs" className="mt-1 text-gray-600">
+                Comma-separated tags (optional)
               </Typography>
             </div>
 
