@@ -1,0 +1,11 @@
+services:
+  monotreme:
+
+    volumes:
+      - /Primer/Media/data/monotreme:/var/opt/monotreme
+    restart: unless-stopped
+
+networks:
+  macvlan_network:
+    name: MyMacVlan
+    external: true
