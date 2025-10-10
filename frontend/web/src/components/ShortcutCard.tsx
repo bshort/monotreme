@@ -87,26 +87,15 @@ const ShortcutCard = (props: Props) => {
                 </button>
               </Tooltip>
             </div>
-            <div className="pr-4 leading-tight w-full text-sm space-y-1">
+            <div className="pr-4 leading-tight w-full text-sm">
               <a
                 className="block truncate text-gray-400 dark:text-gray-500 hover:underline"
-                href={shortcut.link}
+                href={shortcutLink}
                 target="_blank"
                 onClick={(e) => e.stopPropagation()}
               >
                 {shortcut.link}
               </a>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-500">Shortcut:</span>
-                <a
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline truncate"
-                  href={shortcutLink}
-                  target="_blank"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {shortcutLink}
-                </a>
-              </div>
             </div>
           </div>
         </div>

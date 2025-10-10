@@ -84,15 +84,15 @@ const ShortcutView = (props: Props) => {
         </div>
       </div>
 
-      {/* Second row: shortcut link */}
+      {/* Second row: original link */}
       <div className="w-full mt-1 pl-7">
         <a
-          className="text-xs text-blue-600 dark:text-blue-400 hover:underline truncate block"
+          className="text-xs text-gray-500 dark:text-gray-400 hover:underline truncate block"
           href={shortcutLink}
           target="_blank"
           onClick={(e) => e.stopPropagation()}
         >
-          {shortcutLink}
+          {shortcut.link}
         </a>
       </div>
     </div>
