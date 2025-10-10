@@ -7,7 +7,7 @@ set -e  # Exit on error
 
 echo "=== Step 1: Building frontend ==="
 cd frontend/web
-unset DISPLAY && QT_QPA_PLATFORM=offscreen npm run build
+env -u DISPLAY npx vite build
 cd ../..
 
 echo ""
