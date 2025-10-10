@@ -1,6 +1,6 @@
 services:
   monotreme:
-    build: .
+    image: monotreme:local
     container_name: monotreme
     ports:
       - 5231:5231

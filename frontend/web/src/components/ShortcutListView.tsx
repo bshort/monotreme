@@ -100,26 +100,15 @@ const ShortcutListView = (props: Props) => {
 
       {/* Second line: full URL and metrics */}
       <div className="w-full mt-2 flex flex-row justify-between items-center">
-        <div className="flex flex-col justify-start items-start flex-1 min-w-0 mr-4 space-y-1">
+        <div className="flex flex-col justify-start items-start flex-1 min-w-0 mr-4">
           <a
             className="truncate text-sm text-gray-500 dark:text-gray-400 hover:underline hover:text-gray-700 dark:hover:text-gray-300"
-            href={shortcut.link}
+            href={shortcutLink}
             target="_blank"
             onClick={(e) => e.stopPropagation()}
           >
-            {shortcut.link}
+            {shortcut.link.length > 40 ? shortcut.link.substring(0, 60) + '...' : shortcut.link}
           </a>
-          <div className="flex items-center space-x-2">
-            <span className="text-xs text-gray-500">Shortcut:</span>
-            <a
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline truncate"
-              href={shortcutLink}
-              target="_blank"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {shortcutLink}
-            </a>
-          </div>
         </div>
 
         {/* Metrics */}
