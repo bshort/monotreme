@@ -40,6 +40,20 @@ const ShortcutListView = (props: Props) => {
     toast.success("Shortcut link copied to clipboard.");
   };
 
+  const handleCopyShortcutUrl = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    copy(shortcutLink);
+    toast.success("Shortcut URL copied to clipboard.");
+  };
+
+  const handleCopyDestinationUrl = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    copy(shortcut.link);
+    toast.success("Destination URL copied to clipboard.");
+  };
+
   return (
     <div
       className={classNames(
@@ -92,7 +106,7 @@ const ShortcutListView = (props: Props) => {
       </div>
 
       {/* Second line: shortcut URL (clickable) */}
-      <div className="w-full mt-1 ml-8">
+      <div className="w-full mt-1 ml-8 flex flex-row items-center gap-2">
         <a
           className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
           href={shortcutLink}
@@ -101,11 +115,18 @@ const ShortcutListView = (props: Props) => {
         >
           {shortcutLink}
         </a>
+        <button
+          className="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          onClick={handleCopyShortcutUrl}
+          title="Copy shortcut URL"
+        >
+          <Icon.Clipboard className="w-3.5 h-auto" />
+        </button>
       </div>
 
       {/* Third line: destination URL and metrics */}
       <div className="w-full mt-1 flex flex-row justify-between items-center">
-        <div className="flex flex-col justify-start items-start flex-1 min-w-0 mr-4 ml-8">
+        <div className="flex flex-row justify-start items-center flex-1 min-w-0 mr-4 ml-8 gap-2">
           <a
             className="truncate text-sm text-gray-500 dark:text-gray-400 hover:underline hover:text-gray-700 dark:hover:text-gray-300"
             href={shortcut.link}
@@ -114,6 +135,13 @@ const ShortcutListView = (props: Props) => {
           >
             {shortcut.link}
           </a>
+          <button
+            className="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0"
+            onClick={handleCopyDestinationUrl}
+            title="Copy destination URL"
+          >
+            <Icon.Clipboard className="w-3.5 h-auto" />
+          </button>
         </div>
 
         {/* Metrics */}

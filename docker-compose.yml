@@ -4,13 +4,33 @@ services:
     container_name: monotreme
     ports:
       - 5231:5231
-
+    environment:
+      - REDIS_ENABLED=true
+      - REDIS_HOST=monotreme-redis
+      - REDIS_PORT=6379
     volumes:
       - ./data:/var/opt/monotreme
     restart: unless-stopped
     networks:
       - monotreme-network
+    depends_on:
+      - monotreme-redis
+
+  monotreme-redis:
+    image: redis:7-alpine
+    container_name: monotreme-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - monotreme-network
+    command: redis-server --appendonly yes
 
 networks:
   monotreme-network:
     driver: bridge
+
+volumes:
+  redis-data:

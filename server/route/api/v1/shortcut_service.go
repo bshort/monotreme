@@ -23,6 +23,22 @@ import (
 )
 
 func (s *APIV1Service) ListShortcuts(ctx context.Context, _ *v1pb.ListShortcutsRequest) (*v1pb.ListShortcutsResponse, error) {
+	user, err := getCurrentUser(ctx, s.Store)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
+	}
+
+	// Try to get from Redis cache first
+	if s.RedisService != nil && user != nil {
+		var cachedResponse v1pb.ListShortcutsResponse
+		cacheErr := s.RedisService.GetJSON(ctx, fmt.Sprintf("shortcuts:user:%d", user.ID), &cachedResponse)
+		if cacheErr == nil {
+			// Cache hit
+			return &cachedResponse, nil
+		}
+	}
+
+	// Cache miss or Redis unavailable - fetch from database
 	shortcutList, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list shortcuts, err: %v", err)
@@ -40,6 +56,12 @@ func (s *APIV1Service) ListShortcuts(ctx context.Context, _ *v1pb.ListShortcutsR
 	response := &v1pb.ListShortcutsResponse{
 		Shortcuts: shortcutMessageList,
 	}
+
+	// Save to Redis cache with 1 hour expiration
+	if s.RedisService != nil && user != nil {
+		_ = s.RedisService.SetJSON(ctx, fmt.Sprintf("shortcuts:user:%d", user.ID), response, time.Hour)
+	}
+
 	return response, nil
 }
 
@@ -142,6 +164,11 @@ func (s *APIV1Service) CreateShortcut(ctx context.Context, request *v1pb.CreateS
 		return nil, status.Errorf(codes.Internal, "failed to create activity, err: %v", err)
 	}
 
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
+	}
+
 	composedShortcut, err := s.convertShortcutFromStorepb(ctx, shortcut)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to convert shortcut, err: %v", err)
@@ -205,6 +232,11 @@ func (s *APIV1Service) UpdateShortcut(ctx context.Context, request *v1pb.UpdateS
 		return nil, status.Errorf(codes.Internal, "failed to update shortcut, err: %v", err)
 	}
 
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
+	}
+
 	composedShortcut, err := s.convertShortcutFromStorepb(ctx, shortcut)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to convert shortcut, err: %v", err)
@@ -236,6 +268,12 @@ func (s *APIV1Service) DeleteShortcut(ctx context.Context, request *v1pb.DeleteS
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to delete shortcut, err: %v", err)
 	}
+
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
+	}
+
 	return &emptypb.Empty{}, nil
 }
 

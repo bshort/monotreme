@@ -18,6 +18,7 @@ import (
 	storepb "github.com/bshort/monotreme/proto/gen/store"
 	"github.com/bshort/monotreme/server/profile"
 	"github.com/bshort/monotreme/server/service/license"
+	redisService "github.com/bshort/monotreme/server/service/redis"
 	"github.com/bshort/monotreme/store"
 )
 
@@ -36,12 +37,13 @@ type APIV1Service struct {
 	Profile        *profile.Profile
 	Store          *store.Store
 	LicenseService *license.LicenseService
+	RedisService   *redisService.RedisService
 
 	grpcServer     *grpc.Server
 	grpcServerPort int
 }
 
-func NewAPIV1Service(secret string, profile *profile.Profile, store *store.Store, licenseService *license.LicenseService, grpcServerPort int) *APIV1Service {
+func NewAPIV1Service(secret string, profile *profile.Profile, store *store.Store, licenseService *license.LicenseService, redisServ *redisService.RedisService, grpcServerPort int) *APIV1Service {
 	authProvider := NewGRPCAuthInterceptor(store, secret)
 	grpcServer := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
@@ -54,6 +56,7 @@ func NewAPIV1Service(secret string, profile *profile.Profile, store *store.Store
 		Profile:        profile,
 		Store:          store,
 		LicenseService: licenseService,
+		RedisService:   redisServ,
 		grpcServer:     grpcServer,
 		grpcServerPort: grpcServerPort,
 	}

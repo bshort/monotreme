@@ -13,7 +13,7 @@ export interface Filter {
 }
 
 export interface Order {
-  field: "name" | "createdTs" | "updatedTs" | "view";
+  field: "name" | "createdTs" | "updatedTs" | "view" | "userOrder";
   direction: "asc" | "desc";
 }
 
@@ -107,8 +107,12 @@ export const getOrderedShortcutList = (shortcutList: Shortcut[], order: Order) =
     field: order.field || "name",
     direction: order.direction || "asc",
   };
-  const orderedShortcutList = shortcutList.sort((a, b) => {
-    if (field === "name") {
+
+  const orderedShortcutList = [...shortcutList].sort((a, b) => {
+    if (field === "userOrder") {
+      // Sort by userOrder field from the shortcut
+      return direction === "asc" ? a.userOrder - b.userOrder : b.userOrder - a.userOrder;
+    } else if (field === "name") {
       return direction === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     } else if (field === "createdTs") {
       return direction === "asc"

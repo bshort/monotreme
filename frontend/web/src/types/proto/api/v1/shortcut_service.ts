@@ -27,6 +27,7 @@ export interface Shortcut {
   visibility: Visibility;
   viewCount: number;
   ogMetadata?: Shortcut_OpenGraphMetadata | undefined;
+  userOrder: number;
 }
 
 export interface Shortcut_OpenGraphMetadata {
@@ -93,6 +94,7 @@ function createBaseShortcut(): Shortcut {
     visibility: Visibility.VISIBILITY_UNSPECIFIED,
     viewCount: 0,
     ogMetadata: undefined,
+    userOrder: 0,
   };
 }
 
@@ -136,6 +138,9 @@ export const Shortcut: MessageFns<Shortcut> = {
     }
     if (message.ogMetadata !== undefined) {
       Shortcut_OpenGraphMetadata.encode(message.ogMetadata, writer.uint32(106).fork()).join();
+    }
+    if (message.userOrder !== 0) {
+      writer.uint32(112).int32(message.userOrder);
     }
     return writer;
   },
@@ -251,6 +256,14 @@ export const Shortcut: MessageFns<Shortcut> = {
           message.ogMetadata = Shortcut_OpenGraphMetadata.decode(reader, reader.uint32());
           continue;
         }
+        case 14: {
+          if (tag !== 112) {
+            break;
+          }
+
+          message.userOrder = reader.int32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -280,6 +293,7 @@ export const Shortcut: MessageFns<Shortcut> = {
     message.ogMetadata = (object.ogMetadata !== undefined && object.ogMetadata !== null)
       ? Shortcut_OpenGraphMetadata.fromPartial(object.ogMetadata)
       : undefined;
+    message.userOrder = object.userOrder ?? 0;
     return message;
   },
 };

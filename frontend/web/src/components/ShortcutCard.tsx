@@ -1,6 +1,8 @@
 import { Avatar, Tooltip } from "@mui/joy";
 import classNames from "classnames";
 import copy from "copy-to-clipboard";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -13,6 +15,8 @@ import CustomIcon from "./CustomIcon";
 import Icon from "./Icon";
 import ShortcutActionsDropdown from "./ShortcutActionsDropdown";
 import VisibilityIcon from "./VisibilityIcon";
+
+dayjs.extend(relativeTime);
 
 interface Props {
   shortcut: Shortcut;
@@ -153,6 +157,24 @@ const ShortcutCard = (props: Props) => {
             {t("shortcut.visits", { count: shortcut.viewCount })}
           </Link>
         </Tooltip>
+      </div>
+      <div className="w-full mt-2 flex flex-col gap-1 text-xs text-gray-400 dark:text-gray-500">
+        {shortcut.createdTime && (
+          <Tooltip title={dayjs(shortcut.createdTime).format("YYYY-MM-DD HH:mm:ss")} variant="solid" placement="top" arrow>
+            <div className="flex flex-row items-center">
+              <Icon.Calendar className="w-3.5 h-auto mr-1.5 opacity-70" />
+              <span>Created {dayjs(shortcut.createdTime).fromNow()}</span>
+            </div>
+          </Tooltip>
+        )}
+        {shortcut.updatedTime && (
+          <Tooltip title={dayjs(shortcut.updatedTime).format("YYYY-MM-DD HH:mm:ss")} variant="solid" placement="top" arrow>
+            <div className="flex flex-row items-center">
+              <Icon.Clock className="w-3.5 h-auto mr-1.5 opacity-70" />
+              <span>Updated {dayjs(shortcut.updatedTime).fromNow()}</span>
+            </div>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

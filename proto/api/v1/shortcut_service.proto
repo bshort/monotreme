@@ -77,6 +77,8 @@ message Shortcut {
 
   OpenGraphMetadata og_metadata = 13;
 
+  int32 user_order = 14;
+
   message OpenGraphMetadata {
     string title = 1;
 
