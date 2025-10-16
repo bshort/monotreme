@@ -48,21 +48,14 @@ const ShortcutListView = (props: Props) => {
       )}
       onClick={onClick}
     >
-      {/* First line: favicon, title, tags */}
+      {/* First line: favicon, title, tags, actions */}
       <div className="w-full flex flex-row justify-between items-start">
         <div className="flex flex-row justify-start items-center flex-1 min-w-0">
           <div className="w-5 h-5 flex justify-center items-center overflow-clip shrink-0 mr-3">
             <LinkFavicon url={shortcut.link} />
           </div>
           <div className="flex flex-row justify-start items-center min-w-0 mr-3">
-            {shortcut.title ? (
-              <>
-                <span className="dark:text-gray-300 font-medium mr-2 truncate">{shortcut.title}</span>
-                <span className="text-gray-500 text-sm">({shortcut.name})</span>
-              </>
-            ) : (
-              <span className="dark:text-gray-300 font-medium truncate">{shortcut.name}</span>
-            )}
+            <span className="dark:text-gray-300 font-medium truncate">{shortcut.title || shortcut.name}</span>
           </div>
           {/* Tags */}
           <div className="flex flex-row justify-start items-center gap-1 min-w-0">
@@ -98,16 +91,28 @@ const ShortcutListView = (props: Props) => {
         )}
       </div>
 
-      {/* Second line: full URL and metrics */}
-      <div className="w-full mt-2 flex flex-row justify-between items-center">
-        <div className="flex flex-col justify-start items-start flex-1 min-w-0 mr-4">
+      {/* Second line: shortcut URL (clickable) */}
+      <div className="w-full mt-1 ml-8">
+        <a
+          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          href={shortcutLink}
+          target="_blank"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {shortcutLink}
+        </a>
+      </div>
+
+      {/* Third line: destination URL and metrics */}
+      <div className="w-full mt-1 flex flex-row justify-between items-center">
+        <div className="flex flex-col justify-start items-start flex-1 min-w-0 mr-4 ml-8">
           <a
             className="truncate text-sm text-gray-500 dark:text-gray-400 hover:underline hover:text-gray-700 dark:hover:text-gray-300"
-            href={shortcutLink}
+            href={shortcut.link}
             target="_blank"
             onClick={(e) => e.stopPropagation()}
           >
-            {shortcut.link.length > 40 ? shortcut.link.substring(0, 60) + '...' : shortcut.link}
+            {shortcut.link}
           </a>
         </div>
 
