@@ -58,6 +58,7 @@ func (s *SwaggerService) serveSwaggerUI(c echo.Context) error {
                 url: '/api/v1/swagger.yaml',
                 dom_id: '#swagger-ui',
                 deepLinking: true,
+                persistAuthorization: true,
                 presets: [
                     SwaggerUIBundle.presets.apis,
                     SwaggerUIStandalonePreset
@@ -65,8 +66,26 @@ func (s *SwaggerService) serveSwaggerUI(c echo.Context) error {
                 plugins: [
                     SwaggerUIBundle.plugins.DownloadUrl
                 ],
-                layout: "StandaloneLayout"
+                layout: "StandaloneLayout",
+                requestInterceptor: (request) => {
+                    // Get the token from localStorage or try to read from cookie
+                    const token = localStorage.getItem('swagger_auth_token');
+                    if (token) {
+                        request.headers['Authorization'] = 'Bearer ' + token;
+                    }
+                    return request;
+                },
+                onComplete: () => {
+                    // Check if we have a stored token and pre-authorize
+                    const token = localStorage.getItem('swagger_auth_token');
+                    if (token) {
+                        ui.preauthorizeApiKey('Bearer', token);
+                    }
+                }
             });
+
+            // Store token when user authorizes
+            window.ui = ui;
         };
     </script>
 </body>

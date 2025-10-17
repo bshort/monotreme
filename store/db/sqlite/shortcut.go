@@ -14,9 +14,9 @@ import (
 )
 
 func (d *DB) CreateShortcut(ctx context.Context, create *storepb.Shortcut) (*storepb.Shortcut, error) {
-	set := []string{"creator_id", "name", "link", "title", "description", "visibility", "tag", "uuid", "custom_icon"}
-	args := []any{create.CreatorId, create.Name, create.Link, create.Title, create.Description, create.Visibility.String(), strings.Join(create.Tags, " "), create.Uuid, create.CustomIcon}
-	placeholder := []string{"?", "?", "?", "?", "?", "?", "?", "?", "?"}
+	set := []string{"creator_id", "name", "link", "title", "description", "visibility", "tag", "uuid", "custom_icon", "user_order"}
+	args := []any{create.CreatorId, create.Name, create.Link, create.Title, create.Description, create.Visibility.String(), strings.Join(create.Tags, " "), create.Uuid, create.CustomIcon, create.UserOrder}
+	placeholder := []string{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"}
 	if create.OgMetadata != nil {
 		set = append(set, "og_metadata")
 		openGraphMetadataBytes, err := protojson.Marshal(create.OgMetadata)
@@ -75,6 +75,9 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 	if update.CustomIcon != nil {
 		set, args = append(set, "custom_icon = ?"), append(args, *update.CustomIcon)
 	}
+	if update.UserOrder != nil {
+		set, args = append(set, "user_order = ?"), append(args, *update.UserOrder)
+	}
 	if len(set) == 0 {
 		return nil, errors.New("no update specified")
 	}
@@ -86,7 +89,7 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 			` + strings.Join(set, ", ") + `
 		WHERE
 			id = ?
-		RETURNING id, creator_id, created_ts, updated_ts, name, link, title, description, visibility, tag, og_metadata, uuid, custom_icon
+		RETURNING id, creator_id, created_ts, updated_ts, name, link, title, description, visibility, tag, og_metadata, uuid, custom_icon, user_order
 	`
 	shortcut := &storepb.Shortcut{}
 	var visibility, tags, openGraphMetadataString string
@@ -104,6 +107,7 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 		&openGraphMetadataString,
 		&shortcut.Uuid,
 		&shortcut.CustomIcon,
+		&shortcut.UserOrder,
 	); err != nil {
 		return nil, err
 	}
@@ -154,7 +158,8 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 			tag,
 			og_metadata,
 			uuid,
-			custom_icon
+			custom_icon,
+			user_order
 		FROM shortcut
 		WHERE `+strings.Join(where, " AND ")+`
 		ORDER BY created_ts DESC`,
@@ -183,6 +188,7 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 			&openGraphMetadataString,
 			&shortcut.Uuid,
 			&shortcut.CustomIcon,
+			&shortcut.UserOrder,
 		); err != nil {
 			return nil, err
 		}

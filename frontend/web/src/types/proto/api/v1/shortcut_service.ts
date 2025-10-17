@@ -64,6 +64,9 @@ export interface DeleteShortcutRequest {
   id: number;
 }
 
+export interface DeleteAllShortcutsRequest {
+}
+
 export interface GetShortcutAnalyticsRequest {
   id: number;
 }
@@ -694,6 +697,40 @@ export const DeleteShortcutRequest: MessageFns<DeleteShortcutRequest> = {
   },
 };
 
+function createBaseDeleteAllShortcutsRequest(): DeleteAllShortcutsRequest {
+  return {};
+}
+
+export const DeleteAllShortcutsRequest: MessageFns<DeleteAllShortcutsRequest> = {
+  encode(_: DeleteAllShortcutsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteAllShortcutsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteAllShortcutsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<DeleteAllShortcutsRequest>): DeleteAllShortcutsRequest {
+    return DeleteAllShortcutsRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<DeleteAllShortcutsRequest>): DeleteAllShortcutsRequest {
+    const message = createBaseDeleteAllShortcutsRequest();
+    return message;
+  },
+};
+
 function createBaseGetShortcutAnalyticsRequest(): GetShortcutAnalyticsRequest {
   return { id: 0 };
 }
@@ -1110,6 +1147,21 @@ export const ShortcutServiceDefinition = {
               100,
               125,
             ]),
+          ],
+        },
+      },
+    },
+    /** DeleteAllShortcuts deletes all shortcuts for the current user. */
+    deleteAllShortcuts: {
+      name: "DeleteAllShortcuts",
+      requestType: DeleteAllShortcutsRequest,
+      requestStream: false,
+      responseType: Empty,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([19, 42, 17, 47, 97, 112, 105, 47, 118, 49, 47, 115, 104, 111, 114, 116, 99, 117, 116, 115]),
           ],
         },
       },

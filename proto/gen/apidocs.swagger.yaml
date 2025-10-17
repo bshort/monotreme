@@ -17,6 +17,14 @@ consumes:
   - application/json
 produces:
   - application/json
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: 'Enter your JWT token in the format: Bearer {token}'
+security:
+  - Bearer: []
 paths:
   /api/v1/activities:
     get:
@@ -693,6 +701,21 @@ paths:
             $ref: '#/definitions/rpcStatus'
       tags:
         - ShortcutService
+    delete:
+      summary: DeleteAllShortcuts deletes all shortcuts for the current user.
+      operationId: ShortcutService_DeleteAllShortcuts
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - ShortcutService
     post:
       summary: CreateShortcut creates a shortcut.
       operationId: ShortcutService_CreateShortcut
@@ -831,6 +854,9 @@ paths:
                 format: int32
               ogMetadata:
                 $ref: '#/definitions/v1ShortcutOpenGraphMetadata'
+              userOrder:
+                type: integer
+                format: int32
         - name: updateMask
           in: query
           required: false
@@ -1096,6 +1122,8 @@ paths:
                 type: string
               password:
                 type: string
+              profilePicture:
+                type: string
               locale:
                 type: string
                 title: Personal preferences
@@ -1109,6 +1137,8 @@ paths:
                 type: boolean
               autoGenerateName:
                 type: boolean
+              editModePreference:
+                type: string
       tags:
         - UserService
   /api/v1/workspace/profile:
@@ -1433,6 +1463,9 @@ definitions:
         format: int32
       ogMetadata:
         $ref: '#/definitions/v1ShortcutOpenGraphMetadata'
+      userOrder:
+        type: integer
+        format: int32
   apiv1StatsMeasurement:
     type: object
     properties:
@@ -2043,6 +2076,8 @@ definitions:
         type: string
       password:
         type: string
+      profilePicture:
+        type: string
       locale:
         type: string
         title: Personal preferences
@@ -2056,6 +2091,8 @@ definitions:
         type: boolean
       autoGenerateName:
         type: boolean
+      editModePreference:
+        type: string
   v1UserAccessToken:
     type: object
     properties:

@@ -17,12 +17,17 @@ const SortableShortcutItem: React.FC<Props> = ({ shortcut, ShortcutItemView, onC
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    cursor: isDragging ? "grabbing" : "grab",
+  };
+
+  // Combine attributes and listeners for the drag handle
+  const dragHandleProps = {
+    ...attributes,
+    ...listeners,
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <ShortcutItemView shortcut={shortcut} showActions={true} onClick={onClick} />
+    <div ref={setNodeRef} style={style}>
+      <ShortcutItemView shortcut={shortcut} showActions={true} onClick={onClick} dragHandleProps={dragHandleProps} />
     </div>
   );
 };

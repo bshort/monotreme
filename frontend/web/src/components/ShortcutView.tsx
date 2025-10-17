@@ -16,10 +16,11 @@ interface Props {
   alwaysShowLink?: boolean;
   onClick?: () => void;
   highlight?: boolean;
+  dragHandleProps?: any;
 }
 
 const ShortcutView = (props: Props) => {
-  const { shortcut, className, showActions, alwaysShowLink, onClick, highlight } = props;
+  const { shortcut, className, showActions, alwaysShowLink, onClick, highlight, dragHandleProps } = props;
   const shortcutLink = absolutifyLink(getShortcutUrl(shortcut.name));
 
   const handleCopyButtonClick = (e: React.MouseEvent) => {
@@ -34,12 +35,22 @@ const ShortcutView = (props: Props) => {
       className={classNames(
         "group w-full px-3 py-2 flex flex-col justify-start items-start border rounded-lg hover:bg-gray-100 dark:border-zinc-800 dark:hover:bg-zinc-800",
         highlight && "ring-2 ring-blue-500 dark:ring-blue-400",
+        !dragHandleProps && "cursor-pointer",
         className,
       )}
-      onClick={onClick}
+      onClick={dragHandleProps ? undefined : onClick}
     >
       {/* First row: icon, title, actions */}
       <div className="w-full flex flex-row justify-start items-center">
+        {dragHandleProps && (
+          <div
+            {...dragHandleProps}
+            className="mr-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            title={`Drag to reorder (User Order: ${shortcut.userOrder})`}
+          >
+            <Icon.GripVertical className="w-5 h-5" />
+          </div>
+        )}
         <div className={classNames("w-5 h-5 flex justify-center items-center overflow-clip shrink-0")}>
           <CustomIcon customIcon={shortcut.customIcon} url={shortcut.link} />
         </div>

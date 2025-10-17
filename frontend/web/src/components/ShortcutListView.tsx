@@ -19,10 +19,11 @@ interface Props {
   className?: string;
   showActions?: boolean;
   onClick?: () => void;
+  dragHandleProps?: any;
 }
 
 const ShortcutListView = (props: Props) => {
-  const { shortcut, className, showActions, onClick } = props;
+  const { shortcut, className, showActions, onClick, dragHandleProps } = props;
   const { t } = useTranslation();
   const userStore = useUserStore();
   const viewStore = useViewStore();
@@ -57,14 +58,24 @@ const ShortcutListView = (props: Props) => {
   return (
     <div
       className={classNames(
-        "group w-full px-4 py-3 flex flex-col justify-start items-start border rounded-lg hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50 cursor-pointer",
+        "group w-full px-4 py-3 flex flex-col justify-start items-start border rounded-lg hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50",
+        !dragHandleProps && "cursor-pointer",
         className,
       )}
-      onClick={onClick}
+      onClick={dragHandleProps ? undefined : onClick}
     >
       {/* First line: favicon, title, tags, actions */}
       <div className="w-full flex flex-row justify-between items-start">
         <div className="flex flex-row justify-start items-center flex-1 min-w-0">
+          {dragHandleProps && (
+            <div
+              {...dragHandleProps}
+              className="mr-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              title={`Drag to reorder (User Order: ${shortcut.userOrder})`}
+            >
+              <Icon.GripVertical className="w-5 h-5" />
+            </div>
+          )}
           <div className="w-5 h-5 flex justify-center items-center overflow-clip shrink-0 mr-3">
             <LinkFavicon url={shortcut.link} />
           </div>

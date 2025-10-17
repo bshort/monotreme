@@ -62,6 +62,7 @@ export interface User {
   email: string;
   nickname: string;
   password: string;
+  profilePicture: string;
   /** Personal preferences */
   locale: string;
   colorTheme: string;
@@ -69,6 +70,7 @@ export interface User {
   autoGenerateTitle: boolean;
   autoGenerateIcon: boolean;
   autoGenerateName: boolean;
+  editModePreference: string;
 }
 
 export interface ListUsersRequest {
@@ -149,12 +151,14 @@ function createBaseUser(): User {
     email: "",
     nickname: "",
     password: "",
+    profilePicture: "",
     locale: "",
     colorTheme: "",
     defaultVisibility: "",
     autoGenerateTitle: false,
     autoGenerateIcon: false,
     autoGenerateName: false,
+    editModePreference: "",
   };
 }
 
@@ -187,6 +191,9 @@ export const User: MessageFns<User> = {
     if (message.password !== "") {
       writer.uint32(74).string(message.password);
     }
+    if (message.profilePicture !== "") {
+      writer.uint32(138).string(message.profilePicture);
+    }
     if (message.locale !== "") {
       writer.uint32(82).string(message.locale);
     }
@@ -204,6 +211,9 @@ export const User: MessageFns<User> = {
     }
     if (message.autoGenerateName !== false) {
       writer.uint32(120).bool(message.autoGenerateName);
+    }
+    if (message.editModePreference !== "") {
+      writer.uint32(130).string(message.editModePreference);
     }
     return writer;
   },
@@ -287,6 +297,14 @@ export const User: MessageFns<User> = {
           message.password = reader.string();
           continue;
         }
+        case 17: {
+          if (tag !== 138) {
+            break;
+          }
+
+          message.profilePicture = reader.string();
+          continue;
+        }
         case 10: {
           if (tag !== 82) {
             break;
@@ -335,6 +353,14 @@ export const User: MessageFns<User> = {
           message.autoGenerateName = reader.bool();
           continue;
         }
+        case 16: {
+          if (tag !== 130) {
+            break;
+          }
+
+          message.editModePreference = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -358,12 +384,14 @@ export const User: MessageFns<User> = {
     message.email = object.email ?? "";
     message.nickname = object.nickname ?? "";
     message.password = object.password ?? "";
+    message.profilePicture = object.profilePicture ?? "";
     message.locale = object.locale ?? "";
     message.colorTheme = object.colorTheme ?? "";
     message.defaultVisibility = object.defaultVisibility ?? "";
     message.autoGenerateTitle = object.autoGenerateTitle ?? false;
     message.autoGenerateIcon = object.autoGenerateIcon ?? false;
     message.autoGenerateName = object.autoGenerateName ?? false;
+    message.editModePreference = object.editModePreference ?? "";
     return message;
   },
 };

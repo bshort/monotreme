@@ -481,6 +481,7 @@ ID of the created shortcut, if any |
 | visibility | [Visibility](#monotreme-store-Visibility) |  |  |
 | og_metadata | [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata) |  |  |
 | custom_icon | [string](#string) |  |  |
+| user_order | [int32](#int32) |  |  |
 
 
 

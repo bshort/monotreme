@@ -84,7 +84,8 @@ CREATE TABLE collection (
   description TEXT NOT NULL DEFAULT '',
   shortcut_ids INTEGER ARRAY NOT NULL,
   visibility TEXT NOT NULL CHECK (visibility IN ('PRIVATE', 'WORKSPACE', 'PUBLIC')) DEFAULT 'PRIVATE',
-  custom_icon TEXT NOT NULL DEFAULT ''
+  custom_icon TEXT NOT NULL DEFAULT '',
+  uuid TEXT
 );
 
 CREATE INDEX idx_collection_name ON collection(name);
