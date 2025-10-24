@@ -57,7 +57,8 @@ CREATE TABLE shortcut (
   tag TEXT NOT NULL DEFAULT '',
   og_metadata TEXT NOT NULL DEFAULT '{}',
   uuid TEXT NOT NULL DEFAULT '',
-  custom_icon TEXT NOT NULL DEFAULT ''
+  custom_icon TEXT NOT NULL DEFAULT '',
+  user_order INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX idx_shortcut_name ON shortcut(name);
@@ -84,7 +85,8 @@ CREATE TABLE collection (
   description TEXT NOT NULL DEFAULT '',
   shortcut_ids INTEGER[] NOT NULL,
   visibility TEXT NOT NULL CHECK (visibility IN ('PRIVATE', 'WORKSPACE', 'PUBLIC')) DEFAULT 'PRIVATE',
-  custom_icon TEXT NOT NULL DEFAULT ''
+  custom_icon TEXT NOT NULL DEFAULT '',
+  uuid TEXT
 );
 
 CREATE INDEX idx_collection_name ON collection(name);

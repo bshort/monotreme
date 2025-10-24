@@ -11,10 +11,11 @@ import ShortcutsNavigator from "@/components/ShortcutsNavigator";
 import StandaloneViewControls from "@/components/StandaloneViewControls";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useUserStore, useViewStore } from "@/stores";
-import { getFilteredShortcutList, getOrderedShortcutList } from "@/stores/view";
+import { getFilteredShortcutList, getOrderedShortcutList, getTagsSortedByMostRecent } from "@/stores/view";
 
 interface State {
   showCreateShortcutDrawer: boolean;
+  tagsExpanded: boolean;
 }
 
 const ShortcutDashboard: React.FC = () => {
@@ -28,6 +29,7 @@ const ShortcutDashboard: React.FC = () => {
   const shortcutList = shortcutStore.getShortcutList();
   const [state, setState] = useState<State>({
     showCreateShortcutDrawer: false,
+    tagsExpanded: false,
   });
 
   // Get tags from URL querystring
@@ -42,6 +44,7 @@ const ShortcutDashboard: React.FC = () => {
 
   const filteredShortcutList = getFilteredShortcutList(shortcutList, filter, currentUser);
   const orderedShortcutList = getOrderedShortcutList(filteredShortcutList, viewStore.order);
+  const recentTags = getTagsSortedByMostRecent(shortcutList);
 
   useEffect(() => {
     setLastVisited("/shortcuts");
@@ -64,10 +67,51 @@ const ShortcutDashboard: React.FC = () => {
     });
   };
 
+  const toggleTags = () => {
+    setState({ ...state, tagsExpanded: !state.tagsExpanded });
+  };
+
+  const handleTagClick = (tag: string) => {
+    window.location.href = `/shortcuts?tags=${encodeURIComponent(tag)}`;
+  };
+
   return (
     <>
       <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 pt-4 pb-6 flex flex-col justify-start items-start">
         <ShortcutsNavigator />
+
+        {/* Collapsible Tags Section */}
+        {recentTags.length > 0 && (
+          <div className="w-full mb-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+            <button
+              onClick={toggleTags}
+              className="w-full px-4 py-2 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              <div className="flex items-center gap-2 flex-wrap overflow-hidden">
+                <Icon.Tag className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                <span className="text-sm text-gray-600 dark:text-gray-400 flex-shrink-0">Recent Tags:</span>
+                <div className={`flex items-center gap-2 flex-wrap ${!state.tagsExpanded ? 'line-clamp-1 max-h-6 overflow-hidden' : ''}`}>
+                  {(state.tagsExpanded ? recentTags : recentTags.slice(0, 10)).map((tag) => (
+                    <span
+                      key={tag}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTagClick(tag);
+                      }}
+                      className="text-xs px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer transition-colors"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <Icon.ChevronDown
+                className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform ${state.tagsExpanded ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
+        )}
+
         <div className="w-full flex flex-row justify-between items-center mb-4">
           <div className="flex flex-row justify-start items-center">
             <Input

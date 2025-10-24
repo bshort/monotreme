@@ -13,7 +13,7 @@ export interface Filter {
 }
 
 export interface Order {
-  field: "name" | "createdTs" | "updatedTs" | "view";
+  field: "name" | "createdTs" | "updatedTs" | "view" | "userOrder";
   direction: "asc" | "desc";
 }
 
@@ -107,8 +107,12 @@ export const getOrderedShortcutList = (shortcutList: Shortcut[], order: Order) =
     field: order.field || "name",
     direction: order.direction || "asc",
   };
-  const orderedShortcutList = shortcutList.sort((a, b) => {
-    if (field === "name") {
+
+  const orderedShortcutList = [...shortcutList].sort((a, b) => {
+    if (field === "userOrder") {
+      // Sort by userOrder field from the shortcut
+      return direction === "asc" ? a.userOrder - b.userOrder : b.userOrder - a.userOrder;
+    } else if (field === "name") {
       return direction === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     } else if (field === "createdTs") {
       return direction === "asc"
@@ -142,6 +146,30 @@ export const getAllUniqueTags = (shortcutList: Shortcut[]): string[] => {
     });
   });
   return Array.from(tagSet).sort();
+};
+
+export const getTagsSortedByMostRecent = (shortcutList: Shortcut[]): string[] => {
+  // Map each tag to its most recent timestamp
+  const tagTimestampMap = new Map<string, number>();
+
+  shortcutList.forEach((shortcut) => {
+    const timestamp = (shortcut.updatedTime || shortcut.createdTime)?.getTime() || 0;
+    shortcut.tags.forEach((tag) => {
+      const cleanTag = tag.trim().replace(/,$/, ''); // Remove trailing comma
+      if (cleanTag) {
+        const currentTimestamp = tagTimestampMap.get(cleanTag) || 0;
+        // Keep the most recent timestamp for this tag
+        if (timestamp > currentTimestamp) {
+          tagTimestampMap.set(cleanTag, timestamp);
+        }
+      }
+    });
+  });
+
+  // Sort tags by timestamp in reverse chronological order (most recent first)
+  return Array.from(tagTimestampMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([tag]) => tag);
 };
 
 export default useViewStore;

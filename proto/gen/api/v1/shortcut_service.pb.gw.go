@@ -220,6 +220,27 @@ func local_request_ShortcutService_DeleteShortcut_0(ctx context.Context, marshal
 	return msg, metadata, err
 }
 
+func request_ShortcutService_DeleteAllShortcuts_0(ctx context.Context, marshaler runtime.Marshaler, client ShortcutServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq DeleteAllShortcutsRequest
+		metadata runtime.ServerMetadata
+	)
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	msg, err := client.DeleteAllShortcuts(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_ShortcutService_DeleteAllShortcuts_0(ctx context.Context, marshaler runtime.Marshaler, server ShortcutServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq DeleteAllShortcutsRequest
+		metadata runtime.ServerMetadata
+	)
+	msg, err := server.DeleteAllShortcuts(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 func request_ShortcutService_GetShortcutAnalytics_0(ctx context.Context, marshaler runtime.Marshaler, client ShortcutServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetShortcutAnalyticsRequest
@@ -364,6 +385,26 @@ func RegisterShortcutServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 		forward_ShortcutService_DeleteShortcut_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodDelete, pattern_ShortcutService_DeleteAllShortcuts_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/monotreme.api.v1.ShortcutService/DeleteAllShortcuts", runtime.WithHTTPPathPattern("/api/v1/shortcuts"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_ShortcutService_DeleteAllShortcuts_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_ShortcutService_DeleteAllShortcuts_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodGet, pattern_ShortcutService_GetShortcutAnalytics_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -510,6 +551,23 @@ func RegisterShortcutServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		}
 		forward_ShortcutService_DeleteShortcut_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodDelete, pattern_ShortcutService_DeleteAllShortcuts_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/monotreme.api.v1.ShortcutService/DeleteAllShortcuts", runtime.WithHTTPPathPattern("/api/v1/shortcuts"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_ShortcutService_DeleteAllShortcuts_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_ShortcutService_DeleteAllShortcuts_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodGet, pattern_ShortcutService_GetShortcutAnalytics_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -536,6 +594,7 @@ var (
 	pattern_ShortcutService_CreateShortcut_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "shortcuts"}, ""))
 	pattern_ShortcutService_UpdateShortcut_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "shortcuts", "shortcut.id"}, ""))
 	pattern_ShortcutService_DeleteShortcut_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "shortcuts", "id"}, ""))
+	pattern_ShortcutService_DeleteAllShortcuts_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "shortcuts"}, ""))
 	pattern_ShortcutService_GetShortcutAnalytics_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "shortcuts", "id", "analytics"}, ""))
 )
 
@@ -545,5 +604,6 @@ var (
 	forward_ShortcutService_CreateShortcut_0       = runtime.ForwardResponseMessage
 	forward_ShortcutService_UpdateShortcut_0       = runtime.ForwardResponseMessage
 	forward_ShortcutService_DeleteShortcut_0       = runtime.ForwardResponseMessage
+	forward_ShortcutService_DeleteAllShortcuts_0   = runtime.ForwardResponseMessage
 	forward_ShortcutService_GetShortcutAnalytics_0 = runtime.ForwardResponseMessage
 )

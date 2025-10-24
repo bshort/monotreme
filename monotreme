@@ -1,0 +1,664 @@
+#!/bin/bash
+
+# Monotreme Dashboard - Interactive TUI Management Tool
+# Provides a persistent dashboard-style interface with real-time updates
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m' # No Color
+BOLD='\033[1m'
+DIM='\033[2m'
+
+# Configuration
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DB_PATH="$PROJECT_DIR/data/monotreme_prod.db"
+COMPOSE_FILE="$PROJECT_DIR/docker-compose.yml"
+POLL_INTERVAL=2  # seconds between status updates
+
+# Global state
+LAST_ACTION=""
+LAST_ACTION_TIME=""
+ACTION_OUTPUT=""
+DASHBOARD_DRAWN=false
+
+# Terminal control sequences
+HIDE_CURSOR='\033[?25l'
+SHOW_CURSOR='\033[?25h'
+CLEAR_SCREEN='\033[2J\033[H'
+SAVE_CURSOR='\033[s'
+RESTORE_CURSOR='\033[u'
+
+# Cursor positioning - saves the row numbers for each dynamic section
+DOCKER_STATUS_ROW=7
+MONOTREME_STATUS_ROW=10
+MONOTREME_UPTIME_ROW=11
+MONOTREME_RESOURCES_ROW=12
+REDIS_STATUS_ROW=15
+REDIS_UPTIME_ROW=16
+REDIS_RESOURCES_ROW=17
+SHORTCUTS_ROW=23
+USERS_ROW=24
+COLLECTIONS_ROW=25
+DB_SIZE_ROW=26
+APP_ACCESS_START_ROW=31
+LAST_ACTION_START_ROW=39
+CONTROLS_START_ROW=47
+TIMESTAMP_ROW=4
+
+# Function to move cursor to specific position
+move_cursor() {
+    local row=$1
+    local col=$2
+    echo -en "\033[${row};${col}H"
+}
+
+# Function to clear line from cursor position
+clear_line_from_cursor() {
+    echo -en "\033[K"
+}
+
+# Function to clear entire line
+clear_entire_line() {
+    echo -en "\033[2K"
+}
+
+# Trap to restore cursor on exit
+trap "echo -e \"${SHOW_CURSOR}\"; clear; exit" INT TERM EXIT
+
+# Function to check if Docker is running
+check_docker() {
+    docker info > /dev/null 2>&1
+    return $?
+}
+
+# Function to check container status
+check_container_status() {
+    local container=$1
+    if docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^${container}$"; then
+        echo "running"
+    elif docker ps -a --format '{{.Names}}' 2>/dev/null | grep -q "^${container}$"; then
+        echo "stopped"
+    else
+        echo "not_created"
+    fi
+}
+
+# Function to get container uptime
+get_container_uptime() {
+    local container=$1
+    local status=$(docker ps --filter "name=^${container}$" --format '{{.Status}}' 2>/dev/null)
+    if [ -n "$status" ]; then
+        echo "$status"
+    else
+        echo "Not running"
+    fi
+}
+
+# Function to get database statistics
+get_db_stats() {
+    if [ ! -f "$DB_PATH" ]; then
+        echo "0|0|0|0"
+        return 0
+    fi
+
+    local shortcuts_count=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM shortcut WHERE row_status='NORMAL';" 2>/dev/null || echo "0")
+    local users_count=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM user WHERE row_status='NORMAL';" 2>/dev/null || echo "0")
+    local collections_count=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM collection;" 2>/dev/null || echo "0")
+    local db_size=$(du -h "$DB_PATH" 2>/dev/null | cut -f1 || echo "0")
+
+    echo "$shortcuts_count|$users_count|$collections_count|$db_size"
+}
+
+# Function to get system resource usage
+get_resource_usage() {
+    local container=$1
+    local stats=$(docker stats --no-stream --format "{{.CPUPerc}}|{{.MemUsage}}" "$container" 2>/dev/null || echo "0%|0B / 0B")
+    echo "$stats"
+}
+
+# Function to draw status indicator
+draw_status_indicator() {
+    local status=$1
+    case $status in
+        running)
+            echo -e "${GREEN}●${NC} RUNNING   "
+            ;;
+        stopped)
+            echo -e "${YELLOW}◐${NC} STOPPED   "
+            ;;
+        not_created)
+            echo -e "${RED}○${NC} NOT CREATED"
+            ;;
+        *)
+            echo -e "${DIM}?${NC} UNKNOWN   "
+            ;;
+    esac
+}
+
+# Function to draw the initial dashboard structure (only once)
+draw_dashboard_structure() {
+    echo -e "${CLEAR_SCREEN}${HIDE_CURSOR}"
+
+    # Header
+    echo -e "${BOLD}${CYAN}╔════════════════════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${BOLD}${CYAN}║${NC}                    ${BOLD}MONOTREME DASHBOARD${NC} - Live Monitoring                   ${BOLD}${CYAN}║${NC}"
+    echo -e "${BOLD}${CYAN}╠════════════════════════════════════════════════════════════════════════════╣${NC}"
+    echo -e "${BOLD}${CYAN}║${NC}  Updated: [TIMESTAMP]                │  Refresh: ${POLL_INTERVAL}s  │  Press 'q' to exit     ${BOLD}${CYAN}║${NC}"
+    echo -e "${BOLD}${CYAN}╚════════════════════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+
+    # System Status Section
+    echo -e "${BOLD}${BLUE}┌─── SYSTEM STATUS ──────────────────────────────────────────────────────────┐${NC}"
+    echo -e "  ${BOLD}Docker:${NC}           [DOCKER_STATUS]"
+    echo -e "  ${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "  ${BOLD}Monotreme:${NC}        [MONOTREME_STATUS]"
+    echo -e "                      [MONOTREME_UPTIME]"
+    echo -e "                      [MONOTREME_RESOURCES]"
+    echo ""
+    echo ""
+    echo -e "  ${BOLD}Redis:${NC}            [REDIS_STATUS]"
+    echo -e "                      [REDIS_UPTIME]"
+    echo -e "                      [REDIS_RESOURCES]"
+    echo ""
+    echo -e "${BOLD}${BLUE}└────────────────────────────────────────────────────────────────────────────┘${NC}"
+    echo ""
+
+    # Database Statistics Section
+    echo -e "${BOLD}${MAGENTA}┌─── DATABASE STATISTICS ────────────────────────────────────────────────────┐${NC}"
+    echo -e "  📎 ${BOLD}Shortcuts:${NC}      [SHORTCUTS_COUNT]"
+    echo -e "  👥 ${BOLD}Users:${NC}          [USERS_COUNT]"
+    echo -e "  📚 ${BOLD}Collections:${NC}    [COLLECTIONS_COUNT]"
+    echo -e "  💾 ${BOLD}Database Size:${NC}  [DB_SIZE]"
+    echo -e "${BOLD}${MAGENTA}└────────────────────────────────────────────────────────────────────────────┘${NC}"
+    echo ""
+
+    # Application Access Section (will be hidden/shown dynamically)
+    echo -e "${BOLD}${GREEN}┌─── APPLICATION ACCESS ─────────────────────────────────────────────────────┐${NC}"
+    echo -e "  🌐 ${BOLD}Main URL:${NC}       http://localhost:5231"
+    echo -e "  🏥 ${BOLD}Health Check:${NC}   http://localhost:5231/healthz"
+    echo -e "  📖 ${BOLD}API Docs:${NC}       http://localhost:5231/swagger"
+    echo -e "${BOLD}${GREEN}└────────────────────────────────────────────────────────────────────────────┘${NC}"
+    echo ""
+
+    # Last Action Section
+    echo -e "${BOLD}${YELLOW}┌─── LAST ACTION ────────────────────────────────────────────────────────────┐${NC}"
+    echo -e "  [LAST_ACTION_LINE1]"
+    echo -e "  [LAST_ACTION_LINE2]"
+    echo -e "  [LAST_ACTION_LINE3]"
+    echo -e "${BOLD}${YELLOW}└────────────────────────────────────────────────────────────────────────────┘${NC}"
+    echo ""
+
+    # Control Panel
+    echo -e "${BOLD}${CYAN}┌─── CONTROLS ───────────────────────────────────────────────────────────────┐${NC}"
+    echo -e "  [CONTROL_LINE1]"
+    echo -e "  [CONTROL_LINE2]"
+    echo -e "  [CONTROL_LINE3]"
+    echo -e "  [CONTROL_LINE4]"
+    echo ""
+    echo -e "  ${CYAN}[l]${NC} View Logs (Monotreme)    ${CYAN}[k]${NC} View Logs (Redis)"
+    echo -e "  ${MAGENTA}[v]${NC} Vacuum Database          ${YELLOW}[c]${NC} Clear Last Action"
+    echo -e "  ${RED}[q]${NC} Quit Dashboard"
+    echo -e "${BOLD}${CYAN}└────────────────────────────────────────────────────────────────────────────┘${NC}"
+    echo ""
+    echo -en "${BOLD}Enter command: ${NC}"
+
+    DASHBOARD_DRAWN=true
+}
+
+# Function to update timestamp
+update_timestamp() {
+    move_cursor $TIMESTAMP_ROW 13
+    clear_line_from_cursor
+    echo -en "$(date '+%Y-%m-%d %H:%M:%S')"
+}
+
+# Function to update Docker status
+update_docker_status() {
+    move_cursor $DOCKER_STATUS_ROW 25
+    clear_line_from_cursor
+    if check_docker; then
+        echo -en "${GREEN}Running${NC}"
+    else
+        echo -en "${RED}Not Available${NC}"
+    fi
+}
+
+# Function to update Monotreme status
+update_monotreme_status() {
+    local status=$1
+    local uptime=$2
+    local resources=$3
+
+    # Status line
+    move_cursor $MONOTREME_STATUS_ROW 25
+    clear_line_from_cursor
+    draw_status_indicator "$status"
+
+    # Uptime line
+    move_cursor $MONOTREME_UPTIME_ROW 22
+    clear_line_from_cursor
+    if [ "$status" = "running" ]; then
+        echo -en "${DIM}Uptime: $uptime${NC}"
+    fi
+
+    # Resources line
+    move_cursor $MONOTREME_RESOURCES_ROW 22
+    clear_line_from_cursor
+    if [ "$status" = "running" ]; then
+        IFS='|' read -r cpu mem <<< "$resources"
+        echo -en "${DIM}CPU: $cpu  │  Memory: $mem${NC}"
+    fi
+}
+
+# Function to update Redis status
+update_redis_status() {
+    local status=$1
+    local uptime=$2
+    local resources=$3
+
+    # Status line
+    move_cursor $REDIS_STATUS_ROW 25
+    clear_line_from_cursor
+    draw_status_indicator "$status"
+
+    # Uptime line
+    move_cursor $REDIS_UPTIME_ROW 22
+    clear_line_from_cursor
+    if [ "$status" = "running" ]; then
+        echo -en "${DIM}Uptime: $uptime${NC}"
+    fi
+
+    # Resources line
+    move_cursor $REDIS_RESOURCES_ROW 22
+    clear_line_from_cursor
+    if [ "$status" = "running" ]; then
+        IFS='|' read -r cpu mem <<< "$resources"
+        echo -en "${DIM}CPU: $cpu  │  Memory: $mem${NC}"
+    fi
+}
+
+# Function to update database statistics
+update_db_stats() {
+    local stats=$1
+    IFS='|' read -r shortcuts users collections db_size <<< "$stats"
+
+    move_cursor $SHORTCUTS_ROW 25
+    clear_line_from_cursor
+    echo -en "$shortcuts"
+
+    move_cursor $USERS_ROW 25
+    clear_line_from_cursor
+    echo -en "$users"
+
+    move_cursor $COLLECTIONS_ROW 25
+    clear_line_from_cursor
+    echo -en "$collections"
+
+    move_cursor $DB_SIZE_ROW 25
+    clear_line_from_cursor
+    echo -en "$db_size"
+}
+
+# Function to show/hide Application Access section
+update_app_access_section() {
+    local monotreme_status=$1
+
+    if [ "$monotreme_status" = "running" ]; then
+        # Show the section (it's already drawn)
+        move_cursor $APP_ACCESS_START_ROW 1
+        echo -en "${BOLD}${GREEN}┌─── APPLICATION ACCESS ─────────────────────────────────────────────────────┐${NC}"
+    else
+        # Hide the section by making it dim or replacing with empty box
+        move_cursor $APP_ACCESS_START_ROW 1
+        clear_entire_line
+        move_cursor $((APP_ACCESS_START_ROW + 1)) 1
+        clear_entire_line
+        move_cursor $((APP_ACCESS_START_ROW + 2)) 1
+        clear_entire_line
+        move_cursor $((APP_ACCESS_START_ROW + 3)) 1
+        clear_entire_line
+        move_cursor $((APP_ACCESS_START_ROW + 4)) 1
+        clear_entire_line
+        move_cursor $((APP_ACCESS_START_ROW + 5)) 1
+        clear_entire_line
+    fi
+}
+
+# Function to update Last Action section
+update_last_action() {
+    move_cursor $((LAST_ACTION_START_ROW + 1)) 3
+    clear_line_from_cursor
+    if [ -n "$LAST_ACTION" ]; then
+        echo -en "${BOLD}Action:${NC}  $LAST_ACTION"
+    fi
+
+    move_cursor $((LAST_ACTION_START_ROW + 2)) 3
+    clear_line_from_cursor
+    if [ -n "$LAST_ACTION_TIME" ]; then
+        echo -en "${BOLD}Time:${NC}    $LAST_ACTION_TIME"
+    fi
+
+    move_cursor $((LAST_ACTION_START_ROW + 3)) 3
+    clear_line_from_cursor
+    if [ -n "$ACTION_OUTPUT" ]; then
+        echo -en "${BOLD}Status:${NC}  $ACTION_OUTPUT"
+    fi
+}
+
+# Function to update control panel based on status
+update_controls() {
+    local monotreme_status=$1
+    local redis_status=$2
+
+    move_cursor $((CONTROLS_START_ROW + 1)) 3
+    clear_line_from_cursor
+    move_cursor $((CONTROLS_START_ROW + 2)) 3
+    clear_line_from_cursor
+    move_cursor $((CONTROLS_START_ROW + 3)) 3
+    clear_line_from_cursor
+    move_cursor $((CONTROLS_START_ROW + 4)) 3
+    clear_line_from_cursor
+
+    move_cursor $((CONTROLS_START_ROW + 1)) 3
+    if [ "$monotreme_status" = "not_created" ] && [ "$redis_status" = "not_created" ]; then
+        echo -e "${GREEN}[s]${NC} Start All Services       ${BLUE}[b]${NC} Build & Start"
+    elif [ "$monotreme_status" = "running" ] && [ "$redis_status" = "running" ]; then
+        echo -e "${RED}[x]${NC} Stop All Services        ${YELLOW}[r]${NC} Restart All"
+        move_cursor $((CONTROLS_START_ROW + 2)) 3
+        echo -e "${BLUE}[m]${NC} Stop Monotreme          ${BLUE}[n]${NC} Restart Monotreme"
+        move_cursor $((CONTROLS_START_ROW + 3)) 3
+        echo -e "${BLUE}[d]${NC} Stop Redis              ${BLUE}[e]${NC} Restart Redis"
+    else
+        echo -e "${GREEN}[s]${NC} Start All Services       ${RED}[x]${NC} Stop All Services"
+        move_cursor $((CONTROLS_START_ROW + 2)) 3
+        echo -e "${YELLOW}[r]${NC} Restart All             ${BLUE}[b]${NC} Build & Start"
+
+        move_cursor $((CONTROLS_START_ROW + 3)) 3
+        if [ "$monotreme_status" != "running" ]; then
+            echo -en "${GREEN}[m]${NC} Start Monotreme"
+        else
+            echo -en "${BLUE}[m]${NC} Stop Monotreme          ${BLUE}[n]${NC} Restart Monotreme"
+        fi
+
+        move_cursor $((CONTROLS_START_ROW + 4)) 3
+        if [ "$redis_status" != "running" ]; then
+            echo -en "${GREEN}[d]${NC} Start Redis"
+        else
+            echo -en "${BLUE}[d]${NC} Stop Redis              ${BLUE}[e]${NC} Restart Redis"
+        fi
+    fi
+
+    # Restore cursor to command prompt
+    move_cursor $((CONTROLS_START_ROW + 10)) 17
+}
+
+# Function to execute action in background
+execute_action() {
+    local action=$1
+    local description=$2
+
+    LAST_ACTION="$description"
+    LAST_ACTION_TIME=$(date '+%H:%M:%S')
+    ACTION_OUTPUT="Running..."
+
+    # Execute in background and capture output
+    case $action in
+        start_all)
+            cd "$PROJECT_DIR"
+            if docker compose up -d > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed - Check logs${NC}"
+            fi
+            ;;
+        stop_all)
+            cd "$PROJECT_DIR"
+            if docker compose down > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed - Check logs${NC}"
+            fi
+            ;;
+        restart_all)
+            cd "$PROJECT_DIR"
+            if docker compose restart > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed - Check logs${NC}"
+            fi
+            ;;
+        build_start)
+            cd "$PROJECT_DIR"
+            if [ -f "rebuild_and_start.sh" ]; then
+                if bash rebuild_and_start.sh > /tmp/monotreme_action.log 2>&1; then
+                    ACTION_OUTPUT="${GREEN}✓ Build Complete${NC}"
+                else
+                    ACTION_OUTPUT="${RED}✗ Build Failed${NC}"
+                fi
+            else
+                if docker compose build --no-cache > /tmp/monotreme_action.log 2>&1 && docker compose up -d >> /tmp/monotreme_action.log 2>&1; then
+                    ACTION_OUTPUT="${GREEN}✓ Build Complete${NC}"
+                else
+                    ACTION_OUTPUT="${RED}✗ Build Failed${NC}"
+                fi
+            fi
+            ;;
+        start_monotreme)
+            cd "$PROJECT_DIR"
+            if docker compose start monotreme > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+        stop_monotreme)
+            cd "$PROJECT_DIR"
+            if docker compose stop monotreme > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+        restart_monotreme)
+            cd "$PROJECT_DIR"
+            if docker compose restart monotreme > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+        start_redis)
+            cd "$PROJECT_DIR"
+            if docker compose start monotreme-redis > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+        stop_redis)
+            cd "$PROJECT_DIR"
+            if docker compose stop monotreme-redis > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+        restart_redis)
+            cd "$PROJECT_DIR"
+            if docker compose restart monotreme-redis > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Success${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+        vacuum_db)
+            if docker compose exec -T monotreme sqlite3 /var/opt/monotreme/monotreme_prod.db "VACUUM;" > /tmp/monotreme_action.log 2>&1; then
+                ACTION_OUTPUT="${GREEN}✓ Database Vacuumed${NC}"
+            else
+                ACTION_OUTPUT="${RED}✗ Failed${NC}"
+            fi
+            ;;
+    esac
+}
+
+# Function to view logs
+view_logs() {
+    local service=$1
+    echo -e "${SHOW_CURSOR}"
+    clear
+    echo -e "${BOLD}${CYAN}Viewing logs for: $service${NC}"
+    echo -e "${DIM}Press Ctrl+C to return to dashboard...${NC}"
+    echo ""
+    cd "$PROJECT_DIR"
+    docker compose logs -f --tail=50 "$service" || true
+    echo -e "${HIDE_CURSOR}"
+    DASHBOARD_DRAWN=false  # Force redraw after returning from logs
+}
+
+# Function to update all dashboard data
+update_dashboard_data() {
+    local monotreme_status=$(check_container_status "monotreme")
+    local redis_status=$(check_container_status "monotreme-redis")
+    local monotreme_uptime=$(get_container_uptime "monotreme")
+    local redis_uptime=$(get_container_uptime "monotreme-redis")
+    local monotreme_resources=$(get_resource_usage "monotreme")
+    local redis_resources=$(get_resource_usage "monotreme-redis")
+    local db_stats=$(get_db_stats)
+
+    # Update timestamp
+    update_timestamp
+
+    # Update Docker status
+    update_docker_status
+
+    # Update container statuses
+    update_monotreme_status "$monotreme_status" "$monotreme_uptime" "$monotreme_resources"
+    update_redis_status "$redis_status" "$redis_uptime" "$redis_resources"
+
+    # Update database statistics
+    update_db_stats "$db_stats"
+
+    # Update application access section visibility
+    update_app_access_section "$monotreme_status"
+
+    # Update last action
+    update_last_action
+
+    # Update controls based on current state
+    update_controls "$monotreme_status" "$redis_status"
+
+    # Return to command prompt
+    move_cursor $((CONTROLS_START_ROW + 10)) 17
+}
+
+# Main dashboard loop
+main() {
+    # Check for sqlite3
+    if ! command -v sqlite3 &> /dev/null; then
+        echo -e "${YELLOW}Warning: sqlite3 not installed. Database statistics will show 0.${NC}"
+        echo -e "${YELLOW}Install with: sudo apt-get install sqlite3${NC}"
+        echo ""
+        sleep 2
+    fi
+
+    # Draw the initial structure
+    draw_dashboard_structure
+
+    # Main loop
+    local last_update=0
+    while true; do
+        local current_time=$(date +%s)
+
+        # Redraw structure if needed (after returning from logs)
+        if [ "$DASHBOARD_DRAWN" = false ]; then
+            draw_dashboard_structure
+        fi
+
+        # Update status if enough time has passed
+        if [ $((current_time - last_update)) -ge $POLL_INTERVAL ]; then
+            update_dashboard_data
+            last_update=$current_time
+        fi
+
+        # Check for user input (non-blocking)
+        if read -t 0.1 -n 1 input; then
+            case $input in
+                s)
+                    execute_action "start_all" "Starting all services"
+                    update_last_action
+                    ;;
+                x)
+                    execute_action "stop_all" "Stopping all services"
+                    update_last_action
+                    ;;
+                r)
+                    execute_action "restart_all" "Restarting all services"
+                    update_last_action
+                    ;;
+                b)
+                    execute_action "build_start" "Building and starting services"
+                    update_last_action
+                    ;;
+                m)
+                    local mono_status=$(check_container_status "monotreme")
+                    if [ "$mono_status" = "running" ]; then
+                        execute_action "stop_monotreme" "Stopping Monotreme"
+                    else
+                        execute_action "start_monotreme" "Starting Monotreme"
+                    fi
+                    update_last_action
+                    ;;
+                n)
+                    execute_action "restart_monotreme" "Restarting Monotreme"
+                    update_last_action
+                    ;;
+                d)
+                    local redis_status=$(check_container_status "monotreme-redis")
+                    if [ "$redis_status" = "running" ]; then
+                        execute_action "stop_redis" "Stopping Redis"
+                    else
+                        execute_action "start_redis" "Starting Redis"
+                    fi
+                    update_last_action
+                    ;;
+                e)
+                    execute_action "restart_redis" "Restarting Redis"
+                    update_last_action
+                    ;;
+                l)
+                    view_logs "monotreme"
+                    ;;
+                k)
+                    view_logs "monotreme-redis"
+                    ;;
+                v)
+                    execute_action "vacuum_db" "Vacuuming database"
+                    update_last_action
+                    ;;
+                c)
+                    LAST_ACTION=""
+                    LAST_ACTION_TIME=""
+                    ACTION_OUTPUT=""
+                    update_last_action
+                    ;;
+                q)
+                    echo -e "${SHOW_CURSOR}"
+                    clear
+                    echo -e "${GREEN}Dashboard closed. Goodbye!${NC}"
+                    exit 0
+                    ;;
+            esac
+        fi
+    done
+}
+
+# Run the dashboard
+main

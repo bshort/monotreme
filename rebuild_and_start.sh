@@ -5,21 +5,27 @@
 
 set -e  # Exit on error
 
-echo "=== Step 1: Building frontend ==="
+echo "=== Step 1: Installing frontend dependencies ==="
+cd frontend/web
+npm install
+cd ../..
+
+echo ""
+echo "=== Step 2: Building frontend ==="
 cd frontend/web
 env -u DISPLAY npx vite build
 cd ../..
 
 echo ""
-echo "=== Step 2: Building Docker image ==="
-docker build -f Dockerfile.local -t monotreme:local .
+echo "=== Step 3: Building Docker image ==="
+docker build --network=host -f Dockerfile.local -t monotreme:local .
 
 echo ""
-echo "=== Step 3: Stopping existing containers ==="
+echo "=== Step 4: Stopping existing containers ==="
 docker compose down
 
 echo ""
-echo "=== Step 4: Starting containers ==="
+echo "=== Step 5: Starting containers ==="
 docker compose up -d
 
 echo ""

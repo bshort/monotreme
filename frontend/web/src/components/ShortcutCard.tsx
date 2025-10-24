@@ -1,6 +1,8 @@
 import { Avatar, Tooltip } from "@mui/joy";
 import classNames from "classnames";
 import copy from "copy-to-clipboard";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -14,13 +16,16 @@ import Icon from "./Icon";
 import ShortcutActionsDropdown from "./ShortcutActionsDropdown";
 import VisibilityIcon from "./VisibilityIcon";
 
+dayjs.extend(relativeTime);
+
 interface Props {
   shortcut: Shortcut;
   onClick?: () => void;
+  dragHandleProps?: any;
 }
 
 const ShortcutCard = (props: Props) => {
-  const { shortcut, onClick } = props;
+  const { shortcut, onClick, dragHandleProps } = props;
   const { t } = useTranslation();
   const userStore = useUserStore();
   const viewStore = useViewStore();
@@ -39,12 +44,22 @@ const ShortcutCard = (props: Props) => {
   return (
     <div
       className={classNames(
-        "group px-4 py-3 w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-700 cursor-pointer",
+        "group px-4 py-3 w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-700",
+        !dragHandleProps && "cursor-pointer",
       )}
-      onClick={onClick}
+      onClick={dragHandleProps ? undefined : onClick}
     >
       <div className="w-full flex flex-row justify-between items-center">
-        <div className="w-[calc(100%-16px)] flex flex-row justify-start items-center mr-1 shrink-0">
+        {dragHandleProps && (
+          <div
+            {...dragHandleProps}
+            className="mr-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex items-center"
+            title={`Drag to reorder (User Order: ${shortcut.userOrder})`}
+          >
+            <Icon.GripVertical className="w-5 h-5" />
+          </div>
+        )}
+        <div className={classNames("flex flex-row justify-start items-center mr-1 shrink-0", dragHandleProps ? "w-[calc(100%-36px)]" : "w-[calc(100%-16px)]")}>
           <Link
             className={classNames("w-8 h-8 flex justify-center items-center overflow-clip shrink-0")}
             to={`/shortcut/${shortcut.uuid}`}
@@ -153,6 +168,24 @@ const ShortcutCard = (props: Props) => {
             {t("shortcut.visits", { count: shortcut.viewCount })}
           </Link>
         </Tooltip>
+      </div>
+      <div className="w-full mt-2 flex flex-col gap-1 text-xs text-gray-400 dark:text-gray-500">
+        {shortcut.createdTime && (
+          <Tooltip title={dayjs(shortcut.createdTime).format("YYYY-MM-DD HH:mm:ss")} variant="solid" placement="top" arrow>
+            <div className="flex flex-row items-center">
+              <Icon.Calendar className="w-3.5 h-auto mr-1.5 opacity-70" />
+              <span>Created {dayjs(shortcut.createdTime).fromNow()}</span>
+            </div>
+          </Tooltip>
+        )}
+        {shortcut.updatedTime && (
+          <Tooltip title={dayjs(shortcut.updatedTime).format("YYYY-MM-DD HH:mm:ss")} variant="solid" placement="top" arrow>
+            <div className="flex flex-row items-center">
+              <Icon.Clock className="w-3.5 h-auto mr-1.5 opacity-70" />
+              <span>Updated {dayjs(shortcut.updatedTime).fromNow()}</span>
+            </div>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

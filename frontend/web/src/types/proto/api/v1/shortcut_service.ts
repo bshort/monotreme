@@ -27,6 +27,7 @@ export interface Shortcut {
   visibility: Visibility;
   viewCount: number;
   ogMetadata?: Shortcut_OpenGraphMetadata | undefined;
+  userOrder: number;
 }
 
 export interface Shortcut_OpenGraphMetadata {
@@ -63,6 +64,9 @@ export interface DeleteShortcutRequest {
   id: number;
 }
 
+export interface DeleteAllShortcutsRequest {
+}
+
 export interface GetShortcutAnalyticsRequest {
   id: number;
 }
@@ -93,6 +97,7 @@ function createBaseShortcut(): Shortcut {
     visibility: Visibility.VISIBILITY_UNSPECIFIED,
     viewCount: 0,
     ogMetadata: undefined,
+    userOrder: 0,
   };
 }
 
@@ -136,6 +141,9 @@ export const Shortcut: MessageFns<Shortcut> = {
     }
     if (message.ogMetadata !== undefined) {
       Shortcut_OpenGraphMetadata.encode(message.ogMetadata, writer.uint32(106).fork()).join();
+    }
+    if (message.userOrder !== 0) {
+      writer.uint32(112).int32(message.userOrder);
     }
     return writer;
   },
@@ -251,6 +259,14 @@ export const Shortcut: MessageFns<Shortcut> = {
           message.ogMetadata = Shortcut_OpenGraphMetadata.decode(reader, reader.uint32());
           continue;
         }
+        case 14: {
+          if (tag !== 112) {
+            break;
+          }
+
+          message.userOrder = reader.int32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -280,6 +296,7 @@ export const Shortcut: MessageFns<Shortcut> = {
     message.ogMetadata = (object.ogMetadata !== undefined && object.ogMetadata !== null)
       ? Shortcut_OpenGraphMetadata.fromPartial(object.ogMetadata)
       : undefined;
+    message.userOrder = object.userOrder ?? 0;
     return message;
   },
 };
@@ -676,6 +693,40 @@ export const DeleteShortcutRequest: MessageFns<DeleteShortcutRequest> = {
   fromPartial(object: DeepPartial<DeleteShortcutRequest>): DeleteShortcutRequest {
     const message = createBaseDeleteShortcutRequest();
     message.id = object.id ?? 0;
+    return message;
+  },
+};
+
+function createBaseDeleteAllShortcutsRequest(): DeleteAllShortcutsRequest {
+  return {};
+}
+
+export const DeleteAllShortcutsRequest: MessageFns<DeleteAllShortcutsRequest> = {
+  encode(_: DeleteAllShortcutsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteAllShortcutsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteAllShortcutsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<DeleteAllShortcutsRequest>): DeleteAllShortcutsRequest {
+    return DeleteAllShortcutsRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<DeleteAllShortcutsRequest>): DeleteAllShortcutsRequest {
+    const message = createBaseDeleteAllShortcutsRequest();
     return message;
   },
 };
@@ -1096,6 +1147,21 @@ export const ShortcutServiceDefinition = {
               100,
               125,
             ]),
+          ],
+        },
+      },
+    },
+    /** DeleteAllShortcuts deletes all shortcuts for the current user. */
+    deleteAllShortcuts: {
+      name: "DeleteAllShortcuts",
+      requestType: DeleteAllShortcutsRequest,
+      requestStream: false,
+      responseType: Empty,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([19, 42, 17, 47, 97, 112, 105, 47, 118, 49, 47, 115, 104, 111, 114, 116, 99, 117, 116, 115]),
           ],
         },
       },

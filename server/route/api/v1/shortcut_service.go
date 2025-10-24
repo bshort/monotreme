@@ -3,6 +3,7 @@ package v1
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -23,23 +24,63 @@ import (
 )
 
 func (s *APIV1Service) ListShortcuts(ctx context.Context, _ *v1pb.ListShortcutsRequest) (*v1pb.ListShortcutsResponse, error) {
+	user, err := getCurrentUser(ctx, s.Store)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
+	}
+
+	// Try to get from Redis cache first
+	if s.RedisService != nil && user != nil {
+		var cachedResponse v1pb.ListShortcutsResponse
+		cacheKey := fmt.Sprintf("shortcuts:user:%d", user.ID)
+		cacheErr := s.RedisService.GetJSON(ctx, cacheKey, &cachedResponse)
+		if cacheErr == nil {
+			// Cache hit
+			slog.Info("Redis cache hit", "key", cacheKey, "shortcut_count", len(cachedResponse.Shortcuts))
+			return &cachedResponse, nil
+		}
+	}
+
+	// Cache miss or Redis unavailable - fetch from database
 	shortcutList, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list shortcuts, err: %v", err)
 	}
 
+	// Batch-load all activity view counts at once to avoid N+1 query problem
+	activities, err := s.Store.ListActivities(ctx, &store.FindActivity{
+		Type:  store.ActivityShortcutView,
+		Level: store.ActivityInfo,
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list activities, err: %v", err)
+	}
+
+	// Build a map of shortcut ID to view count
+	viewCountMap := make(map[int32]int32)
+	for _, activity := range activities {
+		payload := &storepb.ActivityShorcutViewPayload{}
+		if err := protojson.Unmarshal([]byte(activity.Payload), payload); err != nil {
+			continue // Skip invalid payloads
+		}
+		viewCountMap[payload.ShortcutId]++
+	}
+
 	shortcutMessageList := []*v1pb.Shortcut{}
 	for _, shortcut := range shortcutList {
-		composedShortcut, err := s.convertShortcutFromStorepb(ctx, shortcut)
-		if err != nil {
-			return nil, status.Errorf(codes.Internal, "failed to convert shortcut, err: %v", err)
-		}
+		composedShortcut := s.convertShortcutFromStorepbWithViewCount(shortcut, viewCountMap[shortcut.Id])
 		shortcutMessageList = append(shortcutMessageList, composedShortcut)
 	}
 
 	response := &v1pb.ListShortcutsResponse{
 		Shortcuts: shortcutMessageList,
 	}
+
+	// Save to Redis cache with 1 hour expiration
+	if s.RedisService != nil && user != nil {
+		_ = s.RedisService.SetJSON(ctx, fmt.Sprintf("shortcuts:user:%d", user.ID), response, time.Hour)
+	}
+
 	return response, nil
 }
 
@@ -142,6 +183,11 @@ func (s *APIV1Service) CreateShortcut(ctx context.Context, request *v1pb.CreateS
 		return nil, status.Errorf(codes.Internal, "failed to create activity, err: %v", err)
 	}
 
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
+	}
+
 	composedShortcut, err := s.convertShortcutFromStorepb(ctx, shortcut)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to convert shortcut, err: %v", err)
@@ -198,11 +244,18 @@ func (s *APIV1Service) UpdateShortcut(ctx context.Context, request *v1pb.UpdateS
 					Image:       request.Shortcut.OgMetadata.Image,
 				}
 			}
+		case "user_order":
+			update.UserOrder = &request.Shortcut.UserOrder
 		}
 	}
 	shortcut, err = s.Store.UpdateShortcut(ctx, update)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to update shortcut, err: %v", err)
+	}
+
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
 	}
 
 	composedShortcut, err := s.convertShortcutFromStorepb(ctx, shortcut)
@@ -236,6 +289,47 @@ func (s *APIV1Service) DeleteShortcut(ctx context.Context, request *v1pb.DeleteS
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to delete shortcut, err: %v", err)
 	}
+
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (s *APIV1Service) DeleteAllShortcuts(ctx context.Context, _ *v1pb.DeleteAllShortcutsRequest) (*emptypb.Empty, error) {
+	user, err := getCurrentUser(ctx, s.Store)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
+	}
+
+	// Get all shortcuts for the current user
+	shortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{
+		CreatorID: &user.ID,
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to list shortcuts, err: %v", err)
+	}
+
+	// Delete each shortcut
+	for _, shortcut := range shortcuts {
+		err = s.Store.DeleteShortcut(ctx, &store.DeleteShortcut{
+			ID: shortcut.Id,
+		})
+		if err != nil {
+			slog.Error("Failed to delete shortcut", "shortcut_id", shortcut.Id, "error", err)
+			return nil, status.Errorf(codes.Internal, "failed to delete shortcut %d, err: %v", shortcut.Id, err)
+		}
+	}
+
+	slog.Info("Deleted all shortcuts for user", "user_id", user.ID, "count", len(shortcuts))
+
+	// Invalidate Redis cache for this user
+	if s.RedisService != nil {
+		_ = s.RedisService.InvalidateShortcutListCache(ctx, user.ID)
+	}
+
 	return &emptypb.Empty{}, nil
 }
 
@@ -349,6 +443,7 @@ func (s *APIV1Service) convertShortcutFromStorepb(ctx context.Context, shortcut 
 		Description: shortcut.Description,
 		Visibility:  convertVisibilityFromStorepb(shortcut.Visibility),
 		Uuid:        shortcut.Uuid,
+		UserOrder:   shortcut.UserOrder,
 		OgMetadata: &v1pb.Shortcut_OpenGraphMetadata{
 			Title:       shortcut.OgMetadata.Title,
 			Description: shortcut.OgMetadata.Description,
@@ -367,4 +462,30 @@ func (s *APIV1Service) convertShortcutFromStorepb(ctx context.Context, shortcut 
 	composedShortcut.ViewCount = int32(len(activityList))
 
 	return composedShortcut, nil
+}
+
+// convertShortcutFromStorepbWithViewCount converts a shortcut from storepb to v1pb with a pre-computed view count
+// This avoids the N+1 query problem when listing many shortcuts
+func (s *APIV1Service) convertShortcutFromStorepbWithViewCount(shortcut *storepb.Shortcut, viewCount int32) *v1pb.Shortcut {
+	composedShortcut := &v1pb.Shortcut{
+		Id:          shortcut.Id,
+		CreatorId:   shortcut.CreatorId,
+		CreatedTime: timestamppb.New(time.Unix(shortcut.CreatedTs, 0)),
+		UpdatedTime: timestamppb.New(time.Unix(shortcut.UpdatedTs, 0)),
+		Name:        shortcut.Name,
+		Link:        shortcut.Link,
+		Title:       shortcut.Title,
+		Tags:        shortcut.Tags,
+		Description: shortcut.Description,
+		Visibility:  convertVisibilityFromStorepb(shortcut.Visibility),
+		Uuid:        shortcut.Uuid,
+		UserOrder:   shortcut.UserOrder,
+		ViewCount:   viewCount,
+		OgMetadata: &v1pb.Shortcut_OpenGraphMetadata{
+			Title:       shortcut.OgMetadata.Title,
+			Description: shortcut.OgMetadata.Description,
+			Image:       shortcut.OgMetadata.Image,
+		},
+	}
+	return composedShortcut
 }

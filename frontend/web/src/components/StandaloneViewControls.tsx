@@ -99,6 +99,7 @@ const StandaloneViewControls = () => {
           <Option value={"updatedTs"}>Updated At</Option>
           <Option value={"createdTs"}>Created At</Option>
           <Option value={"view"}>Visits</Option>
+          <Option value={"userOrder"}>User Order</Option>
         </Select>
       </div>
 

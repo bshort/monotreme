@@ -17,6 +17,7 @@ type UpdateShortcut struct {
 	Tag               *string
 	OpenGraphMetadata *storepb.OpenGraphMetadata
 	CustomIcon        *string
+	UserOrder         *int32
 }
 
 type FindShortcut struct {

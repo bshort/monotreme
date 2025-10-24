@@ -43,6 +43,10 @@ service ShortcutService {
     option (google.api.http) = {delete: "/api/v1/shortcuts/{id}"};
     option (google.api.method_signature) = "id";
   }
+  // DeleteAllShortcuts deletes all shortcuts for the current user.
+  rpc DeleteAllShortcuts(DeleteAllShortcutsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/shortcuts"};
+  }
   // GetShortcutAnalytics returns the analytics for a shortcut.
   rpc GetShortcutAnalytics(GetShortcutAnalyticsRequest) returns (GetShortcutAnalyticsResponse) {
     option (google.api.http) = {get: "/api/v1/shortcuts/{id}/analytics"};
@@ -76,6 +80,8 @@ message Shortcut {
   int32 view_count = 12;
 
   OpenGraphMetadata og_metadata = 13;
+
+  int32 user_order = 14;
 
   message OpenGraphMetadata {
     string title = 1;
@@ -113,6 +119,8 @@ message UpdateShortcutRequest {
 message DeleteShortcutRequest {
   int32 id = 1;
 }
+
+message DeleteAllShortcutsRequest {}
 
 message GetShortcutAnalyticsRequest {
   int32 id = 1;

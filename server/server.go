@@ -26,6 +26,7 @@ import (
 	"github.com/bshort/monotreme/server/runner/stats"
 	"github.com/bshort/monotreme/server/runner/version"
 	"github.com/bshort/monotreme/server/service/license"
+	redisService "github.com/bshort/monotreme/server/service/redis"
 	"github.com/bshort/monotreme/store"
 )
 
@@ -37,6 +38,7 @@ type Server struct {
 	Secret  string
 
 	licenseService *license.LicenseService
+	redisService   *redisService.RedisService
 
 	// API services.
 	apiV1Service *apiv1.APIV1Service
@@ -50,11 +52,24 @@ func NewServer(ctx context.Context, profile *profile.Profile, store *store.Store
 
 	licenseService := license.NewLicenseService(profile, store)
 
+	// Initialize Redis service
+	redisServ, err := redisService.NewRedisService()
+	if err != nil {
+		slog.Warn("Failed to initialize Redis service, continuing without cache", "error", err)
+		// Create a disabled Redis service instance
+		redisServ = &redisService.RedisService{}
+	} else if redisServ != nil && !redisServ.IsEnabled() {
+		slog.Info("Redis caching is disabled via REDIS_ENABLED environment variable")
+	} else if redisServ != nil {
+		slog.Info("Redis caching is enabled and connected")
+	}
+
 	s := &Server{
 		e:              e,
 		Profile:        profile,
 		Store:          store,
 		licenseService: licenseService,
+		redisService:   redisServ,
 	}
 
 	// Serve frontend.
@@ -94,7 +109,7 @@ func NewServer(ctx context.Context, profile *profile.Profile, store *store.Store
 	exportService := export.NewExportService(profile, store, secret)
 	exportService.RegisterRoutes(e)
 
-	s.apiV1Service = apiv1.NewAPIV1Service(secret, profile, store, licenseService, s.Profile.Port+1)
+	s.apiV1Service = apiv1.NewAPIV1Service(secret, profile, store, licenseService, redisServ, s.Profile.Port+1)
 	// Register gRPC gateway as api v1.
 	if err := s.apiV1Service.RegisterGateway(ctx, e); err != nil {
 		return nil, errors.Wrap(err, "failed to register gRPC gateway")
@@ -131,6 +146,13 @@ func (s *Server) Shutdown(ctx context.Context) {
 	// Close database connection.
 	if err := s.Store.Close(); err != nil {
 		fmt.Printf("failed to close database, error: %v\n", err)
+	}
+
+	// Close Redis connection.
+	if s.redisService != nil {
+		if err := s.redisService.Close(); err != nil {
+			fmt.Printf("failed to close Redis, error: %v\n", err)
+		}
 	}
 
 	fmt.Printf("server stopped properly\n")

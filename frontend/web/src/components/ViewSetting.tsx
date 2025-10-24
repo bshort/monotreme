@@ -69,6 +69,7 @@ const ViewSetting = () => {
           <div className="w-full flex flex-row justify-between items-center">
             <span className="text-sm shrink-0 mr-2">{t("filter.order-by")}</span>
             <Select size="sm" value={field} onChange={(_, value) => viewStore.setOrder({ field: value as any })}>
+              <Option value={"userOrder"}>Custom Order</Option>
               <Option value={"name"}>Name</Option>
               <Option value={"updatedTs"}>Created At</Option>
               <Option value={"createdTs"}>Updated At</Option>

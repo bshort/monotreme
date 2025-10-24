@@ -1,7 +1,7 @@
 services:
   monotreme:
     volumes:
-      - /Primer/Media/data/monotreme:/var/opt/monotreme
+      - ./data:/var/opt/monotreme
     restart: unless-stopped
     networks:
       macvlan_network:

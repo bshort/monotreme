@@ -19,10 +19,11 @@ interface Props {
   className?: string;
   showActions?: boolean;
   onClick?: () => void;
+  dragHandleProps?: any;
 }
 
 const ShortcutListView = (props: Props) => {
-  const { shortcut, className, showActions, onClick } = props;
+  const { shortcut, className, showActions, onClick, dragHandleProps } = props;
   const { t } = useTranslation();
   const userStore = useUserStore();
   const viewStore = useViewStore();
@@ -40,29 +41,46 @@ const ShortcutListView = (props: Props) => {
     toast.success("Shortcut link copied to clipboard.");
   };
 
+  const handleCopyShortcutUrl = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    copy(shortcutLink);
+    toast.success("Shortcut URL copied to clipboard.");
+  };
+
+  const handleCopyDestinationUrl = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    copy(shortcut.link);
+    toast.success("Destination URL copied to clipboard.");
+  };
+
   return (
     <div
       className={classNames(
-        "group w-full px-4 py-3 flex flex-col justify-start items-start border rounded-lg hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50 cursor-pointer",
+        "group w-full px-4 py-3 flex flex-col justify-start items-start border rounded-lg hover:bg-gray-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50",
+        !dragHandleProps && "cursor-pointer",
         className,
       )}
-      onClick={onClick}
+      onClick={dragHandleProps ? undefined : onClick}
     >
-      {/* First line: favicon, title, tags */}
+      {/* First line: favicon, title, tags, actions */}
       <div className="w-full flex flex-row justify-between items-start">
         <div className="flex flex-row justify-start items-center flex-1 min-w-0">
+          {dragHandleProps && (
+            <div
+              {...dragHandleProps}
+              className="mr-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              title={`Drag to reorder (User Order: ${shortcut.userOrder})`}
+            >
+              <Icon.GripVertical className="w-5 h-5" />
+            </div>
+          )}
           <div className="w-5 h-5 flex justify-center items-center overflow-clip shrink-0 mr-3">
             <LinkFavicon url={shortcut.link} />
           </div>
           <div className="flex flex-row justify-start items-center min-w-0 mr-3">
-            {shortcut.title ? (
-              <>
-                <span className="dark:text-gray-300 font-medium mr-2 truncate">{shortcut.title}</span>
-                <span className="text-gray-500 text-sm">({shortcut.name})</span>
-              </>
-            ) : (
-              <span className="dark:text-gray-300 font-medium truncate">{shortcut.name}</span>
-            )}
+            <span className="dark:text-gray-300 font-medium truncate">{shortcut.title || shortcut.name}</span>
           </div>
           {/* Tags */}
           <div className="flex flex-row justify-start items-center gap-1 min-w-0">
@@ -98,17 +116,43 @@ const ShortcutListView = (props: Props) => {
         )}
       </div>
 
-      {/* Second line: full URL and metrics */}
-      <div className="w-full mt-2 flex flex-row justify-between items-center">
-        <div className="flex flex-col justify-start items-start flex-1 min-w-0 mr-4">
+      {/* Second line: shortcut URL (clickable) */}
+      <div className="w-full mt-1 ml-8 flex flex-row items-center gap-2">
+        <a
+          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          href={shortcutLink}
+          target="_blank"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {shortcutLink}
+        </a>
+        <button
+          className="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          onClick={handleCopyShortcutUrl}
+          title="Copy shortcut URL"
+        >
+          <Icon.Clipboard className="w-3.5 h-auto" />
+        </button>
+      </div>
+
+      {/* Third line: destination URL and metrics */}
+      <div className="w-full mt-1 flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-start items-center flex-1 min-w-0 mr-4 ml-8 gap-2">
           <a
             className="truncate text-sm text-gray-500 dark:text-gray-400 hover:underline hover:text-gray-700 dark:hover:text-gray-300"
-            href={shortcutLink}
+            href={shortcut.link}
             target="_blank"
             onClick={(e) => e.stopPropagation()}
           >
-            {shortcut.link.length > 40 ? shortcut.link.substring(0, 60) + '...' : shortcut.link}
+            {shortcut.link}
           </a>
+          <button
+            className="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0"
+            onClick={handleCopyDestinationUrl}
+            title="Copy destination URL"
+          >
+            <Icon.Clipboard className="w-3.5 h-auto" />
+          </button>
         </div>
 
         {/* Metrics */}

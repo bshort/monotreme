@@ -100,6 +100,7 @@
   
 - [api/v1/shortcut_service.proto](#api_v1_shortcut_service-proto)
     - [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest)
+    - [DeleteAllShortcutsRequest](#monotreme-api-v1-DeleteAllShortcutsRequest)
     - [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest)
     - [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest)
     - [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse)
@@ -397,12 +398,14 @@
 | email | [string](#string) |  |  |
 | nickname | [string](#string) |  |  |
 | password | [string](#string) |  |  |
+| profile_picture | [string](#string) |  |  |
 | locale | [string](#string) |  | Personal preferences |
 | color_theme | [string](#string) |  |  |
 | default_visibility | [string](#string) |  |  |
 | auto_generate_title | [bool](#bool) |  |  |
 | auto_generate_icon | [bool](#bool) |  |  |
 | auto_generate_name | [bool](#bool) |  |  |
+| edit_mode_preference | [string](#string) |  |  |
 
 
 
@@ -1495,6 +1498,16 @@ Empty - returns all feeds for the authenticated user
 
 
 
+<a name="monotreme-api-v1-DeleteAllShortcutsRequest"></a>
+
+### DeleteAllShortcutsRequest
+
+
+
+
+
+
+
 <a name="monotreme-api-v1-DeleteShortcutRequest"></a>
 
 ### DeleteShortcutRequest
@@ -1634,6 +1647,7 @@ Empty - returns all feeds for the authenticated user
 | visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
 | view_count | [int32](#int32) |  |  |
 | og_metadata | [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata) |  |  |
+| user_order | [int32](#int32) |  |  |
 
 
 
@@ -1692,6 +1706,7 @@ Empty - returns all feeds for the authenticated user
 | CreateShortcut | [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | CreateShortcut creates a shortcut. |
 | UpdateShortcut | [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | UpdateShortcut updates a shortcut. |
 | DeleteShortcut | [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteShortcut deletes a shortcut by name. |
+| DeleteAllShortcuts | [DeleteAllShortcutsRequest](#monotreme-api-v1-DeleteAllShortcutsRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteAllShortcuts deletes all shortcuts for the current user. |
 | GetShortcutAnalytics | [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest) | [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse) | GetShortcutAnalytics returns the analytics for a shortcut. |
 
  

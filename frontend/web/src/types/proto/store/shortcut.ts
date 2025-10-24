@@ -24,6 +24,7 @@ export interface Shortcut {
   visibility: Visibility;
   ogMetadata?: OpenGraphMetadata | undefined;
   customIcon: string;
+  userOrder: number;
 }
 
 export interface OpenGraphMetadata {
@@ -47,6 +48,7 @@ function createBaseShortcut(): Shortcut {
     visibility: Visibility.VISIBILITY_UNSPECIFIED,
     ogMetadata: undefined,
     customIcon: "",
+    userOrder: 0,
   };
 }
 
@@ -90,6 +92,9 @@ export const Shortcut: MessageFns<Shortcut> = {
     }
     if (message.customIcon !== "") {
       writer.uint32(106).string(message.customIcon);
+    }
+    if (message.userOrder !== 0) {
+      writer.uint32(112).int32(message.userOrder);
     }
     return writer;
   },
@@ -205,6 +210,14 @@ export const Shortcut: MessageFns<Shortcut> = {
           message.customIcon = reader.string();
           continue;
         }
+        case 14: {
+          if (tag !== 112) {
+            break;
+          }
+
+          message.userOrder = reader.int32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -234,6 +247,7 @@ export const Shortcut: MessageFns<Shortcut> = {
       ? OpenGraphMetadata.fromPartial(object.ogMetadata)
       : undefined;
     message.customIcon = object.customIcon ?? "";
+    message.userOrder = object.userOrder ?? 0;
     return message;
   },
 };
