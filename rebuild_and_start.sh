@@ -18,7 +18,7 @@ cd ../..
 
 echo ""
 echo "=== Step 3: Building Docker image ==="
-docker build -f Dockerfile.local -t monotreme:local .
+docker build --network=host -f Dockerfile.local -t monotreme:local .
 
 echo ""
 echo "=== Step 4: Stopping existing containers ==="

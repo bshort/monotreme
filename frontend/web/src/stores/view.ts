@@ -148,4 +148,28 @@ export const getAllUniqueTags = (shortcutList: Shortcut[]): string[] => {
   return Array.from(tagSet).sort();
 };
 
+export const getTagsSortedByMostRecent = (shortcutList: Shortcut[]): string[] => {
+  // Map each tag to its most recent timestamp
+  const tagTimestampMap = new Map<string, number>();
+
+  shortcutList.forEach((shortcut) => {
+    const timestamp = (shortcut.updatedTime || shortcut.createdTime)?.getTime() || 0;
+    shortcut.tags.forEach((tag) => {
+      const cleanTag = tag.trim().replace(/,$/, ''); // Remove trailing comma
+      if (cleanTag) {
+        const currentTimestamp = tagTimestampMap.get(cleanTag) || 0;
+        // Keep the most recent timestamp for this tag
+        if (timestamp > currentTimestamp) {
+          tagTimestampMap.set(cleanTag, timestamp);
+        }
+      }
+    });
+  });
+
+  // Sort tags by timestamp in reverse chronological order (most recent first)
+  return Array.from(tagTimestampMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([tag]) => tag);
+};
+
 export default useViewStore;
