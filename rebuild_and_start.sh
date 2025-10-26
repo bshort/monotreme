@@ -26,7 +26,7 @@ docker compose down
 
 echo ""
 echo "=== Step 5: Starting containers ==="
-docker compose up -d
+docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
 
 echo ""
 echo "=== Done! ==="
