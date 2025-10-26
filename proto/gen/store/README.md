@@ -9,6 +9,9 @@
     - [ActivityShorcutViewPayload.ParamsEntry](#monotreme-store-ActivityShorcutViewPayload-ParamsEntry)
     - [ActivityShorcutViewPayload.ValueList](#monotreme-store-ActivityShorcutViewPayload-ValueList)
   
+- [store/bookmark_tag.proto](#store_bookmark_tag-proto)
+    - [BookmarkTag](#monotreme-store-BookmarkTag)
+  
 - [store/common.proto](#store_common-proto)
     - [RowStatus](#monotreme-store-RowStatus)
     - [Visibility](#monotreme-store-Visibility)
@@ -37,6 +40,9 @@
   
 - [store/stats_measurement.proto](#store_stats_measurement-proto)
     - [StatsMeasurement](#monotreme-store-StatsMeasurement)
+  
+- [store/tag.proto](#store_tag-proto)
+    - [Tag](#monotreme-store-Tag)
   
 - [store/user_setting.proto](#store_user_setting-proto)
     - [UserSetting](#monotreme-store-UserSetting)
@@ -140,6 +146,40 @@
 
 
 
+<a name="store_bookmark_tag-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## store/bookmark_tag.proto
+
+
+
+<a name="monotreme-store-BookmarkTag"></a>
+
+### BookmarkTag
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut_id | [int32](#int32) |  |  |
+| tag_uuid | [string](#string) |  |  |
+| user_id | [int32](#int32) |  |  |
+| created_ts | [int64](#int64) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="store_common-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -172,6 +212,8 @@
 | VISIBILITY_UNSPECIFIED | 0 |  |
 | WORKSPACE | 1 |  |
 | PUBLIC | 2 |  |
+| PRIVATE | 3 |  |
+| FRIENDS | 4 |  |
 
 
  
@@ -518,6 +560,43 @@ StatsMeasurement represents a single measurement of workspace statistics at a sp
 | users_count | [int32](#int32) |  | Total number of users at measurement time |
 | collections_count | [int32](#int32) |  | Total number of collections at measurement time |
 | hits_count | [int32](#int32) |  | Total number of hits (shortcut views) at measurement time |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="store_tag-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## store/tag.proto
+
+
+
+<a name="monotreme-store-Tag"></a>
+
+### Tag
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| uuid | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| created_ts | [int64](#int64) |  |  |
+| updated_ts | [int64](#int64) |  |  |
+| name | [string](#string) |  |  |
+| abbreviation | [string](#string) |  |  |
+| description | [string](#string) |  |  |
 
 
 

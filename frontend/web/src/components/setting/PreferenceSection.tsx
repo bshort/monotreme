@@ -1,5 +1,7 @@
 import { Button, Option, Select, Switch } from "@mui/joy";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 import BetaBadge from "@/components/BetaBadge";
 import { useUserStore } from "@/stores";
 import { User } from "@/types/proto/api/v1/user_service";
@@ -9,15 +11,16 @@ const PreferenceSection: React.FC = () => {
   const { t } = useTranslation();
   const userStore = useUserStore();
   const currentUser = userStore.getCurrentUser();
-  const language = currentUser.locale || "EN";
-  const colorTheme = currentUser.colorTheme || "SYSTEM";
-  const defaultVisibility = currentUser.defaultVisibility || "WORKSPACE";
-  const autoGenerateTitle = currentUser.autoGenerateTitle ?? true;
-  const autoGenerateIcon = currentUser.autoGenerateIcon ?? true;
-  const autoGenerateName = currentUser.autoGenerateName ?? true;
-  const editModePreference = currentUser.editModePreference || "FLYOUT";
 
-  const bookmarkletCode = `javascript:(function(){try{const title=encodeURIComponent(document.title||'Untitled');const url=encodeURIComponent(window.location.href);window.open('${window.location.origin}/quick-save?url='+url+'&title='+title,'_blank','width=500,height=600,left='+(screen.width/2-250)+',top='+(screen.height/2-300)+',scrollbars=yes,resizable=yes');}catch(error){console.log('Mon.otre.me bookmarklet error:',error);}})();`;
+  // Local state for pending changes
+  const [language, setLanguage] = useState(currentUser.locale || "EN");
+  const [colorTheme, setColorTheme] = useState(currentUser.colorTheme || "SYSTEM");
+  const [defaultVisibility, setDefaultVisibility] = useState(currentUser.defaultVisibility || "WORKSPACE");
+  const [autoGenerateTitle, setAutoGenerateTitle] = useState(currentUser.autoGenerateTitle ?? true);
+  const [autoGenerateIcon, setAutoGenerateIcon] = useState(currentUser.autoGenerateIcon ?? true);
+  const [autoGenerateName, setAutoGenerateName] = useState(currentUser.autoGenerateName ?? true);
+  const [editModePreference, setEditModePreference] = useState(currentUser.editModePreference || "FLYOUT");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const languageOptions = [
     {
@@ -91,93 +94,69 @@ const PreferenceSection: React.FC = () => {
     },
   ];
 
-  const handleSelectLanguage = async (locale: string) => {
-    await userStore.patchUser(
-      {
-        ...currentUser,
-        locale: locale,
-      },
-      ["locale"],
-    );
+  const handleSelectLanguage = (locale: string) => {
+    setLanguage(locale);
+    setHasUnsavedChanges(true);
   };
 
-  const handleSelectColorTheme = async (colorTheme: string) => {
-    await userStore.patchUser(
-      {
-        ...currentUser,
-        colorTheme: colorTheme,
-      },
-      ["colorTheme"],
-    );
+  const handleSelectColorTheme = (theme: string) => {
+    setColorTheme(theme);
+    setHasUnsavedChanges(true);
   };
 
-  const handleSelectDefaultVisibility = async (visibility: string) => {
+  const handleSelectDefaultVisibility = (visibility: string) => {
+    setDefaultVisibility(visibility);
+    setHasUnsavedChanges(true);
+  };
+
+  const handleToggleAutoGenerateTitle = (enabled: boolean) => {
+    setAutoGenerateTitle(enabled);
+    setHasUnsavedChanges(true);
+  };
+
+  const handleToggleAutoGenerateIcon = (enabled: boolean) => {
+    setAutoGenerateIcon(enabled);
+    setHasUnsavedChanges(true);
+  };
+
+  const handleToggleAutoGenerateName = (enabled: boolean) => {
+    setAutoGenerateName(enabled);
+    setHasUnsavedChanges(true);
+  };
+
+  const handleSelectEditModePreference = (mode: string) => {
+    setEditModePreference(mode);
+    setHasUnsavedChanges(true);
+  };
+
+  const handleSave = async () => {
     try {
       await userStore.patchUser(
         {
           ...currentUser,
-          defaultVisibility: visibility,
+          locale: language,
+          colorTheme: colorTheme,
+          defaultVisibility: defaultVisibility,
+          autoGenerateTitle: autoGenerateTitle,
+          autoGenerateIcon: autoGenerateIcon,
+          autoGenerateName: autoGenerateName,
+          editModePreference: editModePreference,
         },
-        ["defaultVisibility"],
+        [
+          "locale",
+          "colorTheme",
+          "defaultVisibility",
+          "autoGenerateTitle",
+          "autoGenerateIcon",
+          "autoGenerateName",
+          "editModePreference",
+        ],
       );
+      setHasUnsavedChanges(false);
+      toast.success("Preferences saved successfully");
     } catch (error) {
-      console.error('Failed to update default visibility setting:', error);
-    }
-  };
-
-  const handleToggleAutoGenerateTitle = async (enabled: boolean) => {
-    try {
-      await userStore.patchUser(
-        {
-          ...currentUser,
-          autoGenerateTitle: enabled,
-        },
-        ["autoGenerateTitle"],
-      );
-    } catch (error) {
-      console.error('Failed to update auto-generate title setting:', error);
-    }
-  };
-
-  const handleToggleAutoGenerateIcon = async (enabled: boolean) => {
-    try {
-      await userStore.patchUser(
-        {
-          ...currentUser,
-          autoGenerateIcon: enabled,
-        },
-        ["autoGenerateIcon"],
-      );
-    } catch (error) {
-      console.error('Failed to update auto-generate icon setting:', error);
-    }
-  };
-
-  const handleToggleAutoGenerateName = async (enabled: boolean) => {
-    try {
-      await userStore.patchUser(
-        {
-          ...currentUser,
-          autoGenerateName: enabled,
-        },
-        ["autoGenerateName"],
-      );
-    } catch (error) {
-      console.error('Failed to update auto-generate name setting:', error);
-    }
-  };
-
-  const handleSelectEditModePreference = async (mode: string) => {
-    try {
-      await userStore.patchUser(
-        {
-          ...currentUser,
-          editModePreference: mode,
-        },
-        ["editModePreference"],
-      );
-    } catch (error) {
-      console.error('Failed to update edit mode preference setting:', error);
+      console.error('Failed to save preferences:', error);
+      toast.error("Failed to save preferences. Please try again.");
     }
   };
 
@@ -189,7 +168,7 @@ const PreferenceSection: React.FC = () => {
           <div className="flex flex-row justify-start items-center gap-x-1">
             <span className="dark:text-gray-400">{t("settings.preference.color-theme")}</span>
           </div>
-          <Select defaultValue={colorTheme} onChange={(_, value) => handleSelectColorTheme(value as string)}>
+          <Select value={colorTheme} onChange={(_, value) => handleSelectColorTheme(value as string)}>
             {colorThemeOptions.map((option) => {
               return (
                 <Option key={option.value} value={option.value}>
@@ -204,7 +183,7 @@ const PreferenceSection: React.FC = () => {
             <span className="dark:text-gray-400">{t("common.language")}</span>
             <BetaBadge />
           </div>
-          <Select defaultValue={language} onChange={(_, value) => handleSelectLanguage(value as string)}>
+          <Select value={language} onChange={(_, value) => handleSelectLanguage(value as string)}>
             {languageOptions.map((option) => {
               return (
                 <Option key={option.value} value={option.value}>
@@ -287,32 +266,28 @@ const PreferenceSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Browser Integration */}
+        {/* Save Button */}
         <div className="w-full border-t pt-4 mt-4 dark:border-zinc-700">
-          <h4 className="text-lg font-semibold mb-3 dark:text-gray-300">Browser Integration</h4>
-
-          <div className="w-full flex flex-col gap-3">
-            <div className="flex flex-col">
-              <span className="dark:text-gray-400 mb-1">Quick Save Bookmarklet</span>
-              <span className="text-sm text-gray-500 dark:text-gray-600 mb-3">
-                Drag this button to your bookmarks bar, then click it on any page to quickly save it to Mon.otre.me
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <a
-                href={bookmarkletCode}
-                className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-grab active:cursor-grabbing transition-colors duration-200 select-none no-underline font-medium"
-                draggable={true}
-                onClick={(e) => e.preventDefault()}
-                title="Drag this to your bookmarks bar"
-              >
-                📚 Save to Mon.otre.me
-              </a>
-              <span className="text-xs text-gray-500 dark:text-gray-600">
-                ← Drag this to your bookmarks bar
-              </span>
-            </div>
-          </div>
+          <Button
+            color="primary"
+            size="lg"
+            onClick={handleSave}
+            disabled={!hasUnsavedChanges}
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '1.125rem',
+              paddingX: '2rem',
+              paddingY: '0.875rem',
+              minWidth: '150px',
+            }}
+          >
+            {t("common.save")}
+          </Button>
+          {hasUnsavedChanges && (
+            <span className="ml-3 text-sm text-orange-600 dark:text-orange-400">
+              You have unsaved changes
+            </span>
+          )}
         </div>
       </div>
     </div>

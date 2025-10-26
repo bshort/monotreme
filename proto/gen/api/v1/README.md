@@ -74,6 +74,52 @@
   
     - [CollectionService](#monotreme-api-v1-CollectionService)
   
+- [api/v1/shortcut_service.proto](#api_v1_shortcut_service-proto)
+    - [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest)
+    - [DeleteAllShortcutsRequest](#monotreme-api-v1-DeleteAllShortcutsRequest)
+    - [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest)
+    - [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest)
+    - [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse)
+    - [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem)
+    - [GetShortcutByNameRequest](#monotreme-api-v1-GetShortcutByNameRequest)
+    - [GetShortcutRequest](#monotreme-api-v1-GetShortcutRequest)
+    - [ListShortcutsRequest](#monotreme-api-v1-ListShortcutsRequest)
+    - [ListShortcutsResponse](#monotreme-api-v1-ListShortcutsResponse)
+    - [Shortcut](#monotreme-api-v1-Shortcut)
+    - [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata)
+    - [Shortcut.TagInfo](#monotreme-api-v1-Shortcut-TagInfo)
+    - [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest)
+  
+    - [ShortcutService](#monotreme-api-v1-ShortcutService)
+  
+- [api/v1/follow_service.proto](#api_v1_follow_service-proto)
+    - [FollowUserRequest](#monotreme-api-v1-FollowUserRequest)
+    - [Following](#monotreme-api-v1-Following)
+    - [ListFollowersRequest](#monotreme-api-v1-ListFollowersRequest)
+    - [ListFollowersResponse](#monotreme-api-v1-ListFollowersResponse)
+    - [ListFollowingRequest](#monotreme-api-v1-ListFollowingRequest)
+    - [ListFollowingResponse](#monotreme-api-v1-ListFollowingResponse)
+    - [ListFollowingUserShortcutsRequest](#monotreme-api-v1-ListFollowingUserShortcutsRequest)
+    - [ListFollowingUserShortcutsResponse](#monotreme-api-v1-ListFollowingUserShortcutsResponse)
+    - [UnfollowUserRequest](#monotreme-api-v1-UnfollowUserRequest)
+  
+    - [FollowService](#monotreme-api-v1-FollowService)
+  
+- [api/v1/friend_service.proto](#api_v1_friend_service-proto)
+    - [AcceptFriendRequestRequest](#monotreme-api-v1-AcceptFriendRequestRequest)
+    - [Friendship](#monotreme-api-v1-Friendship)
+    - [ListFriendRequestsRequest](#monotreme-api-v1-ListFriendRequestsRequest)
+    - [ListFriendRequestsResponse](#monotreme-api-v1-ListFriendRequestsResponse)
+    - [ListFriendsRequest](#monotreme-api-v1-ListFriendsRequest)
+    - [ListFriendsResponse](#monotreme-api-v1-ListFriendsResponse)
+    - [RemoveFriendRequest](#monotreme-api-v1-RemoveFriendRequest)
+    - [SendFriendRequestRequest](#monotreme-api-v1-SendFriendRequestRequest)
+  
+    - [FriendRequestType](#monotreme-api-v1-FriendRequestType)
+    - [FriendshipStatus](#monotreme-api-v1-FriendshipStatus)
+  
+    - [FriendService](#monotreme-api-v1-FriendService)
+  
 - [api/v1/invitation_service.proto](#api_v1_invitation_service-proto)
     - [AcceptInvitationRequest](#monotreme-api-v1-AcceptInvitationRequest)
     - [CreateInvitationRequest](#monotreme-api-v1-CreateInvitationRequest)
@@ -98,23 +144,6 @@
   
     - [RssImportService](#monotreme-api-v1-RssImportService)
   
-- [api/v1/shortcut_service.proto](#api_v1_shortcut_service-proto)
-    - [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest)
-    - [DeleteAllShortcutsRequest](#monotreme-api-v1-DeleteAllShortcutsRequest)
-    - [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest)
-    - [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest)
-    - [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse)
-    - [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem)
-    - [GetShortcutByNameRequest](#monotreme-api-v1-GetShortcutByNameRequest)
-    - [GetShortcutRequest](#monotreme-api-v1-GetShortcutRequest)
-    - [ListShortcutsRequest](#monotreme-api-v1-ListShortcutsRequest)
-    - [ListShortcutsResponse](#monotreme-api-v1-ListShortcutsResponse)
-    - [Shortcut](#monotreme-api-v1-Shortcut)
-    - [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata)
-    - [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest)
-  
-    - [ShortcutService](#monotreme-api-v1-ShortcutService)
-  
 - [api/v1/subscription_service.proto](#api_v1_subscription_service-proto)
     - [DeleteSubscriptionRequest](#monotreme-api-v1-DeleteSubscriptionRequest)
     - [GetSubscriptionRequest](#monotreme-api-v1-GetSubscriptionRequest)
@@ -124,6 +153,24 @@
     - [PlanType](#monotreme-api-v1-PlanType)
   
     - [SubscriptionService](#monotreme-api-v1-SubscriptionService)
+  
+- [api/v1/tag_service.proto](#api_v1_tag_service-proto)
+    - [AddBookmarkToTagRequest](#monotreme-api-v1-AddBookmarkToTagRequest)
+    - [CreateTagRequest](#monotreme-api-v1-CreateTagRequest)
+    - [DeleteTagRequest](#monotreme-api-v1-DeleteTagRequest)
+    - [GetTagByAbbreviationRequest](#monotreme-api-v1-GetTagByAbbreviationRequest)
+    - [GetTagRequest](#monotreme-api-v1-GetTagRequest)
+    - [ListBookmarksForTagRequest](#monotreme-api-v1-ListBookmarksForTagRequest)
+    - [ListBookmarksForTagResponse](#monotreme-api-v1-ListBookmarksForTagResponse)
+    - [ListTagsForBookmarkRequest](#monotreme-api-v1-ListTagsForBookmarkRequest)
+    - [ListTagsForBookmarkResponse](#monotreme-api-v1-ListTagsForBookmarkResponse)
+    - [ListTagsRequest](#monotreme-api-v1-ListTagsRequest)
+    - [ListTagsResponse](#monotreme-api-v1-ListTagsResponse)
+    - [RemoveBookmarkFromTagRequest](#monotreme-api-v1-RemoveBookmarkFromTagRequest)
+    - [Tag](#monotreme-api-v1-Tag)
+    - [UpdateTagRequest](#monotreme-api-v1-UpdateTagRequest)
+  
+    - [TagService](#monotreme-api-v1-TagService)
   
 - [api/v1/user_setting_service.proto](#api_v1_user_setting_service-proto)
     - [GetUserSettingRequest](#monotreme-api-v1-GetUserSettingRequest)
@@ -189,6 +236,8 @@
 | VISIBILITY_UNSPECIFIED | 0 |  |
 | WORKSPACE | 1 |  |
 | PUBLIC | 2 |  |
+| PRIVATE | 3 |  |
+| FRIENDS | 4 |  |
 
 
  
@@ -1153,6 +1202,602 @@ Activity Types
 
 
 
+<a name="api_v1_shortcut_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/shortcut_service.proto
+
+
+
+<a name="monotreme-api-v1-CreateShortcutRequest"></a>
+
+### CreateShortcutRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut | [Shortcut](#monotreme-api-v1-Shortcut) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-DeleteAllShortcutsRequest"></a>
+
+### DeleteAllShortcutsRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-DeleteShortcutRequest"></a>
+
+### DeleteShortcutRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetShortcutAnalyticsRequest"></a>
+
+### GetShortcutAnalyticsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetShortcutAnalyticsResponse"></a>
+
+### GetShortcutAnalyticsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| references | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
+| devices | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
+| browsers | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem"></a>
+
+### GetShortcutAnalyticsResponse.AnalyticsItem
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| count | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetShortcutByNameRequest"></a>
+
+### GetShortcutByNameRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetShortcutRequest"></a>
+
+### GetShortcutRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListShortcutsRequest"></a>
+
+### ListShortcutsRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListShortcutsResponse"></a>
+
+### ListShortcutsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcuts | [Shortcut](#monotreme-api-v1-Shortcut) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Shortcut"></a>
+
+### Shortcut
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| uuid | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| name | [string](#string) |  |  |
+| link | [string](#string) |  |  |
+| title | [string](#string) |  |  |
+| tags | [string](#string) | repeated |  |
+| description | [string](#string) |  |  |
+| visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
+| view_count | [int32](#int32) |  |  |
+| og_metadata | [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata) |  |  |
+| user_order | [int32](#int32) |  |  |
+| tag_info | [Shortcut.TagInfo](#monotreme-api-v1-Shortcut-TagInfo) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Shortcut-OpenGraphMetadata"></a>
+
+### Shortcut.OpenGraphMetadata
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| title | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+| image | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Shortcut-TagInfo"></a>
+
+### Shortcut.TagInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| uuid | [string](#string) |  |  |
+| name | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-UpdateShortcutRequest"></a>
+
+### UpdateShortcutRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut | [Shortcut](#monotreme-api-v1-Shortcut) |  |  |
+| update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-ShortcutService"></a>
+
+### ShortcutService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListShortcuts | [ListShortcutsRequest](#monotreme-api-v1-ListShortcutsRequest) | [ListShortcutsResponse](#monotreme-api-v1-ListShortcutsResponse) | ListShortcuts returns a list of shortcuts. |
+| GetShortcut | [GetShortcutRequest](#monotreme-api-v1-GetShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | GetShortcut returns a shortcut by id. |
+| GetShortcutByName | [GetShortcutByNameRequest](#monotreme-api-v1-GetShortcutByNameRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | GetShortcutByName returns a shortcut by name. |
+| CreateShortcut | [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | CreateShortcut creates a shortcut. |
+| UpdateShortcut | [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | UpdateShortcut updates a shortcut. |
+| DeleteShortcut | [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteShortcut deletes a shortcut by name. |
+| DeleteAllShortcuts | [DeleteAllShortcutsRequest](#monotreme-api-v1-DeleteAllShortcutsRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteAllShortcuts deletes all shortcuts for the current user. |
+| GetShortcutAnalytics | [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest) | [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse) | GetShortcutAnalytics returns the analytics for a shortcut. |
+
+ 
+
+
+
+<a name="api_v1_follow_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/follow_service.proto
+
+
+
+<a name="monotreme-api-v1-FollowUserRequest"></a>
+
+### FollowUserRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_id | [int32](#int32) | optional |  |
+| user_email | [string](#string) | optional |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Following"></a>
+
+### Following
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| follower_id | [int32](#int32) |  |  |
+| following_id | [int32](#int32) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| follower | [User](#monotreme-api-v1-User) |  |  |
+| following | [User](#monotreme-api-v1-User) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFollowersRequest"></a>
+
+### ListFollowersRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFollowersResponse"></a>
+
+### ListFollowersResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| followers | [Following](#monotreme-api-v1-Following) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFollowingRequest"></a>
+
+### ListFollowingRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFollowingResponse"></a>
+
+### ListFollowingResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| following | [Following](#monotreme-api-v1-Following) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFollowingUserShortcutsRequest"></a>
+
+### ListFollowingUserShortcutsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFollowingUserShortcutsResponse"></a>
+
+### ListFollowingUserShortcutsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcuts | [Shortcut](#monotreme-api-v1-Shortcut) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-UnfollowUserRequest"></a>
+
+### UnfollowUserRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-FollowService"></a>
+
+### FollowService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListFollowing | [ListFollowingRequest](#monotreme-api-v1-ListFollowingRequest) | [ListFollowingResponse](#monotreme-api-v1-ListFollowingResponse) | ListFollowing lists all users that the current user is following |
+| FollowUser | [FollowUserRequest](#monotreme-api-v1-FollowUserRequest) | [Following](#monotreme-api-v1-Following) | FollowUser follows a user |
+| UnfollowUser | [UnfollowUserRequest](#monotreme-api-v1-UnfollowUserRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | UnfollowUser unfollows a user |
+| ListFollowers | [ListFollowersRequest](#monotreme-api-v1-ListFollowersRequest) | [ListFollowersResponse](#monotreme-api-v1-ListFollowersResponse) | ListFollowers lists all users following the current user |
+| ListFollowingUserShortcuts | [ListFollowingUserShortcutsRequest](#monotreme-api-v1-ListFollowingUserShortcutsRequest) | [ListFollowingUserShortcutsResponse](#monotreme-api-v1-ListFollowingUserShortcutsResponse) | ListFollowingUserShortcuts lists public shortcuts from users the current user is following |
+
+ 
+
+
+
+<a name="api_v1_friend_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/friend_service.proto
+
+
+
+<a name="monotreme-api-v1-AcceptFriendRequestRequest"></a>
+
+### AcceptFriendRequestRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Friendship"></a>
+
+### Friendship
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+| user_id | [int32](#int32) |  |  |
+| friend_id | [int32](#int32) |  |  |
+| status | [FriendshipStatus](#monotreme-api-v1-FriendshipStatus) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| accepted_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| user | [User](#monotreme-api-v1-User) |  |  |
+| friend | [User](#monotreme-api-v1-User) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFriendRequestsRequest"></a>
+
+### ListFriendRequestsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [FriendRequestType](#monotreme-api-v1-FriendRequestType) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFriendRequestsResponse"></a>
+
+### ListFriendRequestsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| friend_requests | [Friendship](#monotreme-api-v1-Friendship) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFriendsRequest"></a>
+
+### ListFriendsRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListFriendsResponse"></a>
+
+### ListFriendsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| friends | [Friendship](#monotreme-api-v1-Friendship) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RemoveFriendRequest"></a>
+
+### RemoveFriendRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-SendFriendRequestRequest"></a>
+
+### SendFriendRequestRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| friend_email | [string](#string) | optional |  |
+| friend_id | [int32](#int32) | optional |  |
+
+
+
+
+
+ 
+
+
+<a name="monotreme-api-v1-FriendRequestType"></a>
+
+### FriendRequestType
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| REQUEST_TYPE_ALL | 0 |  |
+| REQUEST_TYPE_INCOMING | 1 |  |
+| REQUEST_TYPE_OUTGOING | 2 |  |
+
+
+
+<a name="monotreme-api-v1-FriendshipStatus"></a>
+
+### FriendshipStatus
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| FRIENDSHIP_STATUS_UNSPECIFIED | 0 |  |
+| PENDING | 1 |  |
+| ACCEPTED | 2 |  |
+| DECLINED | 3 |  |
+| BLOCKED | 4 |  |
+
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-FriendService"></a>
+
+### FriendService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListFriends | [ListFriendsRequest](#monotreme-api-v1-ListFriendsRequest) | [ListFriendsResponse](#monotreme-api-v1-ListFriendsResponse) | ListFriends returns a list of friends for the current user. |
+| SendFriendRequest | [SendFriendRequestRequest](#monotreme-api-v1-SendFriendRequestRequest) | [Friendship](#monotreme-api-v1-Friendship) | SendFriendRequest sends a friend request to another user. |
+| ListFriendRequests | [ListFriendRequestsRequest](#monotreme-api-v1-ListFriendRequestsRequest) | [ListFriendRequestsResponse](#monotreme-api-v1-ListFriendRequestsResponse) | ListFriendRequests returns a list of pending friend requests. |
+| AcceptFriendRequest | [AcceptFriendRequestRequest](#monotreme-api-v1-AcceptFriendRequestRequest) | [Friendship](#monotreme-api-v1-Friendship) | AcceptFriendRequest accepts a pending friend request. |
+| RemoveFriend | [RemoveFriendRequest](#monotreme-api-v1-RemoveFriendRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | RemoveFriend removes a friend or declines a friend request. |
+
+ 
+
+
+
 <a name="api_v1_invitation_service-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1476,243 +2121,6 @@ Empty - returns all feeds for the authenticated user
 
 
 
-<a name="api_v1_shortcut_service-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/v1/shortcut_service.proto
-
-
-
-<a name="monotreme-api-v1-CreateShortcutRequest"></a>
-
-### CreateShortcutRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| shortcut | [Shortcut](#monotreme-api-v1-Shortcut) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-DeleteAllShortcutsRequest"></a>
-
-### DeleteAllShortcutsRequest
-
-
-
-
-
-
-
-<a name="monotreme-api-v1-DeleteShortcutRequest"></a>
-
-### DeleteShortcutRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| id | [int32](#int32) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-GetShortcutAnalyticsRequest"></a>
-
-### GetShortcutAnalyticsRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| id | [int32](#int32) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-GetShortcutAnalyticsResponse"></a>
-
-### GetShortcutAnalyticsResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| references | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
-| devices | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
-| browsers | [GetShortcutAnalyticsResponse.AnalyticsItem](#monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem) | repeated |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-GetShortcutAnalyticsResponse-AnalyticsItem"></a>
-
-### GetShortcutAnalyticsResponse.AnalyticsItem
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| count | [int32](#int32) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-GetShortcutByNameRequest"></a>
-
-### GetShortcutByNameRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-GetShortcutRequest"></a>
-
-### GetShortcutRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| id | [int32](#int32) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-ListShortcutsRequest"></a>
-
-### ListShortcutsRequest
-
-
-
-
-
-
-
-<a name="monotreme-api-v1-ListShortcutsResponse"></a>
-
-### ListShortcutsResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| shortcuts | [Shortcut](#monotreme-api-v1-Shortcut) | repeated |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-Shortcut"></a>
-
-### Shortcut
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| id | [int32](#int32) |  |  |
-| uuid | [string](#string) |  |  |
-| creator_id | [int32](#int32) |  |  |
-| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| name | [string](#string) |  |  |
-| link | [string](#string) |  |  |
-| title | [string](#string) |  |  |
-| tags | [string](#string) | repeated |  |
-| description | [string](#string) |  |  |
-| visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
-| view_count | [int32](#int32) |  |  |
-| og_metadata | [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata) |  |  |
-| user_order | [int32](#int32) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-Shortcut-OpenGraphMetadata"></a>
-
-### Shortcut.OpenGraphMetadata
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| title | [string](#string) |  |  |
-| description | [string](#string) |  |  |
-| image | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="monotreme-api-v1-UpdateShortcutRequest"></a>
-
-### UpdateShortcutRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| shortcut | [Shortcut](#monotreme-api-v1-Shortcut) |  |  |
-| update_mask | [google.protobuf.FieldMask](#google-protobuf-FieldMask) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
-
-<a name="monotreme-api-v1-ShortcutService"></a>
-
-### ShortcutService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| ListShortcuts | [ListShortcutsRequest](#monotreme-api-v1-ListShortcutsRequest) | [ListShortcutsResponse](#monotreme-api-v1-ListShortcutsResponse) | ListShortcuts returns a list of shortcuts. |
-| GetShortcut | [GetShortcutRequest](#monotreme-api-v1-GetShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | GetShortcut returns a shortcut by id. |
-| GetShortcutByName | [GetShortcutByNameRequest](#monotreme-api-v1-GetShortcutByNameRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | GetShortcutByName returns a shortcut by name. |
-| CreateShortcut | [CreateShortcutRequest](#monotreme-api-v1-CreateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | CreateShortcut creates a shortcut. |
-| UpdateShortcut | [UpdateShortcutRequest](#monotreme-api-v1-UpdateShortcutRequest) | [Shortcut](#monotreme-api-v1-Shortcut) | UpdateShortcut updates a shortcut. |
-| DeleteShortcut | [DeleteShortcutRequest](#monotreme-api-v1-DeleteShortcutRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteShortcut deletes a shortcut by name. |
-| DeleteAllShortcuts | [DeleteAllShortcutsRequest](#monotreme-api-v1-DeleteAllShortcutsRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteAllShortcuts deletes all shortcuts for the current user. |
-| GetShortcutAnalytics | [GetShortcutAnalyticsRequest](#monotreme-api-v1-GetShortcutAnalyticsRequest) | [GetShortcutAnalyticsResponse](#monotreme-api-v1-GetShortcutAnalyticsResponse) | GetShortcutAnalytics returns the analytics for a shortcut. |
-
- 
-
-
-
 <a name="api_v1_subscription_service-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -1806,6 +2214,255 @@ Empty - returns all feeds for the authenticated user
 | GetSubscription | [GetSubscriptionRequest](#monotreme-api-v1-GetSubscriptionRequest) | [Subscription](#monotreme-api-v1-Subscription) | GetSubscription gets the current subscription of Monotreme instance. |
 | UpdateSubscription | [UpdateSubscriptionRequest](#monotreme-api-v1-UpdateSubscriptionRequest) | [Subscription](#monotreme-api-v1-Subscription) | UpdateSubscription updates the subscription. |
 | DeleteSubscription | [DeleteSubscriptionRequest](#monotreme-api-v1-DeleteSubscriptionRequest) | [Subscription](#monotreme-api-v1-Subscription) | DeleteSubscription deletes the subscription. |
+
+ 
+
+
+
+<a name="api_v1_tag_service-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/v1/tag_service.proto
+
+
+
+<a name="monotreme-api-v1-AddBookmarkToTagRequest"></a>
+
+### AddBookmarkToTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tag_uuid | [string](#string) |  |  |
+| shortcut_id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-CreateTagRequest"></a>
+
+### CreateTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tag | [Tag](#monotreme-api-v1-Tag) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-DeleteTagRequest"></a>
+
+### DeleteTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| uuid | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetTagByAbbreviationRequest"></a>
+
+### GetTagByAbbreviationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| abbreviation | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetTagRequest"></a>
+
+### GetTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| uuid | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListBookmarksForTagRequest"></a>
+
+### ListBookmarksForTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tag_uuid | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListBookmarksForTagResponse"></a>
+
+### ListBookmarksForTagResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcuts | [Shortcut](#monotreme-api-v1-Shortcut) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListTagsForBookmarkRequest"></a>
+
+### ListTagsForBookmarkRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| shortcut_id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListTagsForBookmarkResponse"></a>
+
+### ListTagsForBookmarkResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tags | [Tag](#monotreme-api-v1-Tag) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListTagsRequest"></a>
+
+### ListTagsRequest
+
+
+
+
+
+
+
+<a name="monotreme-api-v1-ListTagsResponse"></a>
+
+### ListTagsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tags | [Tag](#monotreme-api-v1-Tag) | repeated |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-RemoveBookmarkFromTagRequest"></a>
+
+### RemoveBookmarkFromTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tag_uuid | [string](#string) |  |  |
+| shortcut_id | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-Tag"></a>
+
+### Tag
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| uuid | [string](#string) |  |  |
+| creator_id | [int32](#int32) |  |  |
+| created_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_time | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| name | [string](#string) |  |  |
+| abbreviation | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-UpdateTagRequest"></a>
+
+### UpdateTagRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| tag | [Tag](#monotreme-api-v1-Tag) |  |  |
+| update_mask | [string](#string) | repeated |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="monotreme-api-v1-TagService"></a>
+
+### TagService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| ListTags | [ListTagsRequest](#monotreme-api-v1-ListTagsRequest) | [ListTagsResponse](#monotreme-api-v1-ListTagsResponse) | ListTags returns a list of tags. |
+| GetTag | [GetTagRequest](#monotreme-api-v1-GetTagRequest) | [Tag](#monotreme-api-v1-Tag) | GetTag returns a tag by uuid. |
+| GetTagByAbbreviation | [GetTagByAbbreviationRequest](#monotreme-api-v1-GetTagByAbbreviationRequest) | [Tag](#monotreme-api-v1-Tag) | GetTagByAbbreviation returns a tag by abbreviation. |
+| CreateTag | [CreateTagRequest](#monotreme-api-v1-CreateTagRequest) | [Tag](#monotreme-api-v1-Tag) | CreateTag creates a tag. |
+| UpdateTag | [UpdateTagRequest](#monotreme-api-v1-UpdateTagRequest) | [Tag](#monotreme-api-v1-Tag) | UpdateTag updates a tag. |
+| DeleteTag | [DeleteTagRequest](#monotreme-api-v1-DeleteTagRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | DeleteTag deletes a tag by uuid. |
+| AddBookmarkToTag | [AddBookmarkToTagRequest](#monotreme-api-v1-AddBookmarkToTagRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | AddBookmarkToTag adds a bookmark to a tag. |
+| RemoveBookmarkFromTag | [RemoveBookmarkFromTagRequest](#monotreme-api-v1-RemoveBookmarkFromTagRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | RemoveBookmarkFromTag removes a bookmark from a tag. |
+| ListBookmarksForTag | [ListBookmarksForTagRequest](#monotreme-api-v1-ListBookmarksForTagRequest) | [ListBookmarksForTagResponse](#monotreme-api-v1-ListBookmarksForTagResponse) | ListBookmarksForTag lists all bookmarks for a tag. |
+| ListTagsForBookmark | [ListTagsForBookmarkRequest](#monotreme-api-v1-ListTagsForBookmarkRequest) | [ListTagsForBookmarkResponse](#monotreme-api-v1-ListTagsForBookmarkResponse) | ListTagsForBookmark lists all tags for a bookmark. |
 
  
 

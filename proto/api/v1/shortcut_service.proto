@@ -83,12 +83,19 @@ message Shortcut {
 
   int32 user_order = 14;
 
+  repeated TagInfo tag_info = 15;
+
   message OpenGraphMetadata {
     string title = 1;
 
     string description = 2;
 
     string image = 3;
+  }
+
+  message TagInfo {
+    string uuid = 1;
+    string name = 2;
   }
 }
 

@@ -28,12 +28,18 @@ export interface Shortcut {
   viewCount: number;
   ogMetadata?: Shortcut_OpenGraphMetadata | undefined;
   userOrder: number;
+  tagInfo: Shortcut_TagInfo[];
 }
 
 export interface Shortcut_OpenGraphMetadata {
   title: string;
   description: string;
   image: string;
+}
+
+export interface Shortcut_TagInfo {
+  uuid: string;
+  name: string;
 }
 
 export interface ListShortcutsRequest {
@@ -98,6 +104,7 @@ function createBaseShortcut(): Shortcut {
     viewCount: 0,
     ogMetadata: undefined,
     userOrder: 0,
+    tagInfo: [],
   };
 }
 
@@ -144,6 +151,9 @@ export const Shortcut: MessageFns<Shortcut> = {
     }
     if (message.userOrder !== 0) {
       writer.uint32(112).int32(message.userOrder);
+    }
+    for (const v of message.tagInfo) {
+      Shortcut_TagInfo.encode(v!, writer.uint32(122).fork()).join();
     }
     return writer;
   },
@@ -267,6 +277,14 @@ export const Shortcut: MessageFns<Shortcut> = {
           message.userOrder = reader.int32();
           continue;
         }
+        case 15: {
+          if (tag !== 122) {
+            break;
+          }
+
+          message.tagInfo.push(Shortcut_TagInfo.decode(reader, reader.uint32()));
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -297,6 +315,7 @@ export const Shortcut: MessageFns<Shortcut> = {
       ? Shortcut_OpenGraphMetadata.fromPartial(object.ogMetadata)
       : undefined;
     message.userOrder = object.userOrder ?? 0;
+    message.tagInfo = object.tagInfo?.map((e) => Shortcut_TagInfo.fromPartial(e)) || [];
     return message;
   },
 };
@@ -367,6 +386,64 @@ export const Shortcut_OpenGraphMetadata: MessageFns<Shortcut_OpenGraphMetadata> 
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     message.image = object.image ?? "";
+    return message;
+  },
+};
+
+function createBaseShortcut_TagInfo(): Shortcut_TagInfo {
+  return { uuid: "", name: "" };
+}
+
+export const Shortcut_TagInfo: MessageFns<Shortcut_TagInfo> = {
+  encode(message: Shortcut_TagInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.uuid !== "") {
+      writer.uint32(10).string(message.uuid);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Shortcut_TagInfo {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseShortcut_TagInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.uuid = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<Shortcut_TagInfo>): Shortcut_TagInfo {
+    return Shortcut_TagInfo.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<Shortcut_TagInfo>): Shortcut_TagInfo {
+    const message = createBaseShortcut_TagInfo();
+    message.uuid = object.uuid ?? "";
+    message.name = object.name ?? "";
     return message;
   },
 };

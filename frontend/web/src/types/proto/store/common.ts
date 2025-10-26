@@ -51,6 +51,8 @@ export enum Visibility {
   VISIBILITY_UNSPECIFIED = "VISIBILITY_UNSPECIFIED",
   WORKSPACE = "WORKSPACE",
   PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+  FRIENDS = "FRIENDS",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -65,6 +67,12 @@ export function visibilityFromJSON(object: any): Visibility {
     case 2:
     case "PUBLIC":
       return Visibility.PUBLIC;
+    case 3:
+    case "PRIVATE":
+      return Visibility.PRIVATE;
+    case 4:
+    case "FRIENDS":
+      return Visibility.FRIENDS;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -80,6 +88,10 @@ export function visibilityToNumber(object: Visibility): number {
       return 1;
     case Visibility.PUBLIC:
       return 2;
+    case Visibility.PRIVATE:
+      return 3;
+    case Visibility.FRIENDS:
+      return 4;
     case Visibility.UNRECOGNIZED:
     default:
       return -1;

@@ -76,6 +76,8 @@ const (
 	Visibility_VISIBILITY_UNSPECIFIED Visibility = 0
 	Visibility_WORKSPACE              Visibility = 1
 	Visibility_PUBLIC                 Visibility = 2
+	Visibility_PRIVATE                Visibility = 3
+	Visibility_FRIENDS                Visibility = 4
 )
 
 // Enum value maps for Visibility.
@@ -84,11 +86,15 @@ var (
 		0: "VISIBILITY_UNSPECIFIED",
 		1: "WORKSPACE",
 		2: "PUBLIC",
+		3: "PRIVATE",
+		4: "FRIENDS",
 	}
 	Visibility_value = map[string]int32{
 		"VISIBILITY_UNSPECIFIED": 0,
 		"WORKSPACE":              1,
 		"PUBLIC":                 2,
+		"PRIVATE":                3,
+		"FRIENDS":                4,
 	}
 )
 
@@ -128,13 +134,15 @@ const file_store_common_proto_rawDesc = "" +
 	"\x16ROW_STATUS_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06NORMAL\x10\x01\x12\f\n" +
-	"\bARCHIVED\x10\x02*C\n" +
+	"\bARCHIVED\x10\x02*]\n" +
 	"\n" +
 	"Visibility\x12\x1a\n" +
 	"\x16VISIBILITY_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tWORKSPACE\x10\x01\x12\n" +
 	"\n" +
-	"\x06PUBLIC\x10\x02B\xac\x01\n" +
+	"\x06PUBLIC\x10\x02\x12\v\n" +
+	"\aPRIVATE\x10\x03\x12\v\n" +
+	"\aFRIENDS\x10\x04B\xac\x01\n" +
 	"\x13com.monotreme.storeB\vCommonProtoP\x01Z+github.com/bshort/monotreme/proto/gen/store\xa2\x02\x03MSX\xaa\x02\x0fMonotreme.Store\xca\x02\x0fMonotreme\\Store\xe2\x02\x1bMonotreme\\Store\\GPBMetadata\xea\x02\x10Monotreme::Storeb\x06proto3"
 
 var (

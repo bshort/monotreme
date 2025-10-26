@@ -41,6 +41,7 @@ type Shortcut struct {
 	ViewCount     int32                       `protobuf:"varint,12,opt,name=view_count,json=viewCount,proto3" json:"view_count,omitempty"`
 	OgMetadata    *Shortcut_OpenGraphMetadata `protobuf:"bytes,13,opt,name=og_metadata,json=ogMetadata,proto3" json:"og_metadata,omitempty"`
 	UserOrder     int32                       `protobuf:"varint,14,opt,name=user_order,json=userOrder,proto3" json:"user_order,omitempty"`
+	TagInfo       []*Shortcut_TagInfo         `protobuf:"bytes,15,rep,name=tag_info,json=tagInfo,proto3" json:"tag_info,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -171,6 +172,13 @@ func (x *Shortcut) GetUserOrder() int32 {
 		return x.UserOrder
 	}
 	return 0
+}
+
+func (x *Shortcut) GetTagInfo() []*Shortcut_TagInfo {
+	if x != nil {
+		return x.TagInfo
+	}
+	return nil
 }
 
 type ListShortcutsRequest struct {
@@ -681,6 +689,58 @@ func (x *Shortcut_OpenGraphMetadata) GetImage() string {
 	return ""
 }
 
+type Shortcut_TagInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Shortcut_TagInfo) Reset() {
+	*x = Shortcut_TagInfo{}
+	mi := &file_api_v1_shortcut_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Shortcut_TagInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Shortcut_TagInfo) ProtoMessage() {}
+
+func (x *Shortcut_TagInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_shortcut_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Shortcut_TagInfo.ProtoReflect.Descriptor instead.
+func (*Shortcut_TagInfo) Descriptor() ([]byte, []int) {
+	return file_api_v1_shortcut_service_proto_rawDescGZIP(), []int{0, 1}
+}
+
+func (x *Shortcut_TagInfo) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *Shortcut_TagInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type GetShortcutAnalyticsResponse_AnalyticsItem struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -691,7 +751,7 @@ type GetShortcutAnalyticsResponse_AnalyticsItem struct {
 
 func (x *GetShortcutAnalyticsResponse_AnalyticsItem) Reset() {
 	*x = GetShortcutAnalyticsResponse_AnalyticsItem{}
-	mi := &file_api_v1_shortcut_service_proto_msgTypes[12]
+	mi := &file_api_v1_shortcut_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -703,7 +763,7 @@ func (x *GetShortcutAnalyticsResponse_AnalyticsItem) String() string {
 func (*GetShortcutAnalyticsResponse_AnalyticsItem) ProtoMessage() {}
 
 func (x *GetShortcutAnalyticsResponse_AnalyticsItem) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_shortcut_service_proto_msgTypes[12]
+	mi := &file_api_v1_shortcut_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -737,7 +797,7 @@ var File_api_v1_shortcut_service_proto protoreflect.FileDescriptor
 
 const file_api_v1_shortcut_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1dapi/v1/shortcut_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xed\x04\n" +
+	"\x1dapi/v1/shortcut_service.proto\x12\x10monotreme.api.v1\x1a\x13api/v1/common.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17google/api/client.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xdf\x05\n" +
 	"\bShortcut\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04uuid\x18\x05 \x01(\tR\x04uuid\x12\x1d\n" +
@@ -759,11 +819,15 @@ const file_api_v1_shortcut_service_proto_rawDesc = "" +
 	"\vog_metadata\x18\r \x01(\v2,.monotreme.api.v1.Shortcut.OpenGraphMetadataR\n" +
 	"ogMetadata\x12\x1d\n" +
 	"\n" +
-	"user_order\x18\x0e \x01(\x05R\tuserOrder\x1aa\n" +
+	"user_order\x18\x0e \x01(\x05R\tuserOrder\x12=\n" +
+	"\btag_info\x18\x0f \x03(\v2\".monotreme.api.v1.Shortcut.TagInfoR\atagInfo\x1aa\n" +
 	"\x11OpenGraphMetadata\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +
-	"\x05image\x18\x03 \x01(\tR\x05image\"\x16\n" +
+	"\x05image\x18\x03 \x01(\tR\x05image\x1a1\n" +
+	"\aTagInfo\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"\x16\n" +
 	"\x14ListShortcutsRequest\"Q\n" +
 	"\x15ListShortcutsResponse\x128\n" +
 	"\tshortcuts\x18\x01 \x03(\v2\x1a.monotreme.api.v1.ShortcutR\tshortcuts\"$\n" +
@@ -814,7 +878,7 @@ func file_api_v1_shortcut_service_proto_rawDescGZIP() []byte {
 	return file_api_v1_shortcut_service_proto_rawDescData
 }
 
-var file_api_v1_shortcut_service_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_api_v1_shortcut_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_api_v1_shortcut_service_proto_goTypes = []any{
 	(*Shortcut)(nil),                                   // 0: monotreme.api.v1.Shortcut
 	(*ListShortcutsRequest)(nil),                       // 1: monotreme.api.v1.ListShortcutsRequest
@@ -828,45 +892,47 @@ var file_api_v1_shortcut_service_proto_goTypes = []any{
 	(*GetShortcutAnalyticsRequest)(nil),                // 9: monotreme.api.v1.GetShortcutAnalyticsRequest
 	(*GetShortcutAnalyticsResponse)(nil),               // 10: monotreme.api.v1.GetShortcutAnalyticsResponse
 	(*Shortcut_OpenGraphMetadata)(nil),                 // 11: monotreme.api.v1.Shortcut.OpenGraphMetadata
-	(*GetShortcutAnalyticsResponse_AnalyticsItem)(nil), // 12: monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
-	(*timestamppb.Timestamp)(nil),                      // 13: google.protobuf.Timestamp
-	(Visibility)(0),                                    // 14: monotreme.api.v1.Visibility
-	(*fieldmaskpb.FieldMask)(nil),                      // 15: google.protobuf.FieldMask
-	(*emptypb.Empty)(nil),                              // 16: google.protobuf.Empty
+	(*Shortcut_TagInfo)(nil),                           // 12: monotreme.api.v1.Shortcut.TagInfo
+	(*GetShortcutAnalyticsResponse_AnalyticsItem)(nil), // 13: monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
+	(*timestamppb.Timestamp)(nil),                      // 14: google.protobuf.Timestamp
+	(Visibility)(0),                                    // 15: monotreme.api.v1.Visibility
+	(*fieldmaskpb.FieldMask)(nil),                      // 16: google.protobuf.FieldMask
+	(*emptypb.Empty)(nil),                              // 17: google.protobuf.Empty
 }
 var file_api_v1_shortcut_service_proto_depIdxs = []int32{
-	13, // 0: monotreme.api.v1.Shortcut.created_time:type_name -> google.protobuf.Timestamp
-	13, // 1: monotreme.api.v1.Shortcut.updated_time:type_name -> google.protobuf.Timestamp
-	14, // 2: monotreme.api.v1.Shortcut.visibility:type_name -> monotreme.api.v1.Visibility
+	14, // 0: monotreme.api.v1.Shortcut.created_time:type_name -> google.protobuf.Timestamp
+	14, // 1: monotreme.api.v1.Shortcut.updated_time:type_name -> google.protobuf.Timestamp
+	15, // 2: monotreme.api.v1.Shortcut.visibility:type_name -> monotreme.api.v1.Visibility
 	11, // 3: monotreme.api.v1.Shortcut.og_metadata:type_name -> monotreme.api.v1.Shortcut.OpenGraphMetadata
-	0,  // 4: monotreme.api.v1.ListShortcutsResponse.shortcuts:type_name -> monotreme.api.v1.Shortcut
-	0,  // 5: monotreme.api.v1.CreateShortcutRequest.shortcut:type_name -> monotreme.api.v1.Shortcut
-	0,  // 6: monotreme.api.v1.UpdateShortcutRequest.shortcut:type_name -> monotreme.api.v1.Shortcut
-	15, // 7: monotreme.api.v1.UpdateShortcutRequest.update_mask:type_name -> google.protobuf.FieldMask
-	12, // 8: monotreme.api.v1.GetShortcutAnalyticsResponse.references:type_name -> monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
-	12, // 9: monotreme.api.v1.GetShortcutAnalyticsResponse.devices:type_name -> monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
-	12, // 10: monotreme.api.v1.GetShortcutAnalyticsResponse.browsers:type_name -> monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
-	1,  // 11: monotreme.api.v1.ShortcutService.ListShortcuts:input_type -> monotreme.api.v1.ListShortcutsRequest
-	3,  // 12: monotreme.api.v1.ShortcutService.GetShortcut:input_type -> monotreme.api.v1.GetShortcutRequest
-	4,  // 13: monotreme.api.v1.ShortcutService.GetShortcutByName:input_type -> monotreme.api.v1.GetShortcutByNameRequest
-	5,  // 14: monotreme.api.v1.ShortcutService.CreateShortcut:input_type -> monotreme.api.v1.CreateShortcutRequest
-	6,  // 15: monotreme.api.v1.ShortcutService.UpdateShortcut:input_type -> monotreme.api.v1.UpdateShortcutRequest
-	7,  // 16: monotreme.api.v1.ShortcutService.DeleteShortcut:input_type -> monotreme.api.v1.DeleteShortcutRequest
-	8,  // 17: monotreme.api.v1.ShortcutService.DeleteAllShortcuts:input_type -> monotreme.api.v1.DeleteAllShortcutsRequest
-	9,  // 18: monotreme.api.v1.ShortcutService.GetShortcutAnalytics:input_type -> monotreme.api.v1.GetShortcutAnalyticsRequest
-	2,  // 19: monotreme.api.v1.ShortcutService.ListShortcuts:output_type -> monotreme.api.v1.ListShortcutsResponse
-	0,  // 20: monotreme.api.v1.ShortcutService.GetShortcut:output_type -> monotreme.api.v1.Shortcut
-	0,  // 21: monotreme.api.v1.ShortcutService.GetShortcutByName:output_type -> monotreme.api.v1.Shortcut
-	0,  // 22: monotreme.api.v1.ShortcutService.CreateShortcut:output_type -> monotreme.api.v1.Shortcut
-	0,  // 23: monotreme.api.v1.ShortcutService.UpdateShortcut:output_type -> monotreme.api.v1.Shortcut
-	16, // 24: monotreme.api.v1.ShortcutService.DeleteShortcut:output_type -> google.protobuf.Empty
-	16, // 25: monotreme.api.v1.ShortcutService.DeleteAllShortcuts:output_type -> google.protobuf.Empty
-	10, // 26: monotreme.api.v1.ShortcutService.GetShortcutAnalytics:output_type -> monotreme.api.v1.GetShortcutAnalyticsResponse
-	19, // [19:27] is the sub-list for method output_type
-	11, // [11:19] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	12, // 4: monotreme.api.v1.Shortcut.tag_info:type_name -> monotreme.api.v1.Shortcut.TagInfo
+	0,  // 5: monotreme.api.v1.ListShortcutsResponse.shortcuts:type_name -> monotreme.api.v1.Shortcut
+	0,  // 6: monotreme.api.v1.CreateShortcutRequest.shortcut:type_name -> monotreme.api.v1.Shortcut
+	0,  // 7: monotreme.api.v1.UpdateShortcutRequest.shortcut:type_name -> monotreme.api.v1.Shortcut
+	16, // 8: monotreme.api.v1.UpdateShortcutRequest.update_mask:type_name -> google.protobuf.FieldMask
+	13, // 9: monotreme.api.v1.GetShortcutAnalyticsResponse.references:type_name -> monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
+	13, // 10: monotreme.api.v1.GetShortcutAnalyticsResponse.devices:type_name -> monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
+	13, // 11: monotreme.api.v1.GetShortcutAnalyticsResponse.browsers:type_name -> monotreme.api.v1.GetShortcutAnalyticsResponse.AnalyticsItem
+	1,  // 12: monotreme.api.v1.ShortcutService.ListShortcuts:input_type -> monotreme.api.v1.ListShortcutsRequest
+	3,  // 13: monotreme.api.v1.ShortcutService.GetShortcut:input_type -> monotreme.api.v1.GetShortcutRequest
+	4,  // 14: monotreme.api.v1.ShortcutService.GetShortcutByName:input_type -> monotreme.api.v1.GetShortcutByNameRequest
+	5,  // 15: monotreme.api.v1.ShortcutService.CreateShortcut:input_type -> monotreme.api.v1.CreateShortcutRequest
+	6,  // 16: monotreme.api.v1.ShortcutService.UpdateShortcut:input_type -> monotreme.api.v1.UpdateShortcutRequest
+	7,  // 17: monotreme.api.v1.ShortcutService.DeleteShortcut:input_type -> monotreme.api.v1.DeleteShortcutRequest
+	8,  // 18: monotreme.api.v1.ShortcutService.DeleteAllShortcuts:input_type -> monotreme.api.v1.DeleteAllShortcutsRequest
+	9,  // 19: monotreme.api.v1.ShortcutService.GetShortcutAnalytics:input_type -> monotreme.api.v1.GetShortcutAnalyticsRequest
+	2,  // 20: monotreme.api.v1.ShortcutService.ListShortcuts:output_type -> monotreme.api.v1.ListShortcutsResponse
+	0,  // 21: monotreme.api.v1.ShortcutService.GetShortcut:output_type -> monotreme.api.v1.Shortcut
+	0,  // 22: monotreme.api.v1.ShortcutService.GetShortcutByName:output_type -> monotreme.api.v1.Shortcut
+	0,  // 23: monotreme.api.v1.ShortcutService.CreateShortcut:output_type -> monotreme.api.v1.Shortcut
+	0,  // 24: monotreme.api.v1.ShortcutService.UpdateShortcut:output_type -> monotreme.api.v1.Shortcut
+	17, // 25: monotreme.api.v1.ShortcutService.DeleteShortcut:output_type -> google.protobuf.Empty
+	17, // 26: monotreme.api.v1.ShortcutService.DeleteAllShortcuts:output_type -> google.protobuf.Empty
+	10, // 27: monotreme.api.v1.ShortcutService.GetShortcutAnalytics:output_type -> monotreme.api.v1.GetShortcutAnalyticsResponse
+	20, // [20:28] is the sub-list for method output_type
+	12, // [12:20] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_api_v1_shortcut_service_proto_init() }
@@ -881,7 +947,7 @@ func file_api_v1_shortcut_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_shortcut_service_proto_rawDesc), len(file_api_v1_shortcut_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

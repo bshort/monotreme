@@ -7,24 +7,19 @@ tags:
   - name: ActivityService
   - name: AuthService
   - name: CollectionService
+  - name: ShortcutService
+  - name: FollowService
+  - name: FriendService
   - name: InvitationService
   - name: RssImportService
-  - name: ShortcutService
   - name: SubscriptionService
+  - name: TagService
   - name: UserSettingService
   - name: WorkspaceService
 consumes:
   - application/json
 produces:
   - application/json
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
-    description: 'Enter your JWT token in the format: Bearer {token}'
-security:
-  - Bearer: []
 paths:
   /api/v1/activities:
     get:
@@ -237,6 +232,27 @@ paths:
             $ref: '#/definitions/rpcStatus'
       tags:
         - AuthService
+  /api/v1/bookmarks/{shortcutId}/tags:
+    get:
+      summary: ListTagsForBookmark lists all tags for a bookmark.
+      operationId: TagService_ListTagsForBookmark
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListTagsForBookmarkResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: shortcutId
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - TagService
   /api/v1/collections:
     get:
       summary: ListCollections returns a list of collections.
@@ -390,6 +406,207 @@ paths:
           format: int32
       tags:
         - CollectionService
+  /api/v1/followers:
+    get:
+      summary: ListFollowers lists all users following the current user
+      operationId: FollowService_ListFollowers
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFollowersResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - FollowService
+  /api/v1/following:
+    get:
+      summary: ListFollowing lists all users that the current user is following
+      operationId: FollowService_ListFollowing
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFollowingResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - FollowService
+    post:
+      summary: FollowUser follows a user
+      operationId: FollowService_FollowUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1Following'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1FollowUserRequest'
+      tags:
+        - FollowService
+  /api/v1/following/{id}:
+    delete:
+      summary: UnfollowUser unfollows a user
+      operationId: FollowService_UnfollowUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - FollowService
+  /api/v1/following/{userId}/shortcuts:
+    get:
+      summary: ListFollowingUserShortcuts lists public shortcuts from users the current user is following
+      operationId: FollowService_ListFollowingUserShortcuts
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFollowingUserShortcutsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - FollowService
+  /api/v1/friends:
+    get:
+      summary: ListFriends returns a list of friends for the current user.
+      operationId: FriendService_ListFriends
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFriendsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - FriendService
+    post:
+      summary: SendFriendRequest sends a friend request to another user.
+      operationId: FriendService_SendFriendRequest
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1Friendship'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1SendFriendRequestRequest'
+      tags:
+        - FriendService
+  /api/v1/friends/requests:
+    get:
+      summary: ListFriendRequests returns a list of pending friend requests.
+      operationId: FriendService_ListFriendRequests
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFriendRequestsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: type
+          in: query
+          required: false
+          type: string
+          enum:
+            - REQUEST_TYPE_ALL
+            - REQUEST_TYPE_INCOMING
+            - REQUEST_TYPE_OUTGOING
+          default: REQUEST_TYPE_ALL
+      tags:
+        - FriendService
+  /api/v1/friends/{id}:
+    delete:
+      summary: RemoveFriend removes a friend or declines a friend request.
+      operationId: FriendService_RemoveFriend
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - FriendService
+  /api/v1/friends/{id}/accept:
+    post:
+      summary: AcceptFriendRequest accepts a pending friend request.
+      operationId: FriendService_AcceptFriendRequest
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1Friendship'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FriendServiceAcceptFriendRequestBody'
+      tags:
+        - FriendService
   /api/v1/invitations:
     get:
       summary: ListInvitations returns a list of invitations.
@@ -857,12 +1074,231 @@ paths:
               userOrder:
                 type: integer
                 format: int32
+              tagInfo:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/definitions/ShortcutTagInfo'
         - name: updateMask
           in: query
           required: false
           type: string
       tags:
         - ShortcutService
+  /api/v1/tags:
+    get:
+      summary: ListTags returns a list of tags.
+      operationId: TagService_ListTags
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListTagsResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - TagService
+    post:
+      summary: CreateTag creates a tag.
+      operationId: TagService_CreateTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Tag'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tag
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/apiv1Tag'
+      tags:
+        - TagService
+  /api/v1/tags/abbr/{abbreviation}:
+    get:
+      summary: GetTagByAbbreviation returns a tag by abbreviation.
+      operationId: TagService_GetTagByAbbreviation
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Tag'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: abbreviation
+          in: path
+          required: true
+          type: string
+      tags:
+        - TagService
+  /api/v1/tags/{tag.uuid}:
+    put:
+      summary: UpdateTag updates a tag.
+      operationId: TagService_UpdateTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Tag'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tag.uuid
+          in: path
+          required: true
+          type: string
+        - name: tag
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creatorId:
+                type: integer
+                format: int32
+              createdTime:
+                type: string
+                format: date-time
+              updatedTime:
+                type: string
+                format: date-time
+              name:
+                type: string
+              abbreviation:
+                type: string
+              description:
+                type: string
+        - name: updateMask
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+      tags:
+        - TagService
+  /api/v1/tags/{tagUuid}/bookmarks:
+    get:
+      summary: ListBookmarksForTag lists all bookmarks for a tag.
+      operationId: TagService_ListBookmarksForTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListBookmarksForTagResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tagUuid
+          in: path
+          required: true
+          type: string
+      tags:
+        - TagService
+  /api/v1/tags/{tagUuid}/bookmarks/{shortcutId}:
+    delete:
+      summary: RemoveBookmarkFromTag removes a bookmark from a tag.
+      operationId: TagService_RemoveBookmarkFromTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tagUuid
+          in: path
+          required: true
+          type: string
+        - name: shortcutId
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - TagService
+    post:
+      summary: AddBookmarkToTag adds a bookmark to a tag.
+      operationId: TagService_AddBookmarkToTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: tagUuid
+          in: path
+          required: true
+          type: string
+        - name: shortcutId
+          in: path
+          required: true
+          type: integer
+          format: int32
+      tags:
+        - TagService
+  /api/v1/tags/{uuid}:
+    get:
+      summary: GetTag returns a tag by uuid.
+      operationId: TagService_GetTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/apiv1Tag'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          type: string
+      tags:
+        - TagService
+    delete:
+      summary: DeleteTag deletes a tag by uuid.
+      operationId: TagService_DeleteTag
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          type: string
+      tags:
+        - TagService
   /api/v1/users:
     get:
       summary: ListUsers returns a list of users.
@@ -1253,6 +1689,8 @@ paths:
       tags:
         - SubscriptionService
 definitions:
+  FriendServiceAcceptFriendRequestBody:
+    type: object
   GetShortcutAnalyticsResponseAnalyticsItem:
     type: object
     properties:
@@ -1263,6 +1701,13 @@ definitions:
         format: int32
   InvitationServiceAcceptInvitationBody:
     type: object
+  ShortcutTagInfo:
+    type: object
+    properties:
+      uuid:
+        type: string
+      name:
+        type: string
   UserServiceCreateUserAccessTokenBody:
     type: object
     properties:
@@ -1466,6 +1911,11 @@ definitions:
       userOrder:
         type: integer
         format: int32
+      tagInfo:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/ShortcutTagInfo'
   apiv1StatsMeasurement:
     type: object
     properties:
@@ -1489,6 +1939,26 @@ definitions:
         type: integer
         format: int32
         title: Total number of hits (shortcut views) at measurement time
+  apiv1Tag:
+    type: object
+    properties:
+      uuid:
+        type: string
+      creatorId:
+        type: integer
+        format: int32
+      createdTime:
+        type: string
+        format: date-time
+      updatedTime:
+        type: string
+        format: date-time
+      name:
+        type: string
+      abbreviation:
+        type: string
+      description:
+        type: string
   apiv1UserSetting:
     type: object
     properties:
@@ -1543,6 +2013,8 @@ definitions:
       - VISIBILITY_UNSPECIFIED
       - WORKSPACE
       - PUBLIC
+      - PRIVATE
+      - FRIENDS
     default: VISIBILITY_UNSPECIFIED
   apiv1WorkspaceSetting:
     type: object
@@ -1653,6 +2125,73 @@ definitions:
         type: string
       title:
         type: string
+  v1FollowUserRequest:
+    type: object
+    properties:
+      userId:
+        type: integer
+        format: int32
+      userEmail:
+        type: string
+  v1Following:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      followerId:
+        type: integer
+        format: int32
+      followingId:
+        type: integer
+        format: int32
+      createdTime:
+        type: string
+        format: date-time
+      follower:
+        $ref: '#/definitions/v1User'
+      following:
+        $ref: '#/definitions/v1User'
+  v1FriendRequestType:
+    type: string
+    enum:
+      - REQUEST_TYPE_ALL
+      - REQUEST_TYPE_INCOMING
+      - REQUEST_TYPE_OUTGOING
+    default: REQUEST_TYPE_ALL
+  v1Friendship:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      userId:
+        type: integer
+        format: int32
+      friendId:
+        type: integer
+        format: int32
+      status:
+        $ref: '#/definitions/v1FriendshipStatus'
+      createdTime:
+        type: string
+        format: date-time
+      acceptedTime:
+        type: string
+        format: date-time
+      user:
+        $ref: '#/definitions/v1User'
+      friend:
+        $ref: '#/definitions/v1User'
+  v1FriendshipStatus:
+    type: string
+    enum:
+      - FRIENDSHIP_STATUS_UNSPECIFIED
+      - PENDING
+      - ACCEPTED
+      - DECLINED
+      - BLOCKED
+    default: FRIENDSHIP_STATUS_UNSPECIFIED
   v1GetActivitySummaryResponse:
     type: object
     properties:
@@ -1782,6 +2321,14 @@ definitions:
       totalCount:
         type: integer
         format: int32
+  v1ListBookmarksForTagResponse:
+    type: object
+    properties:
+      shortcuts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1Shortcut'
   v1ListCollectionsResponse:
     type: object
     properties:
@@ -1790,6 +2337,46 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/apiv1Collection'
+  v1ListFollowersResponse:
+    type: object
+    properties:
+      followers:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Following'
+  v1ListFollowingResponse:
+    type: object
+    properties:
+      following:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Following'
+  v1ListFollowingUserShortcutsResponse:
+    type: object
+    properties:
+      shortcuts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1Shortcut'
+  v1ListFriendRequestsResponse:
+    type: object
+    properties:
+      friendRequests:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Friendship'
+  v1ListFriendsResponse:
+    type: object
+    properties:
+      friends:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Friendship'
   v1ListInvitationsResponse:
     type: object
     properties:
@@ -1814,6 +2401,22 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/apiv1Shortcut'
+  v1ListTagsForBookmarkResponse:
+    type: object
+    properties:
+      tags:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1Tag'
+  v1ListTagsResponse:
+    type: object
+    properties:
+      tags:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/apiv1Tag'
   v1ListUserAccessTokensResponse:
     type: object
     properties:
@@ -1972,6 +2575,14 @@ definitions:
         type: array
         items:
           type: string
+  v1SendFriendRequestRequest:
+    type: object
+    properties:
+      friendEmail:
+        type: string
+      friendId:
+        type: integer
+        format: int32
   v1ShortcutCreatedData:
     type: object
     properties:

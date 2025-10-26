@@ -4,10 +4,8 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Icon from "@/components/Icon";
 import AccessTokenSection from "@/components/setting/AccessTokenSection";
-import AccountSection from "@/components/setting/AccountSection";
+import BrowserIntegrationSection from "@/components/setting/BrowserIntegrationSection";
 import PreferenceSection from "@/components/setting/PreferenceSection";
-import RecentActivitySection from "@/components/setting/RecentActivitySection";
-import UserSummarySection from "@/components/setting/UserSummarySection";
 import { shortcutServiceClient, userServiceClient } from "@/grpcweb";
 import { useUserStore, useShortcutStore } from "@/stores";
 
@@ -81,11 +79,9 @@ const Setting: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-8xl w-full px-4 sm:px-6 md:px-12 py-6 flex flex-col justify-start items-start gap-y-12">
-      <AccountSection />
-      <UserSummarySection />
-      <RecentActivitySection />
       <AccessTokenSection />
       <PreferenceSection />
+      <BrowserIntegrationSection />
 
       <Card className="w-full p-6">
         <Typography level="title-md" className="mb-3">

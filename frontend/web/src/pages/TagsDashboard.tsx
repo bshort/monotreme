@@ -117,7 +117,7 @@ const TagsDashboard: React.FC = () => {
         <div className="py-16 w-full flex flex-col justify-center items-center text-gray-400">
           <Icon.Tag size={64} strokeWidth={1} />
           <p className="mt-2">No tags found.</p>
-          <p className="text-sm mt-1">Create some shortcuts with tags to see them organized here.</p>
+          <p className="text-sm mt-1">Create some bookmarks with tags to see them organized here.</p>
         </div>
       </div>
     );
@@ -131,7 +131,7 @@ const TagsDashboard: React.FC = () => {
             Tags
           </Typography>
           <Typography level="body-md" className="text-gray-600 dark:text-gray-400">
-            Browse shortcuts organized by tags
+            Browse bookmarks organized by tags
           </Typography>
         </div>
         <Button className="hover:shadow" variant="plain" size="sm" onClick={handleReload} disabled={loadingState.isLoading}>
@@ -150,7 +150,7 @@ const TagsDashboard: React.FC = () => {
                   #{tag}
                 </Typography>
                 <span className="text-sm text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                  {shortcuts.length} shortcut{shortcuts.length !== 1 ? 's' : ''}
+                  {shortcuts.length} bookmark{shortcuts.length !== 1 ? 's' : ''}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -223,7 +223,7 @@ const TagsDashboard: React.FC = () => {
                     <Link
                       to={`/shortcut/${shortcut.uuid}?edit=true`}
                       className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                      title="Edit shortcut"
+                      title="Edit bookmark"
                     >
                       <Icon.Edit className="w-4 h-4" />
                     </Link>
@@ -232,7 +232,7 @@ const TagsDashboard: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                      title="Open shortcut"
+                      title="Open bookmark"
                     >
                       <Icon.ExternalLink className="w-4 h-4" />
                     </a>

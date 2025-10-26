@@ -93,7 +93,7 @@ func (es *ExportService) handleShortcutsExport(c echo.Context) error {
 	}
 
 	// Set headers for file download
-	timestamp := time.Now().Format("1_2_06") // M_D_YY format
+	timestamp := time.Now().Format("2006_01_02") // YYYY_MM_DD format
 	filename := fmt.Sprintf("monotreme_bookmarks_%s.html", timestamp)
 	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
 	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
@@ -135,7 +135,7 @@ func (es *ExportService) handleShortcutsCSVExport(c echo.Context) error {
 	}
 
 	// Set headers for file download
-	timestamp := time.Now().Format("1_2_06") // M_D_YY format
+	timestamp := time.Now().Format("2006_01_02") // YYYY_MM_DD format
 	filename := fmt.Sprintf("monotreme_shortcuts_%s.csv", timestamp)
 	c.Response().Header().Set("Content-Type", "text/csv; charset=utf-8")
 	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))

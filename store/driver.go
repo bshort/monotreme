@@ -70,4 +70,34 @@ type Driver interface {
 	UpdateInvitation(ctx context.Context, update *UpdateInvitation) (*storepb.Invitation, error)
 	ListInvitations(ctx context.Context, find *FindInvitation) ([]*storepb.Invitation, error)
 	DeleteInvitation(ctx context.Context, delete *DeleteInvitation) error
+
+	// Tag model related methods.
+	CreateTag(ctx context.Context, create *storepb.Tag) (*storepb.Tag, error)
+	UpdateTag(ctx context.Context, update *UpdateTag) (*storepb.Tag, error)
+	ListTags(ctx context.Context, find *FindTag) ([]*storepb.Tag, error)
+	DeleteTag(ctx context.Context, delete *DeleteTag) error
+
+	// BookmarkTag model related methods.
+	CreateBookmarkTag(ctx context.Context, create *CreateBookmarkTag) (*storepb.BookmarkTag, error)
+	ListBookmarkTags(ctx context.Context, find *FindBookmarkTag) ([]*storepb.BookmarkTag, error)
+	DeleteBookmarkTag(ctx context.Context, delete *DeleteBookmarkTag) error
+	DeleteBookmarkTagsByShortcut(ctx context.Context, shortcutID int32) error
+	DeleteBookmarkTagsByTag(ctx context.Context, tagUUID string) error
+
+	// Friendship model related methods.
+	ListFriendships(ctx context.Context, userID int32, status string) ([]*Friendship, error)
+	ListIncomingFriendRequests(ctx context.Context, userID int32) ([]*Friendship, error)
+	ListOutgoingFriendRequests(ctx context.Context, userID int32) ([]*Friendship, error)
+	GetFriendship(ctx context.Context, id int32) (*Friendship, error)
+	CreateFriendship(ctx context.Context, userID int32, friendID int32) (*Friendship, error)
+	AcceptFriendship(ctx context.Context, id int32) error
+	DeleteFriendship(ctx context.Context, id int32) error
+
+	// Following model related methods.
+	ListFollowing(ctx context.Context, userID int32) ([]*Following, error)
+	ListFollowers(ctx context.Context, userID int32) ([]*Following, error)
+	GetFollowing(ctx context.Context, id int32) (*Following, error)
+	CreateFollowing(ctx context.Context, followerID int32, followingID int32) (*Following, error)
+	DeleteFollowing(ctx context.Context, id int32) error
+	GetFollowingUserShortcuts(ctx context.Context, followerID int32, followingID int32) ([]*storepb.Shortcut, error)
 }

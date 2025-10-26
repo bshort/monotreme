@@ -11,6 +11,7 @@ import Home from "@/pages/Home";
 import Invite from "@/pages/Invite";
 import Landing from "@/pages/Landing";
 import NotFound from "@/pages/NotFound";
+import Profile from "@/pages/Profile";
 import QRCode from "@/pages/QRCode";
 import QuickSave from "@/pages/QuickSave";
 import ShortcutDashboard from "@/pages/ShortcutDashboard";
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
           {
             path: "/setting/general",
             element: <UserSetting />,
+          },
+          {
+            path: "/profile/:username",
+            element: <Profile />,
           },
           {
             path: "/qr-code",

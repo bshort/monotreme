@@ -11,7 +11,7 @@ import ShortcutsNavigator from "@/components/ShortcutsNavigator";
 import StandaloneViewControls from "@/components/StandaloneViewControls";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useUserStore, useViewStore } from "@/stores";
-import { getFilteredShortcutList, getOrderedShortcutList, getTagsSortedByMostRecent } from "@/stores/view";
+import { getFilteredShortcutList, getOrderedShortcutList } from "@/stores/view";
 
 interface State {
   showCreateShortcutDrawer: boolean;
@@ -44,7 +44,9 @@ const ShortcutDashboard: React.FC = () => {
 
   const filteredShortcutList = getFilteredShortcutList(shortcutList, filter, currentUser);
   const orderedShortcutList = getOrderedShortcutList(filteredShortcutList, viewStore.order);
-  const recentTags = getTagsSortedByMostRecent(shortcutList);
+
+  // Get tags sorted by popularity
+  const sortedTags = getSortedTagsByPopularity(shortcutList);
 
   useEffect(() => {
     setLastVisited("/shortcuts");
@@ -67,7 +69,7 @@ const ShortcutDashboard: React.FC = () => {
     });
   };
 
-  const toggleTags = () => {
+  const toggleTagsExpanded = () => {
     setState({ ...state, tagsExpanded: !state.tagsExpanded });
   };
 
@@ -81,24 +83,26 @@ const ShortcutDashboard: React.FC = () => {
         <ShortcutsNavigator />
 
         {/* Collapsible Tags Section */}
-        {recentTags.length > 0 && (
+        {sortedTags.length > 0 && (
           <div className="w-full mb-4 border border-gray-200 dark:border-gray-700 rounded-lg">
             <button
-              onClick={toggleTags}
-              className="w-full px-4 py-2 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              onClick={toggleTagsExpanded}
+              className="w-full px-4 py-3 flex items-start justify-between hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
-              <div className="flex items-center gap-2 flex-wrap overflow-hidden">
-                <Icon.Tag className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <span className="text-sm text-gray-600 dark:text-gray-400 flex-shrink-0">Recent Tags:</span>
-                <div className={`flex items-center gap-2 flex-wrap ${!state.tagsExpanded ? 'line-clamp-1 max-h-6 overflow-hidden' : ''}`}>
-                  {(state.tagsExpanded ? recentTags : recentTags.slice(0, 10)).map((tag) => (
+              <div className="flex flex-col items-start gap-2 flex-1 overflow-hidden">
+                <div className="flex items-center gap-2">
+                  <Icon.Tag className="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-shrink-0">Tags</span>
+                </div>
+                <div className={`w-full flex flex-wrap gap-2 ${!state.tagsExpanded ? 'max-h-8 overflow-hidden' : ''}`}>
+                  {sortedTags.map((tag) => (
                     <span
                       key={tag}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleTagClick(tag);
                       }}
-                      className="text-xs px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer transition-colors"
+                      className="text-xs px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer transition-colors font-medium"
                     >
                       #{tag}
                     </span>
@@ -106,7 +110,7 @@ const ShortcutDashboard: React.FC = () => {
                 </div>
               </div>
               <Icon.ChevronDown
-                className={`w-4 h-4 text-gray-500 flex-shrink-0 transition-transform ${state.tagsExpanded ? 'rotate-180' : ''}`}
+                className={`w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0 transition-transform ml-2 ${state.tagsExpanded ? 'rotate-180' : ''}`}
               />
             </button>
           </div>
@@ -150,13 +154,13 @@ const ShortcutDashboard: React.FC = () => {
         ) : orderedShortcutList.length === 0 ? (
           <div className="py-16 w-full flex flex-col justify-center items-center text-gray-400">
             <Icon.PackageOpen size={64} strokeWidth={1} />
-            <p className="mt-2">No shortcuts found.</p>
+            <p className="mt-2">No bookmarks found.</p>
             <a
               className="text-blue-600 border-t dark:border-t-zinc-600 text-sm hover:underline flex flex-row justify-center items-center mt-4 pt-2"
               href="https://github.com/bshort/monotreme/blob/main/docs/getting-started/shortcuts.md"
               target="_blank"
             >
-              <span>Learn more about shortcuts.</span>
+              <span>Learn more about bookmarks.</span>
               <Icon.ExternalLink className="ml-1 w-4 h-auto inline" />
             </a>
           </div>
@@ -170,6 +174,26 @@ const ShortcutDashboard: React.FC = () => {
       )}
     </>
   );
+};
+
+// Helper function to sort tags by popularity (most used first)
+const getSortedTagsByPopularity = (shortcuts: any[]): string[] => {
+  const tagCounts = new Map<string, number>();
+
+  shortcuts.forEach((shortcut) => {
+    if (shortcut.tags && Array.isArray(shortcut.tags)) {
+      shortcut.tags.forEach((tag: string) => {
+        const cleanTag = tag.trim().replace(/,$/, ""); // Remove trailing comma
+        if (cleanTag) {
+          tagCounts.set(cleanTag, (tagCounts.get(cleanTag) || 0) + 1);
+        }
+      });
+    }
+  });
+
+  return Array.from(tagCounts.entries())
+    .sort((a, b) => b[1] - a[1]) // Sort by count descending
+    .map(([tag]) => tag);
 };
 
 export default ShortcutDashboard;

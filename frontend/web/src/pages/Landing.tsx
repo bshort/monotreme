@@ -98,7 +98,7 @@ const Landing: React.FC = () => {
             Made Simple
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Monotreme helps you organize, share, and track your links with ease. Create custom shortcuts, organize them into collections, and access them from anywhere.
+            Monotreme helps you organize, share, and track your links with ease. Create custom bookmarks, organize them into collections, and access them from anywhere.
           </p>
         </div>
       </section>
@@ -113,7 +113,7 @@ const Landing: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Smart Shortcuts</h3>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Smart Bookmarks</h3>
               <p className="text-gray-600 dark:text-gray-300">Create memorable short links that are easy to share and remember. Perfect for frequently accessed resources.</p>
             </div>
 

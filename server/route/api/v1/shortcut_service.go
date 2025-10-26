@@ -19,6 +19,7 @@ import (
 
 	v1pb "github.com/bshort/monotreme/proto/gen/api/v1"
 	storepb "github.com/bshort/monotreme/proto/gen/store"
+	"github.com/bshort/monotreme/server/common"
 	"github.com/bshort/monotreme/server/service/license"
 	"github.com/bshort/monotreme/store"
 )
@@ -179,6 +180,12 @@ func (s *APIV1Service) CreateShortcut(ctx context.Context, request *v1pb.CreateS
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create shortcut, err: %v", err)
 	}
+
+	// Process tags: create Tag entities and bookmark_tag relationships
+	if err := s.processShortcutTags(ctx, shortcut.Id, user.ID, request.Shortcut.Tags); err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to process tags, err: %v", err)
+	}
+
 	if err := s.createShortcutCreateActivity(ctx, shortcut); err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create activity, err: %v", err)
 	}
@@ -220,6 +227,7 @@ func (s *APIV1Service) UpdateShortcut(ctx context.Context, request *v1pb.UpdateS
 	update := &store.UpdateShortcut{
 		ID: shortcut.Id,
 	}
+	tagsUpdated := false
 	for _, path := range request.UpdateMask.Paths {
 		switch path {
 		case "name":
@@ -233,6 +241,7 @@ func (s *APIV1Service) UpdateShortcut(ctx context.Context, request *v1pb.UpdateS
 		case "tags":
 			tag := strings.Join(request.Shortcut.Tags, " ")
 			update.Tag = &tag
+			tagsUpdated = true
 		case "visibility":
 			visibility := convertVisibilityToStorepb(request.Shortcut.Visibility)
 			update.Visibility = &visibility
@@ -251,6 +260,18 @@ func (s *APIV1Service) UpdateShortcut(ctx context.Context, request *v1pb.UpdateS
 	shortcut, err = s.Store.UpdateShortcut(ctx, update)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to update shortcut, err: %v", err)
+	}
+
+	// If tags were updated, update Tag entities and relationships
+	if tagsUpdated {
+		// Delete existing bookmark_tag relationships
+		if err := s.Store.DeleteBookmarkTagsByShortcut(ctx, shortcut.Id); err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to delete old tag relationships, err: %v", err)
+		}
+		// Create new relationships
+		if err := s.processShortcutTags(ctx, shortcut.Id, user.ID, request.Shortcut.Tags); err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to process tags, err: %v", err)
+		}
 	}
 
 	// Invalidate Redis cache for this user
@@ -461,6 +482,14 @@ func (s *APIV1Service) convertShortcutFromStorepb(ctx context.Context, shortcut 
 	}
 	composedShortcut.ViewCount = int32(len(activityList))
 
+	// Populate tag_info with UUIDs and names from Tag entities
+	tagInfo, err := s.getTagInfoForShortcut(ctx, shortcut.Id)
+	if err != nil {
+		// Don't fail the entire request if tag lookup fails, just log it
+		return composedShortcut, nil
+	}
+	composedShortcut.TagInfo = tagInfo
+
 	return composedShortcut, nil
 }
 
@@ -488,4 +517,82 @@ func (s *APIV1Service) convertShortcutFromStorepbWithViewCount(shortcut *storepb
 		},
 	}
 	return composedShortcut
+}
+
+// processShortcutTags processes tag strings and creates Tag entities and bookmark_tag relationships
+func (s *APIV1Service) processShortcutTags(ctx context.Context, shortcutID, userID int32, tagNames []string) error {
+	for _, tagName := range tagNames {
+		if tagName == "" {
+			continue
+		}
+
+		// Generate abbreviation for the tag
+		abbreviation := common.GenerateTagAbbreviation(tagName)
+
+		// Try to find existing tag by abbreviation and user
+		tag, err := s.Store.GetTag(ctx, &store.FindTag{
+			CreatorID:    &userID,
+			Abbreviation: &abbreviation,
+		})
+		if err != nil {
+			return err
+		}
+
+		// If tag doesn't exist, create it
+		if tag == nil {
+			newTag := &storepb.Tag{
+				Uuid:         uuid.New().String(),
+				CreatorId:    userID,
+				Name:         tagName,
+				Abbreviation: abbreviation,
+				Description:  "",
+			}
+			tag, err = s.Store.CreateTag(ctx, newTag)
+			if err != nil {
+				return err
+			}
+		}
+
+		// Create bookmark_tag relationship
+		_, err = s.Store.CreateBookmarkTag(ctx, &store.CreateBookmarkTag{
+			ShortcutID: shortcutID,
+			TagUUID:    tag.Uuid,
+			UserID:     userID,
+		})
+		if err != nil {
+			// Ignore duplicate errors (relationship already exists)
+			continue
+		}
+	}
+
+	return nil
+}
+
+// getTagInfoForShortcut retrieves tag UUIDs and names for a shortcut
+func (s *APIV1Service) getTagInfoForShortcut(ctx context.Context, shortcutID int32) ([]*v1pb.Shortcut_TagInfo, error) {
+	// Get bookmark_tag relationships
+	bookmarkTags, err := s.Store.ListBookmarkTags(ctx, &store.FindBookmarkTag{
+		ShortcutID: &shortcutID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch tag details
+	tagInfoList := make([]*v1pb.Shortcut_TagInfo, 0, len(bookmarkTags))
+	for _, bt := range bookmarkTags {
+		tag, err := s.Store.GetTag(ctx, &store.FindTag{
+			UUID: &bt.TagUuid,
+		})
+		if err != nil || tag == nil {
+			continue
+		}
+
+		tagInfoList = append(tagInfoList, &v1pb.Shortcut_TagInfo{
+			Uuid: tag.Uuid,
+			Name: tag.Name,
+		})
+	}
+
+	return tagInfoList, nil
 }

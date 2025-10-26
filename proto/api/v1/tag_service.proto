@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package monotreme.api.v1;
+
+import "api/v1/common.proto";
+import "api/v1/shortcut_service.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "gen/api/v1";
+
+service TagService {
+  // ListTags returns a list of tags.
+  rpc ListTags(ListTagsRequest) returns (ListTagsResponse) {
+    option (google.api.http) = {get: "/api/v1/tags"};
+  }
+  // GetTag returns a tag by uuid.
+  rpc GetTag(GetTagRequest) returns (Tag) {
+    option (google.api.http) = {get: "/api/v1/tags/{uuid}"};
+    option (google.api.method_signature) = "uuid";
+  }
+  // GetTagByAbbreviation returns a tag by abbreviation.
+  rpc GetTagByAbbreviation(GetTagByAbbreviationRequest) returns (Tag) {
+    option (google.api.http) = {get: "/api/v1/tags/abbr/{abbreviation}"};
+    option (google.api.method_signature) = "abbreviation";
+  }
+  // CreateTag creates a tag.
+  rpc CreateTag(CreateTagRequest) returns (Tag) {
+    option (google.api.http) = {
+      post: "/api/v1/tags"
+      body: "tag"
+    };
+  }
+  // UpdateTag updates a tag.
+  rpc UpdateTag(UpdateTagRequest) returns (Tag) {
+    option (google.api.http) = {
+      put: "/api/v1/tags/{tag.uuid}"
+      body: "tag"
+    };
+    option (google.api.method_signature) = "tag,update_mask";
+  }
+  // DeleteTag deletes a tag by uuid.
+  rpc DeleteTag(DeleteTagRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/tags/{uuid}"};
+    option (google.api.method_signature) = "uuid";
+  }
+  // AddBookmarkToTag adds a bookmark to a tag.
+  rpc AddBookmarkToTag(AddBookmarkToTagRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/tags/{tag_uuid}/bookmarks/{shortcut_id}"
+    };
+  }
+  // RemoveBookmarkFromTag removes a bookmark from a tag.
+  rpc RemoveBookmarkFromTag(RemoveBookmarkFromTagRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/tags/{tag_uuid}/bookmarks/{shortcut_id}"
+    };
+  }
+  // ListBookmarksForTag lists all bookmarks for a tag.
+  rpc ListBookmarksForTag(ListBookmarksForTagRequest) returns (ListBookmarksForTagResponse) {
+    option (google.api.http) = {get: "/api/v1/tags/{tag_uuid}/bookmarks"};
+  }
+  // ListTagsForBookmark lists all tags for a bookmark.
+  rpc ListTagsForBookmark(ListTagsForBookmarkRequest) returns (ListTagsForBookmarkResponse) {
+    option (google.api.http) = {get: "/api/v1/bookmarks/{shortcut_id}/tags"};
+  }
+}
+
+message Tag {
+  string uuid = 1;
+
+  int32 creator_id = 2;
+
+  google.protobuf.Timestamp created_time = 3;
+
+  google.protobuf.Timestamp updated_time = 4;
+
+  string name = 5;
+
+  string abbreviation = 6;
+
+  string description = 7;
+}
+
+message ListTagsRequest {
+}
+
+message ListTagsResponse {
+  repeated Tag tags = 1;
+}
+
+message GetTagRequest {
+  string uuid = 1;
+}
+
+message GetTagByAbbreviationRequest {
+  string abbreviation = 1;
+}
+
+message CreateTagRequest {
+  Tag tag = 1;
+}
+
+message UpdateTagRequest {
+  Tag tag = 1;
+
+  repeated string update_mask = 2;
+}
+
+message DeleteTagRequest {
+  string uuid = 1;
+}
+
+message AddBookmarkToTagRequest {
+  string tag_uuid = 1;
+  int32 shortcut_id = 2;
+}
+
+message RemoveBookmarkFromTagRequest {
+  string tag_uuid = 1;
+  int32 shortcut_id = 2;
+}
+
+message ListBookmarksForTagRequest {
+  string tag_uuid = 1;
+}
+
+message ListBookmarksForTagResponse {
+  repeated Shortcut shortcuts = 1;
+}
+
+message ListTagsForBookmarkRequest {
+  int32 shortcut_id = 1;
+}
+
+message ListTagsForBookmarkResponse {
+  repeated Tag tags = 1;
+}

@@ -306,7 +306,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
 
   return (
     <Drawer anchor="right" open={true} onClose={onClose}>
-      <DialogTitle>{isCreating ? "Create Shortcut" : "Edit Shortcut"}</DialogTitle>
+      <DialogTitle>{isCreating ? "Create Bookmark" : "Edit Bookmark"}</DialogTitle>
       <ModalClose />
       <DialogContent className="w-full max-w-full" onClick={(e) => e.stopPropagation()}>
         <div className="overflow-y-auto w-full mt-2 px-4 pb-4 sm:w-[24rem]">
@@ -317,7 +317,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
             <Input
               className="w-full"
               type="text"
-              placeholder="The destination link of the shortcut"
+              placeholder="The destination link of the bookmark"
               value={state.shortcutCreate.link}
               onChange={handleLinkInputChange}
             />
@@ -352,7 +352,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
                   ? "Fetching page title..."
                   : (currentUser.autoGenerateTitle ?? true) && isCreating
                   ? "Auto-filled from URL or enter manually"
-                  : "The title of the shortcut"
+                  : "The title of the bookmark"
               }
               value={state.shortcutCreate.title}
               onChange={handleTitleInputChange}
@@ -368,7 +368,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
             <Input
               className="w-full"
               type="text"
-              placeholder="A short description of the shortcut"
+              placeholder="A short description of the bookmark"
               value={state.shortcutCreate.description}
               onChange={handleDescriptionInputChange}
             />
@@ -387,7 +387,7 @@ const CreateShortcutDrawer: React.FC<Props> = (props: Props) => {
           </div>
           <div className="w-full flex flex-col justify-start items-start mb-3">
             <span className="mb-2">Tags</span>
-            <Input className="w-full" type="text" placeholder="The tags of shortcut" value={tag} onChange={handleTagsInputChange} />
+            <Input className="w-full" type="text" placeholder="The tags of bookmark" value={tag} onChange={handleTagsInputChange} />
             {tagSuggestions.length > 0 && (
               <div className="w-full flex flex-row justify-start items-start mt-2">
                 <Icon.Asterisk className="w-4 h-auto shrink-0 mx-1 text-gray-400 dark:text-gray-500" />

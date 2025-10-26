@@ -60,12 +60,12 @@ const ShortcutSpace = () => {
       return null;
     }
 
-    // If shortcut is not found, prompt user to create it.
+    // If bookmark is not found, prompt user to create it.
     return (
       <>
         <div className="w-full h-[100svh] flex flex-col justify-center items-center p-4">
           <p className="text-xl">
-            Shortcut <span className="font-mono">{shortcutName}</span> Not Found.
+            Bookmark <span className="font-mono">{shortcutName}</span> Not Found.
           </p>
           <div className="mt-4">
             <Button variant="plain" size="sm" onClick={() => setShowCreateShortcutDrawer(true)}>

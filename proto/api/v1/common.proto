@@ -16,4 +16,8 @@ enum Visibility {
   WORKSPACE = 1;
 
   PUBLIC = 2;
+
+  PRIVATE = 3;
+
+  FRIENDS = 4;
 }

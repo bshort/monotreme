@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package monotreme.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "api/v1/user_service.proto";
+
+option go_package = "gen/api/v1";
+
+service FriendService {
+  // ListFriends returns a list of friends for the current user.
+  rpc ListFriends(ListFriendsRequest) returns (ListFriendsResponse) {
+    option (google.api.http) = {get: "/api/v1/friends"};
+  }
+
+  // SendFriendRequest sends a friend request to another user.
+  rpc SendFriendRequest(SendFriendRequestRequest) returns (Friendship) {
+    option (google.api.http) = {
+      post: "/api/v1/friends"
+      body: "*"
+    };
+  }
+
+  // ListFriendRequests returns a list of pending friend requests.
+  rpc ListFriendRequests(ListFriendRequestsRequest) returns (ListFriendRequestsResponse) {
+    option (google.api.http) = {get: "/api/v1/friends/requests"};
+  }
+
+  // AcceptFriendRequest accepts a pending friend request.
+  rpc AcceptFriendRequest(AcceptFriendRequestRequest) returns (Friendship) {
+    option (google.api.http) = {
+      post: "/api/v1/friends/{id}/accept"
+      body: "*"
+    };
+    option (google.api.method_signature) = "id";
+  }
+
+  // RemoveFriend removes a friend or declines a friend request.
+  rpc RemoveFriend(RemoveFriendRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/friends/{id}"};
+    option (google.api.method_signature) = "id";
+  }
+}
+
+enum FriendshipStatus {
+  FRIENDSHIP_STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  ACCEPTED = 2;
+  DECLINED = 3;
+  BLOCKED = 4;
+}
+
+message Friendship {
+  int32 id = 1;
+  int32 user_id = 2;
+  int32 friend_id = 3;
+  FriendshipStatus status = 4;
+  google.protobuf.Timestamp created_time = 5;
+  google.protobuf.Timestamp accepted_time = 6;
+  User user = 7;
+  User friend = 8;
+}
+
+message ListFriendsRequest {}
+
+message ListFriendsResponse {
+  repeated Friendship friends = 1;
+}
+
+message SendFriendRequestRequest {
+  optional string friend_email = 1;
+  optional int32 friend_id = 2;
+}
+
+enum FriendRequestType {
+  REQUEST_TYPE_ALL = 0;
+  REQUEST_TYPE_INCOMING = 1;
+  REQUEST_TYPE_OUTGOING = 2;
+}
+
+message ListFriendRequestsRequest {
+  FriendRequestType type = 1;
+}
+
+message ListFriendRequestsResponse {
+  repeated Friendship friend_requests = 1;
+}
+
+message AcceptFriendRequestRequest {
+  int32 id = 1;
+}
+
+message RemoveFriendRequest {
+  int32 id = 1;
+}

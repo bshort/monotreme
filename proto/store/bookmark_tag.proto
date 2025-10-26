@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package monotreme.store;
+
+option go_package = "gen/store";
+
+message BookmarkTag {
+  int32 shortcut_id = 1;
+
+  string tag_uuid = 2;
+
+  int32 user_id = 3;
+
+  int64 created_ts = 4;
+}

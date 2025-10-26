@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package monotreme.api.v1;
+
+option go_package = "github.com/bshort/monotreme/proto/gen/api/v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "api/v1/user_service.proto";
+import "api/v1/shortcut_service.proto";
+
+service FollowService {
+  // ListFollowing lists all users that the current user is following
+  rpc ListFollowing(ListFollowingRequest) returns (ListFollowingResponse) {
+    option (google.api.http) = {get: "/api/v1/following"};
+  }
+
+  // FollowUser follows a user
+  rpc FollowUser(FollowUserRequest) returns (Following) {
+    option (google.api.http) = {
+      post: "/api/v1/following"
+      body: "*"
+    };
+  }
+
+  // UnfollowUser unfollows a user
+  rpc UnfollowUser(UnfollowUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/api/v1/following/{id}"};
+  }
+
+  // ListFollowers lists all users following the current user
+  rpc ListFollowers(ListFollowersRequest) returns (ListFollowersResponse) {
+    option (google.api.http) = {get: "/api/v1/followers"};
+  }
+
+  // ListFollowingUserShortcuts lists public shortcuts from users the current user is following
+  rpc ListFollowingUserShortcuts(ListFollowingUserShortcutsRequest) returns (ListFollowingUserShortcutsResponse) {
+    option (google.api.http) = {get: "/api/v1/following/{user_id}/shortcuts"};
+  }
+}
+
+message Following {
+  int32 id = 1;
+  int32 follower_id = 2;
+  int32 following_id = 3;
+  google.protobuf.Timestamp created_time = 4;
+  User follower = 5;
+  User following = 6;
+}
+
+message ListFollowingRequest {}
+
+message ListFollowingResponse {
+  repeated Following following = 1;
+}
+
+message FollowUserRequest {
+  optional int32 user_id = 1;
+  optional string user_email = 2;
+}
+
+message UnfollowUserRequest {
+  int32 id = 1;
+}
+
+message ListFollowersRequest {}
+
+message ListFollowersResponse {
+  repeated Following followers = 1;
+}
+
+message ListFollowingUserShortcutsRequest {
+  int32 user_id = 1;
+}
+
+message ListFollowingUserShortcutsResponse {
+  repeated Shortcut shortcuts = 1;
+}

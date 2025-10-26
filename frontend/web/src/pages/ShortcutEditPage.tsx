@@ -112,7 +112,7 @@ const ShortcutEditPage = () => {
       try {
         const shortcutData = await shortcutStore.getOrFetchShortcutByUuid(shortcutUuid);
         if (shortcutData.id === -1) {
-          toast.error("Shortcut not found");
+          toast.error("Bookmark not found");
           navigateTo("/", { replace: true });
           return;
         }

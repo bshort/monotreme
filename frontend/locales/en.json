@@ -36,12 +36,12 @@
       "current-count": "Current Count of Active Users"
     },
     "shortcuts": {
-      "title": "Shortcuts",
-      "total": "Total Shortcuts",
+      "title": "Bookmarks",
+      "total": "Total Bookmarks",
       "activity": "Total Views",
-      "growth": "New Shortcuts",
+      "growth": "New Bookmarks",
       "growth-period": "in the last 30 days",
-      "active-shortcuts": "Active Shortcuts",
+      "active-shortcuts": "Active Bookmarks",
       "current-count": "Current Count"
     },
     "collections": {
@@ -57,14 +57,14 @@
       "total-hits": "Total Hits",
       "visitors": "Total Visitors",
       "bounce-rate": "Bounce Rate",
-      "total-content": "Total Shortcuts",
-      "total-shortcuts": "Total Shortcuts",
+      "total-content": "Total Bookmarks",
+      "total-shortcuts": "Total Bookmarks",
       "total-users": "Total Users",
       "total-collections": "Total Collections",
       "engagement": "Engagement",
       "avg-visit-duration": "Avg. Visit Duration",
       "hits-per-visit": "Hits per Visit",
-      "hits-per-shortcut": "Hits per Shortcut",
+      "hits-per-shortcut": "Hits per Bookmark",
       "hits-per-user": "Hits per User",
       "external-hits": "External Hits"
     }
@@ -113,8 +113,9 @@
   },
   "settings": {
     "self": "Admin Settings",
+    "general": "Settings",
     "preference": {
-      "self": "Preference",
+      "self": "Preferences",
       "color-theme": "Color theme"
     },
     "workspace": {
