@@ -23,6 +23,9 @@ const (
 	WorkspaceService_GetWorkspaceSetting_FullMethodName    = "/monotreme.api.v1.WorkspaceService/GetWorkspaceSetting"
 	WorkspaceService_UpdateWorkspaceSetting_FullMethodName = "/monotreme.api.v1.WorkspaceService/UpdateWorkspaceSetting"
 	WorkspaceService_GetWorkspaceStats_FullMethodName      = "/monotreme.api.v1.WorkspaceService/GetWorkspaceStats"
+	WorkspaceService_GetDatabaseStats_FullMethodName       = "/monotreme.api.v1.WorkspaceService/GetDatabaseStats"
+	WorkspaceService_ExportDatabase_FullMethodName         = "/monotreme.api.v1.WorkspaceService/ExportDatabase"
+	WorkspaceService_ImportDatabase_FullMethodName         = "/monotreme.api.v1.WorkspaceService/ImportDatabase"
 )
 
 // WorkspaceServiceClient is the client API for WorkspaceService service.
@@ -33,6 +36,9 @@ type WorkspaceServiceClient interface {
 	GetWorkspaceSetting(ctx context.Context, in *GetWorkspaceSettingRequest, opts ...grpc.CallOption) (*WorkspaceSetting, error)
 	UpdateWorkspaceSetting(ctx context.Context, in *UpdateWorkspaceSettingRequest, opts ...grpc.CallOption) (*WorkspaceSetting, error)
 	GetWorkspaceStats(ctx context.Context, in *GetWorkspaceStatsRequest, opts ...grpc.CallOption) (*WorkspaceStats, error)
+	GetDatabaseStats(ctx context.Context, in *GetDatabaseStatsRequest, opts ...grpc.CallOption) (*DatabaseStats, error)
+	ExportDatabase(ctx context.Context, in *ExportDatabaseRequest, opts ...grpc.CallOption) (*ExportDatabaseResponse, error)
+	ImportDatabase(ctx context.Context, in *ImportDatabaseRequest, opts ...grpc.CallOption) (*ImportDatabaseResponse, error)
 }
 
 type workspaceServiceClient struct {
@@ -83,6 +89,36 @@ func (c *workspaceServiceClient) GetWorkspaceStats(ctx context.Context, in *GetW
 	return out, nil
 }
 
+func (c *workspaceServiceClient) GetDatabaseStats(ctx context.Context, in *GetDatabaseStatsRequest, opts ...grpc.CallOption) (*DatabaseStats, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DatabaseStats)
+	err := c.cc.Invoke(ctx, WorkspaceService_GetDatabaseStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workspaceServiceClient) ExportDatabase(ctx context.Context, in *ExportDatabaseRequest, opts ...grpc.CallOption) (*ExportDatabaseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ExportDatabaseResponse)
+	err := c.cc.Invoke(ctx, WorkspaceService_ExportDatabase_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workspaceServiceClient) ImportDatabase(ctx context.Context, in *ImportDatabaseRequest, opts ...grpc.CallOption) (*ImportDatabaseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ImportDatabaseResponse)
+	err := c.cc.Invoke(ctx, WorkspaceService_ImportDatabase_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkspaceServiceServer is the server API for WorkspaceService service.
 // All implementations must embed UnimplementedWorkspaceServiceServer
 // for forward compatibility.
@@ -91,6 +127,9 @@ type WorkspaceServiceServer interface {
 	GetWorkspaceSetting(context.Context, *GetWorkspaceSettingRequest) (*WorkspaceSetting, error)
 	UpdateWorkspaceSetting(context.Context, *UpdateWorkspaceSettingRequest) (*WorkspaceSetting, error)
 	GetWorkspaceStats(context.Context, *GetWorkspaceStatsRequest) (*WorkspaceStats, error)
+	GetDatabaseStats(context.Context, *GetDatabaseStatsRequest) (*DatabaseStats, error)
+	ExportDatabase(context.Context, *ExportDatabaseRequest) (*ExportDatabaseResponse, error)
+	ImportDatabase(context.Context, *ImportDatabaseRequest) (*ImportDatabaseResponse, error)
 	mustEmbedUnimplementedWorkspaceServiceServer()
 }
 
@@ -112,6 +151,15 @@ func (UnimplementedWorkspaceServiceServer) UpdateWorkspaceSetting(context.Contex
 }
 func (UnimplementedWorkspaceServiceServer) GetWorkspaceStats(context.Context, *GetWorkspaceStatsRequest) (*WorkspaceStats, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWorkspaceStats not implemented")
+}
+func (UnimplementedWorkspaceServiceServer) GetDatabaseStats(context.Context, *GetDatabaseStatsRequest) (*DatabaseStats, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDatabaseStats not implemented")
+}
+func (UnimplementedWorkspaceServiceServer) ExportDatabase(context.Context, *ExportDatabaseRequest) (*ExportDatabaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExportDatabase not implemented")
+}
+func (UnimplementedWorkspaceServiceServer) ImportDatabase(context.Context, *ImportDatabaseRequest) (*ImportDatabaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportDatabase not implemented")
 }
 func (UnimplementedWorkspaceServiceServer) mustEmbedUnimplementedWorkspaceServiceServer() {}
 func (UnimplementedWorkspaceServiceServer) testEmbeddedByValue()                          {}
@@ -206,6 +254,60 @@ func _WorkspaceService_GetWorkspaceStats_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkspaceService_GetDatabaseStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDatabaseStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceServiceServer).GetDatabaseStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceService_GetDatabaseStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceServiceServer).GetDatabaseStats(ctx, req.(*GetDatabaseStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkspaceService_ExportDatabase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExportDatabaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceServiceServer).ExportDatabase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceService_ExportDatabase_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceServiceServer).ExportDatabase(ctx, req.(*ExportDatabaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkspaceService_ImportDatabase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportDatabaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceServiceServer).ImportDatabase(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceService_ImportDatabase_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceServiceServer).ImportDatabase(ctx, req.(*ImportDatabaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkspaceService_ServiceDesc is the grpc.ServiceDesc for WorkspaceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +330,18 @@ var WorkspaceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWorkspaceStats",
 			Handler:    _WorkspaceService_GetWorkspaceStats_Handler,
+		},
+		{
+			MethodName: "GetDatabaseStats",
+			Handler:    _WorkspaceService_GetDatabaseStats_Handler,
+		},
+		{
+			MethodName: "ExportDatabase",
+			Handler:    _WorkspaceService_ExportDatabase_Handler,
+		},
+		{
+			MethodName: "ImportDatabase",
+			Handler:    _WorkspaceService_ImportDatabase_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

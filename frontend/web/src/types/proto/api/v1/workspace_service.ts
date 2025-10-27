@@ -155,6 +155,63 @@ export interface StatsMeasurement {
   hitsCount: number;
 }
 
+export interface GetDatabaseStatsRequest {
+}
+
+export interface DatabaseStats {
+  /** Total number of users */
+  users: number;
+  /** Total number of shortcuts */
+  shortcuts: number;
+  /** Total number of collections */
+  collections: number;
+  /** Total number of tags */
+  tags: number;
+  /** Total number of bookmark-tag relationships */
+  bookmarkTags: number;
+  /** Total number of friendships */
+  friendships: number;
+  /** Total number of following relationships */
+  followings: number;
+  /** Total number of activities */
+  activities: number;
+  /** Total number of invitations */
+  invitations: number;
+}
+
+export interface ExportDatabaseRequest {
+  /** List of entity types to export */
+  entities: string[];
+}
+
+export interface ExportDatabaseResponse {
+  /** JSON data containing the exported entities */
+  data: string;
+  /** Filename for the export */
+  filename: string;
+}
+
+export interface ImportDatabaseRequest {
+  /** JSON data to import */
+  data: string;
+  /** List of entity types to import */
+  entities: string[];
+  /** Import mode: "new-only", "overwrite", "wipe-and-import" */
+  mode: string;
+}
+
+export interface ImportDatabaseResponse {
+  /** Number of records imported per entity type */
+  importedCounts: { [key: string]: number };
+  /** Any warnings or messages */
+  messages: string[];
+}
+
+export interface ImportDatabaseResponse_ImportedCountsEntry {
+  key: string;
+  value: number;
+}
+
 function createBaseWorkspaceProfile(): WorkspaceProfile {
   return { mode: "", version: "", owner: "", subscription: undefined, customStyle: "", branding: new Uint8Array(0) };
 }
@@ -1070,6 +1127,495 @@ export const StatsMeasurement: MessageFns<StatsMeasurement> = {
   },
 };
 
+function createBaseGetDatabaseStatsRequest(): GetDatabaseStatsRequest {
+  return {};
+}
+
+export const GetDatabaseStatsRequest: MessageFns<GetDatabaseStatsRequest> = {
+  encode(_: GetDatabaseStatsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetDatabaseStatsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetDatabaseStatsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetDatabaseStatsRequest>): GetDatabaseStatsRequest {
+    return GetDatabaseStatsRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<GetDatabaseStatsRequest>): GetDatabaseStatsRequest {
+    const message = createBaseGetDatabaseStatsRequest();
+    return message;
+  },
+};
+
+function createBaseDatabaseStats(): DatabaseStats {
+  return {
+    users: 0,
+    shortcuts: 0,
+    collections: 0,
+    tags: 0,
+    bookmarkTags: 0,
+    friendships: 0,
+    followings: 0,
+    activities: 0,
+    invitations: 0,
+  };
+}
+
+export const DatabaseStats: MessageFns<DatabaseStats> = {
+  encode(message: DatabaseStats, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.users !== 0) {
+      writer.uint32(8).int32(message.users);
+    }
+    if (message.shortcuts !== 0) {
+      writer.uint32(16).int32(message.shortcuts);
+    }
+    if (message.collections !== 0) {
+      writer.uint32(24).int32(message.collections);
+    }
+    if (message.tags !== 0) {
+      writer.uint32(32).int32(message.tags);
+    }
+    if (message.bookmarkTags !== 0) {
+      writer.uint32(40).int32(message.bookmarkTags);
+    }
+    if (message.friendships !== 0) {
+      writer.uint32(48).int32(message.friendships);
+    }
+    if (message.followings !== 0) {
+      writer.uint32(56).int32(message.followings);
+    }
+    if (message.activities !== 0) {
+      writer.uint32(64).int32(message.activities);
+    }
+    if (message.invitations !== 0) {
+      writer.uint32(72).int32(message.invitations);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DatabaseStats {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDatabaseStats();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.users = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.shortcuts = reader.int32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.collections = reader.int32();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.tags = reader.int32();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.bookmarkTags = reader.int32();
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.friendships = reader.int32();
+          continue;
+        }
+        case 7: {
+          if (tag !== 56) {
+            break;
+          }
+
+          message.followings = reader.int32();
+          continue;
+        }
+        case 8: {
+          if (tag !== 64) {
+            break;
+          }
+
+          message.activities = reader.int32();
+          continue;
+        }
+        case 9: {
+          if (tag !== 72) {
+            break;
+          }
+
+          message.invitations = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<DatabaseStats>): DatabaseStats {
+    return DatabaseStats.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<DatabaseStats>): DatabaseStats {
+    const message = createBaseDatabaseStats();
+    message.users = object.users ?? 0;
+    message.shortcuts = object.shortcuts ?? 0;
+    message.collections = object.collections ?? 0;
+    message.tags = object.tags ?? 0;
+    message.bookmarkTags = object.bookmarkTags ?? 0;
+    message.friendships = object.friendships ?? 0;
+    message.followings = object.followings ?? 0;
+    message.activities = object.activities ?? 0;
+    message.invitations = object.invitations ?? 0;
+    return message;
+  },
+};
+
+function createBaseExportDatabaseRequest(): ExportDatabaseRequest {
+  return { entities: [] };
+}
+
+export const ExportDatabaseRequest: MessageFns<ExportDatabaseRequest> = {
+  encode(message: ExportDatabaseRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.entities) {
+      writer.uint32(10).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ExportDatabaseRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseExportDatabaseRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.entities.push(reader.string());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ExportDatabaseRequest>): ExportDatabaseRequest {
+    return ExportDatabaseRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ExportDatabaseRequest>): ExportDatabaseRequest {
+    const message = createBaseExportDatabaseRequest();
+    message.entities = object.entities?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseExportDatabaseResponse(): ExportDatabaseResponse {
+  return { data: "", filename: "" };
+}
+
+export const ExportDatabaseResponse: MessageFns<ExportDatabaseResponse> = {
+  encode(message: ExportDatabaseResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.data !== "") {
+      writer.uint32(10).string(message.data);
+    }
+    if (message.filename !== "") {
+      writer.uint32(18).string(message.filename);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ExportDatabaseResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseExportDatabaseResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.data = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.filename = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ExportDatabaseResponse>): ExportDatabaseResponse {
+    return ExportDatabaseResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ExportDatabaseResponse>): ExportDatabaseResponse {
+    const message = createBaseExportDatabaseResponse();
+    message.data = object.data ?? "";
+    message.filename = object.filename ?? "";
+    return message;
+  },
+};
+
+function createBaseImportDatabaseRequest(): ImportDatabaseRequest {
+  return { data: "", entities: [], mode: "" };
+}
+
+export const ImportDatabaseRequest: MessageFns<ImportDatabaseRequest> = {
+  encode(message: ImportDatabaseRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.data !== "") {
+      writer.uint32(10).string(message.data);
+    }
+    for (const v of message.entities) {
+      writer.uint32(18).string(v!);
+    }
+    if (message.mode !== "") {
+      writer.uint32(26).string(message.mode);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ImportDatabaseRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseImportDatabaseRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.data = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.entities.push(reader.string());
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.mode = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ImportDatabaseRequest>): ImportDatabaseRequest {
+    return ImportDatabaseRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ImportDatabaseRequest>): ImportDatabaseRequest {
+    const message = createBaseImportDatabaseRequest();
+    message.data = object.data ?? "";
+    message.entities = object.entities?.map((e) => e) || [];
+    message.mode = object.mode ?? "";
+    return message;
+  },
+};
+
+function createBaseImportDatabaseResponse(): ImportDatabaseResponse {
+  return { importedCounts: {}, messages: [] };
+}
+
+export const ImportDatabaseResponse: MessageFns<ImportDatabaseResponse> = {
+  encode(message: ImportDatabaseResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    Object.entries(message.importedCounts).forEach(([key, value]) => {
+      ImportDatabaseResponse_ImportedCountsEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+    });
+    for (const v of message.messages) {
+      writer.uint32(18).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ImportDatabaseResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseImportDatabaseResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          const entry1 = ImportDatabaseResponse_ImportedCountsEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.importedCounts[entry1.key] = entry1.value;
+          }
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.messages.push(reader.string());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ImportDatabaseResponse>): ImportDatabaseResponse {
+    return ImportDatabaseResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ImportDatabaseResponse>): ImportDatabaseResponse {
+    const message = createBaseImportDatabaseResponse();
+    message.importedCounts = Object.entries(object.importedCounts ?? {}).reduce<{ [key: string]: number }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = globalThis.Number(value);
+        }
+        return acc;
+      },
+      {},
+    );
+    message.messages = object.messages?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseImportDatabaseResponse_ImportedCountsEntry(): ImportDatabaseResponse_ImportedCountsEntry {
+  return { key: "", value: 0 };
+}
+
+export const ImportDatabaseResponse_ImportedCountsEntry: MessageFns<ImportDatabaseResponse_ImportedCountsEntry> = {
+  encode(message: ImportDatabaseResponse_ImportedCountsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== 0) {
+      writer.uint32(16).int32(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ImportDatabaseResponse_ImportedCountsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseImportDatabaseResponse_ImportedCountsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.value = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<ImportDatabaseResponse_ImportedCountsEntry>): ImportDatabaseResponse_ImportedCountsEntry {
+    return ImportDatabaseResponse_ImportedCountsEntry.fromPartial(base ?? {});
+  },
+  fromPartial(
+    object: DeepPartial<ImportDatabaseResponse_ImportedCountsEntry>,
+  ): ImportDatabaseResponse_ImportedCountsEntry {
+    const message = createBaseImportDatabaseResponse_ImportedCountsEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? 0;
+    return message;
+  },
+};
+
 export type WorkspaceServiceDefinition = typeof WorkspaceServiceDefinition;
 export const WorkspaceServiceDefinition = {
   name: "WorkspaceService",
@@ -1273,6 +1819,164 @@ export const WorkspaceServiceDefinition = {
               97,
               116,
               115,
+            ]),
+          ],
+        },
+      },
+    },
+    getDatabaseStats: {
+      name: "GetDatabaseStats",
+      requestType: GetDatabaseStatsRequest,
+      requestStream: false,
+      responseType: DatabaseStats,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              34,
+              18,
+              32,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              119,
+              111,
+              114,
+              107,
+              115,
+              112,
+              97,
+              99,
+              101,
+              47,
+              100,
+              97,
+              116,
+              97,
+              98,
+              97,
+              115,
+              101,
+              47,
+              115,
+              116,
+              97,
+              116,
+              115,
+            ]),
+          ],
+        },
+      },
+    },
+    exportDatabase: {
+      name: "ExportDatabase",
+      requestType: ExportDatabaseRequest,
+      requestStream: false,
+      responseType: ExportDatabaseResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              38,
+              58,
+              1,
+              42,
+              34,
+              33,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              119,
+              111,
+              114,
+              107,
+              115,
+              112,
+              97,
+              99,
+              101,
+              47,
+              100,
+              97,
+              116,
+              97,
+              98,
+              97,
+              115,
+              101,
+              47,
+              101,
+              120,
+              112,
+              111,
+              114,
+              116,
+            ]),
+          ],
+        },
+      },
+    },
+    importDatabase: {
+      name: "ImportDatabase",
+      requestType: ImportDatabaseRequest,
+      requestStream: false,
+      responseType: ImportDatabaseResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              38,
+              58,
+              1,
+              42,
+              34,
+              33,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              119,
+              111,
+              114,
+              107,
+              115,
+              112,
+              97,
+              99,
+              101,
+              47,
+              100,
+              97,
+              116,
+              97,
+              98,
+              97,
+              115,
+              101,
+              47,
+              105,
+              109,
+              112,
+              111,
+              114,
+              116,
             ]),
           ],
         },

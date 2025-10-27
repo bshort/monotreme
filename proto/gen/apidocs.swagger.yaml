@@ -1577,6 +1577,60 @@ paths:
                 type: string
       tags:
         - UserService
+  /api/v1/workspace/database/export:
+    post:
+      operationId: WorkspaceService_ExportDatabase
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ExportDatabaseResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ExportDatabaseRequest'
+      tags:
+        - WorkspaceService
+  /api/v1/workspace/database/import:
+    post:
+      operationId: WorkspaceService_ImportDatabase
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ImportDatabaseResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ImportDatabaseRequest'
+      tags:
+        - WorkspaceService
+  /api/v1/workspace/database/stats:
+    get:
+      operationId: WorkspaceService_GetDatabaseStats
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1DatabaseStats'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - WorkspaceService
   /api/v1/workspace/profile:
     get:
       operationId: WorkspaceService_GetWorkspaceProfile
@@ -2125,6 +2179,62 @@ definitions:
         type: string
       title:
         type: string
+  v1DatabaseStats:
+    type: object
+    properties:
+      users:
+        type: integer
+        format: int32
+        title: Total number of users
+      shortcuts:
+        type: integer
+        format: int32
+        title: Total number of shortcuts
+      collections:
+        type: integer
+        format: int32
+        title: Total number of collections
+      tags:
+        type: integer
+        format: int32
+        title: Total number of tags
+      bookmarkTags:
+        type: integer
+        format: int32
+        title: Total number of bookmark-tag relationships
+      friendships:
+        type: integer
+        format: int32
+        title: Total number of friendships
+      followings:
+        type: integer
+        format: int32
+        title: Total number of following relationships
+      activities:
+        type: integer
+        format: int32
+        title: Total number of activities
+      invitations:
+        type: integer
+        format: int32
+        title: Total number of invitations
+  v1ExportDatabaseRequest:
+    type: object
+    properties:
+      entities:
+        type: array
+        items:
+          type: string
+        title: List of entity types to export
+  v1ExportDatabaseResponse:
+    type: object
+    properties:
+      data:
+        type: string
+        title: JSON data containing the exported entities
+      filename:
+        type: string
+        title: Filename for the export
   v1FollowUserRequest:
     type: object
     properties:
@@ -2308,6 +2418,34 @@ definitions:
       collectionsUpdated:
         type: integer
         format: int32
+  v1ImportDatabaseRequest:
+    type: object
+    properties:
+      data:
+        type: string
+        title: JSON data to import
+      entities:
+        type: array
+        items:
+          type: string
+        title: List of entity types to import
+      mode:
+        type: string
+        title: 'Import mode: "new-only", "overwrite", "wipe-and-import"'
+  v1ImportDatabaseResponse:
+    type: object
+    properties:
+      importedCounts:
+        type: object
+        additionalProperties:
+          type: integer
+          format: int32
+        title: Number of records imported per entity type
+      messages:
+        type: array
+        items:
+          type: string
+        title: Any warnings or messages
   v1ListActivitiesResponse:
     type: object
     properties:

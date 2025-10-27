@@ -727,6 +727,375 @@ func (x *StatsMeasurement) GetHitsCount() int32 {
 	return 0
 }
 
+type GetDatabaseStatsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDatabaseStatsRequest) Reset() {
+	*x = GetDatabaseStatsRequest{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDatabaseStatsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDatabaseStatsRequest) ProtoMessage() {}
+
+func (x *GetDatabaseStatsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDatabaseStatsRequest.ProtoReflect.Descriptor instead.
+func (*GetDatabaseStatsRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{10}
+}
+
+type DatabaseStats struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Total number of users
+	Users int32 `protobuf:"varint,1,opt,name=users,proto3" json:"users,omitempty"`
+	// Total number of shortcuts
+	Shortcuts int32 `protobuf:"varint,2,opt,name=shortcuts,proto3" json:"shortcuts,omitempty"`
+	// Total number of collections
+	Collections int32 `protobuf:"varint,3,opt,name=collections,proto3" json:"collections,omitempty"`
+	// Total number of tags
+	Tags int32 `protobuf:"varint,4,opt,name=tags,proto3" json:"tags,omitempty"`
+	// Total number of bookmark-tag relationships
+	BookmarkTags int32 `protobuf:"varint,5,opt,name=bookmark_tags,json=bookmarkTags,proto3" json:"bookmark_tags,omitempty"`
+	// Total number of friendships
+	Friendships int32 `protobuf:"varint,6,opt,name=friendships,proto3" json:"friendships,omitempty"`
+	// Total number of following relationships
+	Followings int32 `protobuf:"varint,7,opt,name=followings,proto3" json:"followings,omitempty"`
+	// Total number of activities
+	Activities int32 `protobuf:"varint,8,opt,name=activities,proto3" json:"activities,omitempty"`
+	// Total number of invitations
+	Invitations   int32 `protobuf:"varint,9,opt,name=invitations,proto3" json:"invitations,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DatabaseStats) Reset() {
+	*x = DatabaseStats{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DatabaseStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseStats) ProtoMessage() {}
+
+func (x *DatabaseStats) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseStats.ProtoReflect.Descriptor instead.
+func (*DatabaseStats) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DatabaseStats) GetUsers() int32 {
+	if x != nil {
+		return x.Users
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetShortcuts() int32 {
+	if x != nil {
+		return x.Shortcuts
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetCollections() int32 {
+	if x != nil {
+		return x.Collections
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetTags() int32 {
+	if x != nil {
+		return x.Tags
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetBookmarkTags() int32 {
+	if x != nil {
+		return x.BookmarkTags
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetFriendships() int32 {
+	if x != nil {
+		return x.Friendships
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetFollowings() int32 {
+	if x != nil {
+		return x.Followings
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetActivities() int32 {
+	if x != nil {
+		return x.Activities
+	}
+	return 0
+}
+
+func (x *DatabaseStats) GetInvitations() int32 {
+	if x != nil {
+		return x.Invitations
+	}
+	return 0
+}
+
+type ExportDatabaseRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// List of entity types to export
+	Entities      []string `protobuf:"bytes,1,rep,name=entities,proto3" json:"entities,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExportDatabaseRequest) Reset() {
+	*x = ExportDatabaseRequest{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExportDatabaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExportDatabaseRequest) ProtoMessage() {}
+
+func (x *ExportDatabaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExportDatabaseRequest.ProtoReflect.Descriptor instead.
+func (*ExportDatabaseRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ExportDatabaseRequest) GetEntities() []string {
+	if x != nil {
+		return x.Entities
+	}
+	return nil
+}
+
+type ExportDatabaseResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// JSON data containing the exported entities
+	Data string `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// Filename for the export
+	Filename      string `protobuf:"bytes,2,opt,name=filename,proto3" json:"filename,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExportDatabaseResponse) Reset() {
+	*x = ExportDatabaseResponse{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExportDatabaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExportDatabaseResponse) ProtoMessage() {}
+
+func (x *ExportDatabaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExportDatabaseResponse.ProtoReflect.Descriptor instead.
+func (*ExportDatabaseResponse) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ExportDatabaseResponse) GetData() string {
+	if x != nil {
+		return x.Data
+	}
+	return ""
+}
+
+func (x *ExportDatabaseResponse) GetFilename() string {
+	if x != nil {
+		return x.Filename
+	}
+	return ""
+}
+
+type ImportDatabaseRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// JSON data to import
+	Data string `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// List of entity types to import
+	Entities []string `protobuf:"bytes,2,rep,name=entities,proto3" json:"entities,omitempty"`
+	// Import mode: "new-only", "overwrite", "wipe-and-import"
+	Mode          string `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImportDatabaseRequest) Reset() {
+	*x = ImportDatabaseRequest{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportDatabaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportDatabaseRequest) ProtoMessage() {}
+
+func (x *ImportDatabaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportDatabaseRequest.ProtoReflect.Descriptor instead.
+func (*ImportDatabaseRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ImportDatabaseRequest) GetData() string {
+	if x != nil {
+		return x.Data
+	}
+	return ""
+}
+
+func (x *ImportDatabaseRequest) GetEntities() []string {
+	if x != nil {
+		return x.Entities
+	}
+	return nil
+}
+
+func (x *ImportDatabaseRequest) GetMode() string {
+	if x != nil {
+		return x.Mode
+	}
+	return ""
+}
+
+type ImportDatabaseResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Number of records imported per entity type
+	ImportedCounts map[string]int32 `protobuf:"bytes,1,rep,name=imported_counts,json=importedCounts,proto3" json:"imported_counts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	// Any warnings or messages
+	Messages      []string `protobuf:"bytes,2,rep,name=messages,proto3" json:"messages,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImportDatabaseResponse) Reset() {
+	*x = ImportDatabaseResponse{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImportDatabaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportDatabaseResponse) ProtoMessage() {}
+
+func (x *ImportDatabaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportDatabaseResponse.ProtoReflect.Descriptor instead.
+func (*ImportDatabaseResponse) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ImportDatabaseResponse) GetImportedCounts() map[string]int32 {
+	if x != nil {
+		return x.ImportedCounts
+	}
+	return nil
+}
+
+func (x *ImportDatabaseResponse) GetMessages() []string {
+	if x != nil {
+		return x.Messages
+	}
+	return nil
+}
+
 type IdentityProviderConfig_FieldMapping struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Identifier    string                 `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
@@ -737,7 +1106,7 @@ type IdentityProviderConfig_FieldMapping struct {
 
 func (x *IdentityProviderConfig_FieldMapping) Reset() {
 	*x = IdentityProviderConfig_FieldMapping{}
-	mi := &file_api_v1_workspace_service_proto_msgTypes[10]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -749,7 +1118,7 @@ func (x *IdentityProviderConfig_FieldMapping) String() string {
 func (*IdentityProviderConfig_FieldMapping) ProtoMessage() {}
 
 func (x *IdentityProviderConfig_FieldMapping) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_workspace_service_proto_msgTypes[10]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -794,7 +1163,7 @@ type IdentityProviderConfig_OAuth2Config struct {
 
 func (x *IdentityProviderConfig_OAuth2Config) Reset() {
 	*x = IdentityProviderConfig_OAuth2Config{}
-	mi := &file_api_v1_workspace_service_proto_msgTypes[11]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -806,7 +1175,7 @@ func (x *IdentityProviderConfig_OAuth2Config) String() string {
 func (*IdentityProviderConfig_OAuth2Config) ProtoMessage() {}
 
 func (x *IdentityProviderConfig_OAuth2Config) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_workspace_service_proto_msgTypes[11]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -940,12 +1309,45 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"usersCount\x12+\n" +
 	"\x11collections_count\x18\x04 \x01(\x05R\x10collectionsCount\x12\x1d\n" +
 	"\n" +
-	"hits_count\x18\x05 \x01(\x05R\thitsCount2\xe3\x04\n" +
+	"hits_count\x18\x05 \x01(\x05R\thitsCount\"\x19\n" +
+	"\x17GetDatabaseStatsRequest\"\xa2\x02\n" +
+	"\rDatabaseStats\x12\x14\n" +
+	"\x05users\x18\x01 \x01(\x05R\x05users\x12\x1c\n" +
+	"\tshortcuts\x18\x02 \x01(\x05R\tshortcuts\x12 \n" +
+	"\vcollections\x18\x03 \x01(\x05R\vcollections\x12\x12\n" +
+	"\x04tags\x18\x04 \x01(\x05R\x04tags\x12#\n" +
+	"\rbookmark_tags\x18\x05 \x01(\x05R\fbookmarkTags\x12 \n" +
+	"\vfriendships\x18\x06 \x01(\x05R\vfriendships\x12\x1e\n" +
+	"\n" +
+	"followings\x18\a \x01(\x05R\n" +
+	"followings\x12\x1e\n" +
+	"\n" +
+	"activities\x18\b \x01(\x05R\n" +
+	"activities\x12 \n" +
+	"\vinvitations\x18\t \x01(\x05R\vinvitations\"3\n" +
+	"\x15ExportDatabaseRequest\x12\x1a\n" +
+	"\bentities\x18\x01 \x03(\tR\bentities\"H\n" +
+	"\x16ExportDatabaseResponse\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\tR\x04data\x12\x1a\n" +
+	"\bfilename\x18\x02 \x01(\tR\bfilename\"[\n" +
+	"\x15ImportDatabaseRequest\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\tR\x04data\x12\x1a\n" +
+	"\bentities\x18\x02 \x03(\tR\bentities\x12\x12\n" +
+	"\x04mode\x18\x03 \x01(\tR\x04mode\"\xde\x01\n" +
+	"\x16ImportDatabaseResponse\x12e\n" +
+	"\x0fimported_counts\x18\x01 \x03(\v2<.monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntryR\x0eimportedCounts\x12\x1a\n" +
+	"\bmessages\x18\x02 \x03(\tR\bmessages\x1aA\n" +
+	"\x13ImportedCountsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x012\x96\b\n" +
 	"\x10WorkspaceService\x12\x8a\x01\n" +
 	"\x13GetWorkspaceProfile\x12,.monotreme.api.v1.GetWorkspaceProfileRequest\x1a\".monotreme.api.v1.WorkspaceProfile\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/profile\x12\x8a\x01\n" +
 	"\x13GetWorkspaceSetting\x12,.monotreme.api.v1.GetWorkspaceSettingRequest\x1a\".monotreme.api.v1.WorkspaceSetting\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/setting\x12\xaf\x01\n" +
 	"\x16UpdateWorkspaceSetting\x12/.monotreme.api.v1.UpdateWorkspaceSettingRequest\x1a\".monotreme.api.v1.WorkspaceSetting\"@\xdaA\x13setting,update_mask\x82\xd3\xe4\x93\x02$:\asetting2\x19/api/v1/workspace/setting\x12\x82\x01\n" +
-	"\x11GetWorkspaceStats\x12*.monotreme.api.v1.GetWorkspaceStatsRequest\x1a .monotreme.api.v1.WorkspaceStats\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/workspace/statsB\xc3\x01\n" +
+	"\x11GetWorkspaceStats\x12*.monotreme.api.v1.GetWorkspaceStatsRequest\x1a .monotreme.api.v1.WorkspaceStats\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/workspace/stats\x12\x88\x01\n" +
+	"\x10GetDatabaseStats\x12).monotreme.api.v1.GetDatabaseStatsRequest\x1a\x1f.monotreme.api.v1.DatabaseStats\"(\x82\xd3\xe4\x93\x02\"\x12 /api/v1/workspace/database/stats\x12\x91\x01\n" +
+	"\x0eExportDatabase\x12'.monotreme.api.v1.ExportDatabaseRequest\x1a(.monotreme.api.v1.ExportDatabaseResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/api/v1/workspace/database/export\x12\x91\x01\n" +
+	"\x0eImportDatabase\x12'.monotreme.api.v1.ImportDatabaseRequest\x1a(.monotreme.api.v1.ImportDatabaseResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/api/v1/workspace/database/importB\xc3\x01\n" +
 	"\x14com.monotreme.api.v1B\x15WorkspaceServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
@@ -961,7 +1363,7 @@ func file_api_v1_workspace_service_proto_rawDescGZIP() []byte {
 }
 
 var file_api_v1_workspace_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_api_v1_workspace_service_proto_goTypes = []any{
 	(IdentityProvider_Type)(0),                  // 0: monotreme.api.v1.IdentityProvider.Type
 	(*WorkspaceProfile)(nil),                    // 1: monotreme.api.v1.WorkspaceProfile
@@ -974,36 +1376,50 @@ var file_api_v1_workspace_service_proto_goTypes = []any{
 	(*GetWorkspaceStatsRequest)(nil),            // 8: monotreme.api.v1.GetWorkspaceStatsRequest
 	(*WorkspaceStats)(nil),                      // 9: monotreme.api.v1.WorkspaceStats
 	(*StatsMeasurement)(nil),                    // 10: monotreme.api.v1.StatsMeasurement
-	(*IdentityProviderConfig_FieldMapping)(nil), // 11: monotreme.api.v1.IdentityProviderConfig.FieldMapping
-	(*IdentityProviderConfig_OAuth2Config)(nil), // 12: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
-	(*Subscription)(nil),                        // 13: monotreme.api.v1.Subscription
-	(Visibility)(0),                             // 14: monotreme.api.v1.Visibility
-	(*fieldmaskpb.FieldMask)(nil),               // 15: google.protobuf.FieldMask
+	(*GetDatabaseStatsRequest)(nil),             // 11: monotreme.api.v1.GetDatabaseStatsRequest
+	(*DatabaseStats)(nil),                       // 12: monotreme.api.v1.DatabaseStats
+	(*ExportDatabaseRequest)(nil),               // 13: monotreme.api.v1.ExportDatabaseRequest
+	(*ExportDatabaseResponse)(nil),              // 14: monotreme.api.v1.ExportDatabaseResponse
+	(*ImportDatabaseRequest)(nil),               // 15: monotreme.api.v1.ImportDatabaseRequest
+	(*ImportDatabaseResponse)(nil),              // 16: monotreme.api.v1.ImportDatabaseResponse
+	(*IdentityProviderConfig_FieldMapping)(nil), // 17: monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	(*IdentityProviderConfig_OAuth2Config)(nil), // 18: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	nil,                           // 19: monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntry
+	(*Subscription)(nil),          // 20: monotreme.api.v1.Subscription
+	(Visibility)(0),               // 21: monotreme.api.v1.Visibility
+	(*fieldmaskpb.FieldMask)(nil), // 22: google.protobuf.FieldMask
 }
 var file_api_v1_workspace_service_proto_depIdxs = []int32{
-	13, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
-	14, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
+	20, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
+	21, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
 	3,  // 2: monotreme.api.v1.WorkspaceSetting.identity_providers:type_name -> monotreme.api.v1.IdentityProvider
 	0,  // 3: monotreme.api.v1.IdentityProvider.type:type_name -> monotreme.api.v1.IdentityProvider.Type
 	4,  // 4: monotreme.api.v1.IdentityProvider.config:type_name -> monotreme.api.v1.IdentityProviderConfig
-	12, // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	18, // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
 	2,  // 6: monotreme.api.v1.UpdateWorkspaceSettingRequest.setting:type_name -> monotreme.api.v1.WorkspaceSetting
-	15, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
+	22, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
 	10, // 8: monotreme.api.v1.WorkspaceStats.historical_data:type_name -> monotreme.api.v1.StatsMeasurement
-	11, // 9: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
-	5,  // 10: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
-	6,  // 11: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
-	7,  // 12: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
-	8,  // 13: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:input_type -> monotreme.api.v1.GetWorkspaceStatsRequest
-	1,  // 14: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
-	2,  // 15: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
-	2,  // 16: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
-	9,  // 17: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:output_type -> monotreme.api.v1.WorkspaceStats
-	14, // [14:18] is the sub-list for method output_type
-	10, // [10:14] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	19, // 9: monotreme.api.v1.ImportDatabaseResponse.imported_counts:type_name -> monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntry
+	17, // 10: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	5,  // 11: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
+	6,  // 12: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
+	7,  // 13: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
+	8,  // 14: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:input_type -> monotreme.api.v1.GetWorkspaceStatsRequest
+	11, // 15: monotreme.api.v1.WorkspaceService.GetDatabaseStats:input_type -> monotreme.api.v1.GetDatabaseStatsRequest
+	13, // 16: monotreme.api.v1.WorkspaceService.ExportDatabase:input_type -> monotreme.api.v1.ExportDatabaseRequest
+	15, // 17: monotreme.api.v1.WorkspaceService.ImportDatabase:input_type -> monotreme.api.v1.ImportDatabaseRequest
+	1,  // 18: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
+	2,  // 19: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	2,  // 20: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	9,  // 21: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:output_type -> monotreme.api.v1.WorkspaceStats
+	12, // 22: monotreme.api.v1.WorkspaceService.GetDatabaseStats:output_type -> monotreme.api.v1.DatabaseStats
+	14, // 23: monotreme.api.v1.WorkspaceService.ExportDatabase:output_type -> monotreme.api.v1.ExportDatabaseResponse
+	16, // 24: monotreme.api.v1.WorkspaceService.ImportDatabase:output_type -> monotreme.api.v1.ImportDatabaseResponse
+	18, // [18:25] is the sub-list for method output_type
+	11, // [11:18] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_api_v1_workspace_service_proto_init() }
@@ -1022,7 +1438,7 @@ func file_api_v1_workspace_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_workspace_service_proto_rawDesc), len(file_api_v1_workspace_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   12,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

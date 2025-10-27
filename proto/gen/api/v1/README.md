@@ -183,6 +183,10 @@
     - [UserSettingService](#monotreme-api-v1-UserSettingService)
   
 - [api/v1/workspace_service.proto](#api_v1_workspace_service-proto)
+    - [DatabaseStats](#monotreme-api-v1-DatabaseStats)
+    - [ExportDatabaseRequest](#monotreme-api-v1-ExportDatabaseRequest)
+    - [ExportDatabaseResponse](#monotreme-api-v1-ExportDatabaseResponse)
+    - [GetDatabaseStatsRequest](#monotreme-api-v1-GetDatabaseStatsRequest)
     - [GetWorkspaceProfileRequest](#monotreme-api-v1-GetWorkspaceProfileRequest)
     - [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest)
     - [GetWorkspaceStatsRequest](#monotreme-api-v1-GetWorkspaceStatsRequest)
@@ -190,6 +194,9 @@
     - [IdentityProviderConfig](#monotreme-api-v1-IdentityProviderConfig)
     - [IdentityProviderConfig.FieldMapping](#monotreme-api-v1-IdentityProviderConfig-FieldMapping)
     - [IdentityProviderConfig.OAuth2Config](#monotreme-api-v1-IdentityProviderConfig-OAuth2Config)
+    - [ImportDatabaseRequest](#monotreme-api-v1-ImportDatabaseRequest)
+    - [ImportDatabaseResponse](#monotreme-api-v1-ImportDatabaseResponse)
+    - [ImportDatabaseResponse.ImportedCountsEntry](#monotreme-api-v1-ImportDatabaseResponse-ImportedCountsEntry)
     - [StatsMeasurement](#monotreme-api-v1-StatsMeasurement)
     - [UpdateWorkspaceSettingRequest](#monotreme-api-v1-UpdateWorkspaceSettingRequest)
     - [WorkspaceProfile](#monotreme-api-v1-WorkspaceProfile)
@@ -2604,6 +2611,70 @@ Empty - returns all feeds for the authenticated user
 
 
 
+<a name="monotreme-api-v1-DatabaseStats"></a>
+
+### DatabaseStats
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| users | [int32](#int32) |  | Total number of users |
+| shortcuts | [int32](#int32) |  | Total number of shortcuts |
+| collections | [int32](#int32) |  | Total number of collections |
+| tags | [int32](#int32) |  | Total number of tags |
+| bookmark_tags | [int32](#int32) |  | Total number of bookmark-tag relationships |
+| friendships | [int32](#int32) |  | Total number of friendships |
+| followings | [int32](#int32) |  | Total number of following relationships |
+| activities | [int32](#int32) |  | Total number of activities |
+| invitations | [int32](#int32) |  | Total number of invitations |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ExportDatabaseRequest"></a>
+
+### ExportDatabaseRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| entities | [string](#string) | repeated | List of entity types to export |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ExportDatabaseResponse"></a>
+
+### ExportDatabaseResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| data | [string](#string) |  | JSON data containing the exported entities |
+| filename | [string](#string) |  | Filename for the export |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetDatabaseStatsRequest"></a>
+
+### GetDatabaseStatsRequest
+
+
+
+
+
+
+
 <a name="monotreme-api-v1-GetWorkspaceProfileRequest"></a>
 
 ### GetWorkspaceProfileRequest
@@ -2698,6 +2769,55 @@ Empty - returns all feeds for the authenticated user
 | user_info_url | [string](#string) |  |  |
 | scopes | [string](#string) | repeated |  |
 | field_mapping | [IdentityProviderConfig.FieldMapping](#monotreme-api-v1-IdentityProviderConfig-FieldMapping) |  |  |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ImportDatabaseRequest"></a>
+
+### ImportDatabaseRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| data | [string](#string) |  | JSON data to import |
+| entities | [string](#string) | repeated | List of entity types to import |
+| mode | [string](#string) |  | Import mode: &#34;new-only&#34;, &#34;overwrite&#34;, &#34;wipe-and-import&#34; |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ImportDatabaseResponse"></a>
+
+### ImportDatabaseResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| imported_counts | [ImportDatabaseResponse.ImportedCountsEntry](#monotreme-api-v1-ImportDatabaseResponse-ImportedCountsEntry) | repeated | Number of records imported per entity type |
+| messages | [string](#string) | repeated | Any warnings or messages |
+
+
+
+
+
+
+<a name="monotreme-api-v1-ImportDatabaseResponse-ImportedCountsEntry"></a>
+
+### ImportDatabaseResponse.ImportedCountsEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [int32](#int32) |  |  |
 
 
 
@@ -2829,6 +2949,9 @@ Empty - returns all feeds for the authenticated user
 | GetWorkspaceSetting | [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest) | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  |
 | UpdateWorkspaceSetting | [UpdateWorkspaceSettingRequest](#monotreme-api-v1-UpdateWorkspaceSettingRequest) | [WorkspaceSetting](#monotreme-api-v1-WorkspaceSetting) |  |
 | GetWorkspaceStats | [GetWorkspaceStatsRequest](#monotreme-api-v1-GetWorkspaceStatsRequest) | [WorkspaceStats](#monotreme-api-v1-WorkspaceStats) |  |
+| GetDatabaseStats | [GetDatabaseStatsRequest](#monotreme-api-v1-GetDatabaseStatsRequest) | [DatabaseStats](#monotreme-api-v1-DatabaseStats) |  |
+| ExportDatabase | [ExportDatabaseRequest](#monotreme-api-v1-ExportDatabaseRequest) | [ExportDatabaseResponse](#monotreme-api-v1-ExportDatabaseResponse) |  |
+| ImportDatabase | [ImportDatabaseRequest](#monotreme-api-v1-ImportDatabaseRequest) | [ImportDatabaseResponse](#monotreme-api-v1-ImportDatabaseResponse) |  |
 
  
 

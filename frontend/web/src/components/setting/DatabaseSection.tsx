@@ -1,6 +1,7 @@
 import { Button, Checkbox, Chip, Divider, Input, Radio, RadioGroup, Table, Typography } from "@mui/joy";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { workspaceServiceClient } from "@/grpcweb";
 import Icon from "../Icon";
 
 interface DatabaseStats {
@@ -67,24 +68,20 @@ const DatabaseSection = () => {
   const loadDatabaseStats = async () => {
     setIsLoadingStats(true);
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/v1/admin/database/stats');
-      // const stats = await response.json();
-      // setDatabaseStats(stats);
-
-      // Mock data for now
+      const stats = await workspaceServiceClient.getDatabaseStats({});
       setDatabaseStats({
-        users: 6,
-        shortcuts: 33,
-        collections: 5,
-        tags: 12,
-        bookmarkTags: 45,
-        friendships: 5,
-        followings: 8,
-        activities: 156,
-        invitations: 2,
+        users: stats.users,
+        shortcuts: stats.shortcuts,
+        collections: stats.collections,
+        tags: stats.tags,
+        bookmarkTags: stats.bookmarkTags,
+        friendships: stats.friendships,
+        followings: stats.followings,
+        activities: stats.activities,
+        invitations: stats.invitations,
       });
     } catch (error: any) {
+      console.error("Failed to load database statistics:", error);
       toast.error("Failed to load database statistics");
     } finally {
       setIsLoadingStats(false);
@@ -138,26 +135,33 @@ const DatabaseSection = () => {
 
     setIsImporting(true);
     try {
-      const formData = new FormData();
-      formData.append("file", importFile);
-      formData.append("entities", JSON.stringify(selectedEntities.map((e) => e.value)));
-      formData.append("mode", importMode);
+      // Read file content
+      const fileContent = await importFile.text();
 
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/v1/admin/database/import', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
+      // Call the backend API
+      const response = await workspaceServiceClient.importDatabase({
+        data: fileContent,
+        entities: selectedEntities.map((e) => e.value),
+        mode: importMode,
+      });
 
-      // Mock success for now
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Show success message with counts
+      const counts = Object.entries(response.importedCounts)
+        .map(([entity, count]) => `${entity}: ${count}`)
+        .join(", ");
 
-      const modeLabel = importMode === "overwrite" ? "overwritten" : importMode === "new-only" ? "imported" : "wiped and imported";
-      toast.success(`Successfully ${modeLabel} ${selectedEntities.length} entity types`);
+      toast.success(`Successfully imported: ${counts}`);
+
+      // Show any warning messages
+      if (response.messages && response.messages.length > 0) {
+        response.messages.forEach((msg) => toast.error(msg));
+      }
+
       setImportFile(null);
       setImportEntities(importEntities.map((e) => ({ ...e, enabled: false })));
       await loadDatabaseStats();
     } catch (error: any) {
+      console.error("Import error:", error);
       toast.error(error.message || "Failed to import database");
     } finally {
       setIsImporting(false);
@@ -173,25 +177,30 @@ const DatabaseSection = () => {
 
     setIsExporting(true);
     try {
-      // TODO: Replace with actual API call
-      // const entityParams = selectedEntities.map(e => e.value).join(',');
-      // const response = await fetch(`/api/v1/admin/database/export?entities=${entityParams}`);
-      // const blob = await response.blob();
-      // const url = window.URL.createObjectURL(blob);
-      // const a = document.createElement('a');
-      // a.href = url;
-      // a.download = `monotreme_export_${new Date().toISOString().split('T')[0]}.json`;
-      // document.body.appendChild(a);
-      // a.click();
-      // window.URL.revokeObjectURL(url);
-      // document.body.removeChild(a);
+      // Call the backend API
+      const response = await workspaceServiceClient.exportDatabase({
+        entities: selectedEntities.map((e) => e.value),
+      });
 
-      // Mock export for now
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Create a blob from the JSON data
+      const blob = new Blob([response.data], { type: "application/json" });
+      const url = window.URL.createObjectURL(blob);
+
+      // Create a temporary link and trigger download
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = response.filename;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
 
       toast.success(`Exported ${selectedEntities.length} entity types successfully`);
       setExportEntities(exportEntities.map((e) => ({ ...e, enabled: false })));
     } catch (error: any) {
+      console.error("Export error:", error);
       toast.error(error.message || "Failed to export database");
     } finally {
       setIsExporting(false);

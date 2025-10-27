@@ -27,6 +27,21 @@ service WorkspaceService {
   rpc GetWorkspaceStats(GetWorkspaceStatsRequest) returns (WorkspaceStats) {
     option (google.api.http) = {get: "/api/v1/workspace/stats"};
   }
+  rpc GetDatabaseStats(GetDatabaseStatsRequest) returns (DatabaseStats) {
+    option (google.api.http) = {get: "/api/v1/workspace/database/stats"};
+  }
+  rpc ExportDatabase(ExportDatabaseRequest) returns (ExportDatabaseResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/workspace/database/export"
+      body: "*"
+    };
+  }
+  rpc ImportDatabase(ImportDatabaseRequest) returns (ImportDatabaseResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/workspace/database/import"
+      body: "*"
+    };
+  }
 }
 
 message WorkspaceProfile {
@@ -136,4 +151,55 @@ message StatsMeasurement {
   int32 collections_count = 4;
   // Total number of hits (shortcut views) at measurement time
   int32 hits_count = 5;
+}
+
+message GetDatabaseStatsRequest {}
+
+message DatabaseStats {
+  // Total number of users
+  int32 users = 1;
+  // Total number of shortcuts
+  int32 shortcuts = 2;
+  // Total number of collections
+  int32 collections = 3;
+  // Total number of tags
+  int32 tags = 4;
+  // Total number of bookmark-tag relationships
+  int32 bookmark_tags = 5;
+  // Total number of friendships
+  int32 friendships = 6;
+  // Total number of following relationships
+  int32 followings = 7;
+  // Total number of activities
+  int32 activities = 8;
+  // Total number of invitations
+  int32 invitations = 9;
+}
+
+message ExportDatabaseRequest {
+  // List of entity types to export
+  repeated string entities = 1;
+}
+
+message ExportDatabaseResponse {
+  // JSON data containing the exported entities
+  string data = 1;
+  // Filename for the export
+  string filename = 2;
+}
+
+message ImportDatabaseRequest {
+  // JSON data to import
+  string data = 1;
+  // List of entity types to import
+  repeated string entities = 2;
+  // Import mode: "new-only", "overwrite", "wipe-and-import"
+  string mode = 3;
+}
+
+message ImportDatabaseResponse {
+  // Number of records imported per entity type
+  map<string, int32> imported_counts = 1;
+  // Any warnings or messages
+  repeated string messages = 2;
 }
