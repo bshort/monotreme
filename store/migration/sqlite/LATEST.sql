@@ -205,3 +205,34 @@ CREATE INDEX idx_bookmark_tag_shortcut_id ON bookmark_tag(shortcut_id);
 CREATE INDEX idx_bookmark_tag_tag_uuid ON bookmark_tag(tag_uuid);
 CREATE INDEX idx_bookmark_tag_user_id ON bookmark_tag(user_id);
 CREATE INDEX idx_bookmark_tag_user_tag ON bookmark_tag(user_id, tag_uuid);
+
+-- friendship table for friend requests
+CREATE TABLE friendship (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  friend_id INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'PENDING',
+  created_ts BIGINT NOT NULL DEFAULT (strftime('%s', 'now')),
+  accepted_ts BIGINT,
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+  FOREIGN KEY (friend_id) REFERENCES user(id) ON DELETE CASCADE,
+  UNIQUE(user_id, friend_id)
+);
+
+CREATE INDEX idx_friendship_user_id ON friendship(user_id);
+CREATE INDEX idx_friendship_friend_id ON friendship(friend_id);
+CREATE INDEX idx_friendship_status ON friendship(status);
+
+-- following table for user following relationships
+CREATE TABLE following (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  follower_id INTEGER NOT NULL,
+  following_id INTEGER NOT NULL,
+  created_ts BIGINT NOT NULL DEFAULT (strftime('%s', 'now')),
+  FOREIGN KEY (follower_id) REFERENCES user(id) ON DELETE CASCADE,
+  FOREIGN KEY (following_id) REFERENCES user(id) ON DELETE CASCADE,
+  UNIQUE(follower_id, following_id)
+);
+
+CREATE INDEX idx_following_follower_id ON following(follower_id);
+CREATE INDEX idx_following_following_id ON following(following_id);

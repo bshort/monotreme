@@ -186,6 +186,9 @@
     - [DatabaseStats](#monotreme-api-v1-DatabaseStats)
     - [ExportDatabaseRequest](#monotreme-api-v1-ExportDatabaseRequest)
     - [ExportDatabaseResponse](#monotreme-api-v1-ExportDatabaseResponse)
+    - [GetDatabaseReportRequest](#monotreme-api-v1-GetDatabaseReportRequest)
+    - [GetDatabaseReportResponse](#monotreme-api-v1-GetDatabaseReportResponse)
+    - [GetDatabaseReportResponse.MetadataEntry](#monotreme-api-v1-GetDatabaseReportResponse-MetadataEntry)
     - [GetDatabaseStatsRequest](#monotreme-api-v1-GetDatabaseStatsRequest)
     - [GetWorkspaceProfileRequest](#monotreme-api-v1-GetWorkspaceProfileRequest)
     - [GetWorkspaceSettingRequest](#monotreme-api-v1-GetWorkspaceSettingRequest)
@@ -2665,6 +2668,57 @@ Empty - returns all feeds for the authenticated user
 
 
 
+<a name="monotreme-api-v1-GetDatabaseReportRequest"></a>
+
+### GetDatabaseReportRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| entity | [string](#string) |  | Entity type: users, shortcuts, collections, tags, bookmark_tags, friendships, followings, activities, invitations |
+| limit | [int32](#int32) | optional | Optional: limit the number of records returned |
+| offset | [int32](#int32) | optional | Optional: offset for pagination |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetDatabaseReportResponse"></a>
+
+### GetDatabaseReportResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| entity | [string](#string) |  | The entity type |
+| total_count | [int32](#int32) |  | Total count of records |
+| data | [string](#string) |  | JSON data containing the records |
+| metadata | [GetDatabaseReportResponse.MetadataEntry](#monotreme-api-v1-GetDatabaseReportResponse-MetadataEntry) | repeated | Metadata about the report |
+
+
+
+
+
+
+<a name="monotreme-api-v1-GetDatabaseReportResponse-MetadataEntry"></a>
+
+### GetDatabaseReportResponse.MetadataEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="monotreme-api-v1-GetDatabaseStatsRequest"></a>
 
 ### GetDatabaseStatsRequest
@@ -2952,6 +3006,7 @@ Empty - returns all feeds for the authenticated user
 | GetDatabaseStats | [GetDatabaseStatsRequest](#monotreme-api-v1-GetDatabaseStatsRequest) | [DatabaseStats](#monotreme-api-v1-DatabaseStats) |  |
 | ExportDatabase | [ExportDatabaseRequest](#monotreme-api-v1-ExportDatabaseRequest) | [ExportDatabaseResponse](#monotreme-api-v1-ExportDatabaseResponse) |  |
 | ImportDatabase | [ImportDatabaseRequest](#monotreme-api-v1-ImportDatabaseRequest) | [ImportDatabaseResponse](#monotreme-api-v1-ImportDatabaseResponse) |  |
+| GetDatabaseReport | [GetDatabaseReportRequest](#monotreme-api-v1-GetDatabaseReportRequest) | [GetDatabaseReportResponse](#monotreme-api-v1-GetDatabaseReportResponse) |  |
 
  
 

@@ -8,14 +8,46 @@ import (
 )
 
 func (d *DB) ListFriendships(ctx context.Context, userID int32, status string) ([]*store.Friendship, error) {
-	query := `
-		SELECT id, user_id, friend_id, status, created_ts, accepted_ts
-		FROM friendship
-		WHERE (user_id = ? OR friend_id = ?) AND status = ?
-		ORDER BY created_ts DESC
-	`
+	var query string
+	var args []interface{}
 
-	rows, err := d.db.QueryContext(ctx, query, userID, userID, status)
+	// If userID is 0 and status is empty, get all friendships
+	if userID == 0 && status == "" {
+		query = `
+			SELECT id, user_id, friend_id, status, created_ts, accepted_ts
+			FROM friendship
+			ORDER BY created_ts DESC
+		`
+	} else if userID == 0 {
+		// Get all friendships with specific status
+		query = `
+			SELECT id, user_id, friend_id, status, created_ts, accepted_ts
+			FROM friendship
+			WHERE status = ?
+			ORDER BY created_ts DESC
+		`
+		args = []interface{}{status}
+	} else if status == "" {
+		// Get all friendships for a user regardless of status
+		query = `
+			SELECT id, user_id, friend_id, status, created_ts, accepted_ts
+			FROM friendship
+			WHERE (user_id = ? OR friend_id = ?)
+			ORDER BY created_ts DESC
+		`
+		args = []interface{}{userID, userID}
+	} else {
+		// Get friendships for a user with specific status
+		query = `
+			SELECT id, user_id, friend_id, status, created_ts, accepted_ts
+			FROM friendship
+			WHERE (user_id = ? OR friend_id = ?) AND status = ?
+			ORDER BY created_ts DESC
+		`
+		args = []interface{}{userID, userID, status}
+	}
+
+	rows, err := d.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}

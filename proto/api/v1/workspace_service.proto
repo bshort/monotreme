@@ -42,6 +42,9 @@ service WorkspaceService {
       body: "*"
     };
   }
+  rpc GetDatabaseReport(GetDatabaseReportRequest) returns (GetDatabaseReportResponse) {
+    option (google.api.http) = {get: "/api/v1/workspace/database/report/{entity}"};
+  }
 }
 
 message WorkspaceProfile {
@@ -202,4 +205,24 @@ message ImportDatabaseResponse {
   map<string, int32> imported_counts = 1;
   // Any warnings or messages
   repeated string messages = 2;
+}
+
+message GetDatabaseReportRequest {
+  // Entity type: users, shortcuts, collections, tags, bookmark_tags, friendships, followings, activities, invitations
+  string entity = 1;
+  // Optional: limit the number of records returned
+  optional int32 limit = 2;
+  // Optional: offset for pagination
+  optional int32 offset = 3;
+}
+
+message GetDatabaseReportResponse {
+  // The entity type
+  string entity = 1;
+  // Total count of records
+  int32 total_count = 2;
+  // JSON data containing the records
+  string data = 3;
+  // Metadata about the report
+  map<string, string> metadata = 4;
 }

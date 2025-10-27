@@ -1096,6 +1096,141 @@ func (x *ImportDatabaseResponse) GetMessages() []string {
 	return nil
 }
 
+type GetDatabaseReportRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Entity type: users, shortcuts, collections, tags, bookmark_tags, friendships, followings, activities, invitations
+	Entity string `protobuf:"bytes,1,opt,name=entity,proto3" json:"entity,omitempty"`
+	// Optional: limit the number of records returned
+	Limit *int32 `protobuf:"varint,2,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	// Optional: offset for pagination
+	Offset        *int32 `protobuf:"varint,3,opt,name=offset,proto3,oneof" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDatabaseReportRequest) Reset() {
+	*x = GetDatabaseReportRequest{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDatabaseReportRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDatabaseReportRequest) ProtoMessage() {}
+
+func (x *GetDatabaseReportRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDatabaseReportRequest.ProtoReflect.Descriptor instead.
+func (*GetDatabaseReportRequest) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GetDatabaseReportRequest) GetEntity() string {
+	if x != nil {
+		return x.Entity
+	}
+	return ""
+}
+
+func (x *GetDatabaseReportRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+func (x *GetDatabaseReportRequest) GetOffset() int32 {
+	if x != nil && x.Offset != nil {
+		return *x.Offset
+	}
+	return 0
+}
+
+type GetDatabaseReportResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The entity type
+	Entity string `protobuf:"bytes,1,opt,name=entity,proto3" json:"entity,omitempty"`
+	// Total count of records
+	TotalCount int32 `protobuf:"varint,2,opt,name=total_count,json=totalCount,proto3" json:"total_count,omitempty"`
+	// JSON data containing the records
+	Data string `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	// Metadata about the report
+	Metadata      map[string]string `protobuf:"bytes,4,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDatabaseReportResponse) Reset() {
+	*x = GetDatabaseReportResponse{}
+	mi := &file_api_v1_workspace_service_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDatabaseReportResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDatabaseReportResponse) ProtoMessage() {}
+
+func (x *GetDatabaseReportResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_v1_workspace_service_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDatabaseReportResponse.ProtoReflect.Descriptor instead.
+func (*GetDatabaseReportResponse) Descriptor() ([]byte, []int) {
+	return file_api_v1_workspace_service_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetDatabaseReportResponse) GetEntity() string {
+	if x != nil {
+		return x.Entity
+	}
+	return ""
+}
+
+func (x *GetDatabaseReportResponse) GetTotalCount() int32 {
+	if x != nil {
+		return x.TotalCount
+	}
+	return 0
+}
+
+func (x *GetDatabaseReportResponse) GetData() string {
+	if x != nil {
+		return x.Data
+	}
+	return ""
+}
+
+func (x *GetDatabaseReportResponse) GetMetadata() map[string]string {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
 type IdentityProviderConfig_FieldMapping struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Identifier    string                 `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
@@ -1106,7 +1241,7 @@ type IdentityProviderConfig_FieldMapping struct {
 
 func (x *IdentityProviderConfig_FieldMapping) Reset() {
 	*x = IdentityProviderConfig_FieldMapping{}
-	mi := &file_api_v1_workspace_service_proto_msgTypes[16]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1118,7 +1253,7 @@ func (x *IdentityProviderConfig_FieldMapping) String() string {
 func (*IdentityProviderConfig_FieldMapping) ProtoMessage() {}
 
 func (x *IdentityProviderConfig_FieldMapping) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_workspace_service_proto_msgTypes[16]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1163,7 +1298,7 @@ type IdentityProviderConfig_OAuth2Config struct {
 
 func (x *IdentityProviderConfig_OAuth2Config) Reset() {
 	*x = IdentityProviderConfig_OAuth2Config{}
-	mi := &file_api_v1_workspace_service_proto_msgTypes[17]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1175,7 +1310,7 @@ func (x *IdentityProviderConfig_OAuth2Config) String() string {
 func (*IdentityProviderConfig_OAuth2Config) ProtoMessage() {}
 
 func (x *IdentityProviderConfig_OAuth2Config) ProtoReflect() protoreflect.Message {
-	mi := &file_api_v1_workspace_service_proto_msgTypes[17]
+	mi := &file_api_v1_workspace_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1339,7 +1474,22 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\bmessages\x18\x02 \x03(\tR\bmessages\x1aA\n" +
 	"\x13ImportedCountsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x012\x96\b\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\x7f\n" +
+	"\x18GetDatabaseReportRequest\x12\x16\n" +
+	"\x06entity\x18\x01 \x01(\tR\x06entity\x12\x19\n" +
+	"\x05limit\x18\x02 \x01(\x05H\x00R\x05limit\x88\x01\x01\x12\x1b\n" +
+	"\x06offset\x18\x03 \x01(\x05H\x01R\x06offset\x88\x01\x01B\b\n" +
+	"\x06_limitB\t\n" +
+	"\a_offset\"\xfc\x01\n" +
+	"\x19GetDatabaseReportResponse\x12\x16\n" +
+	"\x06entity\x18\x01 \x01(\tR\x06entity\x12\x1f\n" +
+	"\vtotal_count\x18\x02 \x01(\x05R\n" +
+	"totalCount\x12\x12\n" +
+	"\x04data\x18\x03 \x01(\tR\x04data\x12U\n" +
+	"\bmetadata\x18\x04 \x03(\v29.monotreme.api.v1.GetDatabaseReportResponse.MetadataEntryR\bmetadata\x1a;\n" +
+	"\rMetadataEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\xb9\t\n" +
 	"\x10WorkspaceService\x12\x8a\x01\n" +
 	"\x13GetWorkspaceProfile\x12,.monotreme.api.v1.GetWorkspaceProfileRequest\x1a\".monotreme.api.v1.WorkspaceProfile\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/profile\x12\x8a\x01\n" +
 	"\x13GetWorkspaceSetting\x12,.monotreme.api.v1.GetWorkspaceSettingRequest\x1a\".monotreme.api.v1.WorkspaceSetting\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/workspace/setting\x12\xaf\x01\n" +
@@ -1347,7 +1497,8 @@ const file_api_v1_workspace_service_proto_rawDesc = "" +
 	"\x11GetWorkspaceStats\x12*.monotreme.api.v1.GetWorkspaceStatsRequest\x1a .monotreme.api.v1.WorkspaceStats\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/workspace/stats\x12\x88\x01\n" +
 	"\x10GetDatabaseStats\x12).monotreme.api.v1.GetDatabaseStatsRequest\x1a\x1f.monotreme.api.v1.DatabaseStats\"(\x82\xd3\xe4\x93\x02\"\x12 /api/v1/workspace/database/stats\x12\x91\x01\n" +
 	"\x0eExportDatabase\x12'.monotreme.api.v1.ExportDatabaseRequest\x1a(.monotreme.api.v1.ExportDatabaseResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/api/v1/workspace/database/export\x12\x91\x01\n" +
-	"\x0eImportDatabase\x12'.monotreme.api.v1.ImportDatabaseRequest\x1a(.monotreme.api.v1.ImportDatabaseResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/api/v1/workspace/database/importB\xc3\x01\n" +
+	"\x0eImportDatabase\x12'.monotreme.api.v1.ImportDatabaseRequest\x1a(.monotreme.api.v1.ImportDatabaseResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/api/v1/workspace/database/import\x12\xa0\x01\n" +
+	"\x11GetDatabaseReport\x12*.monotreme.api.v1.GetDatabaseReportRequest\x1a+.monotreme.api.v1.GetDatabaseReportResponse\"2\x82\xd3\xe4\x93\x02,\x12*/api/v1/workspace/database/report/{entity}B\xc3\x01\n" +
 	"\x14com.monotreme.api.v1B\x15WorkspaceServiceProtoP\x01Z2github.com/bshort/monotreme/proto/gen/api/v1;apiv1\xa2\x02\x03MAX\xaa\x02\x10Monotreme.Api.V1\xca\x02\x10Monotreme\\Api\\V1\xe2\x02\x1cMonotreme\\Api\\V1\\GPBMetadata\xea\x02\x12Monotreme::Api::V1b\x06proto3"
 
 var (
@@ -1363,7 +1514,7 @@ func file_api_v1_workspace_service_proto_rawDescGZIP() []byte {
 }
 
 var file_api_v1_workspace_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_api_v1_workspace_service_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_api_v1_workspace_service_proto_goTypes = []any{
 	(IdentityProvider_Type)(0),                  // 0: monotreme.api.v1.IdentityProvider.Type
 	(*WorkspaceProfile)(nil),                    // 1: monotreme.api.v1.WorkspaceProfile
@@ -1382,44 +1533,50 @@ var file_api_v1_workspace_service_proto_goTypes = []any{
 	(*ExportDatabaseResponse)(nil),              // 14: monotreme.api.v1.ExportDatabaseResponse
 	(*ImportDatabaseRequest)(nil),               // 15: monotreme.api.v1.ImportDatabaseRequest
 	(*ImportDatabaseResponse)(nil),              // 16: monotreme.api.v1.ImportDatabaseResponse
-	(*IdentityProviderConfig_FieldMapping)(nil), // 17: monotreme.api.v1.IdentityProviderConfig.FieldMapping
-	(*IdentityProviderConfig_OAuth2Config)(nil), // 18: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
-	nil,                           // 19: monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntry
-	(*Subscription)(nil),          // 20: monotreme.api.v1.Subscription
-	(Visibility)(0),               // 21: monotreme.api.v1.Visibility
-	(*fieldmaskpb.FieldMask)(nil), // 22: google.protobuf.FieldMask
+	(*GetDatabaseReportRequest)(nil),            // 17: monotreme.api.v1.GetDatabaseReportRequest
+	(*GetDatabaseReportResponse)(nil),           // 18: monotreme.api.v1.GetDatabaseReportResponse
+	(*IdentityProviderConfig_FieldMapping)(nil), // 19: monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	(*IdentityProviderConfig_OAuth2Config)(nil), // 20: monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	nil,                           // 21: monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntry
+	nil,                           // 22: monotreme.api.v1.GetDatabaseReportResponse.MetadataEntry
+	(*Subscription)(nil),          // 23: monotreme.api.v1.Subscription
+	(Visibility)(0),               // 24: monotreme.api.v1.Visibility
+	(*fieldmaskpb.FieldMask)(nil), // 25: google.protobuf.FieldMask
 }
 var file_api_v1_workspace_service_proto_depIdxs = []int32{
-	20, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
-	21, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
+	23, // 0: monotreme.api.v1.WorkspaceProfile.subscription:type_name -> monotreme.api.v1.Subscription
+	24, // 1: monotreme.api.v1.WorkspaceSetting.default_visibility:type_name -> monotreme.api.v1.Visibility
 	3,  // 2: monotreme.api.v1.WorkspaceSetting.identity_providers:type_name -> monotreme.api.v1.IdentityProvider
 	0,  // 3: monotreme.api.v1.IdentityProvider.type:type_name -> monotreme.api.v1.IdentityProvider.Type
 	4,  // 4: monotreme.api.v1.IdentityProvider.config:type_name -> monotreme.api.v1.IdentityProviderConfig
-	18, // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
+	20, // 5: monotreme.api.v1.IdentityProviderConfig.oauth2:type_name -> monotreme.api.v1.IdentityProviderConfig.OAuth2Config
 	2,  // 6: monotreme.api.v1.UpdateWorkspaceSettingRequest.setting:type_name -> monotreme.api.v1.WorkspaceSetting
-	22, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
+	25, // 7: monotreme.api.v1.UpdateWorkspaceSettingRequest.update_mask:type_name -> google.protobuf.FieldMask
 	10, // 8: monotreme.api.v1.WorkspaceStats.historical_data:type_name -> monotreme.api.v1.StatsMeasurement
-	19, // 9: monotreme.api.v1.ImportDatabaseResponse.imported_counts:type_name -> monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntry
-	17, // 10: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
-	5,  // 11: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
-	6,  // 12: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
-	7,  // 13: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
-	8,  // 14: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:input_type -> monotreme.api.v1.GetWorkspaceStatsRequest
-	11, // 15: monotreme.api.v1.WorkspaceService.GetDatabaseStats:input_type -> monotreme.api.v1.GetDatabaseStatsRequest
-	13, // 16: monotreme.api.v1.WorkspaceService.ExportDatabase:input_type -> monotreme.api.v1.ExportDatabaseRequest
-	15, // 17: monotreme.api.v1.WorkspaceService.ImportDatabase:input_type -> monotreme.api.v1.ImportDatabaseRequest
-	1,  // 18: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
-	2,  // 19: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
-	2,  // 20: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
-	9,  // 21: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:output_type -> monotreme.api.v1.WorkspaceStats
-	12, // 22: monotreme.api.v1.WorkspaceService.GetDatabaseStats:output_type -> monotreme.api.v1.DatabaseStats
-	14, // 23: monotreme.api.v1.WorkspaceService.ExportDatabase:output_type -> monotreme.api.v1.ExportDatabaseResponse
-	16, // 24: monotreme.api.v1.WorkspaceService.ImportDatabase:output_type -> monotreme.api.v1.ImportDatabaseResponse
-	18, // [18:25] is the sub-list for method output_type
-	11, // [11:18] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	21, // 9: monotreme.api.v1.ImportDatabaseResponse.imported_counts:type_name -> monotreme.api.v1.ImportDatabaseResponse.ImportedCountsEntry
+	22, // 10: monotreme.api.v1.GetDatabaseReportResponse.metadata:type_name -> monotreme.api.v1.GetDatabaseReportResponse.MetadataEntry
+	19, // 11: monotreme.api.v1.IdentityProviderConfig.OAuth2Config.field_mapping:type_name -> monotreme.api.v1.IdentityProviderConfig.FieldMapping
+	5,  // 12: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:input_type -> monotreme.api.v1.GetWorkspaceProfileRequest
+	6,  // 13: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:input_type -> monotreme.api.v1.GetWorkspaceSettingRequest
+	7,  // 14: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:input_type -> monotreme.api.v1.UpdateWorkspaceSettingRequest
+	8,  // 15: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:input_type -> monotreme.api.v1.GetWorkspaceStatsRequest
+	11, // 16: monotreme.api.v1.WorkspaceService.GetDatabaseStats:input_type -> monotreme.api.v1.GetDatabaseStatsRequest
+	13, // 17: monotreme.api.v1.WorkspaceService.ExportDatabase:input_type -> monotreme.api.v1.ExportDatabaseRequest
+	15, // 18: monotreme.api.v1.WorkspaceService.ImportDatabase:input_type -> monotreme.api.v1.ImportDatabaseRequest
+	17, // 19: monotreme.api.v1.WorkspaceService.GetDatabaseReport:input_type -> monotreme.api.v1.GetDatabaseReportRequest
+	1,  // 20: monotreme.api.v1.WorkspaceService.GetWorkspaceProfile:output_type -> monotreme.api.v1.WorkspaceProfile
+	2,  // 21: monotreme.api.v1.WorkspaceService.GetWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	2,  // 22: monotreme.api.v1.WorkspaceService.UpdateWorkspaceSetting:output_type -> monotreme.api.v1.WorkspaceSetting
+	9,  // 23: monotreme.api.v1.WorkspaceService.GetWorkspaceStats:output_type -> monotreme.api.v1.WorkspaceStats
+	12, // 24: monotreme.api.v1.WorkspaceService.GetDatabaseStats:output_type -> monotreme.api.v1.DatabaseStats
+	14, // 25: monotreme.api.v1.WorkspaceService.ExportDatabase:output_type -> monotreme.api.v1.ExportDatabaseResponse
+	16, // 26: monotreme.api.v1.WorkspaceService.ImportDatabase:output_type -> monotreme.api.v1.ImportDatabaseResponse
+	18, // 27: monotreme.api.v1.WorkspaceService.GetDatabaseReport:output_type -> monotreme.api.v1.GetDatabaseReportResponse
+	20, // [20:28] is the sub-list for method output_type
+	12, // [12:20] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_api_v1_workspace_service_proto_init() }
@@ -1432,13 +1589,14 @@ func file_api_v1_workspace_service_proto_init() {
 	file_api_v1_workspace_service_proto_msgTypes[3].OneofWrappers = []any{
 		(*IdentityProviderConfig_Oauth2)(nil),
 	}
+	file_api_v1_workspace_service_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_workspace_service_proto_rawDesc), len(file_api_v1_workspace_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   19,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

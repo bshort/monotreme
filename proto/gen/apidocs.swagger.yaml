@@ -1617,6 +1617,38 @@ paths:
             $ref: '#/definitions/v1ImportDatabaseRequest'
       tags:
         - WorkspaceService
+  /api/v1/workspace/database/report/{entity}:
+    get:
+      operationId: WorkspaceService_GetDatabaseReport
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetDatabaseReportResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: entity
+          description: 'Entity type: users, shortcuts, collections, tags, bookmark_tags, friendships, followings, activities, invitations'
+          in: path
+          required: true
+          type: string
+        - name: limit
+          description: 'Optional: limit the number of records returned'
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: offset
+          description: 'Optional: offset for pagination'
+          in: query
+          required: false
+          type: integer
+          format: int32
+      tags:
+        - WorkspaceService
   /api/v1/workspace/database/stats:
     get:
       operationId: WorkspaceService_GetDatabaseStats
@@ -2334,6 +2366,24 @@ definitions:
       userSummary:
         $ref: '#/definitions/v1UserSummary'
         title: User-specific summary (for current user)
+  v1GetDatabaseReportResponse:
+    type: object
+    properties:
+      entity:
+        type: string
+        title: The entity type
+      totalCount:
+        type: integer
+        format: int32
+        title: Total count of records
+      data:
+        type: string
+        title: JSON data containing the records
+      metadata:
+        type: object
+        additionalProperties:
+          type: string
+        title: Metadata about the report
   v1GetInvitationCodeResponse:
     type: object
     properties:

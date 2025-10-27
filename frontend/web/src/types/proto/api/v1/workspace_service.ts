@@ -212,6 +212,33 @@ export interface ImportDatabaseResponse_ImportedCountsEntry {
   value: number;
 }
 
+export interface GetDatabaseReportRequest {
+  /** Entity type: users, shortcuts, collections, tags, bookmark_tags, friendships, followings, activities, invitations */
+  entity: string;
+  /** Optional: limit the number of records returned */
+  limit?:
+    | number
+    | undefined;
+  /** Optional: offset for pagination */
+  offset?: number | undefined;
+}
+
+export interface GetDatabaseReportResponse {
+  /** The entity type */
+  entity: string;
+  /** Total count of records */
+  totalCount: number;
+  /** JSON data containing the records */
+  data: string;
+  /** Metadata about the report */
+  metadata: { [key: string]: string };
+}
+
+export interface GetDatabaseReportResponse_MetadataEntry {
+  key: string;
+  value: string;
+}
+
 function createBaseWorkspaceProfile(): WorkspaceProfile {
   return { mode: "", version: "", owner: "", subscription: undefined, customStyle: "", branding: new Uint8Array(0) };
 }
@@ -1616,6 +1643,224 @@ export const ImportDatabaseResponse_ImportedCountsEntry: MessageFns<ImportDataba
   },
 };
 
+function createBaseGetDatabaseReportRequest(): GetDatabaseReportRequest {
+  return { entity: "", limit: undefined, offset: undefined };
+}
+
+export const GetDatabaseReportRequest: MessageFns<GetDatabaseReportRequest> = {
+  encode(message: GetDatabaseReportRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.entity !== "") {
+      writer.uint32(10).string(message.entity);
+    }
+    if (message.limit !== undefined) {
+      writer.uint32(16).int32(message.limit);
+    }
+    if (message.offset !== undefined) {
+      writer.uint32(24).int32(message.offset);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetDatabaseReportRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetDatabaseReportRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.entity = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.limit = reader.int32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.offset = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetDatabaseReportRequest>): GetDatabaseReportRequest {
+    return GetDatabaseReportRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetDatabaseReportRequest>): GetDatabaseReportRequest {
+    const message = createBaseGetDatabaseReportRequest();
+    message.entity = object.entity ?? "";
+    message.limit = object.limit ?? undefined;
+    message.offset = object.offset ?? undefined;
+    return message;
+  },
+};
+
+function createBaseGetDatabaseReportResponse(): GetDatabaseReportResponse {
+  return { entity: "", totalCount: 0, data: "", metadata: {} };
+}
+
+export const GetDatabaseReportResponse: MessageFns<GetDatabaseReportResponse> = {
+  encode(message: GetDatabaseReportResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.entity !== "") {
+      writer.uint32(10).string(message.entity);
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).int32(message.totalCount);
+    }
+    if (message.data !== "") {
+      writer.uint32(26).string(message.data);
+    }
+    Object.entries(message.metadata).forEach(([key, value]) => {
+      GetDatabaseReportResponse_MetadataEntry.encode({ key: key as any, value }, writer.uint32(34).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetDatabaseReportResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetDatabaseReportResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.entity = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.totalCount = reader.int32();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.data = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          const entry4 = GetDatabaseReportResponse_MetadataEntry.decode(reader, reader.uint32());
+          if (entry4.value !== undefined) {
+            message.metadata[entry4.key] = entry4.value;
+          }
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetDatabaseReportResponse>): GetDatabaseReportResponse {
+    return GetDatabaseReportResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetDatabaseReportResponse>): GetDatabaseReportResponse {
+    const message = createBaseGetDatabaseReportResponse();
+    message.entity = object.entity ?? "";
+    message.totalCount = object.totalCount ?? 0;
+    message.data = object.data ?? "";
+    message.metadata = Object.entries(object.metadata ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = globalThis.String(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  },
+};
+
+function createBaseGetDatabaseReportResponse_MetadataEntry(): GetDatabaseReportResponse_MetadataEntry {
+  return { key: "", value: "" };
+}
+
+export const GetDatabaseReportResponse_MetadataEntry: MessageFns<GetDatabaseReportResponse_MetadataEntry> = {
+  encode(message: GetDatabaseReportResponse_MetadataEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetDatabaseReportResponse_MetadataEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetDatabaseReportResponse_MetadataEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create(base?: DeepPartial<GetDatabaseReportResponse_MetadataEntry>): GetDatabaseReportResponse_MetadataEntry {
+    return GetDatabaseReportResponse_MetadataEntry.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetDatabaseReportResponse_MetadataEntry>): GetDatabaseReportResponse_MetadataEntry {
+    const message = createBaseGetDatabaseReportResponse_MetadataEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
+    return message;
+  },
+};
+
 export type WorkspaceServiceDefinition = typeof WorkspaceServiceDefinition;
 export const WorkspaceServiceDefinition = {
   name: "WorkspaceService",
@@ -1977,6 +2222,66 @@ export const WorkspaceServiceDefinition = {
               111,
               114,
               116,
+            ]),
+          ],
+        },
+      },
+    },
+    getDatabaseReport: {
+      name: "GetDatabaseReport",
+      requestType: GetDatabaseReportRequest,
+      requestStream: false,
+      responseType: GetDatabaseReportResponse,
+      responseStream: false,
+      options: {
+        _unknownFields: {
+          578365826: [
+            new Uint8Array([
+              44,
+              18,
+              42,
+              47,
+              97,
+              112,
+              105,
+              47,
+              118,
+              49,
+              47,
+              119,
+              111,
+              114,
+              107,
+              115,
+              112,
+              97,
+              99,
+              101,
+              47,
+              100,
+              97,
+              116,
+              97,
+              98,
+              97,
+              115,
+              101,
+              47,
+              114,
+              101,
+              112,
+              111,
+              114,
+              116,
+              47,
+              123,
+              101,
+              110,
+              116,
+              105,
+              116,
+              121,
+              125,
             ]),
           ],
         },

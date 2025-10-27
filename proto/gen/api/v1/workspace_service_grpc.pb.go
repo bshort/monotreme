@@ -26,6 +26,7 @@ const (
 	WorkspaceService_GetDatabaseStats_FullMethodName       = "/monotreme.api.v1.WorkspaceService/GetDatabaseStats"
 	WorkspaceService_ExportDatabase_FullMethodName         = "/monotreme.api.v1.WorkspaceService/ExportDatabase"
 	WorkspaceService_ImportDatabase_FullMethodName         = "/monotreme.api.v1.WorkspaceService/ImportDatabase"
+	WorkspaceService_GetDatabaseReport_FullMethodName      = "/monotreme.api.v1.WorkspaceService/GetDatabaseReport"
 )
 
 // WorkspaceServiceClient is the client API for WorkspaceService service.
@@ -39,6 +40,7 @@ type WorkspaceServiceClient interface {
 	GetDatabaseStats(ctx context.Context, in *GetDatabaseStatsRequest, opts ...grpc.CallOption) (*DatabaseStats, error)
 	ExportDatabase(ctx context.Context, in *ExportDatabaseRequest, opts ...grpc.CallOption) (*ExportDatabaseResponse, error)
 	ImportDatabase(ctx context.Context, in *ImportDatabaseRequest, opts ...grpc.CallOption) (*ImportDatabaseResponse, error)
+	GetDatabaseReport(ctx context.Context, in *GetDatabaseReportRequest, opts ...grpc.CallOption) (*GetDatabaseReportResponse, error)
 }
 
 type workspaceServiceClient struct {
@@ -119,6 +121,16 @@ func (c *workspaceServiceClient) ImportDatabase(ctx context.Context, in *ImportD
 	return out, nil
 }
 
+func (c *workspaceServiceClient) GetDatabaseReport(ctx context.Context, in *GetDatabaseReportRequest, opts ...grpc.CallOption) (*GetDatabaseReportResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDatabaseReportResponse)
+	err := c.cc.Invoke(ctx, WorkspaceService_GetDatabaseReport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkspaceServiceServer is the server API for WorkspaceService service.
 // All implementations must embed UnimplementedWorkspaceServiceServer
 // for forward compatibility.
@@ -130,6 +142,7 @@ type WorkspaceServiceServer interface {
 	GetDatabaseStats(context.Context, *GetDatabaseStatsRequest) (*DatabaseStats, error)
 	ExportDatabase(context.Context, *ExportDatabaseRequest) (*ExportDatabaseResponse, error)
 	ImportDatabase(context.Context, *ImportDatabaseRequest) (*ImportDatabaseResponse, error)
+	GetDatabaseReport(context.Context, *GetDatabaseReportRequest) (*GetDatabaseReportResponse, error)
 	mustEmbedUnimplementedWorkspaceServiceServer()
 }
 
@@ -160,6 +173,9 @@ func (UnimplementedWorkspaceServiceServer) ExportDatabase(context.Context, *Expo
 }
 func (UnimplementedWorkspaceServiceServer) ImportDatabase(context.Context, *ImportDatabaseRequest) (*ImportDatabaseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportDatabase not implemented")
+}
+func (UnimplementedWorkspaceServiceServer) GetDatabaseReport(context.Context, *GetDatabaseReportRequest) (*GetDatabaseReportResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDatabaseReport not implemented")
 }
 func (UnimplementedWorkspaceServiceServer) mustEmbedUnimplementedWorkspaceServiceServer() {}
 func (UnimplementedWorkspaceServiceServer) testEmbeddedByValue()                          {}
@@ -308,6 +324,24 @@ func _WorkspaceService_ImportDatabase_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkspaceService_GetDatabaseReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDatabaseReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceServiceServer).GetDatabaseReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceService_GetDatabaseReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceServiceServer).GetDatabaseReport(ctx, req.(*GetDatabaseReportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkspaceService_ServiceDesc is the grpc.ServiceDesc for WorkspaceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -342,6 +376,10 @@ var WorkspaceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ImportDatabase",
 			Handler:    _WorkspaceService_ImportDatabase_Handler,
+		},
+		{
+			MethodName: "GetDatabaseReport",
+			Handler:    _WorkspaceService_GetDatabaseReport_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

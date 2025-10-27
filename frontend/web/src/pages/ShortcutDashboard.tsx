@@ -1,5 +1,5 @@
 import { Button, Input } from "@mui/joy";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import useLocalStorage from "react-use/lib/useLocalStorage";
@@ -16,6 +16,7 @@ import { getFilteredShortcutList, getOrderedShortcutList } from "@/stores/view";
 interface State {
   showCreateShortcutDrawer: boolean;
   tagsExpanded: boolean;
+  visibleTagsCount: number;
 }
 
 const ShortcutDashboard: React.FC = () => {
@@ -30,7 +31,9 @@ const ShortcutDashboard: React.FC = () => {
   const [state, setState] = useState<State>({
     showCreateShortcutDrawer: false,
     tagsExpanded: false,
+    visibleTagsCount: 0,
   });
+  const tagsContainerRef = useRef<HTMLDivElement>(null);
 
   // Get tags from URL querystring
   const urlTagsParam = searchParams.get('tags');
@@ -54,6 +57,33 @@ const ShortcutDashboard: React.FC = () => {
       loadingState.setFinish();
     });
   }, []);
+
+  // Calculate visible tags count when collapsed
+  useEffect(() => {
+    if (!state.tagsExpanded && tagsContainerRef.current && sortedTags.length > 0) {
+      const container = tagsContainerRef.current;
+      const children = Array.from(container.children) as HTMLElement[];
+
+      let visibleCount = 0;
+      const maxHeight = 32; // max-h-8 = 2rem = 32px
+
+      for (const child of children) {
+        const rect = child.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        // Check if the tag is within the visible height
+        if (rect.top - containerRect.top < maxHeight) {
+          visibleCount++;
+        } else {
+          break;
+        }
+      }
+
+      if (visibleCount !== state.visibleTagsCount) {
+        setState((prevState) => ({ ...prevState, visibleTagsCount: visibleCount }));
+      }
+    }
+  }, [sortedTags, state.tagsExpanded, state.visibleTagsCount]);
 
   const setShowCreateShortcutDrawer = (show: boolean) => {
     setState({
@@ -94,7 +124,7 @@ const ShortcutDashboard: React.FC = () => {
                   <Icon.Tag className="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-shrink-0">Tags</span>
                 </div>
-                <div className={`w-full flex flex-wrap gap-2 ${!state.tagsExpanded ? 'max-h-8 overflow-hidden' : ''}`}>
+                <div className={`w-full flex flex-wrap gap-2 ${!state.tagsExpanded ? 'max-h-8 overflow-hidden' : ''}`} ref={tagsContainerRef}>
                   {sortedTags.map((tag) => (
                     <span
                       key={tag}
@@ -108,6 +138,11 @@ const ShortcutDashboard: React.FC = () => {
                     </span>
                   ))}
                 </div>
+                {!state.tagsExpanded && state.visibleTagsCount > 0 && state.visibleTagsCount < sortedTags.length && (
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    and {sortedTags.length - state.visibleTagsCount} more...
+                  </span>
+                )}
               </div>
               <Icon.ChevronDown
                 className={`w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0 transition-transform ml-2 ${state.tagsExpanded ? 'rotate-180' : ''}`}

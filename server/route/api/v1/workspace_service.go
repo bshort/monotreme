@@ -863,6 +863,265 @@ func (s *APIV1Service) importFollowings(ctx context.Context, data interface{}, m
 	return count, nil
 }
 
+func (s *APIV1Service) GetDatabaseReport(ctx context.Context, request *v1pb.GetDatabaseReportRequest) (*v1pb.GetDatabaseReportResponse, error) {
+	// Verify user is admin
+	currentUser, err := getCurrentUser(ctx, s.Store)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
+	}
+	if currentUser == nil || currentUser.Role != store.RoleAdmin {
+		return nil, status.Errorf(codes.PermissionDenied, "only admin can access database reports")
+	}
+
+	var data interface{}
+	var totalCount int32
+	metadata := make(map[string]string)
+
+	switch request.Entity {
+	case "users":
+		users, err := s.Store.ListUsers(ctx, &store.FindUser{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list users: %v", err)
+		}
+		totalCount = int32(len(users))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(users) {
+				end := offset + limit
+				if end > len(users) {
+					end = len(users)
+				}
+				users = users[offset:end]
+			} else {
+				users = []*store.User{}
+			}
+		}
+		data = users
+		metadata["fields"] = "id, email, nickname, role, created_ts, updated_ts"
+
+	case "shortcuts":
+		shortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list shortcuts: %v", err)
+		}
+		totalCount = int32(len(shortcuts))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(shortcuts) {
+				end := offset + limit
+				if end > len(shortcuts) {
+					end = len(shortcuts)
+				}
+				shortcuts = shortcuts[offset:end]
+			} else {
+				shortcuts = []*storepb.Shortcut{}
+			}
+		}
+		data = shortcuts
+		metadata["fields"] = "id, name, link, title, visibility, creator_id, created_ts"
+
+	case "collections":
+		collections, err := s.Store.ListCollections(ctx, &store.FindCollection{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list collections: %v", err)
+		}
+		totalCount = int32(len(collections))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(collections) {
+				end := offset + limit
+				if end > len(collections) {
+					end = len(collections)
+				}
+				collections = collections[offset:end]
+			} else {
+				collections = []*storepb.Collection{}
+			}
+		}
+		data = collections
+		metadata["fields"] = "id, name, title, visibility, creator_id, created_ts"
+
+	case "tags":
+		tags, err := s.Store.ListTags(ctx, &store.FindTag{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list tags: %v", err)
+		}
+		totalCount = int32(len(tags))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(tags) {
+				end := offset + limit
+				if end > len(tags) {
+					end = len(tags)
+				}
+				tags = tags[offset:end]
+			} else {
+				tags = []*storepb.Tag{}
+			}
+		}
+		data = tags
+		metadata["fields"] = "uuid, name, abbreviation, creator_id, created_ts"
+
+	case "bookmark_tags":
+		bookmarkTags, err := s.Store.ListBookmarkTags(ctx, &store.FindBookmarkTag{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list bookmark tags: %v", err)
+		}
+		totalCount = int32(len(bookmarkTags))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(bookmarkTags) {
+				end := offset + limit
+				if end > len(bookmarkTags) {
+					end = len(bookmarkTags)
+				}
+				bookmarkTags = bookmarkTags[offset:end]
+			} else {
+				bookmarkTags = []*storepb.BookmarkTag{}
+			}
+		}
+		data = bookmarkTags
+		metadata["fields"] = "shortcut_id, tag_uuid, created_ts"
+
+	case "friendships":
+		friendships, err := s.Store.ListFriendships(ctx, 0, "")
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list friendships: %v", err)
+		}
+		totalCount = int32(len(friendships))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(friendships) {
+				end := offset + limit
+				if end > len(friendships) {
+					end = len(friendships)
+				}
+				friendships = friendships[offset:end]
+			} else {
+				friendships = []*store.Friendship{}
+			}
+		}
+		data = friendships
+		metadata["fields"] = "id, user_id, friend_id, status, created_ts, accepted_ts"
+
+	case "followings":
+		followings, err := s.Store.ListFollowing(ctx, 0)
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list followings: %v", err)
+		}
+		totalCount = int32(len(followings))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(followings) {
+				end := offset + limit
+				if end > len(followings) {
+					end = len(followings)
+				}
+				followings = followings[offset:end]
+			} else {
+				followings = []*store.Following{}
+			}
+		}
+		data = followings
+		metadata["fields"] = "id, follower_id, following_id, created_ts"
+
+	case "activities":
+		activities, err := s.Store.ListActivities(ctx, &store.FindActivity{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list activities: %v", err)
+		}
+		totalCount = int32(len(activities))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(activities) {
+				end := offset + limit
+				if end > len(activities) {
+					end = len(activities)
+				}
+				activities = activities[offset:end]
+			} else {
+				activities = []*store.Activity{}
+			}
+		}
+		data = activities
+		metadata["fields"] = "id, type, level, creator_id, created_ts, payload"
+
+	case "invitations":
+		invitations, err := s.Store.ListInvitations(ctx, &store.FindInvitation{})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list invitations: %v", err)
+		}
+		totalCount = int32(len(invitations))
+
+		// Apply pagination if specified
+		if request.Limit != nil && request.Offset != nil {
+			offset := int(*request.Offset)
+			limit := int(*request.Limit)
+			if offset < len(invitations) {
+				end := offset + limit
+				if end > len(invitations) {
+					end = len(invitations)
+				}
+				invitations = invitations[offset:end]
+			} else {
+				invitations = []*storepb.Invitation{}
+			}
+		}
+		data = invitations
+		metadata["fields"] = "id, user_id, code, status, created_ts, used_ts"
+
+	default:
+		return nil, status.Errorf(codes.InvalidArgument, "unknown entity type: %s", request.Entity)
+	}
+
+	// Serialize data to JSON
+	jsonData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to serialize data: %v", err)
+	}
+
+	// Add report metadata
+	metadata["generated_at"] = time.Now().Format(time.RFC3339)
+	metadata["total_records"] = fmt.Sprintf("%d", totalCount)
+	if request.Limit != nil {
+		metadata["limit"] = fmt.Sprintf("%d", *request.Limit)
+	}
+	if request.Offset != nil {
+		metadata["offset"] = fmt.Sprintf("%d", *request.Offset)
+	}
+
+	return &v1pb.GetDatabaseReportResponse{
+		Entity:     request.Entity,
+		TotalCount: totalCount,
+		Data:       string(jsonData),
+		Metadata:   metadata,
+	}, nil
+}
+
 func (s *APIV1Service) GetInstanceOwner(ctx context.Context) (*v1pb.User, error) {
 	if ownerCache != nil {
 		return ownerCache, nil

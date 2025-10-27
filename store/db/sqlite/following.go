@@ -12,14 +12,28 @@ import (
 )
 
 func (d *DB) ListFollowing(ctx context.Context, userID int32) ([]*store.Following, error) {
-	query := `
-		SELECT id, follower_id, following_id, created_ts
-		FROM following
-		WHERE follower_id = ?
-		ORDER BY created_ts DESC
-	`
+	var query string
+	var args []interface{}
 
-	rows, err := d.db.QueryContext(ctx, query, userID)
+	// If userID is 0, get all following relationships
+	if userID == 0 {
+		query = `
+			SELECT id, follower_id, following_id, created_ts
+			FROM following
+			ORDER BY created_ts DESC
+		`
+	} else {
+		// Get following relationships for a specific user
+		query = `
+			SELECT id, follower_id, following_id, created_ts
+			FROM following
+			WHERE follower_id = ?
+			ORDER BY created_ts DESC
+		`
+		args = []interface{}{userID}
+	}
+
+	rows, err := d.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -43,14 +57,28 @@ func (d *DB) ListFollowing(ctx context.Context, userID int32) ([]*store.Followin
 }
 
 func (d *DB) ListFollowers(ctx context.Context, userID int32) ([]*store.Following, error) {
-	query := `
-		SELECT id, follower_id, following_id, created_ts
-		FROM following
-		WHERE following_id = ?
-		ORDER BY created_ts DESC
-	`
+	var query string
+	var args []interface{}
 
-	rows, err := d.db.QueryContext(ctx, query, userID)
+	// If userID is 0, get all follower relationships
+	if userID == 0 {
+		query = `
+			SELECT id, follower_id, following_id, created_ts
+			FROM following
+			ORDER BY created_ts DESC
+		`
+	} else {
+		// Get followers for a specific user
+		query = `
+			SELECT id, follower_id, following_id, created_ts
+			FROM following
+			WHERE following_id = ?
+			ORDER BY created_ts DESC
+		`
+		args = []interface{}{userID}
+	}
+
+	rows, err := d.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
