@@ -4,6 +4,7 @@ import Icon from "@/components/Icon";
 import WorkspaceGeneralSettingSection from "@/components/setting/WorkspaceGeneralSettingSection";
 import WorkspaceMembersSection from "@/components/setting/WorkspaceMembersSection";
 import WorkspaceSecuritySection from "@/components/setting/WorkspaceSecuritySection";
+import DatabaseSection from "@/components/setting/DatabaseSection";
 import { useUserStore, useWorkspaceStore } from "@/stores";
 import { Role } from "@/types/proto/api/v1/user_service";
 
@@ -29,6 +30,8 @@ const WorkspaceSetting = () => {
       <WorkspaceGeneralSettingSection />
       <Divider />
       <WorkspaceSecuritySection />
+      <Divider />
+      <DatabaseSection />
     </div>
   );
 };
