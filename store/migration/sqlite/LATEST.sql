@@ -58,7 +58,8 @@ CREATE TABLE shortcut (
   og_metadata TEXT NOT NULL DEFAULT '{}',
   uuid TEXT NOT NULL DEFAULT '',
   custom_icon TEXT NOT NULL DEFAULT '',
-  user_order INTEGER NOT NULL DEFAULT 0
+  user_order INTEGER NOT NULL DEFAULT 0,
+  is_favorite BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE INDEX idx_shortcut_name ON shortcut(name);
@@ -86,6 +87,7 @@ CREATE TABLE collection (
   shortcut_ids INTEGER[] NOT NULL,
   visibility TEXT NOT NULL CHECK (visibility IN ('PRIVATE', 'WORKSPACE', 'PUBLIC')) DEFAULT 'PRIVATE',
   custom_icon TEXT NOT NULL DEFAULT '',
+  user_order INTEGER NOT NULL DEFAULT 0,
   uuid TEXT
 );
 

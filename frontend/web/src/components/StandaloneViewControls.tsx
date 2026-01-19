@@ -13,6 +13,7 @@ const StandaloneViewControls = () => {
   const shortcutList = shortcutStore.getShortcutList();
   const allTags = getAllUniqueTags(shortcutList);
   const currentTagFilter = viewStore.filter.tag || "";
+  const showFavoritesOnly = viewStore.filter.showFavoritesOnly || false;
 
   return (
     <div className="flex flex-row justify-start items-center gap-4">
@@ -59,6 +60,21 @@ const StandaloneViewControls = () => {
             </span>
           </label>
         </div>
+      </div>
+
+      {/* Favorites Filter */}
+      <div className="flex flex-row justify-start items-center gap-2">
+        <label className="flex flex-row justify-start items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="mr-1.5 accent-yellow-500"
+            checked={showFavoritesOnly}
+            onChange={(e) => viewStore.setFilter({ showFavoritesOnly: e.target.checked })}
+          />
+          <span className="text-sm text-gray-700 dark:text-gray-300">
+            {t("filter.favorites-only")}
+          </span>
+        </label>
       </div>
 
       {/* Tags Filter Control */}

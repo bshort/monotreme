@@ -250,6 +250,7 @@
 | shortcut_ids | [int32](#int32) | repeated |  |
 | visibility | [Visibility](#monotreme-store-Visibility) |  |  |
 | custom_icon | [string](#string) |  |  |
+| user_order | [int32](#int32) |  |  |
 
 
 
@@ -524,6 +525,7 @@ ID of the created shortcut, if any |
 | og_metadata | [OpenGraphMetadata](#monotreme-store-OpenGraphMetadata) |  |  |
 | custom_icon | [string](#string) |  |  |
 | user_order | [int32](#int32) |  |  |
+| is_favorite | [bool](#bool) |  |  |
 
 
 

@@ -1,12 +1,12 @@
 import { Avatar, Tooltip } from "@mui/joy";
 import classNames from "classnames";
 import copy from "copy-to-clipboard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { absolutifyLink } from "@/helpers/utils";
-import { useUserStore, useViewStore } from "@/stores";
+import { useUserStore, useViewStore, useShortcutStore } from "@/stores";
 import { getShortcutUrl } from "@/utils/shortcut";
 import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 import Icon from "./Icon";
@@ -27,8 +27,10 @@ const ShortcutListView = (props: Props) => {
   const { t } = useTranslation();
   const userStore = useUserStore();
   const viewStore = useViewStore();
+  const shortcutStore = useShortcutStore();
   const creator = userStore.getUserById(shortcut.creatorId);
   const shortcutLink = absolutifyLink(getShortcutUrl(shortcut.name));
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
 
   useEffect(() => {
     userStore.getOrFetchUserById(shortcut.creatorId);
@@ -55,6 +57,28 @@ const ShortcutListView = (props: Props) => {
     toast.success("Destination URL copied to clipboard.");
   };
 
+  const handleToggleFavorite = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isTogglingFavorite) return;
+
+    setIsTogglingFavorite(true);
+    try {
+      await shortcutStore.updateShortcut(
+        {
+          id: shortcut.id,
+          isFavorite: !shortcut.isFavorite,
+        },
+        ["is_favorite"]
+      );
+      toast.success(shortcut.isFavorite ? "Removed from favorites" : "Added to favorites");
+    } catch (error) {
+      toast.error("Failed to update favorite status");
+      console.error("Error toggling favorite:", error);
+    } finally {
+      setIsTogglingFavorite(false);
+    }
+  };
+
   return (
     <div
       className={classNames(
@@ -79,6 +103,25 @@ const ShortcutListView = (props: Props) => {
           <div className="w-5 h-5 flex justify-center items-center overflow-clip shrink-0 mr-3">
             <LinkFavicon url={shortcut.link} />
           </div>
+          <Tooltip title={shortcut.isFavorite ? "Remove from favorites" : "Add to favorites"} variant="solid" placement="top" arrow>
+            <button
+              className={classNames(
+                "cursor-pointer mr-2 shrink-0 transition-all",
+                shortcut.isFavorite ? "text-yellow-500 hover:text-yellow-600" : "text-gray-300 hover:text-yellow-400",
+                isTogglingFavorite && "opacity-50 cursor-not-allowed"
+              )}
+              onClick={handleToggleFavorite}
+              disabled={isTogglingFavorite}
+            >
+              <Icon.Star
+                className={classNames(
+                  "w-4 h-auto transition-all",
+                  shortcut.isFavorite && "fill-yellow-500 stroke-yellow-600"
+                )}
+                style={shortcut.isFavorite ? { fill: '#eab308', stroke: '#ca8a04' } : {}}
+              />
+            </button>
+          </Tooltip>
           <div className="flex flex-row justify-start items-center min-w-0 mr-3">
             <span className="dark:text-gray-300 font-medium truncate">{shortcut.title || shortcut.name}</span>
           </div>

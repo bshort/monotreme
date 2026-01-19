@@ -7,27 +7,82 @@ import { Shortcut } from "@/types/proto/api/v1/shortcut_service";
 interface State {
   shortcutMapById: Record<number, Shortcut>;
   shortcutMapByUuid: Record<string, Shortcut>;
+  hasMore: boolean;
+  totalCount: number;
+  isLoadingMore: boolean;
 }
 
 const getDefaultState = (): State => {
   return {
     shortcutMapById: {},
     shortcutMapByUuid: {},
+    hasMore: false,
+    totalCount: 0,
+    isLoadingMore: false,
   };
 };
 
 const useShortcutStore = create(
   combine(getDefaultState(), (set, get) => ({
-    fetchShortcutList: async () => {
-      const { shortcuts } = await shortcutServiceClient.listShortcuts({});
+    fetchShortcutList: async (reset = true) => {
+      if (reset) {
+        set({ shortcutMapById: {}, shortcutMapByUuid: {} });
+      }
+
+      const { shortcuts, hasMore, totalCount } = await shortcutServiceClient.listShortcuts({
+        limit: 50,
+        offset: 0,
+      });
+
       const shortcutMapById = get().shortcutMapById;
       const shortcutMapByUuid = get().shortcutMapByUuid;
       shortcuts.forEach((shortcut) => {
         shortcutMapById[shortcut.id] = shortcut;
         shortcutMapByUuid[shortcut.uuid] = shortcut;
       });
-      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
+      set({
+        shortcutMapById: shortcutMapById,
+        shortcutMapByUuid: shortcutMapByUuid,
+        hasMore,
+        totalCount,
+      });
       return shortcuts;
+    },
+    loadMoreShortcuts: async () => {
+      const { isLoadingMore, hasMore } = get();
+      if (isLoadingMore || !hasMore) {
+        return;
+      }
+
+      set({ isLoadingMore: true });
+
+      try {
+        const currentShortcuts = get().getShortcutList();
+        const offset = currentShortcuts.length;
+
+        const { shortcuts, hasMore: newHasMore, totalCount } = await shortcutServiceClient.listShortcuts({
+          limit: 50,
+          offset,
+        });
+
+        const shortcutMapById = get().shortcutMapById;
+        const shortcutMapByUuid = get().shortcutMapByUuid;
+        shortcuts.forEach((shortcut) => {
+          shortcutMapById[shortcut.id] = shortcut;
+          shortcutMapByUuid[shortcut.uuid] = shortcut;
+        });
+
+        set({
+          shortcutMapById: shortcutMapById,
+          shortcutMapByUuid: shortcutMapByUuid,
+          hasMore: newHasMore,
+          totalCount,
+          isLoadingMore: false,
+        });
+      } catch (error) {
+        set({ isLoadingMore: false });
+        throw error;
+      }
     },
     fetchShortcutByName: async (name: string) => {
       const shortcut = await shortcutServiceClient.getShortcutByName({
@@ -140,6 +195,9 @@ export const getShortcutUpdateMask = (shortcut: Shortcut, updatingShortcut: Shor
   }
   if (!isEqual(shortcut.ogMetadata, updatingShortcut.ogMetadata)) {
     updateMask.push("og_metadata");
+  }
+  if (!isEqual(shortcut.isFavorite, updatingShortcut.isFavorite)) {
+    updateMask.push("is_favorite");
   }
   return updateMask;
 };

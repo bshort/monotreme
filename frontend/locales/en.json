@@ -99,6 +99,7 @@
     "full-mode": "Full",
     "compact-mode": "Compact",
     "list-mode": "List",
+    "favorites-only": "Favorites Only",
     "tag": "Tag",
     "all-tags": "All Tags",
     "order-by": "Order by",

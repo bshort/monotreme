@@ -23,10 +23,11 @@ import Dropdown from "./common/Dropdown";
 interface Props {
   collection: Collection;
   searchQuery?: string;
+  dragHandleProps?: any;
 }
 
 const CollectionView = (props: Props) => {
-  const { collection, searchQuery = "" } = props;
+  const { collection, searchQuery = "", dragHandleProps } = props;
   const { t } = useTranslation();
   const { sm } = useResponsiveWidth();
   const navigateTo = useNavigateTo();
@@ -100,6 +101,14 @@ const CollectionView = (props: Props) => {
       <div className={classNames("w-full flex flex-col justify-start items-start border rounded-lg hover:shadow dark:border-zinc-800")}>
         <div className="bg-gray-100 dark:bg-zinc-800 px-3 py-2 w-full flex flex-row justify-between items-center rounded-t-lg">
           <div className="w-auto flex flex-row justify-start items-center mr-2">
+            {dragHandleProps && (
+              <button
+                {...dragHandleProps}
+                className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 mr-2"
+              >
+                <Icon.GripVertical className="w-5 h-auto" />
+              </button>
+            )}
             {collection.customIcon && (
               <div className="w-6 h-6 mr-2 flex justify-center items-center overflow-clip shrink-0">
                 <CustomIcon customIcon={collection.customIcon} className="w-full h-full object-cover rounded" />

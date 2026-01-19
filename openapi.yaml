@@ -1,0 +1,2127 @@
+openapi: 3.0.3
+info:
+  title: Monotreme API
+  version: 1.0.0
+  description: |
+    **Monotreme** is an open source, self-hosted platform designed to help you organize, manage, and share your most important links.
+    Easily create customizable, human-readable shortcuts to streamline your link management.
+
+    ## Features
+    - Create customizable `s/` short links for any URL
+    - Share short links public or only with your teammates
+    - View analytics on link traffic and sources
+    - Easy access to your shortcuts with browser extension
+    - Share your shortcuts with Collection to anyone, on any browser
+    - Open source self-hosted solution
+
+    ## Authentication
+    Most endpoints require authentication via session cookies. Use the `/api/v1/auth/signin` endpoint to authenticate.
+  contact:
+    name: Monotreme Project
+    url: https://github.com/bshort/monotreme
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5231
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server (configure your own)
+
+tags:
+  - name: AuthService
+    description: Authentication and authorization endpoints
+  - name: UserService
+    description: User management operations
+  - name: ShortcutService
+    description: Shortcut (bookmark) management and analytics
+  - name: CollectionService
+    description: Collection management and bookmark imports
+  - name: TagService
+    description: Tag management and bookmark-tag relationships
+  - name: ActivityService
+    description: Activity tracking and analytics
+  - name: WorkspaceService
+    description: Workspace configuration and statistics
+  - name: UserSettingService
+    description: User settings and preferences
+  - name: FollowService
+    description: User following relationships
+  - name: FriendService
+    description: Friend requests and friendship management
+  - name: InvitationService
+    description: User invitation management
+  - name: RssImportService
+    description: RSS feed imports and management
+  - name: SubscriptionService
+    description: Subscription and licensing management
+
+paths:
+  # Auth Service
+  /api/v1/auth/signin:
+    post:
+      summary: Sign in with email and password
+      description: Signs in the user with the given username and password.
+      operationId: AuthService_SignIn
+      tags:
+        - AuthService
+      parameters:
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+            format: email
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+            format: password
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/auth/signin/sso:
+    post:
+      summary: Sign in with SSO
+      description: Signs in the user with the given SSO code.
+      operationId: AuthService_SignInWithSSO
+      tags:
+        - AuthService
+      parameters:
+        - name: idpId
+          description: The id of the SSO provider
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: code
+          description: The code to sign in with
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: redirectUri
+          description: The redirect URI
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful SSO authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/auth/signout:
+    post:
+      summary: Sign out
+      description: Signs out the current user.
+      operationId: AuthService_SignOut
+      tags:
+        - AuthService
+      responses:
+        '200':
+          description: Successfully signed out
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/auth/signup:
+    post:
+      summary: Sign up a new user
+      description: Signs up the user with the given username and password.
+      operationId: AuthService_SignUp
+      tags:
+        - AuthService
+      parameters:
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+            format: email
+        - name: nickname
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+            format: password
+        - name: invitationCode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/auth/status:
+    post:
+      summary: Get authentication status
+      description: Returns the current auth status of the user.
+      operationId: AuthService_GetAuthStatus
+      tags:
+        - AuthService
+      responses:
+        '200':
+          description: Current user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  # Shortcut Service
+  /api/v1/shortcuts:
+    get:
+      summary: List shortcuts
+      description: Returns a list of shortcuts with pagination support.
+      operationId: ShortcutService_ListShortcuts
+      tags:
+        - ShortcutService
+      parameters:
+        - name: limit
+          description: Maximum number of shortcuts to return (default 50)
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 50
+        - name: offset
+          description: Number of shortcuts to skip for pagination
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: A list of shortcuts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListShortcutsResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    post:
+      summary: Create a shortcut
+      description: Creates a new shortcut.
+      operationId: ShortcutService_CreateShortcut
+      tags:
+        - ShortcutService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shortcut'
+      responses:
+        '200':
+          description: The created shortcut
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shortcut'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    delete:
+      summary: Delete all shortcuts
+      description: Deletes all shortcuts for the current user.
+      operationId: ShortcutService_DeleteAllShortcuts
+      tags:
+        - ShortcutService
+      responses:
+        '200':
+          description: All shortcuts deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/shortcuts/{id}:
+    get:
+      summary: Get a shortcut
+      description: Returns a shortcut by id.
+      operationId: ShortcutService_GetShortcut
+      tags:
+        - ShortcutService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: The requested shortcut
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shortcut'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    delete:
+      summary: Delete a shortcut
+      description: Deletes a shortcut by id.
+      operationId: ShortcutService_DeleteShortcut
+      tags:
+        - ShortcutService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Shortcut deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/shortcuts/{shortcut.id}:
+    put:
+      summary: Update a shortcut
+      description: Updates an existing shortcut.
+      operationId: ShortcutService_UpdateShortcut
+      tags:
+        - ShortcutService
+      parameters:
+        - name: shortcut.id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: updateMask
+          in: query
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShortcutUpdate'
+      responses:
+        '200':
+          description: The updated shortcut
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shortcut'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/shortcuts/{id}/analytics:
+    get:
+      summary: Get shortcut analytics
+      description: Returns the analytics for a shortcut.
+      operationId: ShortcutService_GetShortcutAnalytics
+      tags:
+        - ShortcutService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Shortcut analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetShortcutAnalyticsResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  # Collection Service
+  /api/v1/collections:
+    get:
+      summary: List collections
+      description: Returns a list of collections.
+      operationId: CollectionService_ListCollections
+      tags:
+        - CollectionService
+      responses:
+        '200':
+          description: A list of collections
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionsResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    post:
+      summary: Create a collection
+      description: Creates a new collection.
+      operationId: CollectionService_CreateCollection
+      tags:
+        - CollectionService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collection'
+      responses:
+        '200':
+          description: The created collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/collections/{id}:
+    get:
+      summary: Get a collection
+      description: Returns a collection by id.
+      operationId: CollectionService_GetCollection
+      tags:
+        - CollectionService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: The requested collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    delete:
+      summary: Delete a collection
+      description: Deletes a collection by id.
+      operationId: CollectionService_DeleteCollection
+      tags:
+        - CollectionService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Collection deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/collections/{collection.id}:
+    put:
+      summary: Update a collection
+      description: Updates an existing collection.
+      operationId: CollectionService_UpdateCollection
+      tags:
+        - CollectionService
+      parameters:
+        - name: collection.id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: updateMask
+          in: query
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionUpdate'
+      responses:
+        '200':
+          description: The updated collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/collections/import:
+    post:
+      summary: Import bookmarks
+      description: Imports bookmarks from an HTML file and creates collections and shortcuts.
+      operationId: CollectionService_ImportBookmarks
+      tags:
+        - CollectionService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportBookmarksRequest'
+      responses:
+        '200':
+          description: Import results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportBookmarksResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  # Tag Service
+  /api/v1/tags:
+    get:
+      summary: List tags
+      description: Returns a list of tags.
+      operationId: TagService_ListTags
+      tags:
+        - TagService
+      responses:
+        '200':
+          description: A list of tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTagsResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    post:
+      summary: Create a tag
+      description: Creates a new tag.
+      operationId: TagService_CreateTag
+      tags:
+        - TagService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+      responses:
+        '200':
+          description: The created tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/tags/{uuid}:
+    get:
+      summary: Get a tag
+      description: Returns a tag by uuid.
+      operationId: TagService_GetTag
+      tags:
+        - TagService
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    delete:
+      summary: Delete a tag
+      description: Deletes a tag by uuid.
+      operationId: TagService_DeleteTag
+      tags:
+        - TagService
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tag deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/tags/abbr/{abbreviation}:
+    get:
+      summary: Get tag by abbreviation
+      description: Returns a tag by abbreviation.
+      operationId: TagService_GetTagByAbbreviation
+      tags:
+        - TagService
+      parameters:
+        - name: abbreviation
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/tags/{tagUuid}/bookmarks/{shortcutId}:
+    post:
+      summary: Add bookmark to tag
+      description: Adds a bookmark to a tag.
+      operationId: TagService_AddBookmarkToTag
+      tags:
+        - TagService
+      parameters:
+        - name: tagUuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: shortcutId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Bookmark added to tag
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    delete:
+      summary: Remove bookmark from tag
+      description: Removes a bookmark from a tag.
+      operationId: TagService_RemoveBookmarkFromTag
+      tags:
+        - TagService
+      parameters:
+        - name: tagUuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: shortcutId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Bookmark removed from tag
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  # Activity Service
+  /api/v1/activities:
+    get:
+      summary: List activities
+      description: Returns a paginated list of activities with filtering.
+      operationId: ActivityService_ListActivities
+      tags:
+        - ActivityService
+      parameters:
+        - name: activityType
+          description: Activity type filter
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - ACTIVITY_TYPE_UNSPECIFIED
+              - USER_CREATED
+              - SHORTCUT_CREATED
+              - SHORTCUT_VIEWED
+              - COLLECTION_CREATED
+              - COLLECTION_VIEWED
+        - name: userId
+          description: User ID filter
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: createdAfter
+          description: Time range filter start
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: createdBefore
+          description: Time range filter end
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: pageSize
+          description: Number of results per page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: pageToken
+          description: Token for next page
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of activities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListActivitiesResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/activities/recent:
+    get:
+      summary: Get recent activity
+      description: Returns recent activity data for the dashboard.
+      operationId: ActivityService_GetRecentActivity
+      tags:
+        - ActivityService
+      parameters:
+        - name: limit
+          description: Number of items to return for each activity type (default 5)
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 5
+      responses:
+        '200':
+          description: Recent activity data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRecentActivityResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/activities/summary:
+    get:
+      summary: Get activity summary
+      description: Returns summary statistics for the workspace.
+      operationId: ActivityService_GetActivitySummary
+      tags:
+        - ActivityService
+      responses:
+        '200':
+          description: Activity summary statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActivitySummaryResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  # User Service
+  /api/v1/users:
+    get:
+      summary: List users
+      description: Returns a list of users.
+      operationId: UserService_ListUsers
+      tags:
+        - UserService
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUsersResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    post:
+      summary: Create a user
+      description: Creates a new user.
+      operationId: UserService_CreateUser
+      tags:
+        - UserService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: The created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/users/{id}:
+    get:
+      summary: Get a user
+      description: Returns a user by id.
+      operationId: UserService_GetUser
+      tags:
+        - UserService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: The requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    delete:
+      summary: Delete a user
+      description: Deletes a user by id.
+      operationId: UserService_DeleteUser
+      tags:
+        - UserService
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/workspace/profile:
+    get:
+      summary: Get workspace profile
+      description: Returns the workspace profile information.
+      operationId: WorkspaceService_GetWorkspaceProfile
+      tags:
+        - WorkspaceService
+      responses:
+        '200':
+          description: Workspace profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceProfile'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/workspace/setting:
+    get:
+      summary: Get workspace settings
+      description: Returns the workspace settings.
+      operationId: WorkspaceService_GetWorkspaceSetting
+      tags:
+        - WorkspaceService
+      responses:
+        '200':
+          description: Workspace settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceSetting'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+    patch:
+      summary: Update workspace settings
+      description: Updates the workspace settings.
+      operationId: WorkspaceService_UpdateWorkspaceSetting
+      tags:
+        - WorkspaceService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkspaceSetting'
+      responses:
+        '200':
+          description: Updated workspace settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceSetting'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/workspace/stats:
+    get:
+      summary: Get workspace statistics
+      description: Returns workspace-level statistics.
+      operationId: WorkspaceService_GetWorkspaceStats
+      tags:
+        - WorkspaceService
+      responses:
+        '200':
+          description: Workspace statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceStats'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/workspace/database/stats:
+    get:
+      summary: Get database statistics
+      description: Returns database entity counts.
+      operationId: WorkspaceService_GetDatabaseStats
+      tags:
+        - WorkspaceService
+      responses:
+        '200':
+          description: Database statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseStats'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/workspace/database/export:
+    post:
+      summary: Export database
+      description: Exports database entities to JSON.
+      operationId: WorkspaceService_ExportDatabase
+      tags:
+        - WorkspaceService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportDatabaseRequest'
+      responses:
+        '200':
+          description: Exported database data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportDatabaseResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+  /api/v1/workspace/database/import:
+    post:
+      summary: Import database
+      description: Imports database entities from JSON.
+      operationId: WorkspaceService_ImportDatabase
+      tags:
+        - WorkspaceService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportDatabaseRequest'
+      responses:
+        '200':
+          description: Import results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportDatabaseResponse'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+components:
+  schemas:
+    # Core Models
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        state:
+          $ref: '#/components/schemas/State'
+        createdTime:
+          type: string
+          format: date-time
+        updatedTime:
+          type: string
+          format: date-time
+        uuid:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+        email:
+          type: string
+          format: email
+        nickname:
+          type: string
+        password:
+          type: string
+          format: password
+          writeOnly: true
+        profilePicture:
+          type: string
+        locale:
+          type: string
+        colorTheme:
+          type: string
+        defaultVisibility:
+          type: string
+        autoGenerateTitle:
+          type: boolean
+        autoGenerateIcon:
+          type: boolean
+        autoGenerateName:
+          type: boolean
+        editModePreference:
+          type: string
+
+    Shortcut:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        uuid:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        createdTime:
+          type: string
+          format: date-time
+        updatedTime:
+          type: string
+          format: date-time
+        name:
+          type: string
+          description: Human-readable shortcut name (e.g., "s/meeting")
+        link:
+          type: string
+          format: uri
+          description: Target URL
+        title:
+          type: string
+          description: Display title
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        viewCount:
+          type: integer
+          format: int32
+        ogMetadata:
+          $ref: '#/components/schemas/OpenGraphMetadata'
+        userOrder:
+          type: integer
+          format: int32
+        tagInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagInfo'
+        isFavorite:
+          type: boolean
+          description: Whether the user has marked this shortcut as a favorite
+          default: false
+
+    Collection:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        creatorId:
+          type: integer
+          format: int32
+        createdTime:
+          type: string
+          format: date-time
+        updatedTime:
+          type: string
+          format: date-time
+        uuid:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        shortcutIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+
+    Tag:
+      type: object
+      properties:
+        uuid:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        createdTime:
+          type: string
+          format: date-time
+        updatedTime:
+          type: string
+          format: date-time
+        name:
+          type: string
+        abbreviation:
+          type: string
+        description:
+          type: string
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/ActivityType'
+        userId:
+          type: integer
+          format: int32
+        userName:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        userCreated:
+          $ref: '#/components/schemas/UserCreatedData'
+        shortcutCreated:
+          $ref: '#/components/schemas/ShortcutCreatedData'
+        shortcutViewed:
+          $ref: '#/components/schemas/ShortcutViewedData'
+        collectionCreated:
+          $ref: '#/components/schemas/CollectionCreatedData'
+        collectionViewed:
+          $ref: '#/components/schemas/CollectionViewedData'
+
+    WorkspaceProfile:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: Current workspace mode (dev, prod)
+        version:
+          type: string
+          description: Current workspace version
+        owner:
+          type: string
+          description: The owner name (format "users/{id}")
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        customStyle:
+          type: string
+        branding:
+          type: string
+          format: byte
+
+    WorkspaceSetting:
+      type: object
+      properties:
+        instanceUrl:
+          type: string
+          format: uri
+        branding:
+          type: string
+          format: byte
+        customStyle:
+          type: string
+        defaultVisibility:
+          $ref: '#/components/schemas/Visibility'
+        identityProviders:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityProvider'
+        disallowUserRegistration:
+          type: boolean
+        disallowPasswordAuth:
+          type: boolean
+        shortcutPrefix:
+          type: string
+          description: Prefix for shortcut URLs (e.g., "s")
+
+    # Enums
+    Role:
+      type: string
+      enum:
+        - ROLE_UNSPECIFIED
+        - ADMIN
+        - USER
+      default: ROLE_UNSPECIFIED
+
+    State:
+      type: string
+      enum:
+        - STATE_UNSPECIFIED
+        - ACTIVE
+        - INACTIVE
+      default: STATE_UNSPECIFIED
+
+    Visibility:
+      type: string
+      enum:
+        - VISIBILITY_UNSPECIFIED
+        - WORKSPACE
+        - PUBLIC
+        - PRIVATE
+        - FRIENDS
+      default: VISIBILITY_UNSPECIFIED
+
+    ActivityType:
+      type: string
+      enum:
+        - ACTIVITY_TYPE_UNSPECIFIED
+        - USER_CREATED
+        - SHORTCUT_CREATED
+        - SHORTCUT_VIEWED
+        - COLLECTION_CREATED
+        - COLLECTION_VIEWED
+      default: ACTIVITY_TYPE_UNSPECIFIED
+
+    # Response Models
+    ListShortcutsResponse:
+      type: object
+      properties:
+        shortcuts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shortcut'
+        totalCount:
+          type: integer
+          format: int32
+        hasMore:
+          type: boolean
+
+    ListCollectionsResponse:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+
+    ListTagsResponse:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    ListActivitiesResponse:
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityItem'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+
+    ListUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    GetShortcutAnalyticsResponse:
+      type: object
+      properties:
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+        browsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticsItem'
+
+    GetRecentActivityResponse:
+      type: object
+      properties:
+        recentUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentUser'
+        recentShortcuts:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentShortcut'
+        recentCollections:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentCollection'
+        recentClicks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentClick'
+        mostClickedShortcuts:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostClickedShortcut'
+
+    GetActivitySummaryResponse:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+          format: int32
+        totalShortcuts:
+          type: integer
+          format: int32
+        totalCollections:
+          type: integer
+          format: int32
+        totalClicks:
+          type: integer
+          format: int32
+        recentUsersCount:
+          type: integer
+          format: int32
+        recentShortcutsCount:
+          type: integer
+          format: int32
+        recentCollectionsCount:
+          type: integer
+          format: int32
+        recentClicksCount:
+          type: integer
+          format: int32
+        userSummary:
+          $ref: '#/components/schemas/UserSummary'
+
+    WorkspaceStats:
+      type: object
+      properties:
+        totalShortcuts:
+          type: integer
+          format: int32
+        totalUsers:
+          type: integer
+          format: int32
+        totalCollections:
+          type: integer
+          format: int32
+        totalHits:
+          type: integer
+          format: int32
+        historicalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatsMeasurement'
+
+    DatabaseStats:
+      type: object
+      properties:
+        users:
+          type: integer
+          format: int32
+        shortcuts:
+          type: integer
+          format: int32
+        collections:
+          type: integer
+          format: int32
+        tags:
+          type: integer
+          format: int32
+        bookmarkTags:
+          type: integer
+          format: int32
+        friendships:
+          type: integer
+          format: int32
+        followings:
+          type: integer
+          format: int32
+        activities:
+          type: integer
+          format: int32
+        invitations:
+          type: integer
+          format: int32
+
+    ImportBookmarksRequest:
+      type: object
+      properties:
+        htmlContent:
+          type: string
+          description: HTML content from browser bookmarks export
+
+    ImportBookmarksResponse:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+        totalShortcuts:
+          type: integer
+          format: int32
+        totalCollections:
+          type: integer
+          format: int32
+        shortcutsCreated:
+          type: integer
+          format: int32
+        shortcutsUpdated:
+          type: integer
+          format: int32
+        collectionsCreated:
+          type: integer
+          format: int32
+        collectionsUpdated:
+          type: integer
+          format: int32
+
+    ExportDatabaseRequest:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            type: string
+          description: List of entity types to export
+
+    ExportDatabaseResponse:
+      type: object
+      properties:
+        data:
+          type: string
+          description: JSON data containing the exported entities
+        filename:
+          type: string
+
+    ImportDatabaseRequest:
+      type: object
+      properties:
+        data:
+          type: string
+          description: JSON data to import
+        entities:
+          type: array
+          items:
+            type: string
+          description: List of entity types to import
+        mode:
+          type: string
+          enum:
+            - new-only
+            - overwrite
+            - wipe-and-import
+          description: Import mode
+
+    ImportDatabaseResponse:
+      type: object
+      properties:
+        importedCounts:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: Number of records imported per entity type
+        messages:
+          type: array
+          items:
+            type: string
+          description: Any warnings or messages
+
+    # Supporting Models
+    OpenGraphMetadata:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+
+    TagInfo:
+      type: object
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+
+    AnalyticsItem:
+      type: object
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+          format: int32
+
+    RecentUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        email:
+          type: string
+        nickname:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        role:
+          $ref: '#/components/schemas/Role'
+
+    RecentShortcut:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+        link:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        creatorName:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        viewCount:
+          type: integer
+          format: int32
+        tags:
+          type: array
+          items:
+            type: string
+
+    RecentCollection:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        creatorName:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        shortcutCount:
+          type: integer
+          format: int32
+
+    RecentClick:
+      type: object
+      properties:
+        shortcutId:
+          type: integer
+          format: int32
+        shortcutName:
+          type: string
+        shortcutTitle:
+          type: string
+        shortcutLink:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        creatorName:
+          type: string
+        clickedTime:
+          type: string
+          format: date-time
+        userAgent:
+          type: string
+        referer:
+          type: string
+
+    MostClickedShortcut:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+        link:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        creatorName:
+          type: string
+        viewCount:
+          type: integer
+          format: int32
+        lastClicked:
+          type: string
+          format: date-time
+
+    UserSummary:
+      type: object
+      properties:
+        userShortcutsCount:
+          type: integer
+          format: int32
+        userCollectionsCount:
+          type: integer
+          format: int32
+        userTotalClicks:
+          type: integer
+          format: int32
+        userTags:
+          type: array
+          items:
+            type: string
+
+    StatsMeasurement:
+      type: object
+      properties:
+        measuredTs:
+          type: string
+          format: int64
+          description: Unix timestamp
+        shortcutsCount:
+          type: integer
+          format: int32
+        usersCount:
+          type: integer
+          format: int32
+        collectionsCount:
+          type: integer
+          format: int32
+        hitsCount:
+          type: integer
+          format: int32
+
+    UserCreatedData:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+        email:
+          type: string
+        nickname:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+
+    ShortcutCreatedData:
+      type: object
+      properties:
+        shortcutId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+        link:
+          type: string
+
+    ShortcutViewedData:
+      type: object
+      properties:
+        shortcutId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+        userAgent:
+          type: string
+        referer:
+          type: string
+
+    CollectionCreatedData:
+      type: object
+      properties:
+        collectionId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+
+    CollectionViewedData:
+      type: object
+      properties:
+        collectionId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        title:
+          type: string
+
+    Subscription:
+      type: object
+      properties:
+        plan:
+          $ref: '#/components/schemas/PlanType'
+        startedTime:
+          type: string
+          format: date-time
+        expiresTime:
+          type: string
+          format: date-time
+        features:
+          type: array
+          items:
+            type: string
+        seats:
+          type: integer
+          format: int32
+        shortcutsLimit:
+          type: integer
+          format: int32
+        collectionsLimit:
+          type: integer
+          format: int32
+
+    PlanType:
+      type: string
+      enum:
+        - PLAN_TYPE_UNSPECIFIED
+        - FREE
+        - PRO
+        - ENTERPRISE
+      default: PLAN_TYPE_UNSPECIFIED
+
+    IdentityProvider:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/IdentityProviderType'
+        config:
+          $ref: '#/components/schemas/IdentityProviderConfig'
+
+    IdentityProviderType:
+      type: string
+      enum:
+        - TYPE_UNSPECIFIED
+        - OAUTH2
+      default: TYPE_UNSPECIFIED
+
+    IdentityProviderConfig:
+      type: object
+      properties:
+        oauth2:
+          $ref: '#/components/schemas/OAuth2Config'
+
+    OAuth2Config:
+      type: object
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        authUrl:
+          type: string
+        tokenUrl:
+          type: string
+        userInfoUrl:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        fieldMapping:
+          $ref: '#/components/schemas/FieldMapping'
+
+    FieldMapping:
+      type: object
+      properties:
+        identifier:
+          type: string
+        displayName:
+          type: string
+
+    ShortcutUpdate:
+      type: object
+      properties:
+        uuid:
+          type: string
+        creatorId:
+          type: integer
+          format: int32
+        createdTime:
+          type: string
+          format: date-time
+        updatedTime:
+          type: string
+          format: date-time
+        name:
+          type: string
+        link:
+          type: string
+        title:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        viewCount:
+          type: integer
+          format: int32
+        ogMetadata:
+          $ref: '#/components/schemas/OpenGraphMetadata'
+        userOrder:
+          type: integer
+          format: int32
+        tagInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagInfo'
+        isFavorite:
+          type: boolean
+          description: Whether the user has marked this shortcut as a favorite
+
+    CollectionUpdate:
+      type: object
+      properties:
+        creatorId:
+          type: integer
+          format: int32
+        createdTime:
+          type: string
+          format: date-time
+        updatedTime:
+          type: string
+          format: date-time
+        uuid:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        shortcutIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+
+    # Error Model
+    Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+      description: Session-based authentication using cookies
+
+security:
+  - cookieAuth: []

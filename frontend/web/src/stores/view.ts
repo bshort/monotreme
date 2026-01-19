@@ -10,6 +10,7 @@ export interface Filter {
   visibility?: Visibility;
   search?: string;
   urlTags?: string[];
+  showFavoritesOnly?: boolean;
 }
 
 export interface Order {
@@ -19,10 +20,17 @@ export interface Order {
 
 export type DisplayStyle = "full" | "compact" | "list";
 
+interface RouteFilters {
+  [route: string]: Filter;
+}
+
 interface ViewState {
   filter: Filter;
   order: Order;
   displayStyle: DisplayStyle;
+  currentRoute: string;
+  routeFilters: RouteFilters;
+  setRoute: (route: string) => void;
   setFilter: (filter: Partial<Filter>) => void;
   getOrder: () => Order;
   setOrder: (order: Partial<Order>) => void;
@@ -38,8 +46,32 @@ const useViewStore = create<ViewState>()(
         direction: "asc",
       },
       displayStyle: "full",
+      currentRoute: "",
+      routeFilters: {},
+      setRoute: (route: string) => {
+        // Save current filter to route-specific storage
+        const currentRoute = get().currentRoute;
+        if (currentRoute) {
+          const routeFilters = { ...get().routeFilters };
+          routeFilters[currentRoute] = get().filter;
+          set({ routeFilters });
+        }
+
+        // Load filter for new route (or use empty filter)
+        const newFilter = get().routeFilters[route] || {};
+        set({ currentRoute: route, filter: newFilter });
+      },
       setFilter: (filter: Partial<Filter>) => {
-        set({ filter: { ...get().filter, ...filter } });
+        const newFilter = { ...get().filter, ...filter };
+        set({ filter: newFilter });
+
+        // Also update the route-specific filter
+        const currentRoute = get().currentRoute;
+        if (currentRoute) {
+          const routeFilters = { ...get().routeFilters };
+          routeFilters[currentRoute] = newFilter;
+          set({ routeFilters });
+        }
       },
       getOrder: () => {
         return {
@@ -61,8 +93,11 @@ const useViewStore = create<ViewState>()(
 );
 
 export const getFilteredShortcutList = (shortcutList: Shortcut[], filter: Filter, currentUser: User) => {
-  const { tab, tag, visibility, search, urlTags } = filter;
+  const { tab, tag, visibility, search, urlTags, showFavoritesOnly } = filter;
   const filteredShortcutList = shortcutList.filter((shortcut) => {
+    if (showFavoritesOnly && !shortcut.isFavorite) {
+      return false;
+    }
     if (tag) {
       if (!shortcut.tags.includes(tag)) {
         return false;

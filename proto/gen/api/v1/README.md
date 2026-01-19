@@ -1044,6 +1044,8 @@ Activity Types
 | description | [string](#string) |  |  |
 | shortcut_ids | [int32](#int32) | repeated |  |
 | visibility | [Visibility](#monotreme-api-v1-Visibility) |  |  |
+| custom_icon | [string](#string) |  |  |
+| user_order | [int32](#int32) |  |  |
 
 
 
@@ -1343,6 +1345,12 @@ Activity Types
 
 
 
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| limit | [int32](#int32) | optional | Optional: maximum number of shortcuts to return. Default is 50. |
+| offset | [int32](#int32) | optional | Optional: number of shortcuts to skip. Used for pagination. |
+
+
 
 
 
@@ -1356,6 +1364,8 @@ Activity Types
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | shortcuts | [Shortcut](#monotreme-api-v1-Shortcut) | repeated |  |
+| total_count | [int32](#int32) |  | Total count of shortcuts (ignoring pagination) |
+| has_more | [bool](#bool) |  | Whether there are more shortcuts available |
 
 
 
@@ -1385,6 +1395,7 @@ Activity Types
 | og_metadata | [Shortcut.OpenGraphMetadata](#monotreme-api-v1-Shortcut-OpenGraphMetadata) |  |  |
 | user_order | [int32](#int32) |  |  |
 | tag_info | [Shortcut.TagInfo](#monotreme-api-v1-Shortcut-TagInfo) | repeated |  |
+| is_favorite | [bool](#bool) |  |  |
 
 
 

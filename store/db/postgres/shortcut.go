@@ -13,8 +13,8 @@ import (
 )
 
 func (d *DB) CreateShortcut(ctx context.Context, create *storepb.Shortcut) (*storepb.Shortcut, error) {
-	set := []string{"creator_id", "name", "link", "title", "description", "visibility", "tag", "uuid", "custom_icon"}
-	args := []any{create.CreatorId, create.Name, create.Link, create.Title, create.Description, create.Visibility.String(), strings.Join(create.Tags, " "), create.Uuid, create.CustomIcon}
+	set := []string{"creator_id", "name", "link", "title", "description", "visibility", "tag", "uuid", "custom_icon", "user_order", "is_favorite"}
+	args := []any{create.CreatorId, create.Name, create.Link, create.Title, create.Description, create.Visibility.String(), strings.Join(create.Tags, " "), create.Uuid, create.CustomIcon, create.UserOrder, create.IsFavorite}
 	if create.OgMetadata != nil {
 		set = append(set, "og_metadata")
 		openGraphMetadataBytes, err := protojson.Marshal(create.OgMetadata)
@@ -70,6 +70,12 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 	if update.CustomIcon != nil {
 		set, args = append(set, fmt.Sprintf("custom_icon = $%d", len(args)+1)), append(args, *update.CustomIcon)
 	}
+	if update.UserOrder != nil {
+		set, args = append(set, fmt.Sprintf("user_order = $%d", len(args)+1)), append(args, *update.UserOrder)
+	}
+	if update.IsFavorite != nil {
+		set, args = append(set, fmt.Sprintf("is_favorite = $%d", len(args)+1)), append(args, *update.IsFavorite)
+	}
 	if len(set) == 0 {
 		return nil, errors.New("no update specified")
 	}
@@ -79,7 +85,7 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 		UPDATE shortcut
 		SET %s
 		WHERE id = $%d
-		RETURNING id, creator_id, created_ts, updated_ts, name, link, title, description, visibility, tag, og_metadata, uuid, custom_icon
+		RETURNING id, creator_id, created_ts, updated_ts, name, link, title, description, visibility, tag, og_metadata, uuid, custom_icon, user_order, is_favorite
 	`, strings.Join(set, ","), len(args))
 
 	shortcut := &storepb.Shortcut{}
@@ -98,6 +104,8 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 		&openGraphMetadataString,
 		&shortcut.Uuid,
 		&shortcut.CustomIcon,
+		&shortcut.UserOrder,
+		&shortcut.IsFavorite,
 	); err != nil {
 		return nil, err
 	}
@@ -148,7 +156,9 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 			tag,
 			og_metadata,
 			uuid,
-			custom_icon
+			custom_icon,
+			user_order,
+			is_favorite
 		FROM shortcut
 		WHERE %s
 		ORDER BY created_ts DESC
@@ -176,6 +186,8 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 			&openGraphMetadataString,
 			&shortcut.Uuid,
 			&shortcut.CustomIcon,
+			&shortcut.UserOrder,
+			&shortcut.IsFavorite,
 		); err != nil {
 			return nil, err
 		}
@@ -193,6 +205,40 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 		return nil, err
 	}
 	return list, nil
+}
+
+func (d *DB) CountShortcuts(ctx context.Context, find *store.FindShortcut) (int32, error) {
+	where, args := []string{"1 = 1"}, []any{}
+	if v := find.ID; v != nil {
+		where, args = append(where, fmt.Sprintf("id = %s", placeholder(len(args)+1))), append(args, *v)
+	}
+	if v := find.CreatorID; v != nil {
+		where, args = append(where, fmt.Sprintf("creator_id = %s", placeholder(len(args)+1))), append(args, *v)
+	}
+	if v := find.Name; v != nil {
+		where, args = append(where, fmt.Sprintf("name = %s", placeholder(len(args)+1))), append(args, *v)
+	}
+	if v := find.VisibilityList; len(v) != 0 {
+		list := []string{}
+		for _, visibility := range v {
+			list = append(list, placeholder(len(args)+1))
+			args = append(args, visibility)
+		}
+		where = append(where, fmt.Sprintf("visibility IN (%s)", strings.Join(list, ",")))
+	}
+	if v := find.Tag; v != nil {
+		where, args = append(where, fmt.Sprintf("tag LIKE %s", placeholder(len(args)+1))), append(args, "%"+*v+"%")
+	}
+
+	query := fmt.Sprintf("SELECT COUNT(*) FROM shortcut WHERE %s", strings.Join(where, " AND "))
+
+	var count int32
+	err := d.db.QueryRowContext(ctx, query, args...).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (d *DB) DeleteShortcut(ctx context.Context, delete *store.DeleteShortcut) error {

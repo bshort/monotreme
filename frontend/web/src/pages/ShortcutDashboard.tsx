@@ -53,6 +53,7 @@ const ShortcutDashboard: React.FC = () => {
 
   useEffect(() => {
     setLastVisited("/shortcuts");
+    viewStore.setRoute("/shortcuts");
     Promise.all([shortcutStore.fetchShortcutList()]).finally(() => {
       loadingState.setFinish();
     });

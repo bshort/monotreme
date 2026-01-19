@@ -14,9 +14,9 @@ import (
 )
 
 func (d *DB) CreateCollection(ctx context.Context, create *storepb.Collection) (*storepb.Collection, error) {
-	set := []string{"creator_id", "name", "title", "description", "shortcut_ids", "visibility", "custom_icon", "uuid"}
-	args := []any{create.CreatorId, create.Name, create.Title, create.Description, strings.Trim(strings.Join(strings.Fields(fmt.Sprint(create.ShortcutIds)), ","), "[]"), create.Visibility.String(), create.CustomIcon, create.Uuid}
-	placeholder := []string{"?", "?", "?", "?", "?", "?", "?", "?"}
+	set := []string{"creator_id", "name", "title", "description", "shortcut_ids", "visibility", "custom_icon", "user_order", "uuid"}
+	args := []any{create.CreatorId, create.Name, create.Title, create.Description, strings.Trim(strings.Join(strings.Fields(fmt.Sprint(create.ShortcutIds)), ","), "[]"), create.Visibility.String(), create.CustomIcon, create.UserOrder, create.Uuid}
+	placeholder := []string{"?", "?", "?", "?", "?", "?", "?", "?", "?"}
 
 	stmt := `
 		INSERT INTO collection (
@@ -56,6 +56,9 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 	if update.CustomIcon != nil {
 		set, args = append(set, "custom_icon = ?"), append(args, *update.CustomIcon)
 	}
+	if update.UserOrder != nil {
+		set, args = append(set, "user_order = ?"), append(args, *update.UserOrder)
+	}
 	if update.UUID != nil {
 		set, args = append(set, "uuid = ?"), append(args, *update.UUID)
 	}
@@ -70,7 +73,7 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 			` + strings.Join(set, ", ") + `
 		WHERE
 			id = ?
-		RETURNING id, creator_id, created_ts, updated_ts, name, title, description, shortcut_ids, visibility, custom_icon, uuid
+		RETURNING id, creator_id, created_ts, updated_ts, name, title, description, shortcut_ids, visibility, custom_icon, user_order, uuid
 	`
 	collection := &storepb.Collection{}
 	var shortcutIDs, visibility string
@@ -86,6 +89,7 @@ func (d *DB) UpdateCollection(ctx context.Context, update *store.UpdateCollectio
 		&shortcutIDs,
 		&visibility,
 		&collection.CustomIcon,
+		&collection.UserOrder,
 		&uuid,
 	); err != nil {
 		return nil, err
@@ -140,10 +144,11 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			shortcut_ids,
 			visibility,
 			custom_icon,
+			user_order,
 			uuid
 		FROM collection
 		WHERE `+strings.Join(where, " AND ")+`
-		ORDER BY created_ts DESC`,
+		ORDER BY user_order ASC, created_ts DESC`,
 		args...,
 	)
 	if err != nil {
@@ -167,6 +172,7 @@ func (d *DB) ListCollections(ctx context.Context, find *store.FindCollection) ([
 			&shortcutIDs,
 			&visibility,
 			&collection.CustomIcon,
+			&collection.UserOrder,
 			&uuid,
 		); err != nil {
 			return nil, err

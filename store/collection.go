@@ -17,6 +17,7 @@ type UpdateCollection struct {
 	ShortcutIDs []int32
 	Visibility  *storepb.Visibility
 	CustomIcon  *string
+	UserOrder   *int32
 }
 
 type FindCollection struct {

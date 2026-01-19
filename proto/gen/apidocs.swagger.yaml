@@ -358,6 +358,11 @@ paths:
                   format: int32
               visibility:
                 $ref: '#/definitions/apiv1Visibility'
+              customIcon:
+                type: string
+              userOrder:
+                type: integer
+                format: int32
         - name: updateMask
           in: query
           required: false
@@ -916,6 +921,19 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: limit
+          description: 'Optional: maximum number of shortcuts to return. Default is 50.'
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: offset
+          description: 'Optional: number of shortcuts to skip. Used for pagination.'
+          in: query
+          required: false
+          type: integer
+          format: int32
       tags:
         - ShortcutService
     delete:
@@ -1079,6 +1097,8 @@ paths:
                 items:
                   type: object
                   $ref: '#/definitions/ShortcutTagInfo'
+              isFavorite:
+                type: boolean
         - name: updateMask
           in: query
           required: false
@@ -1836,6 +1856,11 @@ definitions:
           format: int32
       visibility:
         $ref: '#/definitions/apiv1Visibility'
+      customIcon:
+        type: string
+      userOrder:
+        type: integer
+        format: int32
   apiv1IdentityProvider:
     type: object
     properties:
@@ -2002,6 +2027,8 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/ShortcutTagInfo'
+      isFavorite:
+        type: boolean
   apiv1StatsMeasurement:
     type: object
     properties:
@@ -2589,6 +2616,13 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/apiv1Shortcut'
+      totalCount:
+        type: integer
+        format: int32
+        title: Total count of shortcuts (ignoring pagination)
+      hasMore:
+        type: boolean
+        title: Whether there are more shortcuts available
   v1ListTagsForBookmarkResponse:
     type: object
     properties:

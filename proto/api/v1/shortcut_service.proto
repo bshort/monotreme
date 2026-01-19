@@ -85,6 +85,8 @@ message Shortcut {
 
   repeated TagInfo tag_info = 15;
 
+  bool is_favorite = 16;
+
   message OpenGraphMetadata {
     string title = 1;
 
@@ -99,10 +101,19 @@ message Shortcut {
   }
 }
 
-message ListShortcutsRequest {}
+message ListShortcutsRequest {
+  // Optional: maximum number of shortcuts to return. Default is 50.
+  optional int32 limit = 1;
+  // Optional: number of shortcuts to skip. Used for pagination.
+  optional int32 offset = 2;
+}
 
 message ListShortcutsResponse {
   repeated Shortcut shortcuts = 1;
+  // Total count of shortcuts (ignoring pagination)
+  int32 total_count = 2;
+  // Whether there are more shortcuts available
+  bool has_more = 3;
 }
 
 message GetShortcutRequest {

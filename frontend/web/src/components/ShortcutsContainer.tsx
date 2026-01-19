@@ -79,7 +79,8 @@ const ShortcutsContainer: React.FC<Props> = (props: Props) => {
       await Promise.all(
         updatedShortcuts.map((shortcut) =>
           shortcutStore.updateShortcut({
-            ...shortcut,
+            id: shortcut.id,
+            userOrder: shortcut.userOrder,
           }, ["user_order"])
         )
       );

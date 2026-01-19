@@ -34,6 +34,8 @@ message Shortcut {
   string custom_icon = 13;
 
   int32 user_order = 14;
+
+  bool is_favorite = 15;
 }
 
 message OpenGraphMetadata {

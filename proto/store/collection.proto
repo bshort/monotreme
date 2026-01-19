@@ -28,4 +28,6 @@ message Collection {
   Visibility visibility = 10;
 
   string custom_icon = 11;
+
+  int32 user_order = 12;
 }

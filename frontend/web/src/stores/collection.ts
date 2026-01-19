@@ -19,11 +19,11 @@ const useCollectionStore = create<CollectionState>()((set, get) => ({
   collectionMapById: {},
   fetchCollectionList: async () => {
     const { collections } = await collectionServiceClient.listCollections({});
-    const collectionMap = get().collectionMapById;
+    const collectionMap = { ...get().collectionMapById };
     collections.forEach((collection) => {
       collectionMap[collection.id] = collection;
     });
-    set(collectionMap);
+    set({ collectionMapById: collectionMap });
     return collections;
   },
   getOrFetchCollectionById: async (id: number) => {
@@ -35,8 +35,8 @@ const useCollectionStore = create<CollectionState>()((set, get) => ({
     const collection = await collectionServiceClient.getCollection({
       id: id,
     });
-    collectionMap[id] = collection;
-    set(collectionMap);
+    const newCollectionMap = { ...collectionMap, [id]: collection };
+    set({ collectionMapById: newCollectionMap });
     return collection;
   },
   getCollectionById: (id: number) => {
@@ -50,18 +50,16 @@ const useCollectionStore = create<CollectionState>()((set, get) => ({
     const collection = await collectionServiceClient.getCollectionByName({
       name: collectionName,
     });
-    const collectionMap = get().collectionMapById;
-    collectionMap[collection.id] = collection;
-    set(collectionMap);
+    const collectionMap = { ...get().collectionMapById, [collection.id]: collection };
+    set({ collectionMapById: collectionMap });
     return collection;
   },
   createCollection: async (collection: Collection) => {
     const createdCollection = await collectionServiceClient.createCollection({
       collection: collection,
     });
-    const collectionMap = get().collectionMapById;
-    collectionMap[createdCollection.id] = createdCollection;
-    set(collectionMap);
+    const collectionMap = { ...get().collectionMapById, [createdCollection.id]: createdCollection };
+    set({ collectionMapById: collectionMap });
     return createdCollection;
   },
   updateCollection: async (collection: Partial<Collection>, updateMask: string[]) => {
@@ -69,18 +67,17 @@ const useCollectionStore = create<CollectionState>()((set, get) => ({
       collection: collection,
       updateMask: updateMask,
     });
-    const collectionMap = get().collectionMapById;
-    collectionMap[updatedCollection.id] = updatedCollection;
-    set(collectionMap);
+    const collectionMap = { ...get().collectionMapById, [updatedCollection.id]: updatedCollection };
+    set({ collectionMapById: collectionMap });
     return updatedCollection;
   },
   deleteCollection: async (id: number) => {
     await collectionServiceClient.deleteCollection({
       id,
     });
-    const collectionMap = get().collectionMapById;
+    const collectionMap = { ...get().collectionMapById };
     delete collectionMap[id];
-    set(collectionMap);
+    set({ collectionMapById: collectionMap });
   },
   importBookmarks: async (htmlContent: string) => {
     const response = await collectionServiceClient.importBookmarks({
@@ -88,11 +85,11 @@ const useCollectionStore = create<CollectionState>()((set, get) => ({
     });
 
     // Update the collection map with newly created collections
-    const collectionMap = get().collectionMapById;
+    const collectionMap = { ...get().collectionMapById };
     response.collections.forEach((collection) => {
       collectionMap[collection.id] = collection;
     });
-    set(collectionMap);
+    set({ collectionMapById: collectionMap });
 
     return response;
   },

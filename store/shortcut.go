@@ -18,6 +18,7 @@ type UpdateShortcut struct {
 	OpenGraphMetadata *storepb.OpenGraphMetadata
 	CustomIcon        *string
 	UserOrder         *int32
+	IsFavorite        *bool
 }
 
 type FindShortcut struct {
@@ -26,6 +27,8 @@ type FindShortcut struct {
 	Name           *string
 	VisibilityList []storepb.Visibility
 	Tag            *string
+	Limit          *int32
+	Offset         *int32
 }
 
 type DeleteShortcut struct {
@@ -59,6 +62,10 @@ func (s *Store) ListShortcuts(ctx context.Context, find *FindShortcut) ([]*store
 		s.shortcutCache.Store(shortcut.Id, shortcut)
 	}
 	return list, nil
+}
+
+func (s *Store) CountShortcuts(ctx context.Context, find *FindShortcut) (int32, error) {
+	return s.driver.CountShortcuts(ctx, find)
 }
 
 func (s *Store) GetShortcut(ctx context.Context, find *FindShortcut) (*storepb.Shortcut, error) {

@@ -24,14 +24,29 @@ import (
 	"github.com/bshort/monotreme/store"
 )
 
-func (s *APIV1Service) ListShortcuts(ctx context.Context, _ *v1pb.ListShortcutsRequest) (*v1pb.ListShortcutsResponse, error) {
+func (s *APIV1Service) ListShortcuts(ctx context.Context, request *v1pb.ListShortcutsRequest) (*v1pb.ListShortcutsResponse, error) {
 	user, err := getCurrentUser(ctx, s.Store)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to get current user: %v", err)
 	}
 
+	// Set default limit if not specified
+	limit := int32(50)
+	if request.Limit != nil {
+		limit = *request.Limit
+	}
+
+	offset := int32(0)
+	if request.Offset != nil {
+		offset = *request.Offset
+	}
+
+	// For paginated requests, skip cache
+	// For unpaginated requests with offset=0, try cache
+	useCache := offset == 0 && request.Limit == nil
+
 	// Try to get from Redis cache first
-	if s.RedisService != nil && user != nil {
+	if useCache && s.RedisService != nil && user != nil {
 		var cachedResponse v1pb.ListShortcutsResponse
 		cacheKey := fmt.Sprintf("shortcuts:user:%d", user.ID)
 		cacheErr := s.RedisService.GetJSON(ctx, cacheKey, &cachedResponse)
@@ -42,8 +57,17 @@ func (s *APIV1Service) ListShortcuts(ctx context.Context, _ *v1pb.ListShortcutsR
 		}
 	}
 
-	// Cache miss or Redis unavailable - fetch from database
-	shortcutList, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
+	// Get total count
+	totalCount, err := s.Store.CountShortcuts(ctx, &store.FindShortcut{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to count shortcuts, err: %v", err)
+	}
+
+	// Cache miss or Redis unavailable - fetch from database with pagination
+	shortcutList, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{
+		Limit:  &limit,
+		Offset: &offset,
+	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to list shortcuts, err: %v", err)
 	}
@@ -73,12 +97,16 @@ func (s *APIV1Service) ListShortcuts(ctx context.Context, _ *v1pb.ListShortcutsR
 		shortcutMessageList = append(shortcutMessageList, composedShortcut)
 	}
 
+	hasMore := offset+int32(len(shortcutMessageList)) < totalCount
+
 	response := &v1pb.ListShortcutsResponse{
-		Shortcuts: shortcutMessageList,
+		Shortcuts:  shortcutMessageList,
+		TotalCount: totalCount,
+		HasMore:    hasMore,
 	}
 
-	// Save to Redis cache with 1 hour expiration
-	if s.RedisService != nil && user != nil {
+	// Save to Redis cache with 1 hour expiration (only for first page)
+	if useCache && s.RedisService != nil && user != nil {
 		_ = s.RedisService.SetJSON(ctx, fmt.Sprintf("shortcuts:user:%d", user.ID), response, time.Hour)
 	}
 
@@ -255,6 +283,8 @@ func (s *APIV1Service) UpdateShortcut(ctx context.Context, request *v1pb.UpdateS
 			}
 		case "user_order":
 			update.UserOrder = &request.Shortcut.UserOrder
+		case "is_favorite":
+			update.IsFavorite = &request.Shortcut.IsFavorite
 		}
 	}
 	shortcut, err = s.Store.UpdateShortcut(ctx, update)
@@ -465,6 +495,7 @@ func (s *APIV1Service) convertShortcutFromStorepb(ctx context.Context, shortcut 
 		Visibility:  convertVisibilityFromStorepb(shortcut.Visibility),
 		Uuid:        shortcut.Uuid,
 		UserOrder:   shortcut.UserOrder,
+		IsFavorite:  shortcut.IsFavorite,
 		OgMetadata: &v1pb.Shortcut_OpenGraphMetadata{
 			Title:       shortcut.OgMetadata.Title,
 			Description: shortcut.OgMetadata.Description,
@@ -510,6 +541,7 @@ func (s *APIV1Service) convertShortcutFromStorepbWithViewCount(shortcut *storepb
 		Uuid:        shortcut.Uuid,
 		UserOrder:   shortcut.UserOrder,
 		ViewCount:   viewCount,
+		IsFavorite:  shortcut.IsFavorite,
 		OgMetadata: &v1pb.Shortcut_OpenGraphMetadata{
 			Title:       shortcut.OgMetadata.Title,
 			Description: shortcut.OgMetadata.Description,

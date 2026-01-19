@@ -31,6 +31,7 @@ type Driver interface {
 	CreateShortcut(ctx context.Context, create *storepb.Shortcut) (*storepb.Shortcut, error)
 	UpdateShortcut(ctx context.Context, update *UpdateShortcut) (*storepb.Shortcut, error)
 	ListShortcuts(ctx context.Context, find *FindShortcut) ([]*storepb.Shortcut, error)
+	CountShortcuts(ctx context.Context, find *FindShortcut) (int32, error)
 	DeleteShortcut(ctx context.Context, delete *DeleteShortcut) error
 
 	// User model related methods.

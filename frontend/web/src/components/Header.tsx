@@ -16,8 +16,8 @@ const Header: React.FC = () => {
   const currentUser = useUserStore().getCurrentUser();
   const subscription = workspaceStore.getSubscription();
   const isAdmin = currentUser.role === Role.ADMIN;
-  const shouldShowRouterSwitch = location.pathname === "/shortcuts" || location.pathname === "/collections" || location.pathname === "/tags";
-  const selectedSection = location.pathname === "/shortcuts" ? "Shortcuts" : location.pathname === "/collections" ? "Collections" : location.pathname === "/tags" ? "Tags" : "";
+  const shouldShowRouterSwitch = location.pathname === "/shortcuts" || location.pathname === "/favorites" || location.pathname === "/collections" || location.pathname === "/tags";
+  const selectedSection = location.pathname === "/shortcuts" ? "Shortcuts" : location.pathname === "/favorites" ? "Favorites" : location.pathname === "/collections" ? "Collections" : location.pathname === "/tags" ? "Tags" : "";
 
   const handleSignOutButtonClick = async () => {
     await authServiceClient.signOut({});
@@ -52,6 +52,13 @@ const Header: React.FC = () => {
                         viewTransition
                       >
                         <Icon.SquareSlash className="w-5 h-auto mr-2 opacity-70" /> Shortcuts
+                      </Link>
+                      <Link
+                        className="w-full px-2 flex flex-row justify-start items-center text-left dark:text-gray-400 leading-8 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60"
+                        to="/favorites"
+                        viewTransition
+                      >
+                        <Icon.Star className="w-5 h-auto mr-2 opacity-70" /> Favorites
                       </Link>
                       <Link
                         className="w-full px-2 flex flex-row justify-start items-center text-left dark:text-gray-400 leading-8 cursor-pointer rounded hover:bg-gray-100 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60"

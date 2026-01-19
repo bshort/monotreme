@@ -14,9 +14,9 @@ import (
 )
 
 func (d *DB) CreateShortcut(ctx context.Context, create *storepb.Shortcut) (*storepb.Shortcut, error) {
-	set := []string{"creator_id", "name", "link", "title", "description", "visibility", "tag", "uuid", "custom_icon", "user_order"}
-	args := []any{create.CreatorId, create.Name, create.Link, create.Title, create.Description, create.Visibility.String(), strings.Join(create.Tags, " "), create.Uuid, create.CustomIcon, create.UserOrder}
-	placeholder := []string{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?"}
+	set := []string{"creator_id", "name", "link", "title", "description", "visibility", "tag", "uuid", "custom_icon", "user_order", "is_favorite"}
+	args := []any{create.CreatorId, create.Name, create.Link, create.Title, create.Description, create.Visibility.String(), strings.Join(create.Tags, " "), create.Uuid, create.CustomIcon, create.UserOrder, create.IsFavorite}
+	placeholder := []string{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?"}
 	if create.OgMetadata != nil {
 		set = append(set, "og_metadata")
 		openGraphMetadataBytes, err := protojson.Marshal(create.OgMetadata)
@@ -78,6 +78,9 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 	if update.UserOrder != nil {
 		set, args = append(set, "user_order = ?"), append(args, *update.UserOrder)
 	}
+	if update.IsFavorite != nil {
+		set, args = append(set, "is_favorite = ?"), append(args, *update.IsFavorite)
+	}
 	if len(set) == 0 {
 		return nil, errors.New("no update specified")
 	}
@@ -89,7 +92,7 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 			` + strings.Join(set, ", ") + `
 		WHERE
 			id = ?
-		RETURNING id, creator_id, created_ts, updated_ts, name, link, title, description, visibility, tag, og_metadata, uuid, custom_icon, user_order
+		RETURNING id, creator_id, created_ts, updated_ts, name, link, title, description, visibility, tag, og_metadata, uuid, custom_icon, user_order, is_favorite
 	`
 	shortcut := &storepb.Shortcut{}
 	var visibility, tags, openGraphMetadataString string
@@ -108,6 +111,7 @@ func (d *DB) UpdateShortcut(ctx context.Context, update *store.UpdateShortcut) (
 		&shortcut.Uuid,
 		&shortcut.CustomIcon,
 		&shortcut.UserOrder,
+		&shortcut.IsFavorite,
 	); err != nil {
 		return nil, err
 	}
@@ -144,7 +148,8 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 		where, args = append(where, "tag LIKE ?"), append(args, "%"+*v+"%")
 	}
 
-	rows, err := d.db.QueryContext(ctx, `
+	// Build the query with optional LIMIT and OFFSET
+	query := `
 		SELECT
 			id,
 			creator_id,
@@ -159,12 +164,20 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 			og_metadata,
 			uuid,
 			custom_icon,
-			user_order
+			user_order,
+			is_favorite
 		FROM shortcut
-		WHERE `+strings.Join(where, " AND ")+`
-		ORDER BY created_ts DESC`,
-		args...,
-	)
+		WHERE ` + strings.Join(where, " AND ") + `
+		ORDER BY created_ts DESC`
+
+	if find.Limit != nil {
+		query += fmt.Sprintf(" LIMIT %d", *find.Limit)
+	}
+	if find.Offset != nil {
+		query += fmt.Sprintf(" OFFSET %d", *find.Offset)
+	}
+
+	rows, err := d.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -189,6 +202,7 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 			&shortcut.Uuid,
 			&shortcut.CustomIcon,
 			&shortcut.UserOrder,
+			&shortcut.IsFavorite,
 		); err != nil {
 			return nil, err
 		}
@@ -206,6 +220,40 @@ func (d *DB) ListShortcuts(ctx context.Context, find *store.FindShortcut) ([]*st
 		return nil, err
 	}
 	return list, nil
+}
+
+func (d *DB) CountShortcuts(ctx context.Context, find *store.FindShortcut) (int32, error) {
+	where, args := []string{"1 = 1"}, []any{}
+	if v := find.ID; v != nil {
+		where, args = append(where, "id = ?"), append(args, *v)
+	}
+	if v := find.CreatorID; v != nil {
+		where, args = append(where, "creator_id = ?"), append(args, *v)
+	}
+	if v := find.Name; v != nil {
+		where, args = append(where, "name = ?"), append(args, *v)
+	}
+	if v := find.VisibilityList; len(v) != 0 {
+		list := []string{}
+		for _, visibility := range v {
+			list = append(list, fmt.Sprintf("$%d", len(args)+1))
+			args = append(args, visibility.String())
+		}
+		where = append(where, fmt.Sprintf("visibility in (%s)", strings.Join(list, ",")))
+	}
+	if v := find.Tag; v != nil {
+		where, args = append(where, "tag LIKE ?"), append(args, "%"+*v+"%")
+	}
+
+	query := `SELECT COUNT(*) FROM shortcut WHERE ` + strings.Join(where, " AND ")
+
+	var count int32
+	err := d.db.QueryRowContext(ctx, query, args...).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (d *DB) DeleteShortcut(ctx context.Context, delete *store.DeleteShortcut) error {

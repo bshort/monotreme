@@ -7,6 +7,7 @@ import AuthCallback from "@/pages/AuthCallback";
 import BookmarkImport from "@/pages/BookmarkImport";
 import CollectionDashboard from "@/pages/CollectionDashboard";
 import CollectionSpace from "@/pages/CollectionSpace";
+import Favorites from "@/pages/Favorites";
 import Home from "@/pages/Home";
 import Invite from "@/pages/Invite";
 import Landing from "@/pages/Landing";
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
           {
             path: "/shortcuts",
             element: <ShortcutDashboard />,
+          },
+          {
+            path: "/favorites",
+            element: <Favorites />,
           },
           {
             path: "/collections",

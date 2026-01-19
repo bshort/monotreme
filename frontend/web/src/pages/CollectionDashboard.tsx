@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import useLocalStorage from "react-use/lib/useLocalStorage";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import CollectionView from "@/components/CollectionView";
 import CreateCollectionDrawer from "@/components/CreateCollectionDrawer";
 import FilterView from "@/components/FilterView";
 import Icon from "@/components/Icon";
+import SortableCollectionItem from "@/components/SortableCollectionItem";
 import { userServiceClient } from "@/grpcweb";
 import useLoading from "@/hooks/useLoading";
 import { useShortcutStore, useCollectionStore, useUserStore } from "@/stores";
@@ -17,7 +20,7 @@ interface State {
   showCreateCollectionDrawer: boolean;
 }
 
-type SortOption = "date" | "name" | "shortcuts";
+type SortOption = "date" | "name" | "shortcuts" | "custom";
 
 const CollectionDashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -32,6 +35,7 @@ const CollectionDashboard: React.FC = () => {
   });
   const [search, setSearch] = useState<string>("");
   const [sortBy, setSortBy] = useState<SortOption>("date");
+  const [collectionList, setCollectionList] = useState<Collection[]>([]);
   const sortCollections = (collections: Collection[], sortBy: SortOption): Collection[] => {
     return [...collections].sort((a, b) => {
       switch (sortBy) {
@@ -39,6 +43,8 @@ const CollectionDashboard: React.FC = () => {
           return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
         case "shortcuts":
           return b.shortcutIds.length - a.shortcutIds.length;
+        case "custom":
+          return a.userOrder - b.userOrder;
         case "date":
         default:
           return b.createdTs - a.createdTs;
@@ -47,7 +53,7 @@ const CollectionDashboard: React.FC = () => {
   };
 
   const filteredAndSortedCollections = sortCollections(
-    collectionStore.getCollectionList().filter((collection) => {
+    collectionList.filter((collection) => {
       const searchLower = search.toLowerCase();
 
       // Search collection properties
@@ -87,6 +93,84 @@ const CollectionDashboard: React.FC = () => {
       loadingState.setFinish();
     });
   }, []);
+
+  useEffect(() => {
+    setCollectionList(collectionStore.getCollectionList());
+  }, [collectionStore.collectionMapById]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+  const isCustomOrder = sortBy === "custom";
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const oldIndex = filteredAndSortedCollections.findIndex((c) => c.id === active.id);
+    const newIndex = filteredAndSortedCollections.findIndex((c) => c.id === over.id);
+
+    const newOrderedList = arrayMove(filteredAndSortedCollections, oldIndex, newIndex);
+
+    // Get the full collection list to properly update all userOrder values
+    const fullCollectionList = collectionList;
+
+    // Create a map of id to new userOrder based on the reordered visible list
+    const visibleOrderMap = new Map(newOrderedList.map((c, idx) => [c.id, idx]));
+
+    // Separate visible and non-visible collections
+    const visibleCollections = newOrderedList;
+    const nonVisibleCollections = fullCollectionList.filter((c) => !visibleOrderMap.has(c.id));
+
+    // Assign sequential userOrder values to ALL collections
+    // Visible collections get 0, 1, 2, ... based on their new order
+    // Non-visible collections get sequential values starting after the visible ones
+    const updatedCollections = [
+      ...visibleCollections.map((c, idx) => {
+        const updated = { ...c };
+        updated.userOrder = idx;
+        return updated;
+      }),
+      ...nonVisibleCollections.map((c, idx) => {
+        const updated = { ...c };
+        updated.userOrder = visibleCollections.length + idx;
+        return updated;
+      }),
+    ];
+
+    // Optimistically update the local state
+    setCollectionList(updatedCollections);
+
+    try {
+      // Only update collections where userOrder actually changed
+      const collectionsToUpdate = updatedCollections.filter((updated) => {
+        const original = fullCollectionList.find((c) => c.id === updated.id);
+        return !original || original.userOrder !== updated.userOrder;
+      });
+
+      // Update sequentially to avoid race conditions
+      for (const collection of collectionsToUpdate) {
+        await collectionStore.updateCollection(
+          { id: collection.id, userOrder: collection.userOrder },
+          ["user_order"]
+        );
+      }
+
+      await collectionStore.fetchCollectionList();
+    } catch (error) {
+      console.error("Failed to update collection order:", error);
+      toast.error("Failed to update collection order");
+      setCollectionList(collectionStore.getCollectionList());
+    }
+  };
 
   const setShowCreateCollectionDrawer = (show: boolean) => {
     setState({
@@ -143,6 +227,7 @@ const CollectionDashboard: React.FC = () => {
               <Option value="date">By Date</Option>
               <Option value="name">By Name</Option>
               <Option value="shortcuts">By Shortcuts</Option>
+              <Option value="custom">Custom Order</Option>
             </Select>
           </div>
           <div className="flex flex-row justify-start items-center gap-2">
@@ -180,12 +265,22 @@ const CollectionDashboard: React.FC = () => {
               <Icon.ExternalLink className="ml-1 w-4 h-auto inline" />
             </a>
           </div>
-        ) : (
+        ) : !isCustomOrder ? (
           <div className="w-full flex flex-col justify-start items-start gap-3">
             {filteredAndSortedCollections.map((collection) => {
               return <CollectionView key={collection.id} collection={collection} searchQuery={search} />;
             })}
           </div>
+        ) : (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={filteredAndSortedCollections.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+              <div className="w-full flex flex-col justify-start items-start gap-3">
+                {filteredAndSortedCollections.map((collection) => {
+                  return <SortableCollectionItem key={collection.id} collection={collection} searchQuery={search} />;
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
 

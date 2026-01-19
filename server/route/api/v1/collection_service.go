@@ -83,14 +83,23 @@ func (s *APIV1Service) CreateCollection(ctx context.Context, request *v1pb.Creat
 		return nil, status.Errorf(codes.InvalidArgument, "name and title are required")
 	}
 
+	collections, err := s.Store.ListCollections(ctx, &store.FindCollection{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get collection list, err: %v", err)
+	}
+
 	if !s.LicenseService.IsFeatureEnabled(license.FeatureTypeUnlimitedCollections) {
-		collections, err := s.Store.ListCollections(ctx, &store.FindCollection{})
-		if err != nil {
-			return nil, status.Errorf(codes.Internal, "failed to get collection list, err: %v", err)
-		}
 		collectionsLimit := int(s.LicenseService.GetSubscription().CollectionsLimit)
 		if len(collections) >= collectionsLimit {
 			return nil, status.Errorf(codes.PermissionDenied, "Maximum number of collections %d reached", collectionsLimit)
+		}
+	}
+
+	// Find the highest userOrder value and add 1 for the new collection
+	maxUserOrder := int32(0)
+	for _, collection := range collections {
+		if collection.UserOrder > maxUserOrder {
+			maxUserOrder = collection.UserOrder
 		}
 	}
 
@@ -106,6 +115,7 @@ func (s *APIV1Service) CreateCollection(ctx context.Context, request *v1pb.Creat
 		ShortcutIds: request.Collection.ShortcutIds,
 		Visibility:  convertVisibilityToStorepb(request.Collection.Visibility),
 		Uuid:        uuid.New().String(),
+		UserOrder:   maxUserOrder + 1,
 	}
 	collection, err := s.Store.CreateCollection(ctx, collectionCreate)
 	if err != nil {
@@ -153,6 +163,8 @@ func (s *APIV1Service) UpdateCollection(ctx context.Context, request *v1pb.Updat
 		case "visibility":
 			visibility := convertVisibilityToStorepb(request.Collection.Visibility)
 			update.Visibility = &visibility
+		case "user_order":
+			update.UserOrder = &request.Collection.UserOrder
 		}
 	}
 	collection, err = s.Store.UpdateCollection(ctx, update)
@@ -679,5 +691,7 @@ func convertCollectionFromStore(collection *storepb.Collection) *v1pb.Collection
 		Description: collection.Description,
 		ShortcutIds: collection.ShortcutIds,
 		Visibility:  convertVisibilityFromStorepb(collection.Visibility),
+		CustomIcon:  collection.CustomIcon,
+		UserOrder:   collection.UserOrder,
 	}
 }
