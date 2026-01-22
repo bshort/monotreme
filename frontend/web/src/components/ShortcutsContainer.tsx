@@ -65,26 +65,52 @@ const ShortcutsContainer: React.FC<Props> = (props: Props) => {
     const oldIndex = shortcutList.findIndex((s) => s.id === active.id);
     const newIndex = shortcutList.findIndex((s) => s.id === over.id);
 
-    const newShortcutList = arrayMove(shortcutList, oldIndex, newIndex);
-    setShortcutList(newShortcutList);
+    const newOrderedList = arrayMove(shortcutList, oldIndex, newIndex);
 
-    // Update userOrder for all shortcuts and save to backend
-    const updatedShortcuts = newShortcutList.map((shortcut, index) => ({
-      ...shortcut,
-      userOrder: index,
-    }));
+    // Get all shortcuts from the store to ensure we update all of them
+    const allShortcuts = shortcutStore.getShortcutList();
 
-    // Save all shortcuts with updated userOrder
+    // Create a map of id to new userOrder based on the reordered visible list
+    const visibleOrderMap = new Map(newOrderedList.map((s, idx) => [s.id, idx]));
+
+    // Separate visible and non-visible shortcuts
+    const visibleShortcuts = newOrderedList;
+    const nonVisibleShortcuts = allShortcuts.filter((s) => !visibleOrderMap.has(s.id));
+
+    // Assign sequential userOrder values to ALL shortcuts
+    // Visible shortcuts get 0, 1, 2, ... based on their new order
+    // Non-visible shortcuts get sequential values starting after the visible ones
+    const updatedShortcuts = [
+      ...visibleShortcuts.map((s, idx) => {
+        const updated = { ...s };
+        updated.userOrder = idx;
+        return updated;
+      }),
+      ...nonVisibleShortcuts.map((s, idx) => {
+        const updated = { ...s };
+        updated.userOrder = visibleShortcuts.length + idx;
+        return updated;
+      }),
+    ];
+
+    // Optimistically update the local state
+    setShortcutList(updatedShortcuts.filter(s => visibleOrderMap.has(s.id)));
+
     try {
-      await Promise.all(
-        updatedShortcuts.map((shortcut) =>
-          shortcutStore.updateShortcut({
-            id: shortcut.id,
-            userOrder: shortcut.userOrder,
-          }, ["user_order"])
-        )
-      );
-      // Refresh the shortcut list to get updated data
+      // Only update shortcuts where userOrder actually changed
+      const shortcutsToUpdate = updatedShortcuts.filter((updated) => {
+        const original = allShortcuts.find((s) => s.id === updated.id);
+        return !original || original.userOrder !== updated.userOrder;
+      });
+
+      // Update sequentially to avoid race conditions
+      for (const shortcut of shortcutsToUpdate) {
+        await shortcutStore.updateShortcut(
+          { id: shortcut.id, userOrder: shortcut.userOrder },
+          ["user_order"]
+        );
+      }
+
       await shortcutStore.fetchShortcutList();
     } catch (error) {
       console.error("Failed to update shortcut order:", error);

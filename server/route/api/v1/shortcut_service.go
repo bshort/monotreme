@@ -170,6 +170,18 @@ func (s *APIV1Service) CreateShortcut(ctx context.Context, request *v1pb.CreateS
 		return nil, status.Errorf(codes.InvalidArgument, "name and link are required")
 	}
 
+	// Find the highest userOrder value and add 1 for the new shortcut
+	shortcuts, err := s.Store.ListShortcuts(ctx, &store.FindShortcut{})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get shortcut list, err: %v", err)
+	}
+
+	maxUserOrder := int32(0)
+	for _, shortcut := range shortcuts {
+		if shortcut.UserOrder > maxUserOrder {
+			maxUserOrder = shortcut.UserOrder
+		}
+	}
 
 	user, err := getCurrentUser(ctx, s.Store)
 	if err != nil {
@@ -185,6 +197,7 @@ func (s *APIV1Service) CreateShortcut(ctx context.Context, request *v1pb.CreateS
 		Visibility:  convertVisibilityToStorepb(request.Shortcut.Visibility),
 		OgMetadata:  &storepb.OpenGraphMetadata{},
 		Uuid:        uuid.New().String(),
+		UserOrder:   maxUserOrder + 1,
 	}
 	if shortcutCreate.Visibility == storepb.Visibility_VISIBILITY_UNSPECIFIED {
 		workspaceSetting, err := s.GetWorkspaceSetting(ctx, nil)

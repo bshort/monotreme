@@ -34,15 +34,15 @@ const useShortcutStore = create(
         offset: 0,
       });
 
-      const shortcutMapById = get().shortcutMapById;
-      const shortcutMapByUuid = get().shortcutMapByUuid;
+      const shortcutMapById = { ...get().shortcutMapById };
+      const shortcutMapByUuid = { ...get().shortcutMapByUuid };
       shortcuts.forEach((shortcut) => {
         shortcutMapById[shortcut.id] = shortcut;
         shortcutMapByUuid[shortcut.uuid] = shortcut;
       });
       set({
-        shortcutMapById: shortcutMapById,
-        shortcutMapByUuid: shortcutMapByUuid,
+        shortcutMapById,
+        shortcutMapByUuid,
         hasMore,
         totalCount,
       });
@@ -65,16 +65,16 @@ const useShortcutStore = create(
           offset,
         });
 
-        const shortcutMapById = get().shortcutMapById;
-        const shortcutMapByUuid = get().shortcutMapByUuid;
+        const shortcutMapById = { ...get().shortcutMapById };
+        const shortcutMapByUuid = { ...get().shortcutMapByUuid };
         shortcuts.forEach((shortcut) => {
           shortcutMapById[shortcut.id] = shortcut;
           shortcutMapByUuid[shortcut.uuid] = shortcut;
         });
 
         set({
-          shortcutMapById: shortcutMapById,
-          shortcutMapByUuid: shortcutMapByUuid,
+          shortcutMapById,
+          shortcutMapByUuid,
           hasMore: newHasMore,
           totalCount,
           isLoadingMore: false,
@@ -100,9 +100,9 @@ const useShortcutStore = create(
       const shortcut = await shortcutServiceClient.getShortcut({
         id,
       });
-      shortcutMapById[id] = shortcut;
-      shortcutMapByUuid[shortcut.uuid] = shortcut;
-      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
+      const newShortcutMapById = { ...shortcutMapById, [shortcut.id]: shortcut };
+      const newShortcutMapByUuid = { ...shortcutMapByUuid, [shortcut.uuid]: shortcut };
+      set({ shortcutMapById: newShortcutMapById, shortcutMapByUuid: newShortcutMapByUuid });
       return shortcut;
     },
     getShortcutById: (id: number) => {
@@ -131,11 +131,9 @@ const useShortcutStore = create(
       const createdShortcut = await shortcutServiceClient.createShortcut({
         shortcut: shortcut,
       });
-      const shortcutMapById = get().shortcutMapById;
-      const shortcutMapByUuid = get().shortcutMapByUuid;
-      shortcutMapById[createdShortcut.id] = createdShortcut;
-      shortcutMapByUuid[createdShortcut.uuid] = createdShortcut;
-      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
+      const shortcutMapById = { ...get().shortcutMapById, [createdShortcut.id]: createdShortcut };
+      const shortcutMapByUuid = { ...get().shortcutMapByUuid, [createdShortcut.uuid]: createdShortcut };
+      set({ shortcutMapById, shortcutMapByUuid });
       return createdShortcut;
     },
     updateShortcut: async (shortcut: Partial<Shortcut>, updateMask: string[]) => {
@@ -143,16 +141,14 @@ const useShortcutStore = create(
         shortcut: shortcut,
         updateMask,
       });
-      const shortcutMapById = get().shortcutMapById;
-      const shortcutMapByUuid = get().shortcutMapByUuid;
-      shortcutMapById[updatedShortcut.id] = updatedShortcut;
-      shortcutMapByUuid[updatedShortcut.uuid] = updatedShortcut;
-      set({ shortcutMapById: shortcutMapById, shortcutMapByUuid: shortcutMapByUuid });
+      const shortcutMapById = { ...get().shortcutMapById, [updatedShortcut.id]: updatedShortcut };
+      const shortcutMapByUuid = { ...get().shortcutMapByUuid, [updatedShortcut.uuid]: updatedShortcut };
+      set({ shortcutMapById, shortcutMapByUuid });
       return updatedShortcut;
     },
     deleteShortcut: async (id: number) => {
-      const shortcutMapById = get().shortcutMapById;
-      const shortcutMapByUuid = get().shortcutMapByUuid;
+      const shortcutMapById = { ...get().shortcutMapById };
+      const shortcutMapByUuid = { ...get().shortcutMapByUuid };
       const shortcutToDelete = shortcutMapById[id];
 
       await shortcutServiceClient.deleteShortcut({
