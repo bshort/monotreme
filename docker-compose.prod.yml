@@ -7,13 +7,13 @@ services:
     networks:
       macvlan_network:
 # Keep commented out until docker pulls an IP that's available
-        ipv4_address: 192.168.1.136
+        ipv4_address: ${MONOTREME_IP}
 
   monotreme-redis:
     networks:
       macvlan_network:
 # Keep commented out until docker pulls an IP that's available
-        ipv4_address: 192.168.1.137
+        ipv4_address: ${MONOTREME_REDIS_IP}
 
 networks:
   macvlan_network:

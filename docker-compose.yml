@@ -9,10 +9,15 @@ services:
       - REDIS_HOST=monotreme-redis
       - REDIS_PORT=6379
     volumes:
-      - ./data:/var/opt/monotreme
+      - /Primer/Media/data/monotreme:/var/opt/monotreme
+#      - ./data:/var/opt/monotreme
     restart: unless-stopped
     networks:
-      - monotreme-network
+      macvlan_network:
+# Keep commented out until docker pulls an IP that's available
+#        ipv4_address: 192.168.1.136
+        ipv4_address: ${MONOTREME_IP}
+      monotreme-network:
     depends_on:
       - monotreme-redis
 
@@ -31,6 +36,9 @@ services:
 networks:
   monotreme-network:
     driver: bridge
+  macvlan_network:
+    name: MyMacVlan
+    external: true
 
 volumes:
   redis-data:

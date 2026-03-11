@@ -1,0 +1,7 @@
+#services:
+#  monotreme:
+#    volumes:
+#      - ./data:/var/opt/monotreme
+#      - /Primer/Media/data/monotreme:/var/opt/monotreme
+#    restart: unless-stopped
+
